@@ -41,7 +41,7 @@ export const Route = createFileRoute("/products/garden/$garden")({
       <div className="min-h-screen bg-background text-foreground p-8">
         <SiteHeader />
         <div className="mx-auto max-w-3xl py-32">
-          <h1 className="font-display text-4xl">Couldn't load this garden.</h1>
+          <h1 className="font-display text-4xl">Couldn't load this collection.</h1>
           <p className="text-sm text-muted-foreground mt-2">{error.message}</p>
           <Button onClick={() => { router.invalidate(); reset(); }} className="mt-6">Try again</Button>
         </div>
