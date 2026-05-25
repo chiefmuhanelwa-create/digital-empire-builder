@@ -17,7 +17,7 @@ import {
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/contacts")({
-  head: () => ({ meta: [{ title: "Contacts — CHKPLT Admin" }] }),
+  head: () => ({ meta: [{ title: "Contacts — Christ Kingdom Platform Admin" }] }),
   beforeLoad: async () => {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) throw redirect({ to: "/login" });
@@ -122,10 +122,10 @@ function AdminContacts() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <section className="mx-auto max-w-7xl px-6 pt-16 pb-24">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Phase 02b · Spine</div>
+        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Admin</div>
         <h1 className="mt-4 font-display text-5xl">Contacts &amp; Tags</h1>
         <p className="mt-4 text-muted-foreground max-w-2xl">
-          The net (John 21:6). Every email, every tag, every garden segment. Owned forever.
+          Every email, every tag, every segment. Owned forever.
         </p>
 
         {/* Totals */}
@@ -146,9 +146,9 @@ function AdminContacts() {
         {/* Import */}
         <div className="mt-16 border border-border p-6">
           <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">CSV Import</div>
-          <h2 className="mt-2 font-display text-2xl">Cast the net</h2>
+          <h2 className="mt-2 font-display text-2xl">Import contacts</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Upload your NOCHILL CSV. Headers like <code className="text-foreground">email</code>, <code className="text-foreground">first_name</code>, <code className="text-foreground">last_name</code>, <code className="text-foreground">phone</code> are auto-detected.
+            Upload your CSV. Headers like <code className="text-foreground">email</code>, <code className="text-foreground">first_name</code>, <code className="text-foreground">last_name</code>, <code className="text-foreground">phone</code> are auto-detected.
             Existing emails update; new ones insert. Tags merge.
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">

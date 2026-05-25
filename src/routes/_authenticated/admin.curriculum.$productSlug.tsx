@@ -19,7 +19,7 @@ import { Trash2, Plus, ChevronDown, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/curriculum/$productSlug")({
-  head: ({ params }) => ({ meta: [{ title: `Curriculum: ${params.productSlug} — CHKPLT` }] }),
+  head: ({ params }) => ({ meta: [{ title: `Curriculum: ${params.productSlug} — Christ Kingdom Platform` }] }),
   component: CurriculumAdmin,
   errorComponent: ({ error, reset }) => {
     const router = useRouter();
@@ -94,7 +94,6 @@ function CurriculumAdmin() {
         </Link>
         <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">Admin · Curriculum</div>
         <h1 className="mt-3 font-display text-5xl">{data.product.title}</h1>
-        <div className="mt-2 font-mono text-xs text-muted-foreground">{data.product.slug}</div>
 
         <div className="mt-10 flex gap-2 items-end">
           <div className="flex-1">

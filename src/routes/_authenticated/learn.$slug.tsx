@@ -7,7 +7,7 @@ import { Lock, PlayCircle } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug")({
   head: ({ params }) => ({
-    meta: [{ title: `${params.slug} — CHKPLT` }],
+    meta: [{ title: `${params.slug} — Christ Kingdom Platform` }],
   }),
   component: CoursePage,
   errorComponent: ({ error, reset }) => {
@@ -152,7 +152,7 @@ function CoursePage() {
           <div className="mt-12 border border-banana/30 p-6 bg-banana/5">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Locked</div>
             <p className="mt-2 text-sm">
-              You're previewing this course. Buy access to unlock every lesson.
+              You're previewing this course. Get access to unlock every lesson.
             </p>
             <Button asChild className="mt-4 bg-banana text-banana-foreground hover:bg-banana/90">
               <Link to="/products/$slug" params={{ slug }}>Get access →</Link>
