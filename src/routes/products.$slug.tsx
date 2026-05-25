@@ -1,9 +1,15 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
+import { useAuth } from "@/lib/auth-context";
+import { initializeCheckout } from "@/lib/checkout.functions";
+import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -143,21 +149,8 @@ function ProductDetail() {
         </dl>
 
         {/* CTA */}
-        <div className="mt-12 flex gap-3 flex-wrap">
-          {product.is_free ? (
-            <Button size="lg" disabled className="bg-banana text-banana-foreground">
-              Get free — opt-in coming in Phase 2c
-            </Button>
-          ) : product.requires_application ? (
-            <Button size="lg" disabled variant="outline">
-              Apply — applications open in Phase 2c
-            </Button>
-          ) : (
-            <Button size="lg" disabled className="bg-banana text-banana-foreground">
-              Buy {priceLabel} — Paystack checkout in Phase 2c
-            </Button>
-          )}
-        </div>
+        <BuyBlock product={product} priceLabel={priceLabel} />
+
 
         {/* Seed to next */}
         {seedProduct && (
