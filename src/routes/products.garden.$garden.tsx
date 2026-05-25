@@ -30,8 +30,8 @@ export const Route = createFileRoute("/products/garden/$garden")({
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <div className="mx-auto max-w-3xl px-6 py-32 text-center">
-        <h1 className="font-display text-5xl">Garden not found.</h1>
-        <Link to="/products" className="mt-6 inline-block text-banana">← All gardens</Link>
+        <h1 className="font-display text-5xl">Collection not found.</h1>
+        <Link to="/products" className="mt-6 inline-block text-banana">← All collections</Link>
       </div>
     </div>
   ),
