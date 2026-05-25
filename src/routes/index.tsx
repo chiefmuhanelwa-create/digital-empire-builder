@@ -6,8 +6,8 @@ import { ArrowRight } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CHKPLT — Tools and courses for creators" },
-      { name: "description", content: "Free guides, paid workbooks, courses and mentorship to help South African creators grow their audience, brand and income." },
+      { title: "Christ Kingdom Platform — Tools and courses for Kingdom Contentpreneurs" },
+      { name: "description", content: "Free guides, paid workbooks, courses and mentorship to help Kingdom Contentpreneurs grow their audience, brand and income." },
     ],
   }),
   component: Landing,
@@ -23,22 +23,22 @@ function Landing() {
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,oklch(0.62_0.16_75/0.10),transparent_60%)]" />
         <div className="mx-auto max-w-6xl px-6 pt-24 pb-32 md:pt-36">
           <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-            For creators
+            For Kingdom Contentpreneurs
           </div>
           <h1 className="mt-6 font-display text-5xl leading-[1.05] md:text-7xl lg:text-8xl max-w-4xl">
-            Grow your brand.<br />
-            <em className="text-banana not-italic">Get paid for it.</em>
+            Build your brand.<br />
+            <em className="text-banana not-italic">Monetize your calling.</em>
           </h1>
           <p className="mt-8 max-w-xl text-lg text-muted-foreground">
-            CHKPLT gives creators the workbooks, courses and mentorship to turn an audience
-            into income — without selling out or burning out.
+            Christ Kingdom Platform gives Kingdom Contentpreneurs the workbooks, courses
+            and mentorship to turn an audience into income — without selling out or burning out.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Button asChild size="lg" className="bg-banana text-banana-foreground hover:bg-banana/90">
-              <Link to="/products">Browse the shop <ArrowRight /></Link>
+              <Link to="/products">Browse resources <ArrowRight /></Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/about">What is CHKPLT?</Link>
+              <Link to="/about">What is CKP?</Link>
             </Button>
           </div>
         </div>
@@ -50,7 +50,7 @@ function Landing() {
           {[
             { n: "01", t: "Learn", d: "Workbooks and courses that teach you exactly what to do next." },
             { n: "02", t: "Build", d: "Frameworks for niche clarity, personal branding, content and offers." },
-            { n: "03", t: "Earn", d: "Paid products, brand deals, affiliates and services — diversified income." },
+            { n: "03", t: "Earn", d: "Paid products, brand deals, affiliates and services — multiple income streams." },
           ].map((p) => (
             <div key={p.n} className="border-t border-border pt-6">
               <div className="font-mono text-xs text-banana">{p.n}</div>
@@ -65,10 +65,10 @@ function Landing() {
       <section className="border-t border-border/60">
         <div className="mx-auto max-w-6xl px-6 py-24 flex flex-col items-start gap-6">
           <h2 className="font-display text-4xl md:text-5xl max-w-2xl">
-            Ready to take your creator business seriously?
+            Ready to take your Kingdom content business seriously?
           </h2>
           <Button asChild size="lg" className="bg-banana text-banana-foreground hover:bg-banana/90">
-            <Link to="/signup">Create your account <ArrowRight /></Link>
+            <Link to="/signup">Join the community <ArrowRight /></Link>
           </Button>
         </div>
       </section>

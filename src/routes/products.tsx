@@ -8,10 +8,10 @@ import { ArrowUpRight } from "lucide-react";
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "Shop — CHKPLT" },
-      { name: "description", content: "Free tools, paid workbooks and courses, premium programs, and books for digital creators." },
-      { property: "og:title", content: "Shop — CHKPLT" },
-      { property: "og:description", content: "Everything CHKPLT sells, in one place." },
+      { title: "Shop — Christ Kingdom Platform" },
+      { name: "description", content: "Free tools, paid workbooks and courses, premium programs, and books for Kingdom Contentpreneurs." },
+      { property: "og:title", content: "Shop — Christ Kingdom Platform" },
+      { property: "og:description", content: "Everything we offer, in one place." },
     ],
   }),
   component: Catalog,
@@ -61,7 +61,7 @@ function Catalog() {
         </div>
         <h1 className="mt-4 font-display text-5xl md:text-7xl leading-[1.05] max-w-3xl">
           Everything you need<br />
-          <em className="text-banana not-italic">to grow as a creator.</em>
+          <em className="text-banana not-italic">to grow as a Kingdom Contentpreneur.</em>
         </h1>
         <p className="mt-8 max-w-xl text-lg text-muted-foreground">
           Free tools to get started. Paid workbooks and courses when you're ready to level up.

@@ -22,7 +22,7 @@ export const GARDENS: Record<Garden, {
     name: "Workbooks & Courses",
     tagline: "Step-by-step paid products.",
     description:
-      "Paid workbooks, mini-courses and frameworks. Each one solves one specific problem in your creator business.",
+      "Paid workbooks, mini-courses and frameworks. Each one solves one specific problem in your content business.",
     priceRange: "R299 — R999",
   },
   etz_pri: {
@@ -30,7 +30,7 @@ export const GARDENS: Record<Garden, {
     name: "Premium Programs",
     tagline: "Coaching, cohorts and mentorship.",
     description:
-      "Live cohorts, group programs and 1-on-1 mentorship for creators ready to go full-time.",
+      "Live cohorts, group programs and 1-on-1 mentorship for Kingdom Contentpreneurs ready to go full-time.",
     priceRange: "R4,997+",
   },
   devarim: {

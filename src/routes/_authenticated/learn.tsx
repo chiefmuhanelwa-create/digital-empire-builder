@@ -6,7 +6,7 @@ import { getMyCourses } from "@/lib/lms.functions";
 import { GARDENS, type Garden } from "@/lib/gardens";
 
 export const Route = createFileRoute("/_authenticated/learn")({
-  head: () => ({ meta: [{ title: "My courses — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "My courses — Christ Kingdom Platform" }] }),
   component: LearnIndex,
 });
 

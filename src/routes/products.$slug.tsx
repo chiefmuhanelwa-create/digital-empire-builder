@@ -15,8 +15,8 @@ import { ArrowRight } from "lucide-react";
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.slug} — CHKPLT` },
-      { name: "description", content: "CHKPLT product details and checkout." },
+      { title: `${params.slug} — Christ Kingdom Platform` },
+      { name: "description", content: "Product details and checkout." },
     ],
   }),
   component: ProductDetail,

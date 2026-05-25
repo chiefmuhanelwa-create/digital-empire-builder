@@ -17,7 +17,7 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="font-display text-7xl">404</h1>
-        <p className="mt-4 text-muted-foreground">This page isn't part of the empire.</p>
+        <p className="mt-4 text-muted-foreground">This page isn't part of the Kingdom.</p>
         <Link to="/" className="mt-6 inline-block rounded-md bg-banana px-4 py-2 text-sm font-medium text-banana-foreground">
           Back home
         </Link>
@@ -51,11 +51,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CHKPLT — Build Your Digital Empire" },
-      { name: "description", content: "CHKPLT is the operating system for digital creators: courses, checkout, community, and automation in one platform." },
-      { name: "author", content: "CHKPLT" },
-      { property: "og:title", content: "CHKPLT — Build Your Digital Empire" },
-      { property: "og:description", content: "The operating system for digital creators." },
+      { title: "Christ Kingdom Platform — Build Your Kingdom Content Business" },
+      { name: "description", content: "Christ Kingdom Platform is the home for Kingdom Contentpreneurs: courses, workbooks, community, and tools to turn your content into income." },
+      { name: "author", content: "Christ Kingdom Platform" },
+      { property: "og:title", content: "Christ Kingdom Platform — Build Your Kingdom Content Business" },
+      { property: "og:description", content: "The home for Kingdom Contentpreneurs." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

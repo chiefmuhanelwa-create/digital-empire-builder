@@ -8,7 +8,7 @@ import { formatPrice } from "@/lib/gardens";
 import { useRef } from "react";
 
 export const Route = createFileRoute("/checkout/success")({
-  head: () => ({ meta: [{ title: "Order received — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Order received — Christ Kingdom Platform" }] }),
   validateSearch: (s: Record<string, unknown>) => ({
     reference: (s.reference as string) || (s.trxref as string) || "",
   }),
