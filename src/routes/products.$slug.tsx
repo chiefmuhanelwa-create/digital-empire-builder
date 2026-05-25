@@ -25,7 +25,7 @@ export const Route = createFileRoute("/products/$slug")({
       <SiteHeader />
       <div className="mx-auto max-w-3xl px-6 py-32 text-center">
         <h1 className="font-display text-5xl">Product not found.</h1>
-        <Link to="/products" className="mt-6 inline-block text-banana">← Back to gardens</Link>
+        <Link to="/products" className="mt-6 inline-block text-banana">← Back to shop</Link>
       </div>
     </div>
   ),
@@ -96,7 +96,7 @@ function ProductDetail() {
             params={{ garden: gardenMeta.slug }}
             className="font-mono text-xs text-muted-foreground hover:text-banana"
           >
-            ← {gardenMeta.name} garden
+            ← {gardenMeta.name}
           </Link>
         )}
         <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">
@@ -107,7 +107,7 @@ function ProductDetail() {
         <div className="mt-10 flex items-baseline gap-4 flex-wrap">
           <div className="font-display text-5xl text-banana">{priceLabel}</div>
           {!product.is_free && !product.requires_application && (
-            <div className="font-mono text-xs text-muted-foreground">one-time</div>
+            <div className="font-mono text-xs text-muted-foreground">one-time payment</div>
           )}
           {product.requires_application && (
             <div className="font-mono text-xs text-muted-foreground">/ by application</div>
@@ -124,26 +124,20 @@ function ProductDetail() {
         <dl className="mt-12 grid gap-px bg-border border border-border md:grid-cols-2">
           {product.format && (
             <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Format</dt>
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">What you get</dt>
               <dd className="mt-2 text-sm">{product.format}</dd>
             </div>
           )}
           {product.target_audience && (
             <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">For</dt>
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Built for</dt>
               <dd className="mt-2 text-sm">{product.target_audience}</dd>
             </div>
           )}
           {product.cohort_capacity && (
-            <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Capacity</dt>
-              <dd className="mt-2 text-sm">{product.cohort_capacity} seats per cohort</dd>
-            </div>
-          )}
-          {product.scripture_root && (
             <div className="bg-background p-5 md:col-span-2">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-banana">Scripture root</dt>
-              <dd className="mt-2 text-sm italic">{product.scripture_root}</dd>
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Group size</dt>
+              <dd className="mt-2 text-sm">{product.cohort_capacity} seats per intake</dd>
             </div>
           )}
         </dl>
@@ -160,7 +154,7 @@ function ProductDetail() {
             className="group mt-20 block border-t border-border pt-10"
           >
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-              Next seed →
+              You might also like →
             </div>
             <div className="mt-4 flex items-end justify-between gap-6">
               <div>
@@ -221,7 +215,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
 
   return (
     <div className="mt-12 border border-border p-6">
-      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Checkout · Paystack · ZAR</div>
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · ZAR</div>
       <h3 className="mt-2 font-display text-2xl">Buy {product.title}</h3>
       <div className="mt-6 grid gap-3 md:grid-cols-3">
         <div>
@@ -255,7 +249,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
         {mut.isPending ? "Starting…" : `Pay ${priceLabel} →`}
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">
-        Secure checkout via Paystack. You'll be redirected, then returned here once payment completes.
+        You'll be sent to our secure checkout, then brought back here once payment is complete.
       </p>
     </div>
   );

@@ -60,7 +60,7 @@ function LearnIndex() {
                 >
                   {garden && (
                     <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">
-                      {garden.name} garden
+                      {garden.name}
                     </div>
                   )}
                   <h3 className="mt-3 font-display text-3xl group-hover:text-banana transition-colors">

@@ -23,13 +23,13 @@ export function SiteHeader() {
         <nav className="hidden gap-8 text-sm text-muted-foreground md:flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors outline-none">
-              Gardens <ChevronDown className="size-3.5" />
+              Shop <ChevronDown className="size-3.5" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-72">
               <DropdownMenuItem asChild>
                 <Link to="/products" className="flex flex-col items-start gap-0.5 py-2">
-                  <span className="font-mono text-xs tracking-[0.2em] uppercase text-banana">All gardens</span>
-                  <span className="text-xs text-muted-foreground">The full product ecosystem</span>
+                  <span className="font-mono text-xs tracking-[0.2em] uppercase text-banana">Everything</span>
+                  <span className="text-xs text-muted-foreground">Browse the full shop</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -79,7 +79,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border/60 mt-32">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-        <div className="font-mono tracking-[0.18em] uppercase">CHKPLT — Digital Empire OS</div>
+        <div className="font-mono tracking-[0.18em] uppercase">CHKPLT — Tools for creators</div>
         <div>© {new Date().getFullYear()} CHKPLT. All rights reserved.</div>
       </div>
     </footer>

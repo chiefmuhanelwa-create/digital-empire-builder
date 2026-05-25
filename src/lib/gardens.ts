@@ -1,52 +1,43 @@
 export type Garden = "deshe" | "esev" | "etz_pri" | "devarim";
 
+// User-facing names use plain English. The slugs (deshe/esev/etz_pri/devarim)
+// stay as internal DB keys so we don't break existing data.
 export const GARDENS: Record<Garden, {
   slug: Garden;
   name: string;
-  hebrew: string;
   tagline: string;
   description: string;
-  scripture: string;
   priceRange: string;
 }> = {
   deshe: {
     slug: "deshe",
-    name: "Deshe",
-    hebrew: "דֶּשֶׁא",
-    tagline: "Tender grass. Ground cover.",
+    name: "Free Tools",
+    tagline: "Free guides, workbooks and calculators.",
     description:
-      "Free products that draw people in. Every one delivers full value — never a diluted teaser.",
-    scripture: "Genesis 1:11 — Let the earth bring forth grass.",
+      "Free resources that give you a real win — no diluted teasers, no email-only opt-ins for nothing.",
     priceRange: "Free",
   },
   esev: {
     slug: "esev",
-    name: "Esev",
-    hebrew: "עֵשֶׂב",
-    tagline: "Herbs yielding seed.",
+    name: "Workbooks & Courses",
+    tagline: "Step-by-step paid products.",
     description:
-      "Paid digital products. Each one solves a specific problem and carries a seed leading to the next.",
-    scripture: "Genesis 1:11 — Herb yielding seed.",
-    priceRange: "R49 — R999",
+      "Paid workbooks, mini-courses and frameworks. Each one solves one specific problem in your creator business.",
+    priceRange: "R299 — R999",
   },
   etz_pri: {
     slug: "etz_pri",
-    name: "Etz Pri",
-    hebrew: "עֵץ פְּרִי",
-    tagline: "Fruit trees whose seed is in the fruit.",
+    name: "Premium Programs",
+    tagline: "Coaching, cohorts and mentorship.",
     description:
-      "Premium courses, cohorts, and mentorship. The transformation IS the fruit; graduates become the next sale.",
-    scripture: "Genesis 1:12 — Tree yielding fruit, whose seed was in itself.",
-    priceRange: "R4,997 — R100,000",
+      "Live cohorts, group programs and 1-on-1 mentorship for creators ready to go full-time.",
+    priceRange: "R4,997+",
   },
   devarim: {
     slug: "devarim",
-    name: "Devarim",
-    hebrew: "דְּבָרִים",
-    tagline: "Words. Books that outlive you.",
-    description:
-      "Books for children's children. A book on a shelf speaks when you're sleeping.",
-    scripture: "Deuteronomy 1:1 — These be the words.",
+    name: "Books",
+    tagline: "Long-form reads.",
+    description: "Books worth keeping on your shelf — playbooks you'll come back to for years.",
     priceRange: "R199 — R499",
   },
 };

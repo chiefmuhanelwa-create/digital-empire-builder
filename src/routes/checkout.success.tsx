@@ -80,7 +80,7 @@ function CheckoutSuccess() {
             {q.data?.nextSeed && (
               <div className="mt-16 border border-banana/40 bg-banana/5 p-8 text-left">
                 <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">
-                  Next seed →
+                  You might also like →
                 </div>
                 <h2 className="mt-3 font-display text-3xl">{q.data.nextSeed.title}</h2>
                 {q.data.nextSeed.tagline && (
@@ -95,7 +95,7 @@ function CheckoutSuccess() {
                     className="bg-foreground text-background hover:bg-foreground/90"
                   >
                     <Link to="/products/$slug" params={{ slug: q.data.nextSeed.slug }}>
-                      Plant this seed →
+                      See it →
                     </Link>
                   </Button>
                 </div>

@@ -30,8 +30,8 @@ export const Route = createFileRoute("/products/garden/$garden")({
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <div className="mx-auto max-w-3xl px-6 py-32 text-center">
-        <h1 className="font-display text-5xl">Garden not found.</h1>
-        <Link to="/products" className="mt-6 inline-block text-banana">← All gardens</Link>
+        <h1 className="font-display text-5xl">Collection not found.</h1>
+        <Link to="/products" className="mt-6 inline-block text-banana">← All collections</Link>
       </div>
     </div>
   ),
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/products/garden/$garden")({
       <div className="min-h-screen bg-background text-foreground p-8">
         <SiteHeader />
         <div className="mx-auto max-w-3xl py-32">
-          <h1 className="font-display text-4xl">Couldn't load this garden.</h1>
+          <h1 className="font-display text-4xl">Couldn't load this collection.</h1>
           <p className="text-sm text-muted-foreground mt-2">{error.message}</p>
           <Button onClick={() => { router.invalidate(); reset(); }} className="mt-6">Try again</Button>
         </div>
@@ -75,23 +75,17 @@ function GardenPage() {
       <SiteHeader />
       <section className="mx-auto max-w-6xl px-6 pt-24 pb-8">
         <Link to="/products" className="font-mono text-xs text-muted-foreground hover:text-banana">
-          ← All gardens
+          ← All collections
         </Link>
-        <div className="mt-8 grid md:grid-cols-[1fr_auto] gap-8 items-end">
-          <div>
-            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-              Garden — {meta.priceRange}
-            </div>
-            <h1 className="mt-3 font-display text-6xl md:text-7xl">{meta.name}</h1>
-            <div className="mt-2 font-display text-3xl text-muted-foreground/60">{meta.hebrew}</div>
-            <p className="mt-6 max-w-2xl text-lg italic text-muted-foreground">{meta.tagline}</p>
-            <p className="mt-3 max-w-2xl text-base text-foreground/80 leading-relaxed">
-              {meta.description}
-            </p>
+        <div className="mt-8">
+          <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+            {meta.priceRange}
           </div>
-          <div className="font-mono text-xs text-muted-foreground md:text-right">
-            {meta.scripture}
-          </div>
+          <h1 className="mt-3 font-display text-6xl md:text-7xl">{meta.name}</h1>
+          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">{meta.tagline}</p>
+          <p className="mt-3 max-w-2xl text-base text-foreground/80 leading-relaxed">
+            {meta.description}
+          </p>
         </div>
       </section>
 
