@@ -2,36 +2,53 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
+import { GARDENS, GARDEN_ORDER, type Garden } from "@/lib/gardens";
 import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "Catalog — CHKPLT" },
-      { name: "description", content: "Browse CHKPLT digital products, courses, and cohorts." },
-      { property: "og:title", content: "CHKPLT Catalog" },
-      { property: "og:description", content: "Courses, cohorts, and digital products." },
+      { title: "The 4 Gardens — CHKPLT" },
+      { name: "description", content: "Free products, paid digital tools, premium courses, and books. The CHKPLT product ecosystem, organised by Genesis 1:11–12." },
+      { property: "og:title", content: "The 4 Gardens — CHKPLT" },
+      { property: "og:description", content: "Deshe, Esev, Etz Pri, Devarim. The complete CHKPLT product ecosystem." },
     ],
   }),
-  component: Catalog,
+  component: Gardens,
+  errorComponent: ({ error }) => (
+    <div className="min-h-screen bg-background text-foreground p-8">
+      <SiteHeader />
+      <div className="mx-auto max-w-3xl py-32">
+        <h1 className="font-display text-4xl">Couldn't load gardens.</h1>
+        <p className="text-sm text-muted-foreground mt-2">{error.message}</p>
+      </div>
+    </div>
+  ),
+  notFoundComponent: () => (
+    <div className="min-h-screen bg-background text-foreground p-8">
+      <SiteHeader />
+      <div className="mx-auto max-w-3xl py-32 text-center">
+        <h1 className="font-display text-4xl">Not found.</h1>
+        <Link to="/" className="mt-6 inline-block text-banana">← Home</Link>
+      </div>
+    </div>
+  ),
 });
 
-function formatPrice(cents: number, currency: string) {
-  const v = (cents / 100).toLocaleString("en-NG");
-  return `${currency === "NGN" ? "₦" : currency + " "}${v}`;
-}
-
-function Catalog() {
-  const { data: products, isLoading } = useQuery({
-    queryKey: ["products", "published"],
+function Gardens() {
+  const { data: counts } = useQuery({
+    queryKey: ["product-counts-by-garden"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
-        .eq("status", "published")
-        .order("created_at", { ascending: false });
+        .select("garden")
+        .eq("status", "published");
       if (error) throw error;
-      return data;
+      const tally: Record<string, number> = {};
+      for (const row of data ?? []) {
+        if (row.garden) tally[row.garden] = (tally[row.garden] ?? 0) + 1;
+      }
+      return tally;
     },
   });
 
@@ -39,30 +56,57 @@ function Catalog() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <section className="mx-auto max-w-6xl px-6 pt-24 pb-16">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Catalog</div>
-        <h1 className="mt-4 font-display text-5xl md:text-6xl">Everything we sell.</h1>
+        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+          ◆ The Product Ecosystem
+        </div>
+        <h1 className="mt-4 font-display text-5xl md:text-7xl leading-[1.05] max-w-3xl">
+          Four gardens.<br />
+          <em className="text-banana not-italic">One ascension.</em>
+        </h1>
+        <p className="mt-8 max-w-xl text-lg text-muted-foreground">
+          On Day 3 of creation, God made three kinds of vegetation — each with a different
+          economic function. CHKPLT mirrors that pattern. Every product is a seed pointing to
+          the next.
+        </p>
 
-        <div className="mt-16 grid gap-px bg-border md:grid-cols-2">
-          {isLoading && Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-background p-8 h-64 animate-pulse" />
-          ))}
-          {products?.map((p) => (
-            <Link
-              key={p.id}
-              to="/products/$slug"
-              params={{ slug: p.slug }}
-              className="group relative bg-background p-8 transition-colors hover:bg-card flex flex-col justify-between min-h-64"
-            >
-              <div>
-                <div className="font-mono text-xs text-muted-foreground">{p.tagline}</div>
-                <h2 className="mt-3 font-display text-3xl group-hover:text-banana transition-colors">{p.title}</h2>
-              </div>
-              <div className="mt-8 flex items-end justify-between">
-                <div className="font-mono text-sm">{formatPrice(p.price_cents, p.currency)}</div>
-                <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-banana transition-colors" />
-              </div>
-            </Link>
-          ))}
+        <div className="mt-20 grid gap-px bg-border md:grid-cols-2">
+          {GARDEN_ORDER.map((g: Garden) => {
+            const meta = GARDENS[g];
+            const count = counts?.[g] ?? 0;
+            return (
+              <Link
+                key={g}
+                to="/products/garden/$garden"
+                params={{ garden: g }}
+                className="group relative bg-background p-10 transition-colors hover:bg-card min-h-[280px] flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-baseline justify-between">
+                    <div>
+                      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+                        Garden — {meta.priceRange}
+                      </div>
+                      <h2 className="mt-3 font-display text-5xl group-hover:text-banana transition-colors">
+                        {meta.name}
+                      </h2>
+                      <div className="mt-1 font-display text-2xl text-muted-foreground/60">
+                        {meta.hebrew}
+                      </div>
+                    </div>
+                    <ArrowUpRight className="size-6 text-muted-foreground group-hover:text-banana transition-colors" />
+                  </div>
+                  <p className="mt-6 text-sm italic text-muted-foreground">{meta.tagline}</p>
+                  <p className="mt-3 text-base text-foreground/80 leading-relaxed">
+                    {meta.description}
+                  </p>
+                </div>
+                <div className="mt-8 flex items-center justify-between font-mono text-xs">
+                  <span className="text-muted-foreground">{meta.scripture}</span>
+                  <span className="text-banana">{count} {count === 1 ? "product" : "products"}</span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
       <SiteFooter />

@@ -1,6 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
+import { GARDEN_ORDER, GARDENS } from "@/lib/gardens";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
@@ -11,8 +20,36 @@ export function SiteHeader() {
           <span className="size-2.5 rounded-full bg-banana" />
           <span className="font-mono text-sm tracking-[0.18em] uppercase">CHKPLT</span>
         </Link>
-        <nav className="hidden gap-8 text-sm text-muted-foreground md:flex">
-          <Link to="/products" className="hover:text-foreground transition-colors">Catalog</Link>
+        <nav className="hidden gap-8 text-sm text-muted-foreground md:flex items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors outline-none">
+              Gardens <ChevronDown className="size-3.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-72">
+              <DropdownMenuItem asChild>
+                <Link to="/products" className="flex flex-col items-start gap-0.5 py-2">
+                  <span className="font-mono text-xs tracking-[0.2em] uppercase text-banana">All gardens</span>
+                  <span className="text-xs text-muted-foreground">The full product ecosystem</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {GARDEN_ORDER.map((g) => {
+                const m = GARDENS[g];
+                return (
+                  <DropdownMenuItem key={g} asChild>
+                    <Link
+                      to="/products/garden/$garden"
+                      params={{ garden: g }}
+                      className="flex flex-col items-start gap-0.5 py-2"
+                    >
+                      <span className="font-display text-base">{m.name} — {m.priceRange}</span>
+                      <span className="text-xs text-muted-foreground">{m.tagline}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Link to="/about" className="hover:text-foreground transition-colors">About</Link>
           <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
         </nav>
