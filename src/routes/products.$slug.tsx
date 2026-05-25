@@ -154,7 +154,7 @@ function ProductDetail() {
             className="group mt-20 block border-t border-border pt-10"
           >
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-              Next seed →
+              You might also like →
             </div>
             <div className="mt-4 flex items-end justify-between gap-6">
               <div>
