@@ -96,7 +96,7 @@ function ProductDetail() {
             params={{ garden: gardenMeta.slug }}
             className="font-mono text-xs text-muted-foreground hover:text-banana"
           >
-            ← {gardenMeta.name} garden
+            ← {gardenMeta.name}
           </Link>
         )}
         <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">
@@ -107,7 +107,7 @@ function ProductDetail() {
         <div className="mt-10 flex items-baseline gap-4 flex-wrap">
           <div className="font-display text-5xl text-banana">{priceLabel}</div>
           {!product.is_free && !product.requires_application && (
-            <div className="font-mono text-xs text-muted-foreground">one-time</div>
+            <div className="font-mono text-xs text-muted-foreground">one-time payment</div>
           )}
           {product.requires_application && (
             <div className="font-mono text-xs text-muted-foreground">/ by application</div>
@@ -124,26 +124,20 @@ function ProductDetail() {
         <dl className="mt-12 grid gap-px bg-border border border-border md:grid-cols-2">
           {product.format && (
             <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Format</dt>
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">What you get</dt>
               <dd className="mt-2 text-sm">{product.format}</dd>
             </div>
           )}
           {product.target_audience && (
             <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">For</dt>
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Built for</dt>
               <dd className="mt-2 text-sm">{product.target_audience}</dd>
             </div>
           )}
           {product.cohort_capacity && (
-            <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Capacity</dt>
-              <dd className="mt-2 text-sm">{product.cohort_capacity} seats per cohort</dd>
-            </div>
-          )}
-          {product.scripture_root && (
             <div className="bg-background p-5 md:col-span-2">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-banana">Scripture root</dt>
-              <dd className="mt-2 text-sm italic">{product.scripture_root}</dd>
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Group size</dt>
+              <dd className="mt-2 text-sm">{product.cohort_capacity} seats per intake</dd>
             </div>
           )}
         </dl>
