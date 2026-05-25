@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { useAuth } from "@/lib/auth-context";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — CHKPLT" }] }),
@@ -20,6 +21,15 @@ function Dashboard() {
         <p className="mt-6 text-muted-foreground max-w-2xl">
           Your purchases, courses, and account live here. This dashboard fills out in Phase 04.
         </p>
+        <div className="mt-8">
+          <Link
+            to="/admin/contacts"
+            className="inline-flex items-center gap-2 border border-banana/40 px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-banana hover:bg-banana hover:text-banana-foreground transition-colors"
+          >
+            Admin · Contacts &amp; Tags →
+          </Link>
+        </div>
+
 
         <div className="mt-16 grid gap-px bg-border md:grid-cols-3">
           {[
