@@ -17,7 +17,7 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="font-display text-7xl">404</h1>
-        <p className="mt-4 text-muted-foreground">This page isn't part of the empire.</p>
+        <p className="mt-4 text-muted-foreground">This page isn't part of the Kingdom.</p>
         <Link to="/" className="mt-6 inline-block rounded-md bg-banana px-4 py-2 text-sm font-medium text-banana-foreground">
           Back home
         </Link>
