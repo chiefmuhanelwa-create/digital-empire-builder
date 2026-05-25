@@ -18,7 +18,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2">
           <span className="size-2.5 rounded-full bg-banana" />
-          <span className="font-mono text-sm tracking-[0.18em] uppercase">CKP</span>
+          <span className="font-mono text-sm tracking-[0.18em] uppercase">CHKPLT</span>
         </Link>
         <nav className="hidden gap-8 text-sm text-muted-foreground md:flex items-center">
           <DropdownMenu>
@@ -79,7 +79,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border/60 mt-32">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-        <div className="font-mono tracking-[0.18em] uppercase">CKP — Kingdom Contentpreneurs</div>
+        <div className="font-mono tracking-[0.18em] uppercase">CHKPLT — Kingdom Contentpreneurs</div>
         <div>© {new Date().getFullYear()} Christ Kingdom Platform. All rights reserved.</div>
       </div>
     </footer>
