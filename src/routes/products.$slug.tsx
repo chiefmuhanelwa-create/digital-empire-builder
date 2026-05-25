@@ -215,7 +215,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
 
   return (
     <div className="mt-12 border border-border p-6">
-      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Checkout · Paystack · ZAR</div>
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · ZAR</div>
       <h3 className="mt-2 font-display text-2xl">Buy {product.title}</h3>
       <div className="mt-6 grid gap-3 md:grid-cols-3">
         <div>
@@ -249,7 +249,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
         {mut.isPending ? "Starting…" : `Pay ${priceLabel} →`}
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">
-        Secure checkout via Paystack. You'll be redirected, then returned here once payment completes.
+        You'll be sent to our secure checkout, then brought back here once payment is complete.
       </p>
     </div>
   );
