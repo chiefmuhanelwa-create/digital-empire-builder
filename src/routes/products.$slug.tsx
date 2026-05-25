@@ -25,7 +25,7 @@ export const Route = createFileRoute("/products/$slug")({
       <SiteHeader />
       <div className="mx-auto max-w-3xl px-6 py-32 text-center">
         <h1 className="font-display text-5xl">Product not found.</h1>
-        <Link to="/products" className="mt-6 inline-block text-banana">← Back to gardens</Link>
+        <Link to="/products" className="mt-6 inline-block text-banana">← Back to shop</Link>
       </div>
     </div>
   ),
