@@ -21,10 +21,16 @@ function Dashboard() {
         <p className="mt-6 text-muted-foreground max-w-2xl">
           Your purchases, courses, and account live here. This dashboard fills out in Phase 04.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            to="/learn"
+            className="inline-flex items-center gap-2 border border-banana/40 px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-banana hover:bg-banana hover:text-banana-foreground transition-colors"
+          >
+            My Courses →
+          </Link>
           <Link
             to="/admin/contacts"
-            className="inline-flex items-center gap-2 border border-banana/40 px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-banana hover:bg-banana hover:text-banana-foreground transition-colors"
+            className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
           >
             Admin · Contacts &amp; Tags →
           </Link>
