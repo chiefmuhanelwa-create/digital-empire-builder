@@ -5,9 +5,9 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — CHKPLT" },
-      { name: "description", content: "CHKPLT is a custom-built platform for digital creators who want to own their stack." },
+      { name: "description", content: "CHKPLT is a creator-focused platform offering workbooks, courses and mentorship to help you grow your brand and income." },
       { property: "og:title", content: "About CHKPLT" },
-      { property: "og:description", content: "A custom-built platform for digital creators who want to own their stack." },
+      { property: "og:description", content: "Workbooks, courses and mentorship for creators." },
     ],
   }),
   component: About,
@@ -19,11 +19,11 @@ function About() {
       <SiteHeader />
       <section className="mx-auto max-w-3xl px-6 pt-24 pb-16">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">About</div>
-        <h1 className="mt-4 font-display text-5xl md:text-6xl">A platform built for the work, not the gatekeepers.</h1>
+        <h1 className="mt-4 font-display text-5xl md:text-6xl">Built for creators who want a real business — not just a feed.</h1>
         <div className="mt-10 space-y-6 text-lg text-muted-foreground">
-          <p>CHKPLT replaces the patchwork of tools creators rent — checkout, LMS, email, community — with a single owned stack.</p>
-          <p>Every subsystem is purpose-built: from Paystack-native checkout to drip-scheduled courses, from broadcast email to affiliate payouts.</p>
-          <p>This is Phase 01 — the foundation. Storefront, brand, and authentication. The empire grows from here.</p>
+          <p>CHKPLT is a home for the workbooks, courses, frameworks and mentorship that help South African creators turn their content into a sustainable income.</p>
+          <p>Everything we sell is built to give you a real win: niche clarity, a stronger personal brand, multiple income streams, and the tax know-how to keep what you earn.</p>
+          <p>Start with a free guide, grab a workbook when you're ready, and join a premium program when you go full-time.</p>
         </div>
       </section>
       <SiteFooter />
