@@ -19,10 +19,14 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
+import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/learn'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as ProductsGardenGardenRouteImport } from './routes/products.garden.$garden'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
+import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin.contacts'
+import { Route as AuthenticatedLearnSlugLessonSlugRouteImport } from './routes/_authenticated/learn.$slug.$lessonSlug'
+import { Route as AuthenticatedAdminCurriculumProductSlugRouteImport } from './routes/_authenticated/admin.curriculum.$productSlug'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -73,6 +77,11 @@ const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
   path: '/checkout/success',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedLearnRoute = AuthenticatedLearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -89,10 +98,27 @@ const ApiPublicPaystackWebhookRoute =
     path: '/api/public/paystack-webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedLearnSlugRoute = AuthenticatedLearnSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => AuthenticatedLearnRoute,
+} as any)
 const AuthenticatedAdminContactsRoute =
   AuthenticatedAdminContactsRouteImport.update({
     id: '/admin/contacts',
     path: '/admin/contacts',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLearnSlugLessonSlugRoute =
+  AuthenticatedLearnSlugLessonSlugRouteImport.update({
+    id: '/$lessonSlug',
+    path: '/$lessonSlug',
+    getParentRoute: () => AuthenticatedLearnSlugRoute,
+  } as any)
+const AuthenticatedAdminCurriculumProductSlugRoute =
+  AuthenticatedAdminCurriculumProductSlugRouteImport.update({
+    id: '/admin/curriculum/$productSlug',
+    path: '/admin/curriculum/$productSlug',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -105,11 +131,15 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
+  '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
+  '/learn/$slug/$lessonSlug': typeof AuthenticatedLearnSlugLessonSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -120,11 +150,15 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
+  '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
+  '/learn/$slug/$lessonSlug': typeof AuthenticatedLearnSlugLessonSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -137,11 +171,15 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
+  '/_authenticated/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
+  '/_authenticated/learn/$slug/$lessonSlug': typeof AuthenticatedLearnSlugLessonSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -154,11 +192,15 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard'
+    | '/learn'
     | '/checkout/success'
     | '/products/$slug'
     | '/admin/contacts'
+    | '/learn/$slug'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
+    | '/admin/curriculum/$productSlug'
+    | '/learn/$slug/$lessonSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -169,11 +211,15 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard'
+    | '/learn'
     | '/checkout/success'
     | '/products/$slug'
     | '/admin/contacts'
+    | '/learn/$slug'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
+    | '/admin/curriculum/$productSlug'
+    | '/learn/$slug/$lessonSlug'
   id:
     | '__root__'
     | '/'
@@ -185,11 +231,15 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/_authenticated/dashboard'
+    | '/_authenticated/learn'
     | '/checkout/success'
     | '/products/$slug'
     | '/_authenticated/admin/contacts'
+    | '/_authenticated/learn/$slug'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
+    | '/_authenticated/admin/curriculum/$productSlug'
+    | '/_authenticated/learn/$slug/$lessonSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -277,6 +327,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/learn': {
+      id: '/_authenticated/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof AuthenticatedLearnRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -298,6 +355,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/learn/$slug': {
+      id: '/_authenticated/learn/$slug'
+      path: '/$slug'
+      fullPath: '/learn/$slug'
+      preLoaderRoute: typeof AuthenticatedLearnSlugRouteImport
+      parentRoute: typeof AuthenticatedLearnRoute
+    }
     '/_authenticated/admin/contacts': {
       id: '/_authenticated/admin/contacts'
       path: '/admin/contacts'
@@ -305,17 +369,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminContactsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/learn/$slug/$lessonSlug': {
+      id: '/_authenticated/learn/$slug/$lessonSlug'
+      path: '/$lessonSlug'
+      fullPath: '/learn/$slug/$lessonSlug'
+      preLoaderRoute: typeof AuthenticatedLearnSlugLessonSlugRouteImport
+      parentRoute: typeof AuthenticatedLearnSlugRoute
+    }
+    '/_authenticated/admin/curriculum/$productSlug': {
+      id: '/_authenticated/admin/curriculum/$productSlug'
+      path: '/admin/curriculum/$productSlug'
+      fullPath: '/admin/curriculum/$productSlug'
+      preLoaderRoute: typeof AuthenticatedAdminCurriculumProductSlugRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedLearnSlugRouteChildren {
+  AuthenticatedLearnSlugLessonSlugRoute: typeof AuthenticatedLearnSlugLessonSlugRoute
+}
+
+const AuthenticatedLearnSlugRouteChildren: AuthenticatedLearnSlugRouteChildren =
+  {
+    AuthenticatedLearnSlugLessonSlugRoute:
+      AuthenticatedLearnSlugLessonSlugRoute,
+  }
+
+const AuthenticatedLearnSlugRouteWithChildren =
+  AuthenticatedLearnSlugRoute._addFileChildren(
+    AuthenticatedLearnSlugRouteChildren,
+  )
+
+interface AuthenticatedLearnRouteChildren {
+  AuthenticatedLearnSlugRoute: typeof AuthenticatedLearnSlugRouteWithChildren
+}
+
+const AuthenticatedLearnRouteChildren: AuthenticatedLearnRouteChildren = {
+  AuthenticatedLearnSlugRoute: AuthenticatedLearnSlugRouteWithChildren,
+}
+
+const AuthenticatedLearnRouteWithChildren =
+  AuthenticatedLearnRoute._addFileChildren(AuthenticatedLearnRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedLearnRoute: typeof AuthenticatedLearnRouteWithChildren
   AuthenticatedAdminContactsRoute: typeof AuthenticatedAdminContactsRoute
+  AuthenticatedAdminCurriculumProductSlugRoute: typeof AuthenticatedAdminCurriculumProductSlugRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedLearnRoute: AuthenticatedLearnRouteWithChildren,
   AuthenticatedAdminContactsRoute: AuthenticatedAdminContactsRoute,
+  AuthenticatedAdminCurriculumProductSlugRoute:
+    AuthenticatedAdminCurriculumProductSlugRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
