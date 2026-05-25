@@ -1,8 +1,10 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
+import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
   head: ({ params }) => ({
@@ -17,22 +19,24 @@ export const Route = createFileRoute("/products/$slug")({
       <SiteHeader />
       <div className="mx-auto max-w-3xl px-6 py-32 text-center">
         <h1 className="font-display text-5xl">Product not found.</h1>
-        <Link to="/products" className="mt-6 inline-block text-banana">← Back to catalog</Link>
+        <Link to="/products" className="mt-6 inline-block text-banana">← Back to gardens</Link>
       </div>
     </div>
   ),
-  errorComponent: ({ error }) => (
-    <div className="min-h-screen bg-background text-foreground p-8">
-      <h1 className="font-display text-3xl">Couldn't load product.</h1>
-      <p className="text-sm text-muted-foreground mt-2">{error.message}</p>
-    </div>
-  ),
+  errorComponent: ({ error, reset }) => {
+    const router = useRouter();
+    return (
+      <div className="min-h-screen bg-background text-foreground p-8">
+        <SiteHeader />
+        <div className="mx-auto max-w-3xl py-32">
+          <h1 className="font-display text-3xl">Couldn't load product.</h1>
+          <p className="text-sm text-muted-foreground mt-2">{error.message}</p>
+          <Button onClick={() => { router.invalidate(); reset(); }} className="mt-6">Try again</Button>
+        </div>
+      </div>
+    );
+  },
 });
-
-function formatPrice(cents: number, currency: string) {
-  const v = (cents / 100).toLocaleString("en-NG");
-  return `${currency === "NGN" ? "₦" : currency + " "}${v}`;
-}
 
 function ProductDetail() {
   const { slug } = Route.useParams();
@@ -43,6 +47,20 @@ function ProductDetail() {
         .from("products").select("*").eq("slug", slug).maybeSingle();
       if (error) throw error;
       if (!data) throw notFound();
+      return data;
+    },
+  });
+
+  const { data: seedProduct } = useQuery({
+    queryKey: ["product-seed", product?.seed_to_product_id],
+    enabled: !!product?.seed_to_product_id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("slug, title, tagline, price_cents, currency, is_free, garden")
+        .eq("id", product!.seed_to_product_id!)
+        .maybeSingle();
+      if (error) throw error;
       return data;
     },
   });
@@ -59,27 +77,113 @@ function ProductDetail() {
   }
   if (!product) return null;
 
+  const gardenMeta = product.garden ? GARDENS[product.garden as Garden] : null;
+  const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
-      <section className="mx-auto max-w-3xl px-6 pt-24 pb-16">
-        <Link to="/products" className="font-mono text-xs text-muted-foreground hover:text-banana">← Catalog</Link>
-        <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">{product.tagline}</div>
-        <h1 className="mt-3 font-display text-5xl md:text-6xl">{product.title}</h1>
+      <article className="mx-auto max-w-3xl px-6 pt-24 pb-16">
+        {gardenMeta && (
+          <Link
+            to="/products/garden/$garden"
+            params={{ garden: gardenMeta.slug }}
+            className="font-mono text-xs text-muted-foreground hover:text-banana"
+          >
+            ← {gardenMeta.name} garden
+          </Link>
+        )}
+        <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">
+          {product.tagline}
+        </div>
+        <h1 className="mt-3 font-display text-5xl md:text-6xl leading-[1.05]">{product.title}</h1>
 
-        <div className="mt-10 flex items-baseline gap-4">
-          <div className="font-display text-4xl text-banana">{formatPrice(product.price_cents, product.currency)}</div>
-          <div className="font-mono text-xs text-muted-foreground">one-time</div>
+        <div className="mt-10 flex items-baseline gap-4 flex-wrap">
+          <div className="font-display text-5xl text-banana">{priceLabel}</div>
+          {!product.is_free && !product.requires_application && (
+            <div className="font-mono text-xs text-muted-foreground">one-time</div>
+          )}
+          {product.requires_application && (
+            <div className="font-mono text-xs text-muted-foreground">/ by application</div>
+          )}
         </div>
 
-        <p className="mt-10 text-lg text-muted-foreground leading-relaxed">{product.description}</p>
+        {product.description && (
+          <p className="mt-10 text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
+            {product.description}
+          </p>
+        )}
 
-        <div className="mt-12 flex gap-3">
-          <Button size="lg" disabled className="bg-banana text-banana-foreground">
-            Checkout — coming in Phase 02
-          </Button>
+        {/* Metadata strip */}
+        <dl className="mt-12 grid gap-px bg-border border border-border md:grid-cols-2">
+          {product.format && (
+            <div className="bg-background p-5">
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Format</dt>
+              <dd className="mt-2 text-sm">{product.format}</dd>
+            </div>
+          )}
+          {product.target_audience && (
+            <div className="bg-background p-5">
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">For</dt>
+              <dd className="mt-2 text-sm">{product.target_audience}</dd>
+            </div>
+          )}
+          {product.cohort_capacity && (
+            <div className="bg-background p-5">
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Capacity</dt>
+              <dd className="mt-2 text-sm">{product.cohort_capacity} seats per cohort</dd>
+            </div>
+          )}
+          {product.scripture_root && (
+            <div className="bg-background p-5 md:col-span-2">
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-banana">Scripture root</dt>
+              <dd className="mt-2 text-sm italic">{product.scripture_root}</dd>
+            </div>
+          )}
+        </dl>
+
+        {/* CTA */}
+        <div className="mt-12 flex gap-3 flex-wrap">
+          {product.is_free ? (
+            <Button size="lg" disabled className="bg-banana text-banana-foreground">
+              Get free — opt-in coming in Phase 2c
+            </Button>
+          ) : product.requires_application ? (
+            <Button size="lg" disabled variant="outline">
+              Apply — applications open in Phase 2c
+            </Button>
+          ) : (
+            <Button size="lg" disabled className="bg-banana text-banana-foreground">
+              Buy {priceLabel} — Paystack checkout in Phase 2c
+            </Button>
+          )}
         </div>
-      </section>
+
+        {/* Seed to next */}
+        {seedProduct && (
+          <Link
+            to="/products/$slug"
+            params={{ slug: seedProduct.slug }}
+            className="group mt-20 block border-t border-border pt-10"
+          >
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              Next seed →
+            </div>
+            <div className="mt-4 flex items-end justify-between gap-6">
+              <div>
+                <div className="font-mono text-xs text-muted-foreground">{seedProduct.tagline}</div>
+                <h3 className="mt-2 font-display text-3xl group-hover:text-banana transition-colors">
+                  {seedProduct.title}
+                </h3>
+              </div>
+              <div className="flex items-center gap-3 font-mono text-sm text-muted-foreground">
+                <span>{formatPrice(seedProduct.price_cents, seedProduct.currency, seedProduct.is_free)}</span>
+                <ArrowRight className="size-4 group-hover:text-banana transition-colors" />
+              </div>
+            </div>
+          </Link>
+        )}
+      </article>
       <SiteFooter />
     </div>
   );
