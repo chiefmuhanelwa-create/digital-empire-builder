@@ -20,6 +20,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as ProductsGardenGardenRouteImport } from './routes/products.garden.$garden'
+import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin.contacts'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -75,6 +76,12 @@ const ProductsGardenGardenRoute = ProductsGardenGardenRouteImport.update({
   path: '/garden/$garden',
   getParentRoute: () => ProductsRoute,
 } as any)
+const AuthenticatedAdminContactsRoute =
+  AuthenticatedAdminContactsRouteImport.update({
+    id: '/admin/contacts',
+    path: '/admin/contacts',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
 }
 export interface FileRoutesByTo {
@@ -98,6 +106,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
 }
 export interface FileRoutesById {
@@ -112,6 +121,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
 }
 export interface FileRouteTypes {
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/products/$slug'
+    | '/admin/contacts'
     | '/products/garden/$garden'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/products/$slug'
+    | '/admin/contacts'
     | '/products/garden/$garden'
   id:
     | '__root__'
@@ -151,6 +163,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/dashboard'
     | '/products/$slug'
+    | '/_authenticated/admin/contacts'
     | '/products/garden/$garden'
   fileRoutesById: FileRoutesById
 }
@@ -244,15 +257,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsGardenGardenRouteImport
       parentRoute: typeof ProductsRoute
     }
+    '/_authenticated/admin/contacts': {
+      id: '/_authenticated/admin/contacts'
+      path: '/admin/contacts'
+      fullPath: '/admin/contacts'
+      preLoaderRoute: typeof AuthenticatedAdminContactsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedAdminContactsRoute: typeof AuthenticatedAdminContactsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedAdminContactsRoute: AuthenticatedAdminContactsRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

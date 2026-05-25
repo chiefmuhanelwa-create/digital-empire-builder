@@ -118,6 +118,120 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriber_tags: {
+        Row: {
+          applied_by: string | null
+          created_at: string
+          id: string
+          subscriber_id: string
+          tag_id: string
+        }
+        Insert: {
+          applied_by?: string | null
+          created_at?: string
+          id?: string
+          subscriber_id: string
+          tag_id: string
+        }
+        Update: {
+          applied_by?: string | null
+          created_at?: string
+          id?: string
+          subscriber_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriber_tags_subscriber_id_fkey"
+            columns: ["subscriber_id"]
+            isOneToOne: false
+            referencedRelation: "subscribers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriber_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          phone: string | null
+          raw_data: Json | null
+          source: string
+          status: Database["public"]["Enums"]["subscriber_status"]
+          unsubscribed_at: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          raw_data?: Json | null
+          source?: string
+          status?: Database["public"]["Enums"]["subscriber_status"]
+          unsubscribed_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          phone?: string | null
+          raw_data?: Json | null
+          source?: string
+          status?: Database["public"]["Enums"]["subscriber_status"]
+          unsubscribed_at?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -156,6 +270,7 @@ export type Database = {
       app_role: "admin" | "student"
       product_garden: "deshe" | "esev" | "etz_pri" | "devarim"
       product_status: "draft" | "published" | "archived"
+      subscriber_status: "active" | "unsubscribed" | "bounced" | "complained"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -286,6 +401,7 @@ export const Constants = {
       app_role: ["admin", "student"],
       product_garden: ["deshe", "esev", "etz_pri", "devarim"],
       product_status: ["draft", "published", "archived"],
+      subscriber_status: ["active", "unsubscribed", "bounced", "complained"],
     },
   },
 } as const
