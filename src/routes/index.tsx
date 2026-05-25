@@ -38,7 +38,7 @@ function Landing() {
               <Link to="/products">Browse resources <ArrowRight /></Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link to="/about">What is CKP?</Link>
+              <Link to="/about">What is CHKPLT?</Link>
             </Button>
           </div>
         </div>
