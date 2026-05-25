@@ -5,7 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { verifyCheckout } from "@/lib/checkout.functions";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/gardens";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export const Route = createFileRoute("/checkout/success")({
   head: () => ({ meta: [{ title: "Order received — CHKPLT" }] }),
@@ -33,9 +33,8 @@ function CheckoutSuccess() {
     },
   });
 
-  useEffect(() => {
-    if (!reference) return;
-  }, [reference]);
+
+
 
   const status = q.data?.status;
 
