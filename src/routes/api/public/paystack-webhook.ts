@@ -88,7 +88,9 @@ async function handleChargeSuccess(payload: any) {
 
   // Tag: buyer + garden
   const tagSlugs = ["buyer"];
-  const garden = order.metadata?.garden as string | undefined;
+  const garden = (order.metadata && typeof order.metadata === "object" && !Array.isArray(order.metadata))
+    ? (order.metadata as Record<string, unknown>).garden as string | undefined
+    : undefined;
   if (garden && GARDEN_TAG[garden]) tagSlugs.push(GARDEN_TAG[garden]);
 
   if (subscriberId) {
