@@ -14,8 +14,8 @@ function isGarden(v: string): v is Garden {
 export const Route = createFileRoute("/products/garden/$garden")({
   head: ({ params }) => {
     const meta = isGarden(params.garden) ? GARDENS[params.garden] : null;
-    const title = meta ? `${meta.name} — ${meta.tagline} — CHKPLT` : "Garden — CHKPLT";
-    const desc = meta?.description ?? "CHKPLT garden products.";
+    const title = meta ? `${meta.name} — ${meta.tagline} — Christ Kingdom Platform` : "Collection — Christ Kingdom Platform";
+    const desc = meta?.description ?? "Christ Kingdom Platform products.";
     return {
       meta: [
         { title },

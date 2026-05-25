@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Get access — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Join — Christ Kingdom Platform" }] }),
   component: SignupPage,
 });
 
@@ -45,8 +45,8 @@ function SignupPage() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <div className="mx-auto max-w-md px-6 pt-20 pb-16">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Get access</div>
-        <h1 className="mt-4 font-display text-5xl">Join the empire.</h1>
+        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Join</div>
+        <h1 className="mt-4 font-display text-5xl">Join the Kingdom.</h1>
 
         <Button onClick={onGoogle} variant="outline" className="mt-10 w-full">Continue with Google</Button>
         <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground font-mono">

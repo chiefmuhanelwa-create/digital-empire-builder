@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — Christ Kingdom Platform" }] }),
   component: Dashboard,
 });
 
@@ -19,7 +19,7 @@ function Dashboard() {
           Welcome, {user?.user_metadata?.full_name ?? user?.email}.
         </h1>
         <p className="mt-6 text-muted-foreground max-w-2xl">
-          Your purchases, courses, and account live here. This dashboard fills out in Phase 04.
+          Your purchases, courses, and account live here.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
