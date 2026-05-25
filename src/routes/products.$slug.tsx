@@ -1,9 +1,15 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
+import { useAuth } from "@/lib/auth-context";
+import { initializeCheckout } from "@/lib/checkout.functions";
+import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -143,21 +149,8 @@ function ProductDetail() {
         </dl>
 
         {/* CTA */}
-        <div className="mt-12 flex gap-3 flex-wrap">
-          {product.is_free ? (
-            <Button size="lg" disabled className="bg-banana text-banana-foreground">
-              Get free — opt-in coming in Phase 2c
-            </Button>
-          ) : product.requires_application ? (
-            <Button size="lg" disabled variant="outline">
-              Apply — applications open in Phase 2c
-            </Button>
-          ) : (
-            <Button size="lg" disabled className="bg-banana text-banana-foreground">
-              Buy {priceLabel} — Paystack checkout in Phase 2c
-            </Button>
-          )}
-        </div>
+        <BuyBlock product={product} priceLabel={priceLabel} />
+
 
         {/* Seed to next */}
         {seedProduct && (
@@ -185,6 +178,85 @@ function ProductDetail() {
         )}
       </article>
       <SiteFooter />
+    </div>
+  );
+}
+
+function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string }) {
+  const { user } = useAuth();
+  const initFn = useServerFn(initializeCheckout);
+  const [email, setEmail] = useState<string>(user?.email ?? "");
+  const [fullName, setFullName] = useState<string>(
+    (user?.user_metadata?.full_name as string) ?? "",
+  );
+  const [phone, setPhone] = useState<string>("");
+
+  const mut = useMutation({
+    mutationFn: initFn,
+    onSuccess: (res: any) => {
+      window.location.href = res.authorizationUrl;
+    },
+    onError: (e: any) => toast.error(e.message ?? "Could not start checkout"),
+  });
+
+  if (product.is_free) {
+    return (
+      <div className="mt-12">
+        <Button size="lg" disabled className="bg-banana text-banana-foreground">
+          Get free — opt-in coming soon
+        </Button>
+      </div>
+    );
+  }
+
+  if (product.requires_application) {
+    return (
+      <div className="mt-12">
+        <Button size="lg" disabled variant="outline">
+          By application — applications open soon
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-12 border border-border p-6">
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Checkout · Paystack · ZAR</div>
+      <h3 className="mt-2 font-display text-2xl">Buy {product.title}</h3>
+      <div className="mt-6 grid gap-3 md:grid-cols-3">
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
+          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Full name</label>
+          <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" placeholder="Optional" />
+        </div>
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Phone</label>
+          <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1" placeholder="Optional" />
+        </div>
+      </div>
+      <Button
+        size="lg"
+        disabled={!email || mut.isPending}
+        onClick={() =>
+          mut.mutate({
+            data: {
+              productSlug: product.slug,
+              email,
+              fullName: fullName || undefined,
+              phone: phone || undefined,
+            },
+          })
+        }
+        className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90"
+      >
+        {mut.isPending ? "Starting…" : `Pay ${priceLabel} →`}
+      </Button>
+      <p className="mt-3 text-xs text-muted-foreground">
+        Secure checkout via Paystack. You'll be redirected, then returned here once payment completes.
+      </p>
     </div>
   );
 }

@@ -14,6 +14,210 @@ export type Database = {
   }
   public: {
     Tables: {
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          line_total_cents: number
+          order_id: string
+          product_id: string
+          product_title: string
+          quantity: number
+          unit_price_cents: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          line_total_cents: number
+          order_id: string
+          product_id: string
+          product_title: string
+          quantity?: number
+          unit_price_cents: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          line_total_cents?: number
+          order_id?: string
+          product_id?: string
+          product_title?: string
+          quantity?: number
+          unit_price_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          currency: string
+          customer_name: string | null
+          customer_phone: string | null
+          email: string
+          id: string
+          metadata: Json | null
+          provider: string
+          provider_reference: string | null
+          status: Database["public"]["Enums"]["order_status"]
+          subtotal_cents: number
+          total_cents: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          email: string
+          id?: string
+          metadata?: Json | null
+          provider?: string
+          provider_reference?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          email?: string
+          id?: string
+          metadata?: Json | null
+          provider?: string
+          provider_reference?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount_cents: number | null
+          created_at: string
+          currency: string | null
+          event_type: string | null
+          gateway_response: string | null
+          id: string
+          order_id: string | null
+          paid_at: string | null
+          provider: string
+          provider_reference: string
+          raw_payload: Json | null
+          status: Database["public"]["Enums"]["payment_status"]
+        }
+        Insert: {
+          amount_cents?: number | null
+          created_at?: string
+          currency?: string | null
+          event_type?: string | null
+          gateway_response?: string | null
+          id?: string
+          order_id?: string | null
+          paid_at?: string | null
+          provider?: string
+          provider_reference: string
+          raw_payload?: Json | null
+          status?: Database["public"]["Enums"]["payment_status"]
+        }
+        Update: {
+          amount_cents?: number | null
+          created_at?: string
+          currency?: string | null
+          event_type?: string | null
+          gateway_response?: string | null
+          id?: string
+          order_id?: string | null
+          paid_at?: string | null
+          provider?: string
+          provider_reference?: string
+          raw_payload?: Json | null
+          status?: Database["public"]["Enums"]["payment_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_grants: {
+        Row: {
+          granted_at: string
+          id: string
+          order_id: string | null
+          product_id: string
+          revoked_at: string | null
+          subscriber_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          granted_at?: string
+          id?: string
+          order_id?: string | null
+          product_id: string
+          revoked_at?: string | null
+          subscriber_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          granted_at?: string
+          id?: string
+          order_id?: string | null
+          product_id?: string
+          revoked_at?: string | null
+          subscriber_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_grants_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_grants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_grants_subscriber_id_fkey"
+            columns: ["subscriber_id"]
+            isOneToOne: false
+            referencedRelation: "subscribers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           cohort_capacity: number | null
@@ -268,6 +472,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "student"
+      order_status: "pending" | "paid" | "failed" | "refunded" | "cancelled"
+      payment_status:
+        | "initialized"
+        | "success"
+        | "failed"
+        | "abandoned"
+        | "reversed"
       product_garden: "deshe" | "esev" | "etz_pri" | "devarim"
       product_status: "draft" | "published" | "archived"
       subscriber_status: "active" | "unsubscribed" | "bounced" | "complained"
@@ -399,6 +610,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "student"],
+      order_status: ["pending", "paid", "failed", "refunded", "cancelled"],
+      payment_status: [
+        "initialized",
+        "success",
+        "failed",
+        "abandoned",
+        "reversed",
+      ],
       product_garden: ["deshe", "esev", "etz_pri", "devarim"],
       product_status: ["draft", "published", "archived"],
       subscriber_status: ["active", "unsubscribed", "bounced", "complained"],
