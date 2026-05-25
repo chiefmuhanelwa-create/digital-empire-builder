@@ -23,13 +23,13 @@ export function SiteHeader() {
         <nav className="hidden gap-8 text-sm text-muted-foreground md:flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger className="inline-flex items-center gap-1 hover:text-foreground transition-colors outline-none">
-              Gardens <ChevronDown className="size-3.5" />
+              Shop <ChevronDown className="size-3.5" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-72">
               <DropdownMenuItem asChild>
                 <Link to="/products" className="flex flex-col items-start gap-0.5 py-2">
-                  <span className="font-mono text-xs tracking-[0.2em] uppercase text-banana">All gardens</span>
-                  <span className="text-xs text-muted-foreground">The full product ecosystem</span>
+                  <span className="font-mono text-xs tracking-[0.2em] uppercase text-banana">Everything</span>
+                  <span className="text-xs text-muted-foreground">Browse the full shop</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
