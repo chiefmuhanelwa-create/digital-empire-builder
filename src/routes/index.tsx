@@ -1,26 +1,79 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "CHKPLT — Build Your Digital Empire" },
+      { name: "description", content: "Courses, checkout, community, and automation. The complete operating system for creators selling digital products." },
+    ],
+  }),
+  component: Landing,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Landing() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background text-foreground">
+      <SiteHeader />
+
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,oklch(0.88_0.18_95/0.12),transparent_60%)]" />
+        <div className="mx-auto max-w-6xl px-6 pt-24 pb-32 md:pt-36">
+          <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+            ◆ Phase 01 — Foundation
+          </div>
+          <h1 className="mt-6 font-display text-5xl leading-[1.05] md:text-7xl lg:text-8xl max-w-4xl">
+            Your digital empire,<br />
+            <em className="text-banana not-italic">one platform.</em>
+          </h1>
+          <p className="mt-8 max-w-xl text-lg text-muted-foreground">
+            CHKPLT is the operating system for creators who sell knowledge — courses, cohorts,
+            communities, and digital products. Built for scale from day one.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Button asChild size="lg" className="bg-banana text-banana-foreground hover:bg-banana/90">
+              <Link to="/products">Browse the catalog <ArrowRight /></Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/about">What is CHKPLT?</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Pillars */}
+      <section className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-24 grid gap-12 md:grid-cols-3">
+          {[
+            { n: "01", t: "Sell", d: "Storefront, checkout, receipts, affiliate tracking." },
+            { n: "02", t: "Deliver", d: "Courses, modules, drip schedules, certificates." },
+            { n: "03", t: "Scale", d: "Email automation, funnels, analytics, community." },
+          ].map((p) => (
+            <div key={p.n} className="border-t border-border pt-6">
+              <div className="font-mono text-xs text-banana">{p.n}</div>
+              <h3 className="mt-4 font-display text-3xl">{p.t}</h3>
+              <p className="mt-3 text-sm text-muted-foreground">{p.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-24 flex flex-col items-start gap-6">
+          <h2 className="font-display text-4xl md:text-5xl max-w-2xl">
+            Stop renting other people's platforms.
+          </h2>
+          <Button asChild size="lg" className="bg-banana text-banana-foreground hover:bg-banana/90">
+            <Link to="/signup">Get access <ArrowRight /></Link>
+          </Button>
+        </div>
+      </section>
+
+      <SiteFooter />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
