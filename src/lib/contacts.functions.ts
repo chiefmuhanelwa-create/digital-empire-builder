@@ -103,7 +103,7 @@ export const listSubscribers = createServerFn({ method: "POST" })
 
     if (data.status) q = q.eq("status", data.status);
     if (data.search) q = q.ilike("email", `%${data.search}%`);
-    if (subIds !== null) q = q.in("id", subIds);
+    if (subIds) { const ids = subIds; q = q.in("id", ids); }
 
     const { data: rows, count, error } = await q;
     if (error) throw new Error(error.message);
