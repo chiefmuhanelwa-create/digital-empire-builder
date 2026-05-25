@@ -16,45 +16,80 @@ export type Database = {
     Tables: {
       products: {
         Row: {
+          cohort_capacity: number | null
           cover_image_url: string | null
           created_at: string
           currency: string
           description: string | null
+          format: string | null
+          garden: Database["public"]["Enums"]["product_garden"] | null
           id: string
+          is_free: boolean
           price_cents: number
+          requires_application: boolean
+          scripture_root: string | null
+          seed_to_product_id: string | null
           slug: string
+          sort_order: number
           status: Database["public"]["Enums"]["product_status"]
           tagline: string | null
+          target_audience: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          cohort_capacity?: number | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
           description?: string | null
+          format?: string | null
+          garden?: Database["public"]["Enums"]["product_garden"] | null
           id?: string
+          is_free?: boolean
           price_cents?: number
+          requires_application?: boolean
+          scripture_root?: string | null
+          seed_to_product_id?: string | null
           slug: string
+          sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           tagline?: string | null
+          target_audience?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          cohort_capacity?: number | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
           description?: string | null
+          format?: string | null
+          garden?: Database["public"]["Enums"]["product_garden"] | null
           id?: string
+          is_free?: boolean
           price_cents?: number
+          requires_application?: boolean
+          scripture_root?: string | null
+          seed_to_product_id?: string | null
           slug?: string
+          sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
           tagline?: string | null
+          target_audience?: string | null
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_seed_to_product_id_fkey"
+            columns: ["seed_to_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -119,6 +154,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "student"
+      product_garden: "deshe" | "esev" | "etz_pri" | "devarim"
       product_status: "draft" | "published" | "archived"
     }
     CompositeTypes: {
@@ -248,6 +284,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "student"],
+      product_garden: ["deshe", "esev", "etz_pri", "devarim"],
       product_status: ["draft", "published", "archived"],
     },
   },
