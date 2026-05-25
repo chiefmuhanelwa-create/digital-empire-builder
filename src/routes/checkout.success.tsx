@@ -76,6 +76,31 @@ function CheckoutSuccess() {
                 <Link to="/products">Keep exploring</Link>
               </Button>
             </div>
+
+            {q.data?.nextSeed && (
+              <div className="mt-16 border border-banana/40 bg-banana/5 p-8 text-left">
+                <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">
+                  Next seed →
+                </div>
+                <h2 className="mt-3 font-display text-3xl">{q.data.nextSeed.title}</h2>
+                {q.data.nextSeed.tagline && (
+                  <p className="mt-3 text-muted-foreground">{q.data.nextSeed.tagline}</p>
+                )}
+                <div className="mt-6 flex items-center justify-between gap-4">
+                  <div className="font-display text-2xl">
+                    {formatPrice(q.data.nextSeed.price_cents, q.data.nextSeed.currency, false)}
+                  </div>
+                  <Button
+                    asChild
+                    className="bg-foreground text-background hover:bg-foreground/90"
+                  >
+                    <Link to="/products/$slug" params={{ slug: q.data.nextSeed.slug }}>
+                      Plant this seed →
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            )}
           </>
         )}
 
