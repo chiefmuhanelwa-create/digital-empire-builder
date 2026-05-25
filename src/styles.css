@@ -7,12 +7,12 @@
 /*
  * Christ Kingdom Platform design system
  * Light foundation + warm amber accent.
- * Editorial typography (Instrument Serif display, IBM Plex Sans body, IBM Plex Mono accent).
+ * Modern typography (Syne display, Plus Jakarta Sans body, IBM Plex Mono accent).
  */
 
 @theme inline {
-  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -126,7 +126,7 @@
   }
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 }
