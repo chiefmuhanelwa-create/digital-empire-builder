@@ -131,14 +131,49 @@ export const verifyCheckout = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { data: order } = await supabaseAdmin
       .from("orders")
-      .select("id,status,email,total_cents,currency,provider_reference")
+      .select("id,status,email,total_cents,currency,provider_reference,metadata")
       .eq("provider_reference", data.reference)
       .maybeSingle();
-    if (!order) return { status: "unknown" as const };
+    if (!order) return { status: "unknown" as const, nextSeed: null };
+
+    let nextSeed: {
+      slug: string;
+      title: string;
+      tagline: string | null;
+      price_cents: number;
+      currency: string;
+    } | null = null;
+
+    const purchasedSlug = (order.metadata as { product_slug?: string } | null)?.product_slug;
+    if (purchasedSlug) {
+      const { data: purchased } = await supabaseAdmin
+        .from("products")
+        .select("seed_to_product_id")
+        .eq("slug", purchasedSlug)
+        .maybeSingle();
+      if (purchased?.seed_to_product_id) {
+        const { data: seed } = await supabaseAdmin
+          .from("products")
+          .select("slug,title,tagline,price_cents,currency,status")
+          .eq("id", purchased.seed_to_product_id)
+          .maybeSingle();
+        if (seed && seed.status === "published") {
+          nextSeed = {
+            slug: seed.slug,
+            title: seed.title,
+            tagline: seed.tagline,
+            price_cents: seed.price_cents,
+            currency: seed.currency,
+          };
+        }
+      }
+    }
+
     return {
       status: order.status,
       email: order.email,
       total_cents: order.total_cents,
       currency: order.currency,
+      nextSeed,
     };
   });
