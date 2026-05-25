@@ -91,8 +91,9 @@ export const listSubscribers = createServerFn({ method: "POST" })
         .select("subscriber_id")
         .eq("tag_id", data.tagId)
         .limit(5000);
-      subIds = (links ?? []).map((l: any) => l.subscriber_id);
-      if (subIds.length === 0) return { rows: [], total: 0 };
+      const ids = (links ?? []).map((l: any) => l.subscriber_id as string);
+      if (ids.length === 0) return { rows: [], total: 0 };
+      subIds = ids;
     }
 
     let q = supabase
