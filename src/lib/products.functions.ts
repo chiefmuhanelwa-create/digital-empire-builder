@@ -238,3 +238,35 @@ export const myPurchases = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return { grants: data ?? [] };
   });
+
+// Signed download URL for a signed-in user with a grant.
+export const getMyDownloadUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ productSlug: z.string().min(1).max(120) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { userId } = context;
+    const { data: product, error: pErr } = await supabaseAdmin
+      .from("products")
+      .select("id,title,download_path")
+      .eq("slug", data.productSlug)
+      .maybeSingle();
+    if (pErr) throw new Error(pErr.message);
+    if (!product?.download_path) throw new Error("No download available.");
+
+    const { data: grant } = await supabaseAdmin
+      .from("product_grants")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("product_id", product.id)
+      .is("revoked_at", null)
+      .maybeSingle();
+    if (!grant) throw new Error("You don't have access to this download.");
+
+    const { data: signed, error: sErr } = await supabaseAdmin.storage
+      .from("product-files")
+      .createSignedUrl(product.download_path, 60 * 30);
+    if (sErr) throw new Error(sErr.message);
+    return { url: signed.signedUrl, title: product.title };
+  });
