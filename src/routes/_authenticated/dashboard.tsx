@@ -5,7 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { myPurchases, getDownloadUrl } from "@/lib/products.functions";
+import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 
