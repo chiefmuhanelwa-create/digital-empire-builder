@@ -271,3 +271,30 @@ function UpsellFlow({ buyerEmail }: { buyerEmail: string }) {
     </div>
   );
 }
+
+function DownloadCard({ slug, reference }: { slug: string; reference: string }) {
+  const dl = useServerFn(getDownloadUrl);
+  const mut = useMutation({
+    mutationFn: dl,
+    onSuccess: (res: { url: string; title: string }) => {
+      window.open(res.url, "_blank", "noopener,noreferrer");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  return (
+    <div className="mt-10 border-2 border-banana bg-banana/5 p-6 text-center">
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Your download</div>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Click below to download your file. The link is valid for 30 minutes — you can always grab a fresh one from your dashboard.
+      </p>
+      <Button
+        onClick={() => mut.mutate({ data: { productSlug: slug, reference } })}
+        disabled={mut.isPending}
+        className="mt-5 bg-banana text-banana-foreground hover:bg-banana/90"
+      >
+        <Download className="size-4 mr-2" />
+        {mut.isPending ? "Preparing…" : "Download now"}
+      </Button>
+    </div>
+  );
+}
