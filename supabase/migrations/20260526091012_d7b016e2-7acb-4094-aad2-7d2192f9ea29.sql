@@ -1,0 +1,1 @@
+drop policy if exists "Product covers public read" on storage.objects;

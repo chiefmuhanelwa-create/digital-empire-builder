@@ -114,17 +114,60 @@ function ProductDetail() {
           )}
         </div>
 
+        {product.cover_image_url && (
+          <div className="mt-10 border border-border bg-muted/20 p-6 flex items-center justify-center">
+            <img
+              src={product.cover_image_url}
+              alt={product.title}
+              className="max-h-[420px] w-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+        )}
+
         {product.description && (
           <p className="mt-10 text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
             {product.description}
           </p>
         )}
 
+        {/* Primary CTA */}
+        <BuyBlock product={product} priceLabel={priceLabel} />
+
+        {/* Long-form sales copy */}
+        {product.long_description && (
+          <div className="mt-16 border-t border-border pt-12">
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              Why this exists
+            </div>
+            <div className="mt-6 text-base leading-relaxed whitespace-pre-line text-foreground/90">
+              {product.long_description}
+            </div>
+          </div>
+        )}
+
+        {/* Benefits */}
+        {Array.isArray(product.benefits) && product.benefits.length > 0 && (
+          <div className="mt-12 border border-banana/30 bg-banana/5 p-8">
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              What you get
+            </div>
+            <ul className="mt-5 space-y-3">
+              {(product.benefits as string[]).map((b, i) => (
+                <li key={i} className="flex items-start gap-3 text-base">
+                  <span className="mt-2 inline-block size-1.5 shrink-0 rounded-full bg-banana" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Metadata strip */}
         <dl className="mt-12 grid gap-px bg-border border border-border md:grid-cols-2">
           {product.format && (
             <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">What you get</dt>
+              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Format</dt>
               <dd className="mt-2 text-sm">{product.format}</dd>
             </div>
           )}
@@ -142,8 +185,17 @@ function ProductDetail() {
           )}
         </dl>
 
-        {/* CTA */}
-        <BuyBlock product={product} priceLabel={priceLabel} />
+        {/* Secondary CTA */}
+        {!product.is_free && !product.requires_application && (
+          <div className="mt-12 border-t border-border pt-10 text-center">
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              Ready when you are
+            </div>
+            <h3 className="mt-3 font-display text-3xl">Get it for {priceLabel}</h3>
+            <p className="mt-3 text-sm text-muted-foreground">Scroll up to checkout — takes 60 seconds.</p>
+          </div>
+        )}
+
 
 
         {/* Seed to next */}

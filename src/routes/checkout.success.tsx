@@ -3,12 +3,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { verifyCheckout, initializeCheckout } from "@/lib/checkout.functions";
+import { getDownloadUrl } from "@/lib/products.functions";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/gardens";
 import { supabase } from "@/integrations/supabase/client";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check } from "lucide-react";
+import { Check, Download } from "lucide-react";
+
 
 export const Route = createFileRoute("/checkout/success")({
   head: () => ({ meta: [{ title: "Order received — Christ Kingdom Platform" }] }),
@@ -83,6 +85,10 @@ function CheckoutSuccess() {
               </p>
             </div>
 
+            {purchasedSlug && (
+              <DownloadCard slug={purchasedSlug} reference={reference} />
+            )}
+
             {isNicheClarity ? (
               <UpsellFlow buyerEmail={q.data?.email ?? ""} />
             ) : (
@@ -95,6 +101,7 @@ function CheckoutSuccess() {
                     <Link to="/products">Keep exploring</Link>
                   </Button>
                 </div>
+
 
                 {q.data?.nextSeed && (
                   <div className="mt-16 border border-banana/40 bg-banana/5 p-8 text-left">
@@ -261,6 +268,33 @@ function UpsellFlow({ buyerEmail }: { buyerEmail: string }) {
           </Button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function DownloadCard({ slug, reference }: { slug: string; reference: string }) {
+  const dl = useServerFn(getDownloadUrl);
+  const mut = useMutation({
+    mutationFn: dl,
+    onSuccess: (res: { url: string; title: string }) => {
+      window.open(res.url, "_blank", "noopener,noreferrer");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  return (
+    <div className="mt-10 border-2 border-banana bg-banana/5 p-6 text-center">
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Your download</div>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Click below to download your file. The link is valid for 30 minutes — you can always grab a fresh one from your dashboard.
+      </p>
+      <Button
+        onClick={() => mut.mutate({ data: { productSlug: slug, reference } })}
+        disabled={mut.isPending}
+        className="mt-5 bg-banana text-banana-foreground hover:bg-banana/90"
+      >
+        <Download className="size-4 mr-2" />
+        {mut.isPending ? "Preparing…" : "Download now"}
+      </Button>
     </div>
   );
 }
