@@ -83,6 +83,10 @@ function CheckoutSuccess() {
               </p>
             </div>
 
+            {purchasedSlug && (
+              <DownloadCard slug={purchasedSlug} reference={reference} />
+            )}
+
             {isNicheClarity ? (
               <UpsellFlow buyerEmail={q.data?.email ?? ""} />
             ) : (
@@ -95,6 +99,7 @@ function CheckoutSuccess() {
                     <Link to="/products">Keep exploring</Link>
                   </Button>
                 </div>
+
 
                 {q.data?.nextSeed && (
                   <div className="mt-16 border border-banana/40 bg-banana/5 p-8 text-left">
