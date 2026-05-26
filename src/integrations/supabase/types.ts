@@ -349,15 +349,18 @@ export type Database = {
       }
       products: {
         Row: {
+          benefits: Json | null
           cohort_capacity: number | null
           cover_image_url: string | null
           created_at: string
           currency: string
           description: string | null
+          download_path: string | null
           format: string | null
           garden: Database["public"]["Enums"]["product_garden"] | null
           id: string
           is_free: boolean
+          long_description: string | null
           price_cents: number
           requires_application: boolean
           scripture_root: string | null
@@ -371,15 +374,18 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          benefits?: Json | null
           cohort_capacity?: number | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
           description?: string | null
+          download_path?: string | null
           format?: string | null
           garden?: Database["public"]["Enums"]["product_garden"] | null
           id?: string
           is_free?: boolean
+          long_description?: string | null
           price_cents?: number
           requires_application?: boolean
           scripture_root?: string | null
@@ -393,15 +399,18 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          benefits?: Json | null
           cohort_capacity?: number | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
           description?: string | null
+          download_path?: string | null
           format?: string | null
           garden?: Database["public"]["Enums"]["product_garden"] | null
           id?: string
           is_free?: boolean
+          long_description?: string | null
           price_cents?: number
           requires_application?: boolean
           scripture_root?: string | null
