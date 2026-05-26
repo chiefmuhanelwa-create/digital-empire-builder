@@ -174,6 +174,7 @@ export const verifyCheckout = createServerFn({ method: "POST" })
       email: order.email,
       total_cents: order.total_cents,
       currency: order.currency,
+      purchasedSlug: purchasedSlug ?? null,
       nextSeed,
     };
   });
