@@ -242,7 +242,6 @@ function AdminProducts() {
             qc.invalidateQueries({ queryKey: ["admin-products"] });
             setEditing(null);
           }}
-          upsertFn={upsertFn}
         />
       )}
 
@@ -250,6 +249,18 @@ function AdminProducts() {
     </div>
   );
 }
+
+function EditDrawer({
+  product,
+  onClose,
+  onSaved,
+}: {
+  product: Product;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const upsertFn = useServerFn(adminUpsertProduct);
+
 
 function EditDrawer({
   product,
