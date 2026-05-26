@@ -1,131 +1,89 @@
-# Phase 2 — The CHKPLT Spine
+# Next up: Niche Clarity funnel + nav fix
 
-The spine that every later phase (LMS, email, funnels, affiliates, community) plugs into. Built in 3 sub-phases, each shipped and approved before the next.
-
----
-
-## Phase 2a — Garden-Aware Catalog (the 26 products, modelled correctly)
-
-**Goal:** Replace the thin placeholder catalog with the real Genesis 1:11–12 product taxonomy, fully seeded with all 26 products from the ecosystem doc.
-
-### Database migration
-Extend `products` table with:
-- `garden` — enum `deshe | esev | etz_pri | devarim`
-- `seed_to_product_id` — self-FK pointing to the next product up the ladder
-- `scripture_root` — text (e.g. "Genesis 1:11 — Herb yielding seed.")
-- `format` — text (e.g. "PDF workbook (40+ pages, fillable) + Notion template")
-- `target_audience` — text (e.g. "Creators earning R0–R10K/month")
-- `is_free` — boolean
-- `sort_order` — int (display order within a garden)
-- `cohort_capacity` — int nullable (for Accelerator/Mentorship/Mastermind)
-- `requires_application` — boolean (high-ticket products go through application, not checkout)
-
-Keep `currency` per-product (you chose multi-currency); seeds use `ZAR` by default but the column stays flexible. Add a check constraint that `is_free = true` ⇒ `price_cents = 0`.
-
-Seed all 26 products with scripture roots, seed-pointers, formats, and audiences pulled from the Product Ecosystem doc.
-
-### Storefront restructure
-- `/products` becomes the **4 Gardens overview** — Deshe / Esev / Etz Pri / Devarim, each with a banner explaining its theology and product count.
-- `/products/garden/$garden` — Garden-specific catalog page, sorted by `sort_order` and price ascending.
-- `/products/$slug` — Product page redesigned to surface: scripture root, format, target audience, "Next seed →" link to `seed_to_product_id`, application-vs-checkout CTA.
-- Free products show a "Get free" CTA (will wire to email-gate in Phase 2b/3).
-- Application products (Accelerator R25K, Mentorship R50K, Mastermind R100K) show "Apply" CTA, not "Buy."
-
-### Header nav
-Replace generic "Products" with a dropdown listing the 4 Gardens by name + tagline.
-
-**Verification:** All 26 products visible, grouped by Garden, with correct prices, scripture roots, and seed-to-next links rendering.
+Two things, in this order. Both are small and ship together.
 
 ---
 
-## Phase 2b — Contacts + Tag Spine (your 13,234-row list, imported)
+## 1. Fix the broken Shop nav on mobile
 
-**Goal:** Bring the NOCHILL legacy list into the platform with all multi-source tag history preserved, so every later feature (email, automation, funnels, affiliates) has a real audience to act on.
+**The problem you spotted:** "the products link are not opening to anything."
 
-### Database migration
-- `subscribers` — `email` (unique, citext), `first_name`, `last_name`, `phone`, `source_summary`, `subscribed_at`, `unsubscribed_at`, `bounced_at`, `last_engaged_at`
-- `tags` — `name` (unique), `description`, `color`, `is_system` (locked tags like `paid_customer:*` that automations create)
-- `subscriber_tags` — join table, `subscriber_id`, `tag_id`, `applied_at`, `applied_by` (system | import | manual)
-- `import_jobs` — `id`, `filename`, `uploaded_by`, `status`, `row_count`, `inserted_count`, `updated_count`, `error_count`, `started_at`, `finished_at`, `error_log` (jsonb)
-- RLS: subscribers + tags admin-only via `has_role(auth.uid(), 'admin')`. Subscribers can read/update their own row via email match in a Phase 4 self-service page; not in scope yet.
+On mobile (you're on a 390px viewport right now), the header nav is hidden — it's set to `hidden md:flex`, meaning desktop only. There's no mobile menu button, so there's literally no way to reach Shop, About, or Contact from a phone. Desktop works fine.
 
-### CSV importer (server function)
-- `POST /api/public/import-contacts` is NOT exposed — instead a `createServerFn` `importContactsCsv` gated by admin role middleware.
-- Admin upload UI at `/_authenticated/admin/contacts/import` — drag-drop CSV, preview first 10 rows + detected columns, confirm.
-- Importer logic:
-  1. Stream-parse CSV (handle 13K+ rows)
-  2. For each row: upsert subscriber by email (case-insensitive); split `sources` and `tags` columns on `;`; upsert each tag; create `subscriber_tags` rows skipping duplicates.
-  3. Tag all imports with `legacy_list` regardless of source.
-  4. Write progress to `import_jobs` row.
-- Use `supabaseAdmin` inside the server fn since import bypasses RLS.
+**Fix:**
+- Add a hamburger menu button (visible only on mobile) to `src/components/site-header.tsx`
+- On tap, open a Sheet (slide-in drawer from shadcn/ui — already installed) with:
+  - Everything (→ /products)
+  - The 4 Gardens (→ /products/garden/$garden)
+  - About, Contact
+  - Dashboard / Sign out (if logged in) or Sign in (if not)
+- Auto-close the drawer on link tap.
 
-### Admin contacts list
-- `/_authenticated/admin/contacts` — paginated table (50/page), filter by tag combos (AND/OR), search by email, sortable columns.
-- Tag chips with counts in the sidebar (e.g. `70k_list (12,094)`, `course_student (8,213)`).
-- Per-subscriber detail page showing all tags and import provenance.
-
-**Verification:** Upload `CHKPLT_Master_Contact_List_FINAL.csv` → see 13,234 subscribers with preserved tag distribution matching the CSV's `sources`/`tags` columns.
+No backend work, no schema change.
 
 ---
 
-## Phase 2c — Paystack-Native ZAR Checkout
+## 2. Niche Clarity sales page + upsell funnel
 
-**Goal:** Real money flows. Embedded Paystack Inline (no redirect). Buyer becomes a tagged customer automatically.
+Right now Niche Clarity (R299) is just another product card. You wanted a dedicated direct-paid sales page with a post-purchase upsell flow. Here's the shape:
 
-### Database migration
-- `orders` — `id`, `subscriber_id` nullable, `user_id` nullable, `email`, `currency`, `subtotal_cents`, `total_cents`, `status` (pending | paid | failed | refunded), `paystack_reference`, `created_at`
-- `order_items` — `order_id`, `product_id`, `unit_price_cents`, `quantity`, snapshot of `title`/`slug` at purchase time
-- `payments` — `id`, `order_id`, `provider` (paystack), `provider_event_id`, `amount_cents`, `currency`, `status`, `raw_event` (jsonb), `received_at` — webhook idempotency key on `provider_event_id`
-- `product_grants` — `subscriber_id`/`user_id`, `product_id`, `granted_at`, `expires_at` nullable (for cohort access windows) — this is what the LMS (Phase 3) reads to gate course access
+### a) Sales page — `/niche-clarity`
 
-### Server functions + server route
-- `createPaystackTransaction` server fn — takes `product_id` + `email`, creates a pending `orders` row, calls Paystack `/transaction/initialize` with metadata `{ order_id, product_slug }`, returns `access_code` for Inline.
-- `/api/public/paystack-webhook` server route — verifies signature with `PAYSTACK_SECRET_KEY` + HMAC-SHA512, dedupes on `provider_event_id`, updates `orders.status`, creates `payments` + `product_grants`, upserts `subscribers` row by email, applies tags `paid_customer` + `paid_customer:{product_slug}` + `garden:{garden}`.
+A new route file, separate from `/products/$slug`, fully focused on converting cold traffic:
 
-### Checkout UX
-- Product page "Buy" button opens an inline Paystack modal (loaded via `https://js.paystack.co/v2/inline.js`) — buyer never leaves CHKPLT.
-- Pre-checkout: collect email if not signed in; auto-fill if signed in.
-- Post-success page: `/orders/$reference/success` polls `orders.status` until `paid`, then shows download links / "Go to dashboard" / next-seed upsell card.
+- Hero: bold promise, sub-promise, R299 price anchor, single "Buy Now — R299" CTA
+- "What you'll walk away with" — 4–6 outcomes (not features)
+- "Who this is for / not for" — qualifier block
+- What's inside — module/chapter breakdown
+- About the creator block (short)
+- Testimonials placeholder (we'll wire when you have them)
+- FAQ accordion (using existing shadcn Accordion)
+- Final CTA — sticky on mobile
+- Money-back / guarantee line (you tell me what to write — placeholder for now)
 
-### Dashboard updates
-- Student `/dashboard` shows `product_grants` as "Your purchases" with download links for digital products.
-- Admin `/_authenticated/admin/orders` lists orders with filters by status, product, date range.
+Wired to the existing Paystack Inline checkout (already built in Phase 2c) — clicking "Buy Now" opens the inline modal, no redirect.
 
-### Secrets required (will request once 2a + 2b are approved)
-- `PAYSTACK_SECRET_KEY` — server, used in server fn + webhook
-- `PAYSTACK_PUBLIC_KEY` — client, embedded in Inline init
+Own SEO metadata via `head()` so this page ranks/shares on its own.
 
-**Verification:** Test purchase of a R49 product end-to-end in Paystack test mode — order created, webhook fires, payment row stored once (verify dedup by replaying), grant created, buyer auto-tagged, receipt visible in dashboard.
+### b) Upsell flow — runs after successful Niche Clarity purchase
 
----
+On the existing `/checkout/success?reference=...` page, when the purchased product is `niche-clarity-workbook`, we replace the generic "thank you" with a one-time-offer upsell stack:
 
-## Out of scope for Phase 2 (named so we don't drift)
+```text
+Step 1 — Thanks + access     (always shown)
+Step 2 — UPSELL 1            PAIDS Framework Workbook  R999
+                             "Yes, add this for R999"  |  "No thanks, continue"
+Step 3 — UPSELL 2            9 Modules Personal Branding  R499
+                             "Yes, add this for R499"  |  "No thanks, continue"
+Step 4 — UPSELL 3            Tax Guide for Content Creators  R699
+                             "Yes, add this"            |  "No thanks, continue"
+Step 5 — Final dashboard link
+```
 
-- LMS (modules/lessons/progress/drip) → Phase 3
-- Email engine + automations + sequences → Phase 4
-- Funnel builder (opt-in/upsell/order-bump pages) → Phase 5
-- Affiliate program → Phase 6
-- Community → Phase 7
-- Domain swap from preview to `chkplt.com` → done at publish time
+Each "Yes" → opens Paystack Inline for that single product, charges separately, grants access on webhook (same machinery as today), then advances to the next step. Each "No" just advances. No skip-ahead — sequential.
 
----
+If the user arrives at /checkout/success for any other product, they see the current generic success page — only the Niche Clarity reference triggers the funnel.
 
-## Technical notes
+### Order of upsells
 
-- All server-side DB writes go through `createServerFn` with `requireSupabaseAuth` (admin-gated for admin actions). Webhook is the only `/api/public/*` route and must verify Paystack's HMAC signature before any DB write.
-- `subscribers` table is the email identity; `profiles` remains the auth identity. When a subscriber later signs up, we link by email.
-- Multi-currency stays: `products.currency` per row, but seed scripts default to ZAR. Storefront formatter handles ZAR (R prefix) and NGN (₦ prefix) — existing helper already does both.
-- Brand stays two-color (Obsidian + Banana). Premium tiers (Etz Pri) differentiated by typography scale + serif weight, not a third color.
-- Tag naming convention: lowercase, colon-namespaced for system tags (`paid_customer:paids-workbook`, `garden:etz_pri`, `cohort:accelerator-2026-q1`). User-defined tags are free-form snake_case.
+I went with PAIDS → Module → Tax Guide (highest price first, descending). Tell me if you want a different order, or want to skip one.
 
 ---
 
-## Sequencing
+## What's NOT in this plan (still on the roadmap, just not now)
 
-I'll deliver and stop for approval at the end of each sub-phase:
+- LMS course delivery (video player, lessons, progress) — Phase 3
+- Email engine + welcome sequences — Phase 4
+- Admin CSV importer for your 13K legacy list — Phase 2b
+- Affiliate program, community — Phase 6/7
 
-1. **Phase 2a** — migration + seed + storefront restructure → you verify all 26 products render correctly
-2. **Phase 2b** — schema + importer + admin contacts UI → you upload the CSV, verify counts
-3. **Phase 2c** — schema + Paystack server fn + webhook + checkout UX → you run a test purchase
+---
 
-When you click **Implement plan**, I'll start with 2a.
+## Technical notes (for me, ignore if you want)
+
+- Mobile nav: `Sheet` + `SheetTrigger` from `@/components/ui/sheet`, hamburger from `lucide-react` Menu icon. Trigger has `md:hidden`, existing nav stays `hidden md:flex`.
+- `/niche-clarity` route: `src/routes/niche-clarity.tsx`, loader fetches the product row by slug `niche-clarity-workbook` via existing public products query, reuses the Paystack `createPaystackTransaction` server fn.
+- Upsell state: local React state on the success page, driven by an array `[paids-framework, 9-modules-personal-branding, tax-guide-content-creators]`. Each step calls `createPaystackTransaction` for that one product. No new DB tables — each upsell is a normal order, grants flow through the existing webhook.
+- No new secrets needed (Paystack keys already set).
+
+Click **Implement plan** and I'll ship both in one pass.
