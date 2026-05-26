@@ -257,7 +257,6 @@ function EditDrawer({
     (product.benefits ?? []).join("\n"),
   );
   const [uploading, setUploading] = useState<"cover" | "file" | null>(null);
-  const uploadFn = useServerFn(adminUploadFile);
 
   const mut = useMutation({
     mutationFn: upsertFn,
@@ -274,17 +273,20 @@ function EditDrawer({
 
   async function onCoverFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
+    e.target.value = ""; // allow re-uploading same filename
     if (!f) return;
-    if (f.size > 8 * 1024 * 1024) return toast.error("Cover must be < 8MB");
+    if (f.size > 10 * 1024 * 1024) return toast.error("Cover must be < 10MB");
+    if (!p.slug) return toast.error("Set a slug before uploading");
     setUploading("cover");
     try {
-      const base64 = await fileToBase64(f);
-      const ext = f.name.split(".").pop() || "png";
-      const path = `${p.slug || `tmp-${Date.now()}`}.${ext}`;
-      const res = await uploadFn({
-        data: { bucket: "product-covers", path, contentType: f.type || "image/png", base64 },
-      });
-      if (res.url) set("cover_image_url", res.url);
+      const ext = sanitizeName(f.name.split(".").pop() || "png");
+      const path = `${p.slug}-${Date.now()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("product-covers")
+        .upload(path, f, { contentType: f.type || "image/png", upsert: true });
+      if (error) throw error;
+      const { data: pub } = supabase.storage.from("product-covers").getPublicUrl(path);
+      set("cover_image_url", pub.publicUrl);
       toast.success("Cover uploaded");
     } catch (err) {
       toast.error((err as Error).message);
@@ -295,17 +297,19 @@ function EditDrawer({
 
   async function onPdfFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
+    e.target.value = "";
     if (!f) return;
-    if (f.size > 25 * 1024 * 1024) return toast.error("File must be < 25MB");
+    if (f.size > 50 * 1024 * 1024) return toast.error("File must be < 50MB");
+    if (!p.slug) return toast.error("Set a slug before uploading");
     setUploading("file");
     try {
-      const base64 = await fileToBase64(f);
-      const ext = f.name.split(".").pop() || "pdf";
-      const path = `${p.slug || `tmp-${Date.now()}`}.${ext}`;
-      const res = await uploadFn({
-        data: { bucket: "product-files", path, contentType: f.type || "application/pdf", base64 },
-      });
-      set("download_path", res.path);
+      const ext = sanitizeName(f.name.split(".").pop() || "pdf");
+      const path = `${p.slug}.${ext}`;
+      const { error } = await supabase.storage
+        .from("product-files")
+        .upload(path, f, { contentType: f.type || "application/pdf", upsert: true });
+      if (error) throw error;
+      set("download_path", path);
       toast.success("File uploaded");
     } catch (err) {
       toast.error((err as Error).message);
@@ -313,6 +317,7 @@ function EditDrawer({
       setUploading(null);
     }
   }
+
 
   function save() {
     const benefits = benefitsText
