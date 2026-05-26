@@ -3,12 +3,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { verifyCheckout, initializeCheckout } from "@/lib/checkout.functions";
+import { getDownloadUrl } from "@/lib/products.functions";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/gardens";
 import { supabase } from "@/integrations/supabase/client";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { Check } from "lucide-react";
+import { Check, Download } from "lucide-react";
+
 
 export const Route = createFileRoute("/checkout/success")({
   head: () => ({ meta: [{ title: "Order received — Christ Kingdom Platform" }] }),
