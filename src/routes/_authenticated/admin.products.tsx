@@ -261,18 +261,6 @@ function EditDrawer({
 }) {
   const upsertFn = useServerFn(adminUpsertProduct);
 
-
-function EditDrawer({
-  product,
-  onClose,
-  onSaved,
-  upsertFn,
-}: {
-  product: Product;
-  onClose: () => void;
-  onSaved: () => void;
-  upsertFn: ReturnType<typeof useServerFn<typeof adminUpsertProduct>>;
-}) {
   const [p, setP] = useState<Product>(product);
   const [benefitsText, setBenefitsText] = useState(
     (product.benefits ?? []).join("\n"),
