@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function Dashboard() {
   const { user } = useAuth();
   const purchasesFn = useServerFn(myPurchases);
-  const dlFn = useServerFn(getDownloadUrl);
+  const dlFn = useServerFn(getMyDownloadUrl);
 
   const isAdminQ = useQuery({
     queryKey: ["is-admin", user?.id],
