@@ -1,0 +1,1 @@
+UPDATE public.products SET cover_image_url = '/product-covers/' || slug || '.png';
