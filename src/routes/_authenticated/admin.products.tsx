@@ -12,8 +12,8 @@ import {
   adminUpsertProduct,
   adminToggleStatus,
   adminDeleteProduct,
-  adminUploadFile,
 } from "@/lib/products.functions";
+
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus } from "lucide-react";
