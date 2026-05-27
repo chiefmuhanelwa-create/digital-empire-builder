@@ -38,22 +38,55 @@ export const importContactsBatch = createServerFn({ method: "POST" })
       .maybeSingle();
     if (tagErr || !tag) throw new Error("Legacy import tag missing.");
 
-    const errors: Array<{ row: number; email: string | null; message: string }> = [];
+    type ErrRow = {
+      row: number;
+      email: string | null;
+      first_name: string | null;
+      last_name: string | null;
+      phone: string | null;
+      reason: string;
+      detail: string;
+    };
+    const errors: ErrRow[] = [];
     const cleaned: Array<z.infer<typeof ContactRowSchema> & { source: string }> = [];
 
+    const classifyZod = (issue: { path: (string | number)[]; message: string }): string => {
+      const field = String(issue.path[0] ?? "");
+      const msg = issue.message.toLowerCase();
+      if (field === "email") {
+        if (msg.includes("required") || msg.includes("expected string")) return "Missing Email";
+        if (msg.includes("email")) return "Invalid Email Format";
+        if (msg.includes("at most")) return "Email Too Long";
+        return "Invalid Email";
+      }
+      if (field === "phone" && msg.includes("at most")) return "Phone Too Long";
+      if ((field === "first_name" || field === "last_name") && msg.includes("at most"))
+        return "Name Too Long";
+      return `Invalid ${field || "Row"}`;
+    };
+
     data.rows.forEach((raw, idx) => {
+      const rawEmail = raw.email ?? raw.Email ?? raw.EMAIL;
+      const rawFirst = raw.first_name ?? raw.firstName ?? raw["First Name"] ?? raw.name ?? null;
+      const rawLast = raw.last_name ?? raw.lastName ?? raw["Last Name"] ?? null;
+      const rawPhone = raw.phone ?? raw.Phone ?? raw.mobile ?? null;
       const parsed = ContactRowSchema.safeParse({
-        email: raw.email ?? raw.Email ?? raw.EMAIL,
-        first_name: raw.first_name ?? raw.firstName ?? raw["First Name"] ?? raw.name ?? null,
-        last_name: raw.last_name ?? raw.lastName ?? raw["Last Name"] ?? null,
-        phone: raw.phone ?? raw.Phone ?? raw.mobile ?? null,
+        email: rawEmail,
+        first_name: rawFirst,
+        last_name: rawLast,
+        phone: rawPhone,
         source: raw.source ?? "legacy_import",
       });
       if (!parsed.success) {
+        const issue = parsed.error.issues[0];
         errors.push({
           row: idx,
-          email: typeof raw.email === "string" ? raw.email : null,
-          message: parsed.error.issues[0]?.message ?? "Invalid row",
+          email: typeof rawEmail === "string" ? rawEmail : null,
+          first_name: typeof rawFirst === "string" ? rawFirst : null,
+          last_name: typeof rawLast === "string" ? rawLast : null,
+          phone: typeof rawPhone === "string" ? rawPhone : null,
+          reason: classifyZod(issue ?? { path: [], message: "Invalid row" }),
+          detail: issue?.message ?? "Invalid row",
         });
         return;
       }
@@ -78,7 +111,28 @@ export const importContactsBatch = createServerFn({ method: "POST" })
         { onConflict: "email" },
       )
       .select("id,email,created_at,updated_at");
-    if (upErr) throw new Error(upErr.message);
+    if (upErr) {
+      // Whole batch failed — flag every cleaned row so the operator can re-upload them.
+      const code = (upErr as any).code as string | undefined;
+      const reason =
+        code === "57014" || /timeout/i.test(upErr.message)
+          ? "Database Timeout"
+          : code === "23505"
+            ? "Duplicate Email Conflict"
+            : "Database Error";
+      cleaned.forEach((c) =>
+        errors.push({
+          row: -1,
+          email: c.email,
+          first_name: c.first_name ?? null,
+          last_name: c.last_name ?? null,
+          phone: c.phone ?? null,
+          reason,
+          detail: upErr.message.slice(0, 300),
+        }),
+      );
+      return { inserted: 0, updated: 0, tagged: 0, errors };
+    }
 
     let inserted = 0;
     let updated = 0;
@@ -103,7 +157,15 @@ export const importContactsBatch = createServerFn({ method: "POST" })
           count: "exact",
         });
       if (tErr) {
-        errors.push({ row: -1, email: null, message: `Tagging failed: ${tErr.message}` });
+        errors.push({
+          row: -1,
+          email: null,
+          first_name: null,
+          last_name: null,
+          phone: null,
+          reason: "Tagging Failed",
+          detail: tErr.message.slice(0, 300),
+        });
       } else {
         tagged = count ?? tagRows.length;
       }
