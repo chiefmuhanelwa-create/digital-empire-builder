@@ -90,39 +90,39 @@ function GardenPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-24">
-        <div className="grid gap-px bg-border md:grid-cols-2 border-t border-b border-border">
+        <div className="grid gap-6 md:grid-cols-2">
           {isLoading && Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-background p-8 h-56 animate-pulse" />
+            <div key={i} className="rounded-md border border-stone-800/60 bg-stone-900 p-8 h-56 animate-pulse" />
           ))}
           {products?.map((p) => (
             <Link
               key={p.id}
               to="/products/$slug"
               params={{ slug: p.slug }}
-              className="group relative bg-background p-8 transition-colors hover:bg-card flex flex-col justify-between min-h-56"
+              className="group relative rounded-md border border-stone-800/60 bg-stone-900 p-8 flex flex-col justify-between min-h-56 transition-all ease-in duration-200 hover:border-amber-500/30"
             >
               <div>
-                <div className="font-mono text-xs text-muted-foreground">{p.tagline}</div>
-                <h2 className="mt-3 font-display text-3xl group-hover:text-banana transition-colors">
+                <div className="font-mono text-xs text-stone-400">{p.tagline}</div>
+                <h2 className="mt-3 font-display text-3xl group-hover:text-amber-500 transition-colors">
                   {p.title}
                 </h2>
                 {p.target_audience && (
-                  <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{p.target_audience}</p>
+                  <p className="mt-3 text-sm text-stone-400 line-clamp-2">{p.target_audience}</p>
                 )}
               </div>
               <div className="mt-8 flex items-end justify-between">
                 <div className="font-mono text-sm">
                   {formatPrice(p.price_cents, p.currency, p.is_free)}
                   {p.requires_application && (
-                    <span className="ml-2 text-xs text-muted-foreground">/ application</span>
+                    <span className="ml-2 text-xs text-stone-400">/ application</span>
                   )}
                 </div>
-                <ArrowUpRight className="size-5 text-muted-foreground group-hover:text-banana transition-colors" />
+                <ArrowUpRight className="size-5 text-stone-500 group-hover:text-amber-500 transition-colors" />
               </div>
             </Link>
           ))}
           {products && products.length === 0 && (
-            <div className="bg-background p-12 col-span-full text-center text-muted-foreground">
+            <div className="rounded-md border border-stone-800/60 bg-stone-900 p-12 col-span-full text-center text-stone-400">
               No products published in this garden yet.
             </div>
           )}
