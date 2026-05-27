@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
 import { initializeCheckout } from "@/lib/checkout.functions";
+import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 
