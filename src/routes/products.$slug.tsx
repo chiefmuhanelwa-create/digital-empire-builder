@@ -171,6 +171,7 @@ function ProductDetail() {
         )}
 
         {/* Primary CTA */}
+        <div id="buy" />
         <BuyBlock product={product} priceLabel={priceLabel} />
 
         {/* Long-form sales copy */}
