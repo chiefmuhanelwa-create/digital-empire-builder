@@ -130,15 +130,28 @@ function ProductDetail() {
         </div>
         <h1 className="mt-3 font-display text-5xl md:text-6xl leading-[1.05]">{product.title}</h1>
 
+        <p className="mt-4 text-sm text-muted-foreground">
+          By Lebo M. — multi-award-winning South African media founder. Built for creators 18–34.
+        </p>
+
         <div className="mt-10 flex items-baseline gap-4 flex-wrap">
           <div className="font-display text-5xl text-banana">{priceLabel}</div>
           {!product.is_free && !product.requires_application && (
-            <div className="font-mono text-xs text-muted-foreground">one-time payment</div>
+            <div className="font-mono text-xs text-muted-foreground">one-time payment · instant download</div>
           )}
           {product.requires_application && (
             <div className="font-mono text-xs text-muted-foreground">/ by application</div>
           )}
         </div>
+
+        {!product.is_free && !product.requires_application && (
+          <a
+            href="#buy"
+            className="mt-5 inline-flex items-center gap-2 bg-banana text-banana-foreground hover:bg-banana/90 px-6 py-3 rounded-md font-medium text-sm transition-colors"
+          >
+            Get instant access → {priceLabel}
+          </a>
+        )}
 
         {product.cover_image_url && (
           <div className="mt-10 border border-border bg-muted/20 p-6 flex items-center justify-center">
