@@ -232,7 +232,13 @@ function ProductDetail() {
               Ready when you are
             </div>
             <h3 className="mt-3 font-display text-3xl">Get it for {priceLabel}</h3>
-            <p className="mt-3 text-sm text-muted-foreground">Scroll up to checkout — takes 60 seconds.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Instant download. No subscription. No fluff.</p>
+            <a
+              href="#buy"
+              className="mt-6 inline-flex items-center gap-2 bg-banana text-banana-foreground hover:bg-banana/90 px-8 py-4 rounded-md font-medium text-base transition-colors"
+            >
+              Buy now → {priceLabel}
+            </a>
           </div>
         )}
 
