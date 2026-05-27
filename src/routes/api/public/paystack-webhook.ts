@@ -142,7 +142,7 @@ async function handleChargeSuccess(payload: any) {
     return;
   }
 
-  // Idempotency: if already paid, just log the payment row.
+  // Always log the payment event for auditability (insert is append-only).
   await supabaseAdmin.from("payments").insert({
     order_id: order.id,
     provider: "paystack",
@@ -156,12 +156,25 @@ async function handleChargeSuccess(payload: any) {
     paid_at: dataObj.paid_at ? new Date(dataObj.paid_at).toISOString() : new Date().toISOString(),
   });
 
-  if (order.status === "paid") return;
-
-  await supabaseAdmin
+  // Atomic state transition — only ONE concurrent webhook can flip the row.
+  // The .neq filter prevents a second retry from "re-paying" the order, which
+  // is the database-level guard against duplicate billing side-effects
+  // (grants, receipts, tags) when Paystack retries the webhook.
+  const { data: claimed, error: claimErr } = await supabaseAdmin
     .from("orders")
     .update({ status: "paid" })
-    .eq("id", order.id);
+    .eq("id", order.id)
+    .neq("status", "paid")
+    .select("id")
+    .maybeSingle();
+  if (claimErr) {
+    console.error("[paystack-webhook] order claim failed", claimErr);
+    return;
+  }
+  if (!claimed) {
+    // Another concurrent webhook already finalized this order.
+    return;
+  }
 
   // Upsert subscriber by email
   const email = (order.email || "").toLowerCase();
