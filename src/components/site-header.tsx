@@ -25,11 +25,12 @@ export function SiteHeader() {
   const close = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-stone-800/60 bg-stone-950/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full bg-banana" />
-          <span className="font-mono text-sm tracking-[0.18em] uppercase">CHKPLT</span>
+          <span className="font-sans text-base font-bold tracking-[0.22em] uppercase text-amber-500">
+            CHKPLT
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -79,8 +80,12 @@ export function SiteHeader() {
           ) : (
             <>
               <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
-              <Button asChild size="sm" className="bg-banana text-banana-foreground hover:bg-banana/90">
-                <Link to="/signup">Get access</Link>
+              <Button
+                asChild
+                size="sm"
+                className="bg-amber-500 text-black font-semibold tracking-wide hover:bg-amber-400 transition-all px-4 py-2 rounded-md"
+              >
+                <Link to="/signup">Access Vault</Link>
               </Button>
             </>
           )}
@@ -151,8 +156,12 @@ export function SiteHeader() {
                 </>
               ) : (
                 <>
-                  <Button asChild className="w-full bg-banana text-banana-foreground hover:bg-banana/90" onClick={close}>
-                    <Link to="/signup">Get access</Link>
+                  <Button
+                    asChild
+                    className="w-full bg-amber-500 text-black font-semibold tracking-wide hover:bg-amber-400 transition-all"
+                    onClick={close}
+                  >
+                    <Link to="/signup">Access Vault</Link>
                   </Button>
                   <Button asChild className="w-full" variant="outline" onClick={close}>
                     <Link to="/login">Sign in</Link>
