@@ -87,6 +87,12 @@ function Dashboard() {
               >
                 Admin · Contacts &amp; Tags →
               </Link>
+              <Link
+                to="/admin/import-contacts"
+                className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
+              >
+                Admin · Import CSV →
+              </Link>
             </>
           )}
         </div>
