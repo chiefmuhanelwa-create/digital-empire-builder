@@ -16,7 +16,15 @@ const BATCH_SIZE = 100;
 const DELAY_MS = 2500;
 
 type RowObj = Record<string, unknown>;
-type ErrRow = { row: number; email: string | null; message: string };
+type ErrRow = {
+  row: number;
+  email: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  phone?: string | null;
+  reason: string;
+  detail: string;
+};
 
 function ImportContacts() {
   const importFn = useServerFn(importContactsBatch);
