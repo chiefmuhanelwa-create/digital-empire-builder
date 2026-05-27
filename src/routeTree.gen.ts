@@ -11,13 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as ProductsRouteImport } from './routes/products'
 import { Route as NicheClarityRouteImport } from './routes/niche-clarity'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/learn'
@@ -38,11 +38,6 @@ const SignupRoute = SignupRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NicheClarityRoute = NicheClarityRouteImport.update({
@@ -74,10 +69,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ProductsRoute,
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
   id: '/checkout/success',
@@ -95,9 +95,9 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ProductsGardenGardenRoute = ProductsGardenGardenRouteImport.update({
-  id: '/garden/$garden',
-  path: '/garden/$garden',
-  getParentRoute: () => ProductsRoute,
+  id: '/products/garden/$garden',
+  path: '/products/garden/$garden',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaystackWebhookRoute =
   ApiPublicPaystackWebhookRouteImport.update({
@@ -141,13 +141,13 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
-  '/products': typeof ProductsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/products/': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -162,13 +162,13 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
-  '/products': typeof ProductsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/products': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -185,13 +185,13 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
-  '/products': typeof ProductsRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/products/': typeof ProductsIndexRoute
   '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -208,13 +208,13 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/niche-clarity'
-    | '/products'
     | '/reset-password'
     | '/signup'
     | '/dashboard'
     | '/learn'
     | '/checkout/success'
     | '/products/$slug'
+    | '/products/'
     | '/admin/contacts'
     | '/admin/products'
     | '/learn/$slug'
@@ -229,13 +229,13 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/niche-clarity'
-    | '/products'
     | '/reset-password'
     | '/signup'
     | '/dashboard'
     | '/learn'
     | '/checkout/success'
     | '/products/$slug'
+    | '/products'
     | '/admin/contacts'
     | '/admin/products'
     | '/learn/$slug'
@@ -251,13 +251,13 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/niche-clarity'
-    | '/products'
     | '/reset-password'
     | '/signup'
     | '/_authenticated/dashboard'
     | '/_authenticated/learn'
     | '/checkout/success'
     | '/products/$slug'
+    | '/products/'
     | '/_authenticated/admin/contacts'
     | '/_authenticated/admin/products'
     | '/_authenticated/learn/$slug'
@@ -274,11 +274,13 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
   NicheClarityRoute: typeof NicheClarityRoute
-  ProductsRoute: typeof ProductsRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
+  ProductsSlugRoute: typeof ProductsSlugRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ProductsGardenGardenRoute: typeof ProductsGardenGardenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -295,13 +297,6 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/niche-clarity': {
@@ -346,12 +341,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$slug': {
       id: '/products/$slug'
-      path: '/$slug'
+      path: '/products/$slug'
       fullPath: '/products/$slug'
       preLoaderRoute: typeof ProductsSlugRouteImport
-      parentRoute: typeof ProductsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/checkout/success': {
       id: '/checkout/success'
@@ -376,10 +378,10 @@ declare module '@tanstack/react-router' {
     }
     '/products/garden/$garden': {
       id: '/products/garden/$garden'
-      path: '/garden/$garden'
+      path: '/products/garden/$garden'
       fullPath: '/products/garden/$garden'
       preLoaderRoute: typeof ProductsGardenGardenRouteImport
-      parentRoute: typeof ProductsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/paystack-webhook': {
       id: '/api/public/paystack-webhook'
@@ -473,20 +475,6 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
-interface ProductsRouteChildren {
-  ProductsSlugRoute: typeof ProductsSlugRoute
-  ProductsGardenGardenRoute: typeof ProductsGardenGardenRoute
-}
-
-const ProductsRouteChildren: ProductsRouteChildren = {
-  ProductsSlugRoute: ProductsSlugRoute,
-  ProductsGardenGardenRoute: ProductsGardenGardenRoute,
-}
-
-const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
-  ProductsRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
@@ -494,11 +482,13 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
   NicheClarityRoute: NicheClarityRoute,
-  ProductsRoute: ProductsRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
+  ProductsSlugRoute: ProductsSlugRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ProductsGardenGardenRoute: ProductsGardenGardenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

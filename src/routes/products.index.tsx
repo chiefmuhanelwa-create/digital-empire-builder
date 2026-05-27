@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { GARDENS, GARDEN_ORDER, type Garden } from "@/lib/gardens";
 import { ArrowUpRight } from "lucide-react";
 
-export const Route = createFileRoute("/products")({
+export const Route = createFileRoute("/products/")({
   head: () => ({
     meta: [
       { title: "Shop — Christ Kingdom Platform" },
