@@ -213,7 +213,7 @@ export const getDownloadUrl = createServerFn({ method: "POST" })
 
     const { data: signed, error: sErr } = await supabaseAdmin.storage
       .from("product-files")
-      .createSignedUrl(product.download_path, 60 * 30); // 30 min
+      .createSignedUrl(product.download_path, 60 * 60 * 24); // 24h
     if (sErr) throw new Error(sErr.message);
     return { url: signed.signedUrl, title: product.title };
   });
