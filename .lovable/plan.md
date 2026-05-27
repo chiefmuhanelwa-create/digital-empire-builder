@@ -1,93 +1,101 @@
-# CHKPLT Backend Hardening — Modules 1, 2, 3
+## CHKPLT Hardening — 4 Modules
 
-Aligns the spec to what's already in your DB (don't duplicate tables): you already have `subscribers`, `tags`, `subscriber_tags`, `product_grants`, and the private `product-files` bucket. We extend those, we don't replace them.
+### Module 1 — Immutable Audit Ledger
 
----
+**Migration** (`audit_ledgers`):
+- Columns: `id`, `order_id` (unique, FK-by-id only), `provider_reference`, `gross_cents`, `vat_allocation_cents` (15%), `tax_reserve_cents` (25%), `net_cents`, `currency`, `customer_email_hash` (sha256, not raw email — keeps tax row even after GDPR wipe per Module 4), `paid_at`, `created_at default now()`.
+- `GRANT SELECT ON public.audit_ledgers TO authenticated` (admin-read via has_role check in policy), `GRANT ALL TO service_role`.
+- RLS: admin-only SELECT. **No** INSERT/UPDATE/DELETE policies for any role except service_role INSERT.
+- **Guardrail trigger** `audit_ledgers_immutable()` (BEFORE UPDATE OR DELETE): `RAISE EXCEPTION 'audit_ledgers rows are immutable'`. (Postgres RULEs don't fire for service_role bypass paths reliably — triggers do.)
+- Revoke UPDATE/DELETE from PUBLIC + service_role explicitly.
 
-## Module 1 — 13k legacy contact import
+**Webhook wiring** (`src/routes/api/public/paystack-webhook.ts`):
+- Inside the existing atomic "claim" block (after `orders.status='paid'` succeeds, before receipt enqueue), compute VAT/tax splits and `INSERT INTO audit_ledgers ... ON CONFLICT (order_id) DO NOTHING`. Hash email with `crypto.createHash('sha256')`.
+- Wrap in `reportError(...)` (Module 2) — never block the receipt path on ledger failure.
 
-**Approach:** CSV lives on your desktop, so a node script isn't practical. Build a one-off **admin import page** instead. You upload the CSV from the browser, the server batches it into Supabase.
-
-**1a. Migration**
-- Seed tag row: `slug=legacy_prelaunch_may_2026`, `name="Legacy List – Pre-Launch May 2026"`.
-- Index `subscribers(lower(email))` for fast lookup at scale.
-
-**1b. Admin route** `src/routes/_authenticated/admin.import-contacts.tsx`
-- Admin-only (uses `has_role`).
-- Drag-and-drop CSV uploader, parsed in-browser with `papaparse`.
-- Expected columns: `email` (required), `first_name`, `last_name`, `phone`, `source` (all optional). Column mapper UI lets you re-map if headers differ.
-- Preview first 10 rows, show duplicate count vs existing subscribers, then "Start import".
-- Progress bar: batches of **100**, **2.5s pause** between batches (smooth, ~5–6 min for 13k). Live counters: queued / inserted / skipped / errored. Errors downloadable as CSV.
-
-**1c. Server function** `src/lib/contacts-import.functions.ts`
-- `importContactsBatch({ rows })` → admin-guarded.
-- `upsert` into `subscribers` on `email` (lowercased), source=`legacy_import`.
-- Insert into `subscriber_tags` linking each subscriber to the `legacy_prelaunch_may_2026` tag (idempotent `onConflict`).
-- Returns `{inserted, updated, errors[]}`.
-
-**No external ESP push.** You don't have ConvertKit/ActiveCampaign/Brevo connected. Contacts are staged cleanly in Supabase with the tag; when you pick an ESP later, one sync script reads `subscribers` filtered by tag and pushes them — protects your sender reputation in the meantime.
+**Admin view**: new `/_authenticated/admin.ledger.tsx` read-only table (paginated, CSV export). Server fn `getAuditLedger` with `requireSupabaseAuth` + admin role check.
 
 ---
 
-## Module 2 — Secure asset storage (PDFs now, video later)
+### Module 2 — Real-Time Watchman (error reporter)
 
-**Current state:** `product-files` bucket is private ✅. `product_grants` exists with `(user_id, product_id, order_id)` ✅. `products.download_path` exists ✅. What's missing: storage RLS policy + a signed-URL server fn that's actually called by the dashboard.
+**New file** `src/lib/error-logger.ts` — exactly the abstraction you provided:
+- `reportError(err, { userId?, orderId?, endpoint?, meta? })`
+- Step 1 (active): structured `console.error` tagged `[CHKPLT ERROR]` — captured by TanStack `server-function-logs`.
+- Step 2 (active): insert into new `public.incidents` table (admin-read only) for in-dashboard triage.
+- Step 3 (commented expansion slot): Sentry/Logtail one-liner placeholder.
 
-**2a. Migration — storage.objects RLS**
-```sql
-CREATE POLICY "Download only with active product grant"
-ON storage.objects FOR SELECT TO authenticated
-USING (
-  bucket_id = 'product-files'
-  AND EXISTS (
-    SELECT 1 FROM public.product_grants pg
-    JOIN public.products p ON p.id = pg.product_id
-    WHERE pg.user_id = auth.uid()
-      AND pg.revoked_at IS NULL
-      AND p.download_path = storage.objects.name
-  )
-);
-```
-(Service role still bypasses for admin ops.)
+**Migration** `incidents`: `id, message, endpoint, severity, user_id, meta jsonb, created_at`. RLS: admin SELECT, service_role INSERT. GRANTs included.
 
-**2b. Server function** `src/lib/downloads.functions.ts`
-- `getDownloadUrl({ productSlug })` with `requireSupabaseAuth`.
-- Verifies a non-revoked `product_grants` row for `(auth.uid(), product.id)`.
-- Calls `supabaseAdmin.storage.from('product-files').createSignedUrl(product.download_path, 60*60*24)` → **24h expiry**.
-- Returns `{ url, expiresAt }` or throws clean errors (`not_purchased`, `not_available`).
+**Deploy across**:
+- `src/routes/api/public/paystack-webhook.ts` (every catch + signature failure)
+- `src/lib/contacts-import.functions.ts` (batch failures already classified — also `reportError`)
+- `src/lib/products.functions.ts` (signed URL failures)
+- `src/lib/downloads.functions.ts` if present
+- `src/lib/email-templates/*` send paths via the email worker cron
+- New checkout-init / Turnstile-verify server fns from Module 3
 
-**2c. Wire into dashboard / checkout success**
-- Replace any direct `download_path` rendering in `src/routes/_authenticated/dashboard.tsx` and `src/routes/checkout.success.tsx` with a button that calls `getDownloadUrl` on click → opens the signed URL in a new tab. Link is never embedded in HTML/email.
-
-**Video CDN:** deferred per your call. When a video product ships we'll add a `video_provider` + `video_id` to `products` and a tokenized embed component.
+**Admin incidents page**: `/_authenticated/admin.incidents.tsx` — filter by endpoint/severity, mark resolved.
 
 ---
 
-## Module 3 — Email automation audit
+### Module 3 — Turnstile Bot Shield (login + checkout)
 
-**3a. Audit findings (current state)**
-- ✅ Transactional path exists: Lovable Emails queue (`auth_emails`, `transactional_emails`) + `process-email-queue` cron.
-- ✅ Auth magic links / signup confirmations flow through `auth-email-hook` → queue.
-- ❌ **No post-purchase receipt email.** `paystack-webhook` grants access but never sends the buyer their download link.
-- ❌ **No marketing ESP connected** → no nurture sequence can fire on the `legacy_prelaunch_may_2026` tag yet. This is a "pick a provider, then wire it" item, not a code bug.
+**Secrets request** (will request via `add_secret` after approval):
+- `TURNSTILE_SITE_KEY` (public — also exposed as `VITE_TURNSTILE_SITE_KEY`)
+- `TURNSTILE_SECRET_KEY` (server only)
 
-**3b. Fix the gap — post-purchase receipt**
-- New template `src/lib/email-templates/order-receipt.tsx` (React Email): order summary, total, and a **"Get your downloads"** button → links to `/dashboard` (NOT a raw signed URL; user clicks button there which calls `getDownloadUrl`).
-- In `paystack-webhook.ts` after `product_grants` upsert: enqueue one transactional email to the buyer's email via `supabase.rpc('enqueue_email', { queue_name: 'transactional_emails', payload: {...} })`. Idempotent: skip if `email_send_log` already has a `sent` row for `order:<id>:receipt`.
+**Frontend**:
+- Install `@marsidev/react-turnstile`.
+- New `<TurnstileGate onToken={...} />` component reading `VITE_TURNSTILE_SITE_KEY`.
+- Wire into `/login` (Google button OK to skip; gate the email/password sign-in + sign-up submits) and `/checkout` (gate the "Pay now" button — token attached to the existing checkout-init server fn payload).
 
-**3c. ESP-trigger placeholder (no code yet)**
-- Document the trigger contract in `.lovable/plan.md`: when buyer paid, also stamp `subscriber_tags` with `buyer` + `garden_<x>` (already happening) — that's the hook your future ESP sync will pick up to enroll them in nurture flows.
+**Backend verification helper** `src/lib/turnstile.server.ts`:
+- `verifyTurnstile(token, ip?)` POSTs to `https://challenges.cloudflare.com/turnstile/v0/siteverify` with `TURNSTILE_SECRET_KEY`. Returns `{ success, errorCodes }`.
+- Called inside:
+  - email/password sign-in + sign-up server fns
+  - checkout-init server fn (before Paystack call)
+- On failure: throw `Error('Verification failed — please refresh and retry')`. Logged via `reportError`.
+
+**Cloudflare proxy checklist** (docs only, no code) — appended to `.lovable/plan.md`:
+- Enable orange-cloud DNS proxy on production domain
+- Add Rate-Limiting rule: `/login` + checkout endpoints, 50 req/min per IP
+- Enable Bot Fight Mode
 
 ---
 
-## What's explicitly NOT in this plan
-- No backend rate-limiting on API routes (Lovable backend lacks primitives; throttled CSV import is a one-off client batch, not endpoint rate-limiting).
-- No video CDN integration (deferred).
-- No ESP connector setup (you haven't picked one — say the word and I'll wire Brevo/ConvertKit/ActiveCampaign in a follow-up).
-- No schema duplication: we use existing `subscribers`/`product_grants`, not new `platform_subscribers`/text-keyed grants.
+### Module 4 — Data Cleansing Sanctuary (GDPR-style)
 
-## File touch list
-- Migration: tag seed, subscribers email index, storage.objects download policy.
-- New: `src/routes/_authenticated/admin.import-contacts.tsx`, `src/lib/contacts-import.functions.ts`, `src/lib/downloads.functions.ts`, `src/lib/email-templates/order-receipt.tsx`.
-- Edit: `src/routes/api/public/paystack-webhook.ts` (enqueue receipt), `src/routes/_authenticated/dashboard.tsx` + `src/routes/checkout.success.tsx` (use `getDownloadUrl`), admin nav link.
-- Deps: `papaparse` (+ types).
+**Server fn** `requestAccountDeletion` in `src/lib/account.functions.ts` (`requireSupabaseAuth`):
+1. Verify caller identity (`getUser()` re-check).
+2. Re-hash user's email to `sha256` and **backfill** `audit_ledgers.customer_email_hash` for their `order_id`s if any are still raw — guarantees the historical record survives.
+3. **Wipe marketing PII**: `DELETE FROM subscribers WHERE email = ?`, `DELETE FROM subscriber_tags ...`, `DELETE FROM profiles WHERE id = auth.uid()`, anonymize `orders.email = 'deleted-<hash>@anonymized.local'`, null `customer_name`, `customer_phone`.
+4. **Retain financials**: `audit_ledgers` rows untouched (immutable trigger blocks it anyway — by design).
+5. Call `supabaseAdmin.auth.admin.deleteUser(userId)` last.
+6. Log via `reportError` on partial failure (each step independently try/caught).
+
+**Frontend** new `/_authenticated/account.tsx` settings page:
+- "Download my data" button (server fn returning JSON of profile + orders + subscriber rows).
+- "Delete my account" — double confirm modal explaining what's wiped vs retained for tax compliance, then calls `requestAccountDeletion` and signs out.
+
+**Public policy snippet** added to the existing footer/privacy area (1 short paragraph explaining the retention split).
+
+---
+
+### Files
+
+**Migrations (2)**: `audit_ledgers` + immutable trigger; `incidents` table.
+
+**New**: `src/lib/error-logger.ts`, `src/lib/turnstile.server.ts`, `src/lib/account.functions.ts`, `src/components/TurnstileGate.tsx`, `src/routes/_authenticated/admin.ledger.tsx`, `src/routes/_authenticated/admin.incidents.tsx`, `src/routes/_authenticated/account.tsx`.
+
+**Edited**: `paystack-webhook.ts` (ledger insert + reportError), `contacts-import.functions.ts` + `products.functions.ts` (reportError), `/login` route (Turnstile + verify), `/checkout` route (Turnstile + verify in init fn), admin dashboard nav (+ Ledger, + Incidents links), footer privacy note.
+
+**Deps**: `@marsidev/react-turnstile`.
+
+**Secrets requested after approval**: `TURNSTILE_SITE_KEY`, `VITE_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`.
+
+### Explicitly NOT included
+- Sentry/Logtail transport (slot left commented per your choice).
+- Cloudflare DNS/rate-limit rules (dashboard config — checklist provided).
+- Backend app-level rate limiting (Lovable platform gap; Cloudflare layer handles it).
+- Magic-link auth (not present today; Turnstile applied to existing email/password + Google flows).
