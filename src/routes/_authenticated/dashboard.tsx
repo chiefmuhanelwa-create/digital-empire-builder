@@ -73,6 +73,12 @@ function Dashboard() {
           >
             My Courses →
           </Link>
+          <Link
+            to="/account"
+            className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
+          >
+            Account &amp; Privacy →
+          </Link>
           {isAdminQ.data && (
             <>
               <Link
@@ -92,6 +98,18 @@ function Dashboard() {
                 className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
               >
                 Admin · Import CSV →
+              </Link>
+              <Link
+                to="/admin/ledger"
+                className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
+              >
+                Admin · Audit Ledger →
+              </Link>
+              <Link
+                to="/admin/incidents"
+                className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
+              >
+                Admin · Incidents →
               </Link>
             </>
           )}

@@ -6,6 +6,7 @@ import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/signup")({
@@ -19,9 +20,11 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tsToken, setTsToken] = useState<string | null>(null);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!tsToken) { toast.error("Please complete the security check."); return; }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email, password,
@@ -66,7 +69,8 @@ function SignupPage() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" />
           </div>
-          <Button type="submit" disabled={loading} className="w-full bg-banana text-banana-foreground hover:bg-banana/90">
+          <TurnstileGate onToken={setTsToken} className="pt-1" />
+          <Button type="submit" disabled={loading || !tsToken} className="w-full bg-banana text-banana-foreground hover:bg-banana/90">
             {loading ? "Creating account..." : "Create account"}
           </Button>
         </form>

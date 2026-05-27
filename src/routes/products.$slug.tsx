@@ -282,6 +282,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
     (user?.user_metadata?.full_name as string) ?? "",
   );
   const [phone, setPhone] = useState<string>("");
+  const [tsToken, setTsToken] = useState<string | null>(null);
 
   const mut = useMutation({
     mutationFn: initFn,
@@ -329,9 +330,12 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
           <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1" placeholder="Optional" />
         </div>
       </div>
+      <div className="mt-5">
+        <TurnstileGate onToken={setTsToken} />
+      </div>
       <Button
         size="lg"
-        disabled={!email || mut.isPending}
+        disabled={!email || !tsToken || mut.isPending}
         onClick={() =>
           mut.mutate({
             data: {
@@ -339,6 +343,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
               email,
               fullName: fullName || undefined,
               phone: phone || undefined,
+              turnstileToken: tsToken ?? undefined,
             },
           })
         }

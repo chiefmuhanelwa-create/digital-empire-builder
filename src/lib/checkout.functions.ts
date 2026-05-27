@@ -1,7 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { getRequestHost } from "@tanstack/react-start/server";
+import { getRequestHost, getRequestIP } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { assertTurnstile } from "./turnstile.server";
+import { reportError } from "./error-logger";
 
 // Paystack expects the smallest currency unit (kobo for NGN, cents for ZAR).
 // Our price_cents is already in cents, so we pass it as-is.
@@ -14,10 +16,17 @@ export const initializeCheckout = createServerFn({ method: "POST" })
         email: z.string().email().max(255),
         fullName: z.string().min(1).max(120).optional(),
         phone: z.string().max(40).optional(),
+        turnstileToken: z.string().max(2048).optional(),
       })
       .parse(input),
   )
   .handler(async ({ data }) => {
+    try {
+      await assertTurnstile(data.turnstileToken, getRequestIP({ xForwardedFor: true }) ?? undefined);
+    } catch (err) {
+      await reportError(err, { endpoint: "initializeCheckout:turnstile", meta: { email: data.email } });
+      throw err;
+    }
     const secret = process.env.PAYSTACK_SECRET_KEY;
     if (!secret) throw new Error("Paystack is not configured yet.");
 
