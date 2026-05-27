@@ -238,6 +238,13 @@ async function handleChargeSuccess(payload: any) {
         { onConflict: "product_id,subscriber_id", ignoreDuplicates: true },
       );
   }
+
+  // Send order receipt email (idempotent)
+  try {
+    await sendOrderReceipt(order.id);
+  } catch (err) {
+    console.error("[paystack-webhook] sendOrderReceipt failed", err);
+  }
 }
 
 export const Route = createFileRoute("/api/public/paystack-webhook")({
