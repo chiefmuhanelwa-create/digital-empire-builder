@@ -72,7 +72,10 @@ function ImportContacts() {
         }
       } catch (err: any) {
         toast.error(err?.message ?? "Batch failed");
-        setErrors((x) => [...x, { row: i, email: null, message: err?.message ?? "Batch error" }]);
+        setErrors((x) => [
+          ...x,
+          { row: i, email: null, reason: "Network/Server Error", detail: err?.message ?? "Batch error" },
+        ]);
       }
       i += BATCH_SIZE;
       setDone(Math.min(i, rows.length));
