@@ -1,6 +1,110 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHmac, timingSafeEqual, randomUUID } from "crypto";
+import { render } from "@react-email/components";
+import * as React from "react";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { OrderReceiptEmail } from "@/lib/email-templates/order-receipt";
+
+const SITE_NAME = "Christ Kingdom Platform";
+const ROOT_DOMAIN = "chkplt.com";
+const SENDER_DOMAIN = "notify.chkplt.com";
+const FROM_DOMAIN = "chkplt.com";
+
+function formatZar(cents: number, currency = "ZAR") {
+  const symbol = currency === "ZAR" ? "R" : currency + " ";
+  return `${symbol} ${(cents / 100).toFixed(2)}`;
+}
+
+async function sendOrderReceipt(orderId: string) {
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("id,email,customer_name,total_cents,currency,provider_reference")
+    .eq("id", orderId)
+    .maybeSingle();
+  if (!order) return;
+
+  const messageId = `order:${order.id}:receipt`;
+
+  // Idempotency: skip if already sent or pending
+  const { data: existing } = await supabaseAdmin
+    .from("email_send_log")
+    .select("id,status")
+    .eq("message_id", messageId)
+    .in("status", ["sent", "pending"])
+    .maybeSingle();
+  if (existing) return;
+
+  const { data: items } = await supabaseAdmin
+    .from("order_items")
+    .select("product_title,quantity,line_total_cents")
+    .eq("order_id", order.id);
+
+  const html = await render(
+    React.createElement(OrderReceiptEmail, {
+      siteName: SITE_NAME,
+      siteUrl: `https://${ROOT_DOMAIN}`,
+      dashboardUrl: `https://${ROOT_DOMAIN}/dashboard`,
+      customerName: order.customer_name,
+      orderReference: order.provider_reference ?? order.id,
+      items: (items ?? []).map((i) => ({
+        title: i.product_title,
+        quantity: i.quantity,
+        line_total: formatZar(i.line_total_cents, order.currency),
+      })),
+      total: formatZar(order.total_cents, order.currency),
+    }),
+  );
+  const text = await render(
+    React.createElement(OrderReceiptEmail, {
+      siteName: SITE_NAME,
+      siteUrl: `https://${ROOT_DOMAIN}`,
+      dashboardUrl: `https://${ROOT_DOMAIN}/dashboard`,
+      customerName: order.customer_name,
+      orderReference: order.provider_reference ?? order.id,
+      items: (items ?? []).map((i) => ({
+        title: i.product_title,
+        quantity: i.quantity,
+        line_total: formatZar(i.line_total_cents, order.currency),
+      })),
+      total: formatZar(order.total_cents, order.currency),
+    }),
+    { plainText: true },
+  );
+
+  await supabaseAdmin.from("email_send_log").insert({
+    message_id: messageId,
+    template_name: "order_receipt",
+    recipient_email: order.email,
+    status: "pending",
+  });
+
+  const { error } = await supabaseAdmin.rpc("enqueue_email", {
+    queue_name: "transactional_emails",
+    payload: {
+      run_id: randomUUID(),
+      message_id: messageId,
+      to: order.email,
+      from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+      sender_domain: SENDER_DOMAIN,
+      subject: `Your ${SITE_NAME} order is confirmed`,
+      html,
+      text,
+      purpose: "transactional",
+      label: "order_receipt",
+      queued_at: new Date().toISOString(),
+    },
+  });
+  if (error) {
+    console.error("[paystack-webhook] failed to enqueue receipt", error);
+    await supabaseAdmin.from("email_send_log").insert({
+      message_id: messageId,
+      template_name: "order_receipt",
+      recipient_email: order.email,
+      status: "failed",
+      error_message: error.message.slice(0, 1000),
+    });
+  }
+}
 
 // Garden slug → tag slug (matches the seed tags created in Phase 2b)
 const GARDEN_TAG: Record<string, string> = {
