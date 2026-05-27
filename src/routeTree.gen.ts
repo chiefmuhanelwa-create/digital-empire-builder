@@ -26,6 +26,7 @@ import { Route as ProductsGardenGardenRouteImport } from './routes/products.gard
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
+import { Route as AuthenticatedAdminImportContactsRouteImport } from './routes/_authenticated/admin.import-contacts'
 import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin.contacts'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
@@ -119,6 +120,12 @@ const AuthenticatedAdminProductsRoute =
     path: '/admin/products',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminImportContactsRoute =
+  AuthenticatedAdminImportContactsRouteImport.update({
+    id: '/admin/import-contacts',
+    path: '/admin/import-contacts',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminContactsRoute =
   AuthenticatedAdminContactsRouteImport.update({
     id: '/admin/contacts',
@@ -168,6 +175,7 @@ export interface FileRoutesByFullPath {
   '/products/$slug': typeof ProductsSlugRoute
   '/products/': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -192,6 +200,7 @@ export interface FileRoutesByTo {
   '/products/$slug': typeof ProductsSlugRoute
   '/products': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -218,6 +227,7 @@ export interface FileRoutesById {
   '/products/$slug': typeof ProductsSlugRoute
   '/products/': typeof ProductsIndexRoute
   '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
+  '/_authenticated/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -244,6 +254,7 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/products/'
     | '/admin/contacts'
+    | '/admin/import-contacts'
     | '/admin/products'
     | '/learn/$slug'
     | '/api/public/paystack-webhook'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/products'
     | '/admin/contacts'
+    | '/admin/import-contacts'
     | '/admin/products'
     | '/learn/$slug'
     | '/api/public/paystack-webhook'
@@ -293,6 +305,7 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/products/'
     | '/_authenticated/admin/contacts'
+    | '/_authenticated/admin/import-contacts'
     | '/_authenticated/admin/products'
     | '/_authenticated/learn/$slug'
     | '/api/public/paystack-webhook'
@@ -444,6 +457,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/import-contacts': {
+      id: '/_authenticated/admin/import-contacts'
+      path: '/admin/import-contacts'
+      fullPath: '/admin/import-contacts'
+      preLoaderRoute: typeof AuthenticatedAdminImportContactsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/contacts': {
       id: '/_authenticated/admin/contacts'
       path: '/admin/contacts'
@@ -519,6 +539,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRouteWithChildren
   AuthenticatedAdminContactsRoute: typeof AuthenticatedAdminContactsRoute
+  AuthenticatedAdminImportContactsRoute: typeof AuthenticatedAdminImportContactsRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
   AuthenticatedAdminCurriculumProductSlugRoute: typeof AuthenticatedAdminCurriculumProductSlugRoute
 }
@@ -527,6 +548,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLearnRoute: AuthenticatedLearnRouteWithChildren,
   AuthenticatedAdminContactsRoute: AuthenticatedAdminContactsRoute,
+  AuthenticatedAdminImportContactsRoute: AuthenticatedAdminImportContactsRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
   AuthenticatedAdminCurriculumProductSlugRoute:
     AuthenticatedAdminCurriculumProductSlugRoute,
