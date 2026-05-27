@@ -25,14 +25,21 @@ async function sendOrderReceipt(orderId: string) {
 
   const messageId = `order:${order.id}:receipt`;
 
-  // Idempotency: skip if already sent or pending
-  const { data: existing } = await supabaseAdmin
-    .from("email_send_log")
-    .select("id,status")
-    .eq("message_id", messageId)
-    .in("status", ["sent", "pending"])
-    .maybeSingle();
-  if (existing) return;
+  // Race-safe claim: INSERT relies on the UNIQUE index on email_send_log(message_id).
+  // The first concurrent webhook wins; any duplicate retry hits 23505 and returns early
+  // without enqueuing a second receipt.
+  const { error: claimErr } = await supabaseAdmin.from("email_send_log").insert({
+    message_id: messageId,
+    template_name: "order_receipt",
+    recipient_email: order.email,
+    status: "pending",
+  });
+  if (claimErr) {
+    // 23505 = unique_violation → another worker already claimed this receipt
+    if ((claimErr as any).code === "23505") return;
+    console.error("[paystack-webhook] failed to claim receipt log", claimErr);
+    return;
+  }
 
   const { data: items } = await supabaseAdmin
     .from("order_items")
