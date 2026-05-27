@@ -1,5 +1,8 @@
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getTurnstileSiteKey } from "@/lib/turnstile.functions";
 
 interface TurnstileGateProps {
   onToken: (token: string | null) => void;
@@ -7,22 +10,29 @@ interface TurnstileGateProps {
 }
 
 /**
- * Cloudflare Turnstile invisible / managed challenge widget.
+ * Cloudflare Turnstile widget.
  *
- * - If VITE_TURNSTILE_SITE_KEY is missing, renders nothing and emits a
- *   sentinel "dev-skip" token so the parent form stays usable in dev.
- * - On the server, verifyTurnstile() treats requests as valid when the
- *   secret is missing, so dev + production gracefully diverge.
+ * Fetches the public site key from a small server fn (the value is the
+ * public half of the keypair — safe to ship to the browser). If the key
+ * is missing, the widget renders nothing and emits a "dev-skip" sentinel
+ * so the parent form stays usable. The server-side verifier treats
+ * missing-secret as a no-op too, so dev and prod gracefully align.
  */
 export function TurnstileGate({ onToken, className }: TurnstileGateProps) {
-  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+  const fn = useServerFn(getTurnstileSiteKey);
+  const { data, isLoading } = useQuery({
+    queryKey: ["turnstile-site-key"],
+    queryFn: () => fn(),
+    staleTime: Infinity,
+  });
+
+  const siteKey = data?.siteKey ?? null;
 
   useEffect(() => {
-    if (!siteKey) onToken("dev-skip");
-    // Only fire once on mount when the key is absent.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [siteKey]);
+    if (!isLoading && !siteKey) onToken("dev-skip");
+  }, [isLoading, siteKey, onToken]);
 
+  if (isLoading) return null;
   if (!siteKey) return null;
 
   return (
