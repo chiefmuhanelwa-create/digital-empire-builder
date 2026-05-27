@@ -1,39 +1,118 @@
-## Root cause
 
-I navigated the site as a user (`/products` → click "Workbooks & Courses"). The URL correctly changed to `/products/garden/esev`, but the page kept showing the catalog. Same happens when clicking any product card.
+# Go-Live Readiness Plan
 
-In TanStack Router's file-based routing, because the catalog lives at `src/routes/products.tsx`, that file is treated as the **parent layout** for every sibling that extends it:
+Below is what I found end-to-end and what we need to fix before you can take real money. I've grouped it by area, in roughly the order I'd ship.
 
-- `products.garden.$garden.tsx` → child of `/products`
-- `products.$slug.tsx` → child of `/products`
+---
 
-A parent layout must render `<Outlet />` for child routes to appear. `products.tsx` doesn't — so the catalog renders, the matched child renders into nothing, and the user sees the catalog at every `/products/...` URL.
+## 1. What happens today after someone pays
 
-This single bug explains both symptoms the user reported:
-1. **Categories not clickable** — they navigate, but the garden page never appears.
-2. **Product sales pages invisible** — same reason; `/products/<slug>` matches but is hidden behind the catalog layout.
+**The wiring works, but there is no email anywhere in the flow.**
 
-## Fix
+Flow today:
+1. Buyer clicks "Buy" → `initializeCheckout` server fn creates a `pending` order + `order_items` row, calls Paystack, redirects to Paystack's hosted checkout.
+2. After payment, Paystack redirects to `/checkout/success?reference=...`. The page polls `verifyCheckout` every 2s up to 10 times.
+3. **In parallel, Paystack POSTs to `/api/public/paystack-webhook`** (HMAC SHA-512 verified ✅). The webhook:
+   - Marks order `paid`
+   - Upserts a `subscribers` row (source=`checkout`)
+   - Tags as `buyer` + the relevant garden tag
+   - Creates `product_grants` (links to `user_id` if a profile with that email exists, otherwise just `subscriber_id`)
+   - Logs a `payments` row
+4. Success page then shows a "Download now" button (signed URL, 30 min TTL) and the Niche-Clarity upsell sequence.
 
-Rename `src/routes/products.tsx` → `src/routes/products.index.tsx`. This makes the catalog the leaf route for `/products` only, and removes the unintended parent-layout role. No code changes needed inside the file; the `createFileRoute("/products")` path stays the same (index files keep the parent path).
+**Gaps that block go-live:**
+- ❌ **No receipt email** to the buyer. They only get the file if they don't close the tab.
+- ❌ **If buyer paid as a guest** (no account), `product_grants.user_id` is null. When they later sign up with the same email, nothing back-fills the grant → `/dashboard` shows nothing. The `handle_new_user` trigger needs to also claim any orphan grants by email.
+- ❌ **No admin notification** when a sale happens.
+- ⚠️ **Webhook URL must be registered in the Paystack dashboard** (Settings → API Keys & Webhooks → `https://<your-domain>/api/public/paystack-webhook`). Without it, orders stay `pending` until the success-page polling verifies — and grants never happen if the buyer never lands on the success page.
+- ⚠️ Currently using `PAYSTACK_SECRET_KEY` (test or live — we should confirm which is set, and add the live key for production).
 
-After the rename, `routeTree.gen.ts` regenerates automatically and:
-- `/products` → catalog (unchanged)
-- `/products/garden/esev` → Workbooks & Courses listing
-- `/products/influencers-code-ebook` → product sales page
+## 2. Email delivery (currently: none)
 
-## Other UI/UX checks performed
+Nothing sends emails right now. For go-live we need:
 
-Walked the site as an anonymous and logged-in user:
+**Auth emails (Lovable Emails, branded):**
+- Email verification on signup
+- Password reset (the `/reset-password` route exists but no email triggers it)
+- Magic links (optional)
 
-- **Header nav** (`/`, Shop dropdown, About, Contact, Sign in/Dashboard) — all working.
-- **Shop catalog cards** — clickable, hover state fine, item counts load correctly (5 / 13 / 6 / 5 = 29 published).
-- **Category pages & product detail pages** — currently broken by the bug above; expected to work after the rename.
-- **Admin** (`/admin/products`, `/admin/contacts`) — gated correctly by `_authenticated` + admin role.
-- **Auth flows** (login/signup/reset) — routes resolve, redirect to `/dashboard` on success.
+**Transactional emails (Lovable Emails):**
+- Order receipt to buyer (with download link + dashboard link) — triggered from webhook
+- Admin "new sale" notification to your support inbox
+- Contact-form submission notification (see §3)
 
-No other broken links or dead CTAs found in the navigation paths I exercised. If something else feels off after the fix, I'll do a second pass on the product detail page itself (CTA → checkout, mockup rendering, PDF availability).
+Prerequisite: set up a sender domain (e.g. `notify.christkingdom.co.za`). I'll launch the email domain setup dialog first, then scaffold the auth + transactional templates branded to match the site.
 
-## Files touched
+## 3. Contact page (currently: just mailto links)
 
-- Rename `src/routes/products.tsx` → `src/routes/products.index.tsx` (content unchanged)
+`/contact` is two `mailto:` links — no form, no DB capture, no admin view. Fix:
+- Add a contact form (name, email, subject, message) on `/contact`.
+- New `contact_messages` table (RLS: admins read/manage, anon insert).
+- Server fn `submitContactMessage` → inserts row + sends a transactional email to `support@christkingdom.co.za` + auto-reply to the sender.
+- New admin tab at `/admin/contacts` (or a section in the existing admin contacts page) to read/triage inquiries.
+
+## 4. Admin: products & contacts
+
+I tested the existing admin:
+
+**`/admin/products`** ✅ works
+- Cover image upload → `product-covers` (public bucket)
+- File upload → `product-files` (private bucket) for digital downloads
+- Create / edit / publish / archive / delete
+- One small polish: surface clearer success toast + show uploaded file name in the form after upload
+
+**`/admin/contacts`** ✅ works
+- CSV import with column auto-detection, tag creation, status changes
+- Adds: contact-message inbox section (from §3), and an "Export current view to CSV" button
+
+**Admin access** ✅
+- `has_role(uid, 'admin')` RPC + `_authenticated` layout guard + per-route admin redirect to `/dashboard`
+- The first signup becomes admin automatically via `handle_new_user`
+
+## 5. Sales pages & CTAs
+
+`/products/$slug` already renders mockups and sales copy. Audit + tighten:
+- Every product detail page must have: hero with cover image, tagline, price, **single primary "Buy now"** CTA above the fold (currently fine), trust micro-copy (instant download, secure Paystack, refund policy line), benefit list, FAQ.
+- Sticky mobile checkout bar (price + Buy button) on `/products/$slug` so the CTA is always reachable on phones.
+- Category pages (`/products/garden/$garden`) need clear card CTAs ("See details →") and a section intro.
+- `/` (home) hero CTA → audit copy to ensure it sends people to highest-converting product, not just `/products`.
+
+## 6. Mobile responsiveness audit
+
+Spot-check on 390px viewport (your current one):
+- Header nav, sticky CTAs, product cards, sales page mockups, admin tables.
+- Admin tables in particular tend to overflow — add horizontal scroll wrappers + condensed mobile views.
+- Checkout form modal (`initializeCheckout` trigger) needs to be full-screen on mobile.
+
+## 7. Pre-launch checklist
+
+- [ ] Switch Paystack to live secret key
+- [ ] Register webhook URL in Paystack dashboard
+- [ ] Configure email sender domain + DNS
+- [ ] Verify currency on every published product is `ZAR` (some seeds default to `NGN`)
+- [ ] Confirm first admin user is correct (`select * from user_roles`)
+- [ ] Test one full live purchase end-to-end (small amount), then refund
+- [ ] Publish, then re-test on `project--…lovable.app`
+
+---
+
+## Suggested order of execution
+
+1. **Email infra** — set up sender domain (one click via the setup dialog), scaffold auth + transactional templates.
+2. **Order-receipt email + grant-claim-on-signup** — wire the webhook to enqueue a receipt email; add trigger so signups claim existing grants by email.
+3. **Contact form + `contact_messages` table + admin inbox + notification emails.**
+4. **Sales page polish + sticky mobile Buy bar + CTA audit.**
+5. **Mobile responsiveness pass** on admin tables & checkout modal.
+6. **Pre-launch checklist** + a live test purchase.
+
+---
+
+## Technical notes (for me, when building)
+
+- New table `contact_messages` (id, name, email, subject, message, status, created_at) with RLS: anon insert, admin select/update/delete; `GRANT INSERT TO anon`, `GRANT ALL TO authenticated, service_role`.
+- Update `handle_new_user` to also `UPDATE product_grants SET user_id = new.id WHERE user_id IS NULL AND subscriber_id IN (SELECT id FROM subscribers WHERE lower(email)=lower(new.email))`.
+- Use Lovable Emails (queue-based) for both auth + transactional. Receipt email fired from `handleChargeSuccess` in `paystack-webhook.ts` after grants are written.
+- Use `supabase--configure_auth` to require email confirmation before sign-in (currently unknown — will check status during build).
+- Sticky mobile CTA: a fixed bottom bar visible only on `<sm` breakpoints on `products.$slug.tsx`.
+
+Approve and I'll start with email infra (step 1) — that unblocks everything else.
