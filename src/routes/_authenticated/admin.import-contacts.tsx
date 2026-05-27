@@ -16,7 +16,15 @@ const BATCH_SIZE = 100;
 const DELAY_MS = 2500;
 
 type RowObj = Record<string, unknown>;
-type ErrRow = { row: number; email: string | null; message: string };
+type ErrRow = {
+  row: number;
+  email: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  phone?: string | null;
+  reason: string;
+  detail: string;
+};
 
 function ImportContacts() {
   const importFn = useServerFn(importContactsBatch);
@@ -64,7 +72,10 @@ function ImportContacts() {
         }
       } catch (err: any) {
         toast.error(err?.message ?? "Batch failed");
-        setErrors((x) => [...x, { row: i, email: null, message: err?.message ?? "Batch error" }]);
+        setErrors((x) => [
+          ...x,
+          { row: i, email: null, reason: "Network/Server Error", detail: err?.message ?? "Batch error" },
+        ]);
       }
       i += BATCH_SIZE;
       setDone(Math.min(i, rows.length));
@@ -77,7 +88,18 @@ function ImportContacts() {
   };
 
   const downloadErrors = () => {
-    const csv = Papa.unparse(errors);
+    const csv = Papa.unparse({
+      fields: ["row", "reason", "email", "first_name", "last_name", "phone", "detail"],
+      data: errors.map((e) => ({
+        row: e.row,
+        reason: e.reason,
+        email: e.email ?? "",
+        first_name: e.first_name ?? "",
+        last_name: e.last_name ?? "",
+        phone: e.phone ?? "",
+        detail: e.detail,
+      })),
+    });
     const blob = new Blob([csv], { type: "text/csv" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
