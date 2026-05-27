@@ -18,7 +18,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "Digital Empire Builder"
+const SITE_NAME = "Christ Kingdom Platform"
 const ROOT_DOMAIN = "chkplt.com"
 
 // Sample data for preview mode ONLY (not used in actual email sending).
