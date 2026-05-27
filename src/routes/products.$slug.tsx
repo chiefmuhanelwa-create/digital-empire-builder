@@ -13,12 +13,38 @@ import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug} — Christ Kingdom Platform` },
-      { name: "description", content: "Product details and checkout." },
-    ],
-  }),
+  loader: async ({ params }) => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("title, tagline, description, cover_image_url")
+      .eq("slug", params.slug)
+      .maybeSingle();
+    if (error) throw error;
+    return { meta: data };
+  },
+  head: ({ params, loaderData }) => {
+    const p = loaderData?.meta;
+    const title = p ? `${p.title} — Christ Kingdom Platform` : `${params.slug} — Christ Kingdom Platform`;
+    const description = (p?.description?.slice(0, 200)) ?? p?.tagline ?? "Tools for Kingdom Contentpreneurs.";
+    const image = p?.cover_image_url ?? undefined;
+    const url = `/products/${params.slug}`;
+    const meta: Array<Record<string, string>> = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "product" },
+      { property: "og:url", content: url },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+    ];
+    if (image) {
+      meta.push({ property: "og:image", content: image });
+      meta.push({ name: "twitter:image", content: image });
+    }
+    return { meta, links: [{ rel: "canonical", href: url }] };
+  },
   component: ProductDetail,
   notFoundComponent: () => (
     <div className="min-h-screen bg-background text-foreground">
@@ -104,15 +130,28 @@ function ProductDetail() {
         </div>
         <h1 className="mt-3 font-display text-5xl md:text-6xl leading-[1.05]">{product.title}</h1>
 
+        <p className="mt-4 text-sm text-muted-foreground">
+          By Lebo M. — multi-award-winning South African media founder. Built for creators 18–34.
+        </p>
+
         <div className="mt-10 flex items-baseline gap-4 flex-wrap">
           <div className="font-display text-5xl text-banana">{priceLabel}</div>
           {!product.is_free && !product.requires_application && (
-            <div className="font-mono text-xs text-muted-foreground">one-time payment</div>
+            <div className="font-mono text-xs text-muted-foreground">one-time payment · instant download</div>
           )}
           {product.requires_application && (
             <div className="font-mono text-xs text-muted-foreground">/ by application</div>
           )}
         </div>
+
+        {!product.is_free && !product.requires_application && (
+          <a
+            href="#buy"
+            className="mt-5 inline-flex items-center gap-2 bg-banana text-banana-foreground hover:bg-banana/90 px-6 py-3 rounded-md font-medium text-sm transition-colors"
+          >
+            Get instant access → {priceLabel}
+          </a>
+        )}
 
         {product.cover_image_url && (
           <div className="mt-10 border border-border bg-muted/20 p-6 flex items-center justify-center">
@@ -132,6 +171,7 @@ function ProductDetail() {
         )}
 
         {/* Primary CTA */}
+        <div id="buy" />
         <BuyBlock product={product} priceLabel={priceLabel} />
 
         {/* Long-form sales copy */}
@@ -192,7 +232,13 @@ function ProductDetail() {
               Ready when you are
             </div>
             <h3 className="mt-3 font-display text-3xl">Get it for {priceLabel}</h3>
-            <p className="mt-3 text-sm text-muted-foreground">Scroll up to checkout — takes 60 seconds.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Instant download. No subscription. No fluff.</p>
+            <a
+              href="#buy"
+              className="mt-6 inline-flex items-center gap-2 bg-banana text-banana-foreground hover:bg-banana/90 px-8 py-4 rounded-md font-medium text-base transition-colors"
+            >
+              Buy now → {priceLabel}
+            </a>
           </div>
         )}
 
