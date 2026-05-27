@@ -1,14 +1,49 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createHmac, timingSafeEqual, randomUUID } from "crypto";
+import { createHmac, timingSafeEqual, randomUUID, createHash } from "crypto";
 import { render } from "@react-email/components";
 import * as React from "react";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { OrderReceiptEmail } from "@/lib/email-templates/order-receipt";
+import { reportError } from "@/lib/error-logger";
 
 const SITE_NAME = "Christ Kingdom Platform";
 const ROOT_DOMAIN = "chkplt.com";
 const SENDER_DOMAIN = "notify.chkplt.com";
 const FROM_DOMAIN = "chkplt.com";
+
+// Statutory split — keep in sync with audit_ledgers semantics.
+const VAT_RATE = 0.15;
+const TAX_RESERVE_RATE = 0.25;
+
+async function writeAuditLedger(
+  order: { id: string; email: string; total_cents: number; currency: string; provider_reference: string | null },
+  paidAtIso: string,
+) {
+  const vat = Math.round(order.total_cents * VAT_RATE);
+  const tax = Math.round(order.total_cents * TAX_RESERVE_RATE);
+  const net = order.total_cents - vat - tax;
+  const emailHash = createHash("sha256").update(order.email.toLowerCase()).digest("hex");
+
+  const { error } = await supabaseAdmin.from("audit_ledgers").insert({
+    order_id: order.id,
+    provider_reference: order.provider_reference,
+    gross_cents: order.total_cents,
+    vat_allocation_cents: vat,
+    tax_reserve_cents: tax,
+    net_cents: net,
+    currency: order.currency,
+    customer_email_hash: emailHash,
+    paid_at: paidAtIso,
+  });
+  if (error && (error as { code?: string }).code !== "23505") {
+    await reportError(error, {
+      endpoint: "paystack-webhook:audit_ledgers",
+      orderId: order.id,
+      severity: "critical",
+    });
+  }
+}
+
 
 function formatZar(cents: number, currency = "ZAR") {
   const symbol = currency === "ZAR" ? "R" : currency + " ";
@@ -134,7 +169,7 @@ async function handleChargeSuccess(payload: any) {
 
   const { data: order } = await supabaseAdmin
     .from("orders")
-    .select("id,email,status,customer_name,customer_phone,metadata")
+    .select("id,email,status,customer_name,customer_phone,metadata,total_cents,currency,provider_reference")
     .eq("provider_reference", reference)
     .maybeSingle();
   if (!order) {
@@ -249,11 +284,30 @@ async function handleChargeSuccess(payload: any) {
       );
   }
 
+  // Write the immutable audit ledger row BEFORE the receipt — if the ledger
+  // fails it's logged as a critical incident but never blocks the receipt.
+  const paidAtIso = dataObj.paid_at
+    ? new Date(dataObj.paid_at).toISOString()
+    : new Date().toISOString();
+  await writeAuditLedger(
+    {
+      id: order.id,
+      email: order.email,
+      total_cents: order.total_cents,
+      currency: order.currency,
+      provider_reference: order.provider_reference,
+    },
+    paidAtIso,
+  );
+
   // Send order receipt email (idempotent)
   try {
     await sendOrderReceipt(order.id);
   } catch (err) {
-    console.error("[paystack-webhook] sendOrderReceipt failed", err);
+    await reportError(err, {
+      endpoint: "paystack-webhook:sendOrderReceipt",
+      orderId: order.id,
+    });
   }
 }
 

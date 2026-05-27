@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_ledgers: {
+        Row: {
+          created_at: string
+          currency: string
+          customer_email_hash: string
+          gross_cents: number
+          id: string
+          net_cents: number
+          order_id: string
+          paid_at: string
+          provider_reference: string | null
+          tax_reserve_cents: number
+          vat_allocation_cents: number
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          customer_email_hash: string
+          gross_cents: number
+          id?: string
+          net_cents: number
+          order_id: string
+          paid_at?: string
+          provider_reference?: string | null
+          tax_reserve_cents: number
+          vat_allocation_cents: number
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          customer_email_hash?: string
+          gross_cents?: number
+          id?: string
+          net_cents?: number
+          order_id?: string
+          paid_at?: string
+          provider_reference?: string | null
+          tax_reserve_cents?: number
+          vat_allocation_cents?: number
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
@@ -98,6 +140,39 @@ export type Database = {
           id?: string
           token?: string
           used_at?: string | null
+        }
+        Relationships: []
+      }
+      incidents: {
+        Row: {
+          created_at: string
+          endpoint: string | null
+          id: string
+          message: string
+          meta: Json | null
+          resolved_at: string | null
+          severity: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          endpoint?: string | null
+          id?: string
+          message: string
+          meta?: Json | null
+          resolved_at?: string | null
+          severity?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          endpoint?: string | null
+          id?: string
+          message?: string
+          meta?: Json | null
+          resolved_at?: string | null
+          severity?: string
+          user_id?: string | null
         }
         Relationships: []
       }

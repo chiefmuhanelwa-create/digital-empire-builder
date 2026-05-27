@@ -22,10 +22,13 @@ import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/learn'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as ProductsGardenGardenRouteImport } from './routes/products.garden.$garden'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
+import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
+import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
 import { Route as AuthenticatedAdminImportContactsRouteImport } from './routes/_authenticated/admin.import-contacts'
 import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin.contacts'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
@@ -98,6 +101,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const ProductsGardenGardenRoute = ProductsGardenGardenRouteImport.update({
   id: '/products/garden/$garden',
   path: '/products/garden/$garden',
@@ -118,6 +126,18 @@ const AuthenticatedAdminProductsRoute =
   AuthenticatedAdminProductsRouteImport.update({
     id: '/admin/products',
     path: '/admin/products',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminLedgerRoute =
+  AuthenticatedAdminLedgerRouteImport.update({
+    id: '/admin/ledger',
+    path: '/admin/ledger',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminIncidentsRoute =
+  AuthenticatedAdminIncidentsRouteImport.update({
+    id: '/admin/incidents',
+    path: '/admin/incidents',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminImportContactsRoute =
@@ -169,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/niche-clarity': typeof NicheClarityRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -176,6 +197,8 @@ export interface FileRoutesByFullPath {
   '/products/': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
+  '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
+  '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -194,6 +217,7 @@ export interface FileRoutesByTo {
   '/niche-clarity': typeof NicheClarityRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -201,6 +225,8 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
+  '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
+  '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -221,6 +247,7 @@ export interface FileRoutesById {
   '/niche-clarity': typeof NicheClarityRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -228,6 +255,8 @@ export interface FileRoutesById {
   '/products/': typeof ProductsIndexRoute
   '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/_authenticated/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
+  '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
+  '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -248,6 +277,7 @@ export interface FileRouteTypes {
     | '/niche-clarity'
     | '/reset-password'
     | '/signup'
+    | '/account'
     | '/dashboard'
     | '/learn'
     | '/checkout/success'
@@ -255,6 +285,8 @@ export interface FileRouteTypes {
     | '/products/'
     | '/admin/contacts'
     | '/admin/import-contacts'
+    | '/admin/incidents'
+    | '/admin/ledger'
     | '/admin/products'
     | '/learn/$slug'
     | '/api/public/paystack-webhook'
@@ -273,6 +305,7 @@ export interface FileRouteTypes {
     | '/niche-clarity'
     | '/reset-password'
     | '/signup'
+    | '/account'
     | '/dashboard'
     | '/learn'
     | '/checkout/success'
@@ -280,6 +313,8 @@ export interface FileRouteTypes {
     | '/products'
     | '/admin/contacts'
     | '/admin/import-contacts'
+    | '/admin/incidents'
+    | '/admin/ledger'
     | '/admin/products'
     | '/learn/$slug'
     | '/api/public/paystack-webhook'
@@ -299,6 +334,7 @@ export interface FileRouteTypes {
     | '/niche-clarity'
     | '/reset-password'
     | '/signup'
+    | '/_authenticated/account'
     | '/_authenticated/dashboard'
     | '/_authenticated/learn'
     | '/checkout/success'
@@ -306,6 +342,8 @@ export interface FileRouteTypes {
     | '/products/'
     | '/_authenticated/admin/contacts'
     | '/_authenticated/admin/import-contacts'
+    | '/_authenticated/admin/incidents'
+    | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
     | '/_authenticated/learn/$slug'
     | '/api/public/paystack-webhook'
@@ -429,6 +467,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/products/garden/$garden': {
       id: '/products/garden/$garden'
       path: '/products/garden/$garden'
@@ -455,6 +500,20 @@ declare module '@tanstack/react-router' {
       path: '/admin/products'
       fullPath: '/admin/products'
       preLoaderRoute: typeof AuthenticatedAdminProductsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/ledger': {
+      id: '/_authenticated/admin/ledger'
+      path: '/admin/ledger'
+      fullPath: '/admin/ledger'
+      preLoaderRoute: typeof AuthenticatedAdminLedgerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/incidents': {
+      id: '/_authenticated/admin/incidents'
+      path: '/admin/incidents'
+      fullPath: '/admin/incidents'
+      preLoaderRoute: typeof AuthenticatedAdminIncidentsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/import-contacts': {
@@ -536,19 +595,25 @@ const AuthenticatedLearnRouteWithChildren =
   AuthenticatedLearnRoute._addFileChildren(AuthenticatedLearnRouteChildren)
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRouteWithChildren
   AuthenticatedAdminContactsRoute: typeof AuthenticatedAdminContactsRoute
   AuthenticatedAdminImportContactsRoute: typeof AuthenticatedAdminImportContactsRoute
+  AuthenticatedAdminIncidentsRoute: typeof AuthenticatedAdminIncidentsRoute
+  AuthenticatedAdminLedgerRoute: typeof AuthenticatedAdminLedgerRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
   AuthenticatedAdminCurriculumProductSlugRoute: typeof AuthenticatedAdminCurriculumProductSlugRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLearnRoute: AuthenticatedLearnRouteWithChildren,
   AuthenticatedAdminContactsRoute: AuthenticatedAdminContactsRoute,
   AuthenticatedAdminImportContactsRoute: AuthenticatedAdminImportContactsRoute,
+  AuthenticatedAdminIncidentsRoute: AuthenticatedAdminIncidentsRoute,
+  AuthenticatedAdminLedgerRoute: AuthenticatedAdminLedgerRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
   AuthenticatedAdminCurriculumProductSlugRoute:
     AuthenticatedAdminCurriculumProductSlugRoute,
