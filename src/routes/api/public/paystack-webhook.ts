@@ -1,14 +1,49 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createHmac, timingSafeEqual, randomUUID } from "crypto";
+import { createHmac, timingSafeEqual, randomUUID, createHash } from "crypto";
 import { render } from "@react-email/components";
 import * as React from "react";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { OrderReceiptEmail } from "@/lib/email-templates/order-receipt";
+import { reportError } from "@/lib/error-logger";
 
 const SITE_NAME = "Christ Kingdom Platform";
 const ROOT_DOMAIN = "chkplt.com";
 const SENDER_DOMAIN = "notify.chkplt.com";
 const FROM_DOMAIN = "chkplt.com";
+
+// Statutory split — keep in sync with audit_ledgers semantics.
+const VAT_RATE = 0.15;
+const TAX_RESERVE_RATE = 0.25;
+
+async function writeAuditLedger(
+  order: { id: string; email: string; total_cents: number; currency: string; provider_reference: string | null },
+  paidAtIso: string,
+) {
+  const vat = Math.round(order.total_cents * VAT_RATE);
+  const tax = Math.round(order.total_cents * TAX_RESERVE_RATE);
+  const net = order.total_cents - vat - tax;
+  const emailHash = createHash("sha256").update(order.email.toLowerCase()).digest("hex");
+
+  const { error } = await supabaseAdmin.from("audit_ledgers").insert({
+    order_id: order.id,
+    provider_reference: order.provider_reference,
+    gross_cents: order.total_cents,
+    vat_allocation_cents: vat,
+    tax_reserve_cents: tax,
+    net_cents: net,
+    currency: order.currency,
+    customer_email_hash: emailHash,
+    paid_at: paidAtIso,
+  });
+  if (error && (error as { code?: string }).code !== "23505") {
+    await reportError(error, {
+      endpoint: "paystack-webhook:audit_ledgers",
+      orderId: order.id,
+      severity: "critical",
+    });
+  }
+}
+
 
 function formatZar(cents: number, currency = "ZAR") {
   const symbol = currency === "ZAR" ? "R" : currency + " ";
