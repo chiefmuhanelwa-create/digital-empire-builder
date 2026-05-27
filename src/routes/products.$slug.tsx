@@ -13,12 +13,38 @@ import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug} — Christ Kingdom Platform` },
-      { name: "description", content: "Product details and checkout." },
-    ],
-  }),
+  loader: async ({ params }) => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("title, tagline, description, cover_image_url")
+      .eq("slug", params.slug)
+      .maybeSingle();
+    if (error) throw error;
+    return { meta: data };
+  },
+  head: ({ params, loaderData }) => {
+    const p = loaderData?.meta;
+    const title = p ? `${p.title} — Christ Kingdom Platform` : `${params.slug} — Christ Kingdom Platform`;
+    const description = (p?.description?.slice(0, 200)) ?? p?.tagline ?? "Tools for Kingdom Contentpreneurs.";
+    const image = p?.cover_image_url ?? undefined;
+    const url = `/products/${params.slug}`;
+    const meta: Array<Record<string, string>> = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "product" },
+      { property: "og:url", content: url },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+    ];
+    if (image) {
+      meta.push({ property: "og:image", content: image });
+      meta.push({ name: "twitter:image", content: image });
+    }
+    return { meta, links: [{ rel: "canonical", href: url }] };
+  },
   component: ProductDetail,
   notFoundComponent: () => (
     <div className="min-h-screen bg-background text-foreground">
