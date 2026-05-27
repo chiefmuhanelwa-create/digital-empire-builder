@@ -68,7 +68,7 @@ function Catalog() {
           Premium programs when you go full-time.
         </p>
 
-        <div className="mt-20 grid gap-px bg-border md:grid-cols-2 border border-border">
+        <div className="mt-20 grid gap-6 md:grid-cols-2">
           {GARDEN_ORDER.map((g: Garden) => {
             const meta = GARDENS[g];
             const count = counts?.[g] ?? 0;
@@ -77,26 +77,26 @@ function Catalog() {
                 key={g}
                 to="/products/garden/$garden"
                 params={{ garden: g }}
-                className="group relative bg-background p-10 transition-colors hover:bg-card min-h-[260px] flex flex-col justify-between"
+                className="group relative rounded-md border border-stone-800/60 bg-stone-900 p-10 min-h-[260px] flex flex-col justify-between transition-all ease-in duration-200 hover:border-amber-500/30"
               >
                 <div>
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+                      <div className="font-mono text-xs tracking-[0.25em] uppercase text-amber-500">
                         {meta.priceRange}
                       </div>
-                      <h2 className="mt-3 font-display text-4xl group-hover:text-banana transition-colors">
+                      <h2 className="mt-3 font-display text-4xl group-hover:text-amber-500 transition-colors">
                         {meta.name}
                       </h2>
                     </div>
-                    <ArrowUpRight className="size-6 text-muted-foreground group-hover:text-banana transition-colors" />
+                    <ArrowUpRight className="size-6 text-stone-500 group-hover:text-amber-500 transition-colors" />
                   </div>
-                  <p className="mt-6 text-base text-foreground/80 leading-relaxed">
+                  <p className="mt-6 text-base text-stone-300 leading-relaxed">
                     {meta.description}
                   </p>
                 </div>
                 <div className="mt-8 flex items-center justify-end font-mono text-xs">
-                  <span className="text-banana">{count} {count === 1 ? "item" : "items"}</span>
+                  <span className="text-amber-500">{count} {count === 1 ? "item" : "items"}</span>
                 </div>
               </Link>
             );
