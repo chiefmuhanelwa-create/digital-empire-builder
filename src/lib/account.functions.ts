@@ -39,7 +39,14 @@ export const exportMyData = createServerFn({ method: "POST" })
           : Promise.resolve({ data: null }),
       ]);
 
-    let orderItems: unknown[] = [];
+    let orderItems: Array<{
+      order_id: string;
+      product_title: string;
+      quantity: number;
+      unit_price_cents: number;
+      line_total_cents: number;
+      created_at: string;
+    }> = [];
     if (orders && orders.length > 0) {
       const ids = orders.map((o) => o.id);
       const { data } = await supabaseAdmin
