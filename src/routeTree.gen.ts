@@ -27,6 +27,7 @@ import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/publi
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin.contacts'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as AuthenticatedLearnSlugLessonSlugRouteImport } from './routes/_authenticated/learn.$slug.$lessonSlug'
 import { Route as AuthenticatedAdminCurriculumProductSlugRouteImport } from './routes/_authenticated/admin.curriculum.$productSlug'
 
@@ -122,6 +123,12 @@ const AuthenticatedAdminContactsRoute =
     path: '/admin/contacts',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedLearnSlugLessonSlugRoute =
   AuthenticatedLearnSlugLessonSlugRouteImport.update({
     id: '/$lessonSlug',
@@ -155,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
   '/learn/$slug/$lessonSlug': typeof AuthenticatedLearnSlugLessonSlugRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -176,6 +184,7 @@ export interface FileRoutesByTo {
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
   '/learn/$slug/$lessonSlug': typeof AuthenticatedLearnSlugLessonSlugRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -199,6 +208,7 @@ export interface FileRoutesById {
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/_authenticated/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
   '/_authenticated/learn/$slug/$lessonSlug': typeof AuthenticatedLearnSlugLessonSlugRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/products/garden/$garden'
     | '/admin/curriculum/$productSlug'
     | '/learn/$slug/$lessonSlug'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/products/garden/$garden'
     | '/admin/curriculum/$productSlug'
     | '/learn/$slug/$lessonSlug'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -265,6 +277,7 @@ export interface FileRouteTypes {
     | '/products/garden/$garden'
     | '/_authenticated/admin/curriculum/$productSlug'
     | '/_authenticated/learn/$slug/$lessonSlug'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -281,6 +294,7 @@ export interface RootRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
   ProductsGardenGardenRoute: typeof ProductsGardenGardenRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -411,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminContactsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/learn/$slug/$lessonSlug': {
       id: '/_authenticated/learn/$slug/$lessonSlug'
       path: '/$lessonSlug'
@@ -489,6 +510,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
   ProductsGardenGardenRoute: ProductsGardenGardenRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
