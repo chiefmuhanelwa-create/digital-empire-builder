@@ -31,7 +31,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "Digital Empire Builder"
+const SITE_NAME = "Christ Kingdom Platform"
 const SENDER_DOMAIN = "notify.chkplt.com"
 const ROOT_DOMAIN = "chkplt.com"
 const FROM_DOMAIN = "chkplt.com"
