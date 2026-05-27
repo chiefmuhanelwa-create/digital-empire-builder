@@ -78,13 +78,6 @@ async function sendOrderReceipt(orderId: string) {
     { plainText: true },
   );
 
-  await supabaseAdmin.from("email_send_log").insert({
-    message_id: messageId,
-    template_name: "order_receipt",
-    recipient_email: order.email,
-    status: "pending",
-  });
-
   const { error } = await supabaseAdmin.rpc("enqueue_email", {
     queue_name: "transactional_emails",
     payload: {
@@ -103,13 +96,10 @@ async function sendOrderReceipt(orderId: string) {
   });
   if (error) {
     console.error("[paystack-webhook] failed to enqueue receipt", error);
-    await supabaseAdmin.from("email_send_log").insert({
-      message_id: messageId,
-      template_name: "order_receipt",
-      recipient_email: order.email,
-      status: "failed",
-      error_message: error.message.slice(0, 1000),
-    });
+    await supabaseAdmin
+      .from("email_send_log")
+      .update({ status: "failed", error_message: error.message.slice(0, 1000) })
+      .eq("message_id", messageId);
   }
 }
 
