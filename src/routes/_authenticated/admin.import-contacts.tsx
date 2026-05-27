@@ -88,7 +88,18 @@ function ImportContacts() {
   };
 
   const downloadErrors = () => {
-    const csv = Papa.unparse(errors);
+    const csv = Papa.unparse({
+      fields: ["row", "reason", "email", "first_name", "last_name", "phone", "detail"],
+      data: errors.map((e) => ({
+        row: e.row,
+        reason: e.reason,
+        email: e.email ?? "",
+        first_name: e.first_name ?? "",
+        last_name: e.last_name ?? "",
+        phone: e.phone ?? "",
+        detail: e.detail,
+      })),
+    });
     const blob = new Blob([csv], { type: "text/csv" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
