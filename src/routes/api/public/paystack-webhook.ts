@@ -169,7 +169,7 @@ async function handleChargeSuccess(payload: any) {
 
   const { data: order } = await supabaseAdmin
     .from("orders")
-    .select("id,email,status,customer_name,customer_phone,metadata")
+    .select("id,email,status,customer_name,customer_phone,metadata,total_cents,currency,provider_reference")
     .eq("provider_reference", reference)
     .maybeSingle();
   if (!order) {
@@ -284,11 +284,30 @@ async function handleChargeSuccess(payload: any) {
       );
   }
 
+  // Write the immutable audit ledger row BEFORE the receipt — if the ledger
+  // fails it's logged as a critical incident but never blocks the receipt.
+  const paidAtIso = dataObj.paid_at
+    ? new Date(dataObj.paid_at).toISOString()
+    : new Date().toISOString();
+  await writeAuditLedger(
+    {
+      id: order.id,
+      email: order.email,
+      total_cents: order.total_cents,
+      currency: order.currency,
+      provider_reference: order.provider_reference,
+    },
+    paidAtIso,
+  );
+
   // Send order receipt email (idempotent)
   try {
     await sendOrderReceipt(order.id);
   } catch (err) {
-    console.error("[paystack-webhook] sendOrderReceipt failed", err);
+    await reportError(err, {
+      endpoint: "paystack-webhook:sendOrderReceipt",
+      orderId: order.id,
+    });
   }
 }
 
