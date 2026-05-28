@@ -250,7 +250,7 @@ function ApplyPage() {
           {!result && (
             <div className="nx-card">
               {step === 0 && (
-                <Module title="Module 1 · Reach & Consistency">
+                <Module eyebrow="Module 01" title="Follower Count & Engagement">
                   <Field label="Your full name">
                     <Input
                       value={state.full_name ?? ""}
