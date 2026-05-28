@@ -1,34 +1,35 @@
-# Apply premium light palette + CTA glow + remove Lebo line
+## Nexus × CHKPLT Couture Light Tokens
 
-## 1. `src/styles.css`
-- Replace the entire `:root { ... }` block (lines 64–114) with the provided **Premium Editorial Light Palette** tokens (warm off-white canvas, deep stone ink, Harvest Gold #C8A84B, hairline borders via `color-mix`, gold glow rgba layers, sidebar overrides, font stacks).
-- Bridge so existing shadcn semantic tokens stay wired (the components read `--card`, `--popover`, `--muted`, `--muted-foreground`, `--primary-foreground`, `--ring`, `--secondary`, etc.). Add these as aliases inside the same `:root` so the new palette propagates everywhere without touching components:
-  - `--card: var(--bg-card)` / `--card-foreground: var(--foreground)`
-  - `--popover: var(--bg-card)` / `--popover-foreground: var(--foreground)`
-  - `--muted: var(--bg-surface)` / `--muted-foreground: var(--text-dim)`
-  - `--secondary: var(--bg-surface)` / `--secondary-foreground: var(--foreground)`
-  - `--accent-foreground: var(--banana-foreground)`
-  - `--primary-foreground: var(--banana-foreground)`
-  - `--ring: var(--banana)`
-  - `--destructive: oklch(0.55 0.22 27)` / `--destructive-foreground: oklch(0.985 0.001 106)`
-  - `--obsidian: var(--foreground)`
-  - chart-1..5 kept on the gold spectrum for light mode
-  - `--sidebar: var(--bg-surface)`, `--sidebar-accent: var(--bg-card-hi)`, `--sidebar-accent-foreground: var(--foreground)`, `--sidebar-primary-foreground: var(--banana-foreground)`, `--sidebar-ring: var(--banana)`
-- Replace the existing `@layer base` block with the provided version (font smoothing, `text-rendering: optimizeLegibility`, baseline letter-spacing, global transitions on `a, button, input, select, textarea`). Keep the `* { border-color: var(--color-border); }` reset and the `h1, h2, .font-display` font-family rule so existing `font-display` usages still pick up the headline font.
-- Append the `.cta-glow` utility class verbatim (base + `:hover`) at the bottom of the file.
-- Add the three new Google Fonts (Outfit, Sora, DM Sans) to the existing `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?...">` in `src/routes/__root.tsx` so `--f-head`, `--f-ui`, `--f-body` actually load. Keep Playfair Display + IBM Plex Mono in the URL (still referenced by `.font-display` / mono utilities). **Do not** otherwise touch `__root.tsx`.
+Single-file change to `src/styles.css`. Pure CSS tokens + utility classes — no component refactors, no business logic.
 
-## 2. Apply `cta-glow` to primary CTAs
-Add the class to the existing primary amber `<Button>` / link elements (no other style changes):
-- `src/components/site-header.tsx` — "Access Vault" button
-- `src/routes/index.tsx` — hero "Browse resources" button + bottom "Join the community" button
-- `src/routes/products.$slug.tsx` — Buy / Checkout button(s) in the BuyBlock
-- `src/components/FulfillmentStates.tsx` — primary action buttons across all four fulfillment states
+### 1. Replace `:root` block
+Swap in the Nexus light tokens exactly as specified:
+- Canvas: `--background` 0.985, `--bg-surface` 0.970, `--bg-card` pure white, `--bg-card-hi` 0.955
+- Ink hierarchy: `--foreground` 0.14, `--text-body` 0.28, `--text-dim` 0.48, `--text-subtle` 0.62 (new)
+- Gold system: `--banana` 0.74/0.13/82, plus new `--gold-bright`, `--gold-pale`, `--gold-dim`
+- Borders: `--border` 7% mix + new `--border-hover` (banana 45%)
+- Glow rgba layers (unchanged values)
+- Font stacks unified to Inter (replaces Outfit/Sora/DM Sans)
 
-For each, append `cta-glow` to the existing `className` and remove the now-redundant `bg-banana hover:bg-banana/90` / `bg-amber-500 hover:bg-amber-400` color classes on that one element so the gradient + glow shows through cleanly. Leave variant, size, padding, and layout classes alone.
+Preserve existing shadcn bridge tokens already in `:root` (`--card`, `--popover`, `--muted`, `--secondary`, `--destructive`, `--chart-*`, `--sidebar-*`, `--radius`, `--primary-foreground`) — they still need to resolve for shadcn components.
 
-## 3. Remove the Lebo attribution
-`src/routes/products.$slug.tsx` line ~135 — delete the line "By Lebo M. — multi-award-winning South African media founder. Built for creators 18–34." (and its wrapper `<p>` if empty). That copy was placeholder text I introduced earlier; it doesn't reference a real person tied to your project.
+### 2. Replace `@layer base`
+- Body rules as provided (drop `letter-spacing: -0.01em` global since headlines now own kerning)
+- Add Nexus headline rules: `h1, .nx-h1` with `clamp(42px,6vw,76px)`, `-0.035em`, 1.05 line-height
+- `h1 strong` / `.nx-h1 strong`: 800 weight, gold-tinted ink mix
+- `h2, .nx-h2`: `clamp(28px,4vw,46px)`, `-0.025em`
+- `.nx-label`: 11px / 600 / 0.18em uppercase eyebrow in `--gold-dim`
+- Keep `* { border-color: var(--color-border); }` and the existing `a, button, input...` transition block
 
-## Out of scope
-No business-logic, schema, server-function, route, or auth changes. Purely tokens, one utility class, four CTA className tweaks, one copy deletion, and one `<link>` font URL extension.
+### 3. Append component modules (after `.cta-glow`)
+- `.nx-card` + `::before` gold top-line + `:hover` lift with 3-layer shadow matrix
+- `.nx-video-wrapper` — gold-tinted frame with layered glow
+- `.nx-antisell` + `::before` gradient ring + `.nx-antisell-item` uppercase chip
+- `.nx-hero-orb::before` — ambient breathing radial orb
+- `@keyframes glow-breathe`
+
+### 4. Font loading
+Update `src/routes/__root.tsx` Google Fonts `<link>` to include Inter (weights 400/600/700/800). Leave existing fonts in place to avoid breaking anything still referencing them.
+
+### Out of scope
+No edits to components, routes, or product pages. Applying `.nx-card` / `.nx-video-wrapper` / `.nx-antisell` to specific surfaces (resource grids, product pages, checkout) is a separate follow-up — this turn ships the design system primitives only. Confirm if you want me to wire them into specific pages in the same turn, and which ones (e.g. `products.index.tsx` cards, `checkout.success.tsx` antisell, `products.$slug.tsx` video wrapper).
