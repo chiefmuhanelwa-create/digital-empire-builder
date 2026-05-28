@@ -123,7 +123,7 @@ function Landing() {
 
       {/* 2. THE CORE EQUATION */}
       <section className="border-t border-border/60">
-        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-14 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <div className="nx-label">The Core Equation</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl max-w-3xl tracking-tight">
             Your creative enterprise is governed by a strict,{" "}
