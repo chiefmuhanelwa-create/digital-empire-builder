@@ -27,10 +27,9 @@ export function FulfillmentStates({
   onDownload,
   isDownloading,
 }: FulfillmentStatesProps) {
-  const shell =
-    "mt-10 rounded-md border border-stone-800/60 bg-stone-900 p-6 sm:p-8";
+  const shell = "mt-10 rounded-md border border-border bg-card p-6 sm:p-8";
   const eyebrow =
-    "font-mono text-[10px] tracking-[0.25em] uppercase text-amber-500";
+    "font-mono text-[10px] tracking-[0.25em] uppercase text-banana";
 
   if (deliveryType === "lms_only") {
     return (
@@ -39,14 +38,11 @@ export function FulfillmentStates({
         <h3 className="mt-3 font-display text-2xl sm:text-3xl">
           {productTitle ? `${productTitle} is live in your portal.` : "Your course is live in your portal."}
         </h3>
-        <p className="mt-3 text-sm text-stone-400">
+        <p className="mt-3 text-sm text-muted-foreground">
           This program is delivered entirely inside the learning portal. There is nothing to download.
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Button
-            asChild
-            className="bg-amber-500 text-black font-semibold tracking-wide hover:bg-amber-400 transition-all sm:flex-1"
-          >
+          <Button asChild className="cta-glow tracking-wide sm:flex-1">
             <Link to="/learn/$slug" params={{ slug: productSlug }}>
               <GraduationCap className="size-4 mr-2" />
               Open the course →
@@ -64,14 +60,14 @@ export function FulfillmentStates({
         <h3 className="mt-3 font-display text-2xl sm:text-3xl">
           Two ways to use what you bought.
         </h3>
-        <p className="mt-3 text-sm text-stone-400">
+        <p className="mt-3 text-sm text-muted-foreground">
           Download the companion workbook to your device, then step into the lessons when you're ready.
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Button
             onClick={onDownload}
             disabled={isDownloading}
-            className="bg-amber-500 text-black font-semibold tracking-wide hover:bg-amber-400 transition-all w-full"
+            className="cta-glow tracking-wide w-full"
           >
             <Download className="size-4 mr-2" />
             {isDownloading ? "Preparing…" : "Download workbook"}
@@ -79,7 +75,7 @@ export function FulfillmentStates({
           <Button
             asChild
             variant="outline"
-            className="border-stone-800/60 hover:border-amber-500/30 transition-all w-full"
+            className="border-border hover:border-banana/40 w-full"
           >
             <Link to="/learn/$slug" params={{ slug: productSlug }}>
               <GraduationCap className="size-4 mr-2" />
@@ -98,14 +94,14 @@ export function FulfillmentStates({
         <h3 className="mt-3 font-display text-2xl sm:text-3xl">
           {productTitle ?? "Your asset"} is ready.
         </h3>
-        <p className="mt-3 text-sm text-stone-400">
+        <p className="mt-3 text-sm text-muted-foreground">
           One-click save. Link is valid for 30 minutes — grab a fresh one from your dashboard anytime.
         </p>
         <div className="mt-6">
           <Button
             onClick={onDownload}
             disabled={isDownloading}
-            className="w-full bg-amber-500 text-black font-semibold tracking-wide hover:bg-amber-400 transition-all sm:w-auto"
+            className="cta-glow w-full tracking-wide sm:w-auto"
           >
             <FileText className="size-4 mr-2" />
             {isDownloading ? "Preparing secure link…" : "Download now"}
@@ -122,11 +118,11 @@ export function FulfillmentStates({
       <h3 className="mt-3 font-display text-2xl sm:text-3xl">
         Your order is safely confirmed.
       </h3>
-      <p className="mt-3 text-sm text-stone-400">
+      <p className="mt-3 text-sm text-muted-foreground">
         We're finalising this digital asset and will automatically email you the moment the scroll goes live.
       </p>
-      <div className="mt-6 inline-flex items-center gap-2 rounded-md border border-stone-800/60 bg-stone-950 px-3 py-2 text-xs text-stone-300">
-        <MailCheck className="size-4 text-amber-500" />
+      <div className="mt-6 inline-flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-2 text-xs text-muted-foreground">
+        <MailCheck className="size-4 text-banana" />
         We'll email you the link as soon as it ships.
       </div>
     </div>

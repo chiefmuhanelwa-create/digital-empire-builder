@@ -25,10 +25,10 @@ export function SiteHeader() {
   const close = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-stone-800/60 bg-stone-950/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2">
-          <span className="font-sans text-base font-bold tracking-[0.22em] uppercase text-amber-500">
+          <span className="font-display text-base font-bold tracking-[0.22em] uppercase text-banana">
             CHKPLT
           </span>
         </Link>
@@ -83,7 +83,7 @@ export function SiteHeader() {
               <Button
                 asChild
                 size="sm"
-                className="bg-amber-500 text-black font-semibold tracking-wide hover:bg-amber-400 transition-all px-4 py-2 rounded-md"
+                className="cta-glow tracking-wide px-4 py-2 rounded-md"
               >
                 <Link to="/signup">Access Vault</Link>
               </Button>
@@ -158,7 +158,7 @@ export function SiteHeader() {
                 <>
                   <Button
                     asChild
-                    className="w-full bg-amber-500 text-black font-semibold tracking-wide hover:bg-amber-400 transition-all"
+                    className="cta-glow w-full tracking-wide"
                     onClick={close}
                   >
                     <Link to="/signup">Access Vault</Link>
