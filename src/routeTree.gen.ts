@@ -14,6 +14,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as NicheClarityRouteImport } from './routes/niche-clarity'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -60,6 +61,11 @@ const LoginRoute = LoginRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoute = ApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -184,6 +190,7 @@ const AuthenticatedAdminCurriculumProductSlugRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
@@ -242,6 +250,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
@@ -272,6 +281,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/apply'
     | '/contact'
     | '/login'
     | '/niche-clarity'
@@ -300,6 +310,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/apply'
     | '/contact'
     | '/login'
     | '/niche-clarity'
@@ -329,6 +340,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/apply'
     | '/contact'
     | '/login'
     | '/niche-clarity'
@@ -359,6 +371,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  ApplyRoute: typeof ApplyRoute
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
   NicheClarityRoute: typeof NicheClarityRoute
@@ -409,6 +422,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply': {
+      id: '/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof ApplyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -627,6 +647,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  ApplyRoute: ApplyRoute,
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
   NicheClarityRoute: NicheClarityRoute,
