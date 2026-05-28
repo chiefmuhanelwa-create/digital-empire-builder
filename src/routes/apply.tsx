@@ -598,24 +598,21 @@ function YesNo({
 const DOWNSELL: Record<RecommendationResult["vulnerabilityTag"], { title: string; body: string }> = {
   STAGE_1_DISCOVERY: {
     title: "Content Calendar Template Bundle & Foundation Worksheets",
-    body: "Lock in your Mindset × Skillset × Toolset baseline with battle-tested templates before you scale anything.",
+    body: "Set your baseline metrics, master consistency, and outline your complete 4E content balance platform.",
   },
   STAGE_2_AWARENESS: {
-    title: "Content Calendar Template Bundle & Lead Magnet Blueprint",
-    body: "Build the owned audience layer that algorithms can never take away from you.",
+    title: "Content Calendar Template Bundle & Foundation Worksheets",
+    body: "Set your baseline metrics, master consistency, and outline your complete 4E content balance platform.",
   },
   STAGE_3_CONSIDERATION: {
     title: "Contentpreneur: From Memes to Millions",
-    body: "The standalone book that maps the exact transition from posting for likes to engineering monetized assets.",
+    body: "Our flagship handbook guide to establishing asset ownership and leaving platform slavery behind.",
   },
   STAGE_4_CONVERSION: {
-    title: "Tax for Contentpreneurs · SARS Compliance Guide + PAIDS Tracker",
-    body: "Harden your concentration risk and ringfence your revenue with our compliance toolkit and tracking dashboard.",
+    title: "Tax For Contentpreneurs / PAIDS Tracker",
+    body: "Secure your corporate structure, compute precise deductions, and balance multi-stream risk.",
   },
-  STAGE_5_COMMUNITY: {
-    title: "",
-    body: "",
-  },
+  STAGE_5_COMMUNITY: { title: "", body: "" },
 };
 
 function ResultPanel({
@@ -627,84 +624,80 @@ function ResultPanel({
 }) {
   if (result.status === "QUALIFIED_FOR_CORE_PROGRAM") {
     return (
-      <div className="nx-card">
-        <div className="flex items-center gap-3 text-banana">
-          <CheckCircle2 className="size-6" />
-          <div className="nx-label !text-banana">Qualified · Cohort 01</div>
+      <div className="nx-card relative overflow-hidden text-center !p-8">
+        <div className="absolute top-0 left-0 w-full h-[4px] bg-banana" />
+        <div className="w-16 h-16 bg-banana/10 text-banana rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle2 className="h-8 w-8" />
         </div>
-        <h2 className="mt-4 font-display text-3xl sm:text-4xl tracking-tight">
-          Your metrics validate entry into the{" "}
-          <em className="text-banana not-italic">20-Week Core Curriculum.</em>
+        <h2 className="font-sans text-3xl font-bold tracking-tight mb-4 text-foreground">
+          Stewardship Audited Successfully
         </h2>
-        <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-          You've cleared every system check. The next step is your{" "}
-          <strong>{result.recommendedPackage}</strong> path — focused on{" "}
-          {result.focusPillars}.
+        <p className="text-muted-foreground text-base max-w-md mx-auto mb-8 leading-relaxed">
+          Your metrics validate entry into the 20-Week Core Curriculum. Your structural foundation balances our strict system equation parameters.
         </p>
-        {engagementUnknown && (
-          <p className="mt-4 text-sm text-foreground/80 border-l-2 border-banana pl-3">
-            <strong>Optimization Notice:</strong> you indicated you don't know
-            your engagement rate. We'll address tracking this baseline
-            immediately inside your recommended package.
-          </p>
-        )}
-        <div className="mt-8 flex flex-col sm:flex-row gap-3">
-          <Button asChild size="lg" className="cta-glow w-full sm:w-auto">
-            <Link to="/signup">
-              Reserve your Cohort 01 seat <ArrowRight />
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-            <Link to="/about">Read our standards</Link>
-          </Button>
-        </div>
+        <Button asChild className="w-full sm:w-auto px-8 py-6 uppercase font-bold text-xs tracking-widest cta-glow rounded-xl">
+          <Link to="/signup">Secure Your Master Profile</Link>
+        </Button>
       </div>
     );
   }
 
   const downsell = DOWNSELL[result.vulnerabilityTag];
+  const tagLabel = result.vulnerabilityTag.replace(/_/g, " ");
 
   return (
     <div className="space-y-6">
-      <div className="nx-card">
-        <div className="nx-label" style={{ color: "var(--nx-orange-deep)" }}>
-          Diagnostic · {result.vulnerabilityTag.replace(/_/g, " ")}
+      <div className="nx-card relative overflow-hidden !p-8">
+        <div className="absolute top-0 left-0 w-full h-[4px] bg-[#EA580C]" />
+        <div className="flex items-center gap-3 text-[#EA580C] mb-4">
+          <AlertTriangle className="h-5 w-5" />
+          <span className="text-xs font-bold uppercase tracking-[0.18em]">Diagnostic Evaluation</span>
         </div>
-        <h2 className="mt-4 font-display text-3xl sm:text-4xl tracking-tight">
-          Your primary bottleneck:{" "}
-          <em className="text-banana not-italic">{result.recommendedPackage}.</em>
+        <h2 className="font-sans text-2xl font-bold tracking-tight mb-3 text-foreground">
+          Foundational Vulnerability Detected
         </h2>
-        <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-          {result.focusPillars}.
+        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-6">
+          To protect your resources, you do not qualify for the complete 20-week
+          program until your baseline tracking structure is safe. Your primary
+          operational bottleneck occurs inside{" "}
+          <strong className="text-foreground">{tagLabel}</strong>.
         </p>
-        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-          Recommended starting point: {result.targetModules}.
-        </p>
-        {engagementUnknown && (
-          <p className="mt-4 text-sm text-foreground/80 border-l-2 border-banana pl-3">
-            <strong>Optimization Notice:</strong> you indicated you don't know
-            your engagement rate. We'll address tracking this baseline
-            immediately inside your recommended package resources.
-          </p>
-        )}
+
+        <div className="border-t border-border/60 pt-4 space-y-2 text-sm">
+          <div className="text-muted-foreground">
+            <strong className="text-foreground">Immediate Priority Focus:</strong>{" "}
+            {result.focusPillars}
+          </div>
+          <div className="text-muted-foreground">
+            <strong className="text-foreground">Required Learning Framework:</strong>{" "}
+            {result.targetModules}
+          </div>
+
+          {engagementUnknown && (
+            <div className="mt-4 p-3 rounded-lg bg-muted/40 border border-border text-xs text-[#EA580C] leading-relaxed">
+              <strong>Optimization Notice:</strong> You indicated you don&apos;t
+              know your average engagement rate. We will address tracking this
+              baseline immediately inside your recommended package resources.
+            </div>
+          )}
+        </div>
       </div>
 
       {downsell.title && (
-        <div className="nx-card">
-          <div className="nx-label">Your next move</div>
-          <h3 className="mt-3 font-display text-2xl sm:text-3xl tracking-tight">
+        <div className="nx-card relative overflow-hidden text-center !p-8 border border-banana/30">
+          <div className="absolute top-0 left-0 w-full h-[4px] bg-banana" />
+          <span className="nx-label text-muted-foreground text-[10px] tracking-[0.2em] block mb-2">
+            Recommended Framework Entry
+          </span>
+          <h3 className="font-sans text-xl font-bold mb-3 text-foreground">
             {downsell.title}
           </h3>
-          <p className="mt-3 text-base text-muted-foreground leading-relaxed">
+          <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-6 leading-relaxed">
             {downsell.body}
           </p>
-          <div className="mt-6">
-            <Button asChild size="lg" className="cta-glow w-full sm:w-auto">
-              <Link to="/products">
-                Browse the toolkit <ArrowRight />
-              </Link>
-            </Button>
-          </div>
+          <Button asChild className="w-full sm:w-auto px-8 py-5 uppercase font-bold text-xs tracking-widest cta-glow rounded-xl">
+            <Link to="/products">Get Standalone Package</Link>
+          </Button>
         </div>
       )}
     </div>
