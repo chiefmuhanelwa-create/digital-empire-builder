@@ -26,12 +26,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const PROOF = [
-  "3M+ Combined Followers",
-  "100K+ Email Subscribers",
-  "6,000+ Books Sold",
-  "For Children's Children — Proverbs 13:22",
-];
+const PROOF = ["For Children's Children — Proverbs 13:22"];
 
 const STAGES = [
   {
@@ -87,7 +82,7 @@ const NOT_FOR = [
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SiteHeader />
 
       {/* 1. HERO */}
@@ -114,7 +109,7 @@ function Landing() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <Link to="/about">Read our standards</Link>
+              <Link to="/about">About CHKPLT</Link>
             </Button>
           </div>
 
@@ -139,12 +134,15 @@ function Landing() {
           </h2>
 
           <div className="mt-8 nx-card">
-            <p className="font-mono text-base sm:text-xl md:text-2xl leading-relaxed text-foreground/90">
-              <span className="text-banana">Mindset (MS)</span> ×{" "}
-              <span className="text-banana">Skillset (SS)</span> ×{" "}
-              <span className="text-banana">Toolset (TS)</span> ={" "}
+            <div className="font-mono flex flex-wrap items-center gap-x-2 gap-y-1 text-base sm:text-xl md:text-2xl leading-relaxed text-foreground/90">
+              <span className="text-banana">Mindset (MS)</span>
+              <span>×</span>
+              <span className="text-banana">Skillset (SS)</span>
+              <span>×</span>
+              <span className="text-banana">Toolset (TS)</span>
+              <span>=</span>
               <span className="font-display not-italic">Digital Asset</span>
-            </p>
+            </div>
             <div className="mt-7 border-t border-border/60 pt-6">
               <div className="nx-label">The Zero Rule</div>
               <p className="mt-3 text-base sm:text-lg text-foreground/85 leading-relaxed">
