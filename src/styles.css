@@ -66,82 +66,84 @@
 :root {
   --radius: 0.625rem;
 
-  /* Page Canvas */
-  --background:        #0a0a0a;
-  --bg-surface:        #111111;
-  --bg-card:           #111111;
-  --bg-card-hi:        #1a1a1a;
+  /* Page Canvas — Cream → White → Black ink */
+  --background:        #FAF7F0;   /* Cream white page */
+  --bg-surface:        #FFFFFF;   /* Pure white surface */
+  --bg-card:           #FFFFFF;   /* Card white */
+  --bg-card-hi:        #F4EFE3;   /* Elevated cream */
 
   /* Typography Inks */
-  --foreground:        #ffffff;
-  --text-body:         #E2E8F0;
-  --text-dim:          #94A3B8;
-  --text-subtle:       #64748B;
+  --foreground:        #0A0A0A;   /* Near-black headlines */
+  --text-body:         #1F1B16;   /* Body ink */
+  --text-dim:          #5C5448;   /* Muted warm gray */
+  --text-subtle:       #8A8071;   /* Subtle warm gray */
 
-  /* Brand Accent — indigo→violet */
-  --nx-blue:           #4F46E5;
-  --nx-blue-mid:       #6366F1;
-  --nx-blue-bright:    #818CF8;
-  --nx-purple:         #7C3AED;
+  /* Brand Accent — Gold System */
+  --nx-gold:           #C9A646;   /* Primary gold */
+  --nx-gold-mid:       #D4B65C;   /* Mid gold */
+  --nx-gold-bright:    #E6C871;   /* Bright gold */
+  --nx-gold-deep:      #8C6F1F;   /* Deep gold for text-on-cream */
 
-  --nx-btn-gradient:   linear-gradient(135deg, #4F46E5, #7C3AED);
-  --nx-video-border:   linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6366F1 100%);
+  --nx-btn-gradient:   linear-gradient(135deg, #D4B65C, #C9A646 60%, #8C6F1F);
+  --nx-video-border:   linear-gradient(135deg, #E6C871 0%, #C9A646 50%, #8C6F1F 100%);
 
-  --primary:              var(--nx-blue);
-  --primary-foreground:   #ffffff;
-  --accent:               var(--nx-purple);
-  --accent-foreground:    #ffffff;
+  --primary:              var(--nx-gold);
+  --primary-foreground:   #0A0A0A;
+  --accent:               var(--nx-gold-bright);
+  --accent-foreground:    #0A0A0A;
 
-  /* Banana alias kept so legacy `bg-banana` classes re-skin to indigo */
-  --banana:               var(--nx-blue);
-  --banana-foreground:    #ffffff;
+  /* Banana alias kept so legacy `bg-banana` classes re-skin to gold */
+  --banana:               var(--nx-gold);
+  --banana-foreground:    #0A0A0A;
 
-  /* Borders */
-  --border:            rgba(255, 255, 255, 0.08);
-  --border-hover:      rgba(99, 102, 241, 0.35);
-  --input:             rgba(255, 255, 255, 0.08);
-  --ring:              var(--nx-blue-mid);
+  /* Borders — warm hairlines on cream */
+  --border:            rgba(10, 10, 10, 0.10);
+  --border-hover:      rgba(201, 166, 70, 0.55);
+  --input:             rgba(10, 10, 10, 0.12);
+  --ring:              var(--nx-gold);
 
-  /* Glow System */
-  --nx-glow-tight:     0 0 20px rgba(99, 102, 241, 0.25);
-  --nx-glow-mid:       0 0 60px rgba(99, 102, 241, 0.12);
-  --nx-glow-wide:      0 0 120px rgba(99, 102, 241, 0.06);
+  /* Glow System — gold */
+  --nx-glow-tight:     0 0 20px rgba(201, 166, 70, 0.28);
+  --nx-glow-mid:       0 0 60px rgba(201, 166, 70, 0.14);
+  --nx-glow-wide:      0 0 120px rgba(201, 166, 70, 0.07);
 
   /* shadcn semantic bridges */
   --card:                 var(--bg-card);
   --card-foreground:      var(--foreground);
-  --popover:              var(--bg-card-hi);
+  --popover:              var(--bg-card);
   --popover-foreground:   var(--foreground);
-  --muted:                var(--bg-surface);
+  --muted:                var(--bg-card-hi);
   --muted-foreground:     var(--text-dim);
   --secondary:            var(--bg-card-hi);
   --secondary-foreground: var(--foreground);
-  --obsidian:             #000000;
+  --obsidian:             #0A0A0A;
 
-  --destructive:            oklch(0.62 0.22 27);
+  --destructive:            oklch(0.58 0.22 27);
   --destructive-foreground: #ffffff;
 
-  --chart-1: #4F46E5;
-  --chart-2: #7C3AED;
-  --chart-3: #6366F1;
-  --chart-4: #818CF8;
-  --chart-5: #94A3B8;
+  --chart-1: #C9A646;
+  --chart-2: #8C6F1F;
+  --chart-3: #E6C871;
+  --chart-4: #0A0A0A;
+  --chart-5: #5C5448;
 
   /* Sidebar */
   --sidebar:                    var(--bg-surface);
   --sidebar-foreground:         var(--text-body);
-  --sidebar-primary:            var(--nx-blue);
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-primary:            var(--nx-gold);
+  --sidebar-primary-foreground: #0A0A0A;
   --sidebar-accent:             var(--bg-card-hi);
   --sidebar-accent-foreground:  var(--foreground);
   --sidebar-border:             var(--border);
-  --sidebar-ring:               var(--nx-blue-mid);
+  --sidebar-ring:               var(--nx-gold);
 
   /* Typography Stacks */
   --f-head: 'Inter', -apple-system, sans-serif;
   --f-ui:   'Inter', -apple-system, sans-serif;
   --f-body: 'Inter', -apple-system, sans-serif;
 }
+
+
 
 .dark {
   /* Dark is default; class kept as no-op for shadcn parity. */
@@ -160,31 +162,31 @@
 
   h1, .nx-h1 {
     font-family: var(--f-head);
-    font-size: clamp(40px, 6vw, 72px);
+    font-size: clamp(32px, 6vw, 72px);
     font-weight: 700;
-    letter-spacing: -2px;
+    letter-spacing: -0.035em;
     line-height: 1.05;
-    color: #ffffff;
+    color: var(--foreground);
   }
   h1 strong, .nx-h1 strong {
     font-weight: 800;
-    color: #ffffff;
+    color: var(--nx-gold-deep);
   }
 
   h2, .nx-h2 {
     font-family: var(--f-head);
-    font-size: clamp(28px, 4vw, 48px);
+    font-size: clamp(24px, 4.2vw, 48px);
     font-weight: 700;
-    letter-spacing: -1.5px;
+    letter-spacing: -0.03em;
     line-height: 1.1;
-    color: #ffffff;
+    color: var(--foreground);
   }
 
   h3, h4 {
     font-family: var(--f-head);
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--foreground);
   }
 
   .font-display {
@@ -203,15 +205,24 @@
   .nx-label {
     font-size: 12px;
     font-weight: 600;
-    letter-spacing: 2px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--nx-blue-bright);
+    color: var(--nx-gold-deep);
   }
 
   .nx-metric {
     font-size: 13px;
     font-weight: 500;
     color: var(--text-subtle);
+  }
+
+  /* Mobile tuning */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    .nx-card { padding: 22px; border-radius: 14px; }
+    .nx-antisell { padding: 24px; border-radius: 16px; }
+    .nx-hero-orb::before { width: 380px; height: 380px; top: -100px; }
+    .cta-glow { width: 100%; }
   }
 
   a, button, input, select, textarea {
@@ -225,37 +236,37 @@
 }
 
 /* ═══════════════════════════════════════════════════
-   PRIMARY CTA — indigo→violet gradient pill
+   PRIMARY CTA — gold gradient pill
 ═══════════════════════════════════════════════════ */
 .cta-glow {
   background: var(--nx-btn-gradient);
-  color: #ffffff !important;
-  font-weight: 600;
+  color: #0A0A0A !important;
+  font-weight: 700;
   font-size: 15px;
   letter-spacing: 0.3px;
-  border: none;
+  border: 1px solid rgba(140, 111, 31, 0.45);
   border-radius: 10px;
   box-shadow:
-    0 0 20px rgba(99, 102, 241, 0.30),
-    0 0 60px rgba(99, 102, 241, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.40);
+    0 0 20px rgba(201, 166, 70, 0.30),
+    0 0 60px rgba(201, 166, 70, 0.12),
+    0 4px 16px rgba(10, 10, 10, 0.12);
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .cta-glow:hover {
   transform: translateY(-3px);
   box-shadow:
-    0 0 35px rgba(99, 102, 241, 0.55),
-    0 0 90px rgba(99, 102, 241, 0.22),
-    0 10px 28px rgba(0, 0, 0, 0.50);
+    0 0 35px rgba(201, 166, 70, 0.55),
+    0 0 90px rgba(201, 166, 70, 0.22),
+    0 10px 28px rgba(10, 10, 10, 0.20);
 }
 
 /* ═══════════════════════════════════════════════════
-   NEXUS COMPONENT MODULES
+   COMPONENT MODULES — cream/white/gold
 ═══════════════════════════════════════════════════ */
 
 .nx-card {
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 32px;
   position: relative;
@@ -267,17 +278,17 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, #6366F1, transparent);
+  background: linear-gradient(90deg, transparent, var(--nx-gold), transparent);
   opacity: 0;
   transition: opacity .3s ease;
 }
 .nx-card:hover {
-  border-color: rgba(99, 102, 241, 0.35);
+  border-color: var(--border-hover);
   transform: translateY(-4px);
   box-shadow:
-    0 0 30px rgba(99, 102, 241, 0.12),
-    0 0 60px rgba(99, 102, 241, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 0 30px rgba(201, 166, 70, 0.18),
+    0 12px 32px -8px rgba(10, 10, 10, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 .nx-card:hover::before { opacity: 1; }
 .nx-card:nth-child(1) { animation-delay: 0s; }
@@ -289,11 +300,11 @@
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(99, 102, 241, 0.30);
+  border: 1px solid rgba(201, 166, 70, 0.45);
   box-shadow:
-    0 0 30px rgba(99, 102, 241, 0.18),
-    0 0 70px rgba(99, 102, 241, 0.08),
-    inset 0 0 30px rgba(99, 102, 241, 0.02);
+    0 0 30px rgba(201, 166, 70, 0.20),
+    0 0 70px rgba(201, 166, 70, 0.08),
+    inset 0 0 30px rgba(201, 166, 70, 0.03);
   animation: video-pulse 4s ease-in-out infinite;
 }
 .nx-video-wrapper::before {
@@ -306,15 +317,15 @@
 }
 
 .nx-antisell {
-  background: rgba(10, 10, 10, 0.95);
-  border: 1px solid rgba(99, 102, 241, 0.20);
+  background: var(--bg-card-hi);
+  border: 1px solid rgba(201, 166, 70, 0.35);
   border-radius: 20px;
   padding: 40px;
   position: relative;
   box-shadow:
-    0 0 40px rgba(99, 102, 241, 0.10),
-    0 0 80px rgba(99, 102, 241, 0.05),
-    inset 0 0 60px rgba(99, 102, 241, 0.03);
+    0 0 40px rgba(201, 166, 70, 0.10),
+    0 16px 48px -16px rgba(10, 10, 10, 0.12),
+    inset 0 0 60px rgba(201, 166, 70, 0.04);
 }
 .nx-antisell::before {
   content: '';
@@ -322,23 +333,23 @@
   inset: -1px;
   border-radius: 21px;
   background: linear-gradient(180deg,
-    rgba(99, 102, 241, 0.30) 0%,
-    rgba(99, 102, 241, 0.05) 40%,
+    rgba(201, 166, 70, 0.40) 0%,
+    rgba(201, 166, 70, 0.08) 40%,
     transparent 100%
   );
   z-index: -1;
 }
 .nx-antisell-item {
-  background: rgba(99, 102, 241, 0.08);
-  border: 1px solid rgba(99, 102, 241, 0.12);
+  background: #FFFFFF;
+  border: 1px solid rgba(201, 166, 70, 0.20);
   border-radius: 10px;
   padding: 13px 20px;
   margin-bottom: 10px;
   font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #C8C8E0;
+  color: var(--text-body);
 }
 
 .nx-hero-orb {
@@ -354,8 +365,8 @@
   width: 600px;
   height: 600px;
   background: radial-gradient(circle,
-    rgba(99, 102, 241, 0.15) 0%,
-    rgba(124, 58, 237, 0.08) 35%,
+    rgba(201, 166, 70, 0.22) 0%,
+    rgba(230, 200, 113, 0.10) 35%,
     transparent 65%
   );
   pointer-events: none;
@@ -379,19 +390,19 @@
 @keyframes video-pulse {
   0%, 100% {
     box-shadow:
-      0 0 30px rgba(99, 102, 241, 0.18),
-      0 0 70px rgba(99, 102, 241, 0.08),
-      inset 0 0 30px rgba(99, 102, 241, 0.02);
+      0 0 30px rgba(201, 166, 70, 0.20),
+      0 0 70px rgba(201, 166, 70, 0.08),
+      inset 0 0 30px rgba(201, 166, 70, 0.03);
   }
   50% {
     box-shadow:
-      0 0 45px rgba(99, 102, 241, 0.28),
-      0 0 95px rgba(99, 102, 241, 0.14),
-      inset 0 0 30px rgba(99, 102, 241, 0.04);
+      0 0 45px rgba(201, 166, 70, 0.32),
+      0 0 95px rgba(201, 166, 70, 0.14),
+      inset 0 0 30px rgba(201, 166, 70, 0.05);
   }
 }
 
-/* Scroll-reveal (pair with an IntersectionObserver later) */
+/* Scroll-reveal */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
@@ -406,16 +417,16 @@
 .reveal-delay-3 { transition-delay: .45s; }
 
 /* Form-step utilities */
-.seg        { background: rgba(255, 255, 255, 0.10); transition: background .4s ease; }
-.seg.done   { background: rgba(99, 102, 241, 0.50); }
-.seg.active { background: #818CF8; }
+.seg        { background: rgba(10, 10, 10, 0.10); transition: background .4s ease; }
+.seg.done   { background: rgba(201, 166, 70, 0.55); }
+.seg.active { background: var(--nx-gold); }
 
 .opt        { transition: border-color .2s ease, background .2s ease, box-shadow .3s ease; }
 .opt.sel    {
-  border-color: #6366F1;
+  border-color: var(--nx-gold);
   box-shadow:
-    0 0 16px rgba(99, 102, 241, 0.15),
-    inset 0 1px 0 rgba(99, 102, 241, 0.10);
+    0 0 16px rgba(201, 166, 70, 0.20),
+    inset 0 1px 0 rgba(201, 166, 70, 0.10);
 }
 
 .step { animation: step-in .3s ease both; }
@@ -423,3 +434,4 @@
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
