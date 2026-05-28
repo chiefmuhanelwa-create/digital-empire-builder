@@ -446,7 +446,7 @@ function ApplyPage() {
               )}
 
               {step === 4 && (
-                <Module title="Module 5 · Mindset & Strategy">
+                <Module eyebrow="Module 05" title="Mindset & Strategy">
                   <YesNo label="Q19 · Do you have a clear niche?" value={state.has_clear_niche} onChange={(v) => set("has_clear_niche", v)} />
                   <YesNo label="Q20 · Have you done a SWOT analysis?" value={state.has_done_swot} onChange={(v) => set("has_done_swot", v)} />
                   <Field label="Q21 · What is your primary E?">
