@@ -178,7 +178,7 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/60 mt-32">
+    <footer className="border-t border-border/60">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
         <div className="font-mono tracking-[0.18em] uppercase">CHKPLT — Kingdom Contentpreneurs</div>
         <div>© {new Date().getFullYear()} Christ Kingdom Platform. All rights reserved.</div>
