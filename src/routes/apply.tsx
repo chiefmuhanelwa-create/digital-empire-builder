@@ -527,10 +527,21 @@ function ApplyPage() {
   );
 }
 
-function Module({ title, children }: { title: string; children: React.ReactNode }) {
+function Module({
+  eyebrow,
+  title,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <div className="nx-label">{title}</div>
+      <div className="border-b border-border/60 pb-3">
+        <span className="nx-label text-[#EA580C] text-[10px] block mb-1">{eyebrow}</span>
+        <h3 className="text-xl font-bold tracking-tight">{title}</h3>
+      </div>
       <div className="mt-6 space-y-6">{children}</div>
     </div>
   );
