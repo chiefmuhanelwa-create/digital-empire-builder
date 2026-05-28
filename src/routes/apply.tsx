@@ -216,7 +216,7 @@ function ApplyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SiteHeader />
 
       <section className="border-b border-border/60 nx-hero-orb">
@@ -236,7 +236,7 @@ function ApplyPage() {
       </section>
 
       <section>
-        <div className="mx-auto max-w-2xl px-5 sm:px-6 py-10 sm:py-14">
+        <div className="mx-auto max-w-2xl px-5 sm:px-6 py-10 sm:py-14 pb-32 sm:pb-14">
           {!result && (
             <div className="mb-8">
               <div className="flex items-center justify-between text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground">
@@ -292,7 +292,7 @@ function ApplyPage() {
                       }
                       placeholder="e.g. 4"
                     />
-                    <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+                    <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground cursor-pointer min-h-[48px] py-2">
                       <Checkbox
                         checked={!!state.dont_know_engagement}
                         onCheckedChange={(c) => {
@@ -485,18 +485,18 @@ function ApplyPage() {
                 </div>
               )}
 
-              <div className="mt-8 flex flex-col-reverse sm:flex-row gap-3 sm:justify-between">
+              <div className="mt-8 fixed bottom-0 left-0 right-0 z-30 flex flex-row gap-3 justify-between border-t border-border bg-background/85 backdrop-blur-md p-4 sm:static sm:border-0 sm:bg-transparent sm:backdrop-blur-none sm:p-0">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={back}
                   disabled={step === 0 || submitting}
-                  className="w-full sm:w-auto"
+                  className="flex-1 sm:flex-none sm:w-auto min-h-[48px]"
                 >
                   <ArrowLeft /> Back
                 </Button>
                 {step < TOTAL_STEPS - 1 ? (
-                  <Button type="button" onClick={next} className="cta-glow w-full sm:w-auto">
+                  <Button type="button" onClick={next} className="cta-glow flex-1 sm:flex-none sm:w-auto min-h-[48px]">
                     Continue <ArrowRight />
                   </Button>
                 ) : (
@@ -504,7 +504,7 @@ function ApplyPage() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="cta-glow w-full sm:w-auto"
+                    className="cta-glow flex-1 sm:flex-none sm:w-auto min-h-[48px]"
                   >
                     {submitting ? <><Loader2 className="animate-spin" /> Submitting…</> : <>Submit assessment <ArrowRight /></>}
                   </Button>
@@ -580,7 +580,7 @@ function YesNo({
           <label
             key={o.v}
             className={
-              "flex flex-1 items-center justify-center gap-2 rounded-md border px-4 py-3 text-sm font-medium cursor-pointer transition " +
+              "flex flex-1 items-center justify-center gap-2 rounded-md border px-4 py-3.5 min-h-[48px] text-sm font-medium cursor-pointer transition " +
               ((value === true && o.v === "yes") || (value === false && o.v === "no")
                 ? "border-banana bg-banana/10 text-foreground"
                 : "border-border hover:border-banana/60")
