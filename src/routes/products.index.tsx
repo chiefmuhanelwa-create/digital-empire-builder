@@ -82,10 +82,7 @@ function Catalog() {
                 <div>
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-                        {meta.priceRange}
-                      </div>
-                      <h2 className="mt-3 font-display text-3xl sm:text-4xl text-foreground group-hover:text-banana transition-colors">
+                      <h2 className="font-display text-3xl sm:text-4xl text-foreground group-hover:text-banana transition-colors">
                         {meta.name}
                       </h2>
                     </div>

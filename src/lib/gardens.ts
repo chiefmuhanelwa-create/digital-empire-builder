@@ -7,7 +7,6 @@ export const GARDENS: Record<Garden, {
   name: string;
   tagline: string;
   description: string;
-  priceRange: string;
 }> = {
   deshe: {
     slug: "deshe",
@@ -15,7 +14,6 @@ export const GARDENS: Record<Garden, {
     tagline: "Free guides, workbooks and calculators.",
     description:
       "Free resources that give you a real win — no diluted teasers, no email-only opt-ins for nothing.",
-    priceRange: "Free",
   },
   esev: {
     slug: "esev",
@@ -23,7 +21,6 @@ export const GARDENS: Record<Garden, {
     tagline: "Step-by-step paid products.",
     description:
       "Paid workbooks, mini-courses and frameworks. Each one solves one specific problem in your content business.",
-    priceRange: "R299 — R999",
   },
   etz_pri: {
     slug: "etz_pri",
@@ -31,14 +28,12 @@ export const GARDENS: Record<Garden, {
     tagline: "Coaching, cohorts and mentorship.",
     description:
       "Live cohorts, group programs and 1-on-1 mentorship for Kingdom Contentpreneurs ready to go full-time.",
-    priceRange: "R4,997+",
   },
   devarim: {
     slug: "devarim",
     name: "Books",
     tagline: "Long-form reads.",
     description: "Books worth keeping on your shelf — playbooks you'll come back to for years.",
-    priceRange: "R199 — R499",
   },
 };
 
