@@ -206,7 +206,7 @@ function Landing() {
           <div className="mt-12 flex">
             <Button asChild size="lg" className="cta-glow w-full sm:w-auto">
               <Link to="/apply">
-                Audit your equation & apply for Cohort 01 <ArrowRight />
+                Apply for Cohort 1 Now <ArrowRight />
               </Link>
             </Button>
           </div>
