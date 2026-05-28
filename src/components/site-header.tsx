@@ -56,7 +56,7 @@ export function SiteHeader() {
                       params={{ garden: g }}
                       className="flex flex-col items-start gap-0.5 py-2"
                     >
-                      <span className="font-display text-base">{m.name} — {m.priceRange}</span>
+                      <span className="font-display text-base">{m.name}</span>
                       <span className="text-xs text-muted-foreground">{m.tagline}</span>
                     </Link>
                   </DropdownMenuItem>
@@ -126,7 +126,7 @@ export function SiteHeader() {
                       >
                         <div className="font-display text-base">{m.name}</div>
                         <div className="font-mono text-[10px] tracking-[0.15em] uppercase text-muted-foreground">
-                          {m.priceRange} · {m.tagline}
+                          {m.tagline}
                         </div>
                       </Link>
                     );
