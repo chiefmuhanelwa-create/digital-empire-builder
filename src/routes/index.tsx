@@ -97,11 +97,10 @@ function Landing() {
             <span className="nx-live-dot" aria-hidden /> CHKPLT Engine Activated — Cohort 01 Application Window Open
           </span>
           <h1 className="mt-5 font-display text-4xl leading-[1.05] sm:text-5xl md:text-7xl lg:text-[5.5rem] max-w-5xl tracking-tight">
-            Stop posting for likes.
+            Stop Chasing Likes.
             <br />
             Start{" "}
-            <em className="text-banana not-italic">owning a Kingdom business</em>{" "}
-            that scales with honor.
+            <em className="text-banana not-italic">Building Legacy.</em>
           </h1>
           <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
             "I lead African creators out of digital slavery into the Promised Land
@@ -111,7 +110,7 @@ function Landing() {
           <div className="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
             <Button asChild size="lg" className="cta-glow w-full sm:w-auto">
               <Link to="/apply">
-                Audit Your Creative Equation <ArrowRight />
+                Audit Your Business Now <ArrowRight />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
