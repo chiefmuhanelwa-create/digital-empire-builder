@@ -130,7 +130,7 @@ function Landing() {
             <em className="text-banana not-italic">non-negotiable formula.</em>
           </h2>
 
-          <div className="mt-8 nx-card">
+          <div className="mt-4 nx-card">
             <div className="font-mono flex flex-wrap items-center gap-x-2 gap-y-1 text-base sm:text-xl md:text-2xl leading-relaxed text-foreground/90">
               <span className="text-banana">Mindset (MS)</span>
               <span>×</span>
