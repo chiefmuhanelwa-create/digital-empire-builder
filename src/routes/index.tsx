@@ -215,7 +215,7 @@ function Landing() {
 
       {/* 4. THE DATA SANCTUARY (ANTI-SELL) */}
       <section className="border-t border-border/60">
-        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-14 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <div className="nx-status-live" style={{ color: "var(--nx-orange-deep)" }}>
             <span className="nx-live-dot" aria-hidden /> The Data Sanctuary
           </div>
