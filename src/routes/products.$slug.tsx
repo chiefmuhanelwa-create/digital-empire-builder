@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
 import { initializeCheckout } from "@/lib/checkout.functions";
+import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
@@ -301,13 +302,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   }
 
   if (product.requires_application) {
-    return (
-      <div className="mt-12">
-        <Button size="lg" disabled variant="outline">
-          By application — applications open soon
-        </Button>
-      </div>
-    );
+    return <ApplicationGate product={product} priceLabel={priceLabel} />;
   }
 
   return (
