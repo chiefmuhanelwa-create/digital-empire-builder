@@ -436,7 +436,7 @@ function ApplyPage() {
               )}
 
               {step === 3 && (
-                <Module title="Module 4 · Business Systems">
+                <Module eyebrow="Module 04" title="Business Systems">
                   <YesNo label="Q14 · Do you have automated sales funnels?" value={state.has_automated_funnels} onChange={(v) => set("has_automated_funnels", v)} />
                   <YesNo label="Q15 · Do you use email marketing software?" value={state.uses_email_marketing_software} onChange={(v) => set("uses_email_marketing_software", v)} />
                   <YesNo label="Q16 · Do you batch-create content?" value={state.batches_content} onChange={(v) => set("batches_content", v)} />
