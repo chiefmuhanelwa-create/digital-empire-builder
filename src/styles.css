@@ -5,14 +5,13 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Christ Kingdom Platform — premium dark canvas
- * stone-950 background, stone-50 ink, amber-500 (Harvest Gold) accent.
- * Display: Playfair Display. Body: Inter. Mono: IBM Plex Mono.
+ * Christ Kingdom Platform — Premium Editorial Light palette.
+ * Warm off-white canvas, deep stone ink, Harvest Gold accent.
  */
 
 @theme inline {
-  --font-display: "Playfair Display", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "DM Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -61,78 +60,130 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ═══════════════════════════════════════════════════
+   PREMIUM EDITORIAL LIGHT PALETTE — CHKPLT HARDENING
+═══════════════════════════════════════════════════ */
 :root {
-  --radius: 0.375rem;
+  --radius: 0.5rem;
 
-  /* stone-950 canvas, stone-50 ink */
-  --background: oklch(0.147 0.004 286);   /* #09090b */
-  --foreground: oklch(0.985 0.001 106);   /* #fafaf9 */
-  --obsidian: oklch(0.147 0.004 286);
+  /* Core Background Hierarchy (Soft Warm Off-White) */
+  --background:        oklch(0.985 0.003 80);      /* #FAFAF7 Canvas */
+  --bg-surface:        oklch(0.975 0.004 80);
+  --bg-card:           oklch(1 0 0);
+  --bg-card-hi:        oklch(0.965 0.005 80);
 
-  /* stone-900 surfaces */
-  --card: oklch(0.21 0.006 286);
-  --card-foreground: oklch(0.985 0.001 106);
-  --popover: oklch(0.21 0.006 286);
-  --popover-foreground: oklch(0.985 0.001 106);
+  /* Structural Typography (Deep Stone Ink) */
+  --foreground:        oklch(0.18 0.005 80);
+  --text-body:         oklch(0.32 0.008 80);
+  --text-dim:          oklch(0.55 0.006 80);
 
-  /* Harvest Gold — amber-500 (#d97706) */
-  --banana: oklch(0.692 0.171 51);
-  --banana-foreground: oklch(0.147 0.004 286);
+  /* Harvest Gold & Accent Branding */
+  --banana:            oklch(0.76 0.14 85);        /* #C8A84B */
+  --primary:           var(--banana);
+  --banana-foreground: oklch(0.12 0.005 80);
+  --accent:            var(--banana);
+  --accent-foreground: var(--banana-foreground);
+  --primary-foreground: var(--banana-foreground);
 
-  --primary: oklch(0.692 0.171 51);
-  --primary-foreground: oklch(0.147 0.004 286);
+  /* Hairline Borders */
+  --border:            color-mix(in oklab, var(--foreground) 6%, transparent);
+  --input:             color-mix(in oklab, var(--foreground) 10%, transparent);
+  --ring:              var(--banana);
 
-  --secondary: oklch(0.21 0.006 286);
-  --secondary-foreground: oklch(0.985 0.001 106);
-  --muted: oklch(0.21 0.006 286);
-  --muted-foreground: oklch(0.708 0.01 286);
-  --accent: oklch(0.692 0.171 51);
-  --accent-foreground: oklch(0.147 0.004 286);
+  /* Micro-Glow Layers */
+  --gold-glow-tight:   rgba(200, 168, 75, 0.18);
+  --gold-glow-mid:     rgba(200, 168, 75, 0.08);
+  --gold-glow-ambient: rgba(200, 168, 75, 0.03);
 
-  --destructive: oklch(0.55 0.22 27);
+  /* shadcn semantic bridges */
+  --card:              var(--bg-card);
+  --card-foreground:   var(--foreground);
+  --popover:           var(--bg-card);
+  --popover-foreground: var(--foreground);
+  --muted:             var(--bg-surface);
+  --muted-foreground:  var(--text-dim);
+  --secondary:         var(--bg-surface);
+  --secondary-foreground: var(--foreground);
+  --obsidian:          var(--foreground);
+
+  --destructive:           oklch(0.55 0.22 27);
   --destructive-foreground: oklch(0.985 0.001 106);
 
-  /* stone-800 borders at ~60% */
-  --border: oklch(0.274 0.006 286 / 0.6);
-  --input: oklch(0.274 0.006 286);
-  --ring: oklch(0.692 0.171 51);
+  --chart-1: oklch(0.76 0.14 85);
+  --chart-2: oklch(0.82 0.12 85);
+  --chart-3: oklch(0.65 0.13 70);
+  --chart-4: oklch(0.55 0.08 80);
+  --chart-5: oklch(0.32 0.008 80);
 
-  --chart-1: oklch(0.692 0.171 51);
-  --chart-2: oklch(0.77 0.14 60);
-  --chart-3: oklch(0.55 0.13 51);
-  --chart-4: oklch(0.45 0.05 90);
-  --chart-5: oklch(0.985 0.001 106);
+  /* Sidebar */
+  --sidebar:                       var(--bg-surface);
+  --sidebar-foreground:            var(--text-body);
+  --sidebar-primary:               var(--banana);
+  --sidebar-primary-foreground:    var(--banana-foreground);
+  --sidebar-accent:                var(--bg-card-hi);
+  --sidebar-accent-foreground:     var(--foreground);
+  --sidebar-border:                var(--border);
+  --sidebar-ring:                  var(--banana);
 
-  --sidebar: oklch(0.147 0.004 286);
-  --sidebar-foreground: oklch(0.985 0.001 106);
-  --sidebar-primary: oklch(0.692 0.171 51);
-  --sidebar-primary-foreground: oklch(0.147 0.004 286);
-  --sidebar-accent: oklch(0.21 0.006 286);
-  --sidebar-accent-foreground: oklch(0.985 0.001 106);
-  --sidebar-border: oklch(0.274 0.006 286 / 0.6);
-  --sidebar-ring: oklch(0.692 0.171 51);
+  /* Typography stacks */
+  --f-head: "Outfit", -apple-system, sans-serif;
+  --f-ui:   "Sora", -apple-system, sans-serif;
+  --f-body: "DM Sans", -apple-system, sans-serif;
 }
 
 .dark {
-  /* Dark is the default; this class is kept for shadcn parity. */
+  /* Light is the default; class kept for shadcn parity. */
 }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--f-body);
     -webkit-font-smoothing: antialiased;
-  }
-  h1, h2, .font-display {
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.015em;
-  }
-  h3, h4 {
-    font-family: var(--font-display);
-    font-weight: 600;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     letter-spacing: -0.01em;
   }
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--f-head);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  h1, h2, .font-display {
+    font-weight: 700;
+  }
+
+  /* Smooth globals: gentle transitions on interactive elements */
+  a, button, input, select, textarea {
+    transition:
+      color 200ms ease,
+      background-color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 250ms ease,
+      transform 200ms ease;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   THE LUXURY CTA GLOW UTILITY
+═══════════════════════════════════════════════════ */
+.cta-glow {
+  background: linear-gradient(135deg, oklch(0.82 0.12 85), var(--banana));
+  color: var(--banana-foreground) !important;
+  font-weight: 600;
+  border: 1px solid color-mix(in oklab, var(--banana) 30%, transparent);
+
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--banana) 20%, transparent),
+    0 4px 12px -2px color-mix(in oklab, var(--banana) 25%, transparent),
+    0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+.cta-glow:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--banana) 45%, transparent),
+    0 12px 24px -4px color-mix(in oklab, var(--banana) 40%, transparent),
+    0 4px 8px -2px color-mix(in oklab, var(--banana) 20%, transparent);
 }

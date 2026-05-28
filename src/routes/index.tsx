@@ -34,7 +34,7 @@ function Landing() {
             and mentorship to turn an audience into income — without selling out or burning out.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="bg-banana text-banana-foreground hover:bg-banana/90">
+            <Button asChild size="lg" className="cta-glow">
               <Link to="/products">Browse resources <ArrowRight /></Link>
             </Button>
             <Button asChild size="lg" variant="outline">
@@ -67,7 +67,7 @@ function Landing() {
           <h2 className="font-display text-4xl md:text-5xl max-w-2xl">
             Ready to take your Kingdom content business seriously?
           </h2>
-          <Button asChild size="lg" className="bg-banana text-banana-foreground hover:bg-banana/90">
+          <Button asChild size="lg" className="cta-glow">
             <Link to="/signup">Join the community <ArrowRight /></Link>
           </Button>
         </div>

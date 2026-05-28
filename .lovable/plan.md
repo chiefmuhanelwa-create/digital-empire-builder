@@ -1,101 +1,34 @@
-## CHKPLT Hardening — 4 Modules
+# Apply premium light palette + CTA glow + remove Lebo line
 
-### Module 1 — Immutable Audit Ledger
+## 1. `src/styles.css`
+- Replace the entire `:root { ... }` block (lines 64–114) with the provided **Premium Editorial Light Palette** tokens (warm off-white canvas, deep stone ink, Harvest Gold #C8A84B, hairline borders via `color-mix`, gold glow rgba layers, sidebar overrides, font stacks).
+- Bridge so existing shadcn semantic tokens stay wired (the components read `--card`, `--popover`, `--muted`, `--muted-foreground`, `--primary-foreground`, `--ring`, `--secondary`, etc.). Add these as aliases inside the same `:root` so the new palette propagates everywhere without touching components:
+  - `--card: var(--bg-card)` / `--card-foreground: var(--foreground)`
+  - `--popover: var(--bg-card)` / `--popover-foreground: var(--foreground)`
+  - `--muted: var(--bg-surface)` / `--muted-foreground: var(--text-dim)`
+  - `--secondary: var(--bg-surface)` / `--secondary-foreground: var(--foreground)`
+  - `--accent-foreground: var(--banana-foreground)`
+  - `--primary-foreground: var(--banana-foreground)`
+  - `--ring: var(--banana)`
+  - `--destructive: oklch(0.55 0.22 27)` / `--destructive-foreground: oklch(0.985 0.001 106)`
+  - `--obsidian: var(--foreground)`
+  - chart-1..5 kept on the gold spectrum for light mode
+  - `--sidebar: var(--bg-surface)`, `--sidebar-accent: var(--bg-card-hi)`, `--sidebar-accent-foreground: var(--foreground)`, `--sidebar-primary-foreground: var(--banana-foreground)`, `--sidebar-ring: var(--banana)`
+- Replace the existing `@layer base` block with the provided version (font smoothing, `text-rendering: optimizeLegibility`, baseline letter-spacing, global transitions on `a, button, input, select, textarea`). Keep the `* { border-color: var(--color-border); }` reset and the `h1, h2, .font-display` font-family rule so existing `font-display` usages still pick up the headline font.
+- Append the `.cta-glow` utility class verbatim (base + `:hover`) at the bottom of the file.
+- Add the three new Google Fonts (Outfit, Sora, DM Sans) to the existing `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?...">` in `src/routes/__root.tsx` so `--f-head`, `--f-ui`, `--f-body` actually load. Keep Playfair Display + IBM Plex Mono in the URL (still referenced by `.font-display` / mono utilities). **Do not** otherwise touch `__root.tsx`.
 
-**Migration** (`audit_ledgers`):
-- Columns: `id`, `order_id` (unique, FK-by-id only), `provider_reference`, `gross_cents`, `vat_allocation_cents` (15%), `tax_reserve_cents` (25%), `net_cents`, `currency`, `customer_email_hash` (sha256, not raw email — keeps tax row even after GDPR wipe per Module 4), `paid_at`, `created_at default now()`.
-- `GRANT SELECT ON public.audit_ledgers TO authenticated` (admin-read via has_role check in policy), `GRANT ALL TO service_role`.
-- RLS: admin-only SELECT. **No** INSERT/UPDATE/DELETE policies for any role except service_role INSERT.
-- **Guardrail trigger** `audit_ledgers_immutable()` (BEFORE UPDATE OR DELETE): `RAISE EXCEPTION 'audit_ledgers rows are immutable'`. (Postgres RULEs don't fire for service_role bypass paths reliably — triggers do.)
-- Revoke UPDATE/DELETE from PUBLIC + service_role explicitly.
+## 2. Apply `cta-glow` to primary CTAs
+Add the class to the existing primary amber `<Button>` / link elements (no other style changes):
+- `src/components/site-header.tsx` — "Access Vault" button
+- `src/routes/index.tsx` — hero "Browse resources" button + bottom "Join the community" button
+- `src/routes/products.$slug.tsx` — Buy / Checkout button(s) in the BuyBlock
+- `src/components/FulfillmentStates.tsx` — primary action buttons across all four fulfillment states
 
-**Webhook wiring** (`src/routes/api/public/paystack-webhook.ts`):
-- Inside the existing atomic "claim" block (after `orders.status='paid'` succeeds, before receipt enqueue), compute VAT/tax splits and `INSERT INTO audit_ledgers ... ON CONFLICT (order_id) DO NOTHING`. Hash email with `crypto.createHash('sha256')`.
-- Wrap in `reportError(...)` (Module 2) — never block the receipt path on ledger failure.
+For each, append `cta-glow` to the existing `className` and remove the now-redundant `bg-banana hover:bg-banana/90` / `bg-amber-500 hover:bg-amber-400` color classes on that one element so the gradient + glow shows through cleanly. Leave variant, size, padding, and layout classes alone.
 
-**Admin view**: new `/_authenticated/admin.ledger.tsx` read-only table (paginated, CSV export). Server fn `getAuditLedger` with `requireSupabaseAuth` + admin role check.
+## 3. Remove the Lebo attribution
+`src/routes/products.$slug.tsx` line ~135 — delete the line "By Lebo M. — multi-award-winning South African media founder. Built for creators 18–34." (and its wrapper `<p>` if empty). That copy was placeholder text I introduced earlier; it doesn't reference a real person tied to your project.
 
----
-
-### Module 2 — Real-Time Watchman (error reporter)
-
-**New file** `src/lib/error-logger.ts` — exactly the abstraction you provided:
-- `reportError(err, { userId?, orderId?, endpoint?, meta? })`
-- Step 1 (active): structured `console.error` tagged `[CHKPLT ERROR]` — captured by TanStack `server-function-logs`.
-- Step 2 (active): insert into new `public.incidents` table (admin-read only) for in-dashboard triage.
-- Step 3 (commented expansion slot): Sentry/Logtail one-liner placeholder.
-
-**Migration** `incidents`: `id, message, endpoint, severity, user_id, meta jsonb, created_at`. RLS: admin SELECT, service_role INSERT. GRANTs included.
-
-**Deploy across**:
-- `src/routes/api/public/paystack-webhook.ts` (every catch + signature failure)
-- `src/lib/contacts-import.functions.ts` (batch failures already classified — also `reportError`)
-- `src/lib/products.functions.ts` (signed URL failures)
-- `src/lib/downloads.functions.ts` if present
-- `src/lib/email-templates/*` send paths via the email worker cron
-- New checkout-init / Turnstile-verify server fns from Module 3
-
-**Admin incidents page**: `/_authenticated/admin.incidents.tsx` — filter by endpoint/severity, mark resolved.
-
----
-
-### Module 3 — Turnstile Bot Shield (login + checkout)
-
-**Secrets request** (will request via `add_secret` after approval):
-- `TURNSTILE_SITE_KEY` (public — also exposed as `VITE_TURNSTILE_SITE_KEY`)
-- `TURNSTILE_SECRET_KEY` (server only)
-
-**Frontend**:
-- Install `@marsidev/react-turnstile`.
-- New `<TurnstileGate onToken={...} />` component reading `VITE_TURNSTILE_SITE_KEY`.
-- Wire into `/login` (Google button OK to skip; gate the email/password sign-in + sign-up submits) and `/checkout` (gate the "Pay now" button — token attached to the existing checkout-init server fn payload).
-
-**Backend verification helper** `src/lib/turnstile.server.ts`:
-- `verifyTurnstile(token, ip?)` POSTs to `https://challenges.cloudflare.com/turnstile/v0/siteverify` with `TURNSTILE_SECRET_KEY`. Returns `{ success, errorCodes }`.
-- Called inside:
-  - email/password sign-in + sign-up server fns
-  - checkout-init server fn (before Paystack call)
-- On failure: throw `Error('Verification failed — please refresh and retry')`. Logged via `reportError`.
-
-**Cloudflare proxy checklist** (docs only, no code) — appended to `.lovable/plan.md`:
-- Enable orange-cloud DNS proxy on production domain
-- Add Rate-Limiting rule: `/login` + checkout endpoints, 50 req/min per IP
-- Enable Bot Fight Mode
-
----
-
-### Module 4 — Data Cleansing Sanctuary (GDPR-style)
-
-**Server fn** `requestAccountDeletion` in `src/lib/account.functions.ts` (`requireSupabaseAuth`):
-1. Verify caller identity (`getUser()` re-check).
-2. Re-hash user's email to `sha256` and **backfill** `audit_ledgers.customer_email_hash` for their `order_id`s if any are still raw — guarantees the historical record survives.
-3. **Wipe marketing PII**: `DELETE FROM subscribers WHERE email = ?`, `DELETE FROM subscriber_tags ...`, `DELETE FROM profiles WHERE id = auth.uid()`, anonymize `orders.email = 'deleted-<hash>@anonymized.local'`, null `customer_name`, `customer_phone`.
-4. **Retain financials**: `audit_ledgers` rows untouched (immutable trigger blocks it anyway — by design).
-5. Call `supabaseAdmin.auth.admin.deleteUser(userId)` last.
-6. Log via `reportError` on partial failure (each step independently try/caught).
-
-**Frontend** new `/_authenticated/account.tsx` settings page:
-- "Download my data" button (server fn returning JSON of profile + orders + subscriber rows).
-- "Delete my account" — double confirm modal explaining what's wiped vs retained for tax compliance, then calls `requestAccountDeletion` and signs out.
-
-**Public policy snippet** added to the existing footer/privacy area (1 short paragraph explaining the retention split).
-
----
-
-### Files
-
-**Migrations (2)**: `audit_ledgers` + immutable trigger; `incidents` table.
-
-**New**: `src/lib/error-logger.ts`, `src/lib/turnstile.server.ts`, `src/lib/account.functions.ts`, `src/components/TurnstileGate.tsx`, `src/routes/_authenticated/admin.ledger.tsx`, `src/routes/_authenticated/admin.incidents.tsx`, `src/routes/_authenticated/account.tsx`.
-
-**Edited**: `paystack-webhook.ts` (ledger insert + reportError), `contacts-import.functions.ts` + `products.functions.ts` (reportError), `/login` route (Turnstile + verify), `/checkout` route (Turnstile + verify in init fn), admin dashboard nav (+ Ledger, + Incidents links), footer privacy note.
-
-**Deps**: `@marsidev/react-turnstile`.
-
-**Secrets requested after approval**: `TURNSTILE_SITE_KEY`, `VITE_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`.
-
-### Explicitly NOT included
-- Sentry/Logtail transport (slot left commented per your choice).
-- Cloudflare DNS/rate-limit rules (dashboard config — checklist provided).
-- Backend app-level rate limiting (Lovable platform gap; Cloudflare layer handles it).
-- Magic-link auth (not present today; Turnstile applied to existing email/password + Google flows).
+## Out of scope
+No business-logic, schema, server-function, route, or auth changes. Purely tokens, one utility class, four CTA className tweaks, one copy deletion, and one `<link>` font URL extension.
