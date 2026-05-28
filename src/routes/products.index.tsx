@@ -77,26 +77,29 @@ function Catalog() {
                 key={g}
                 to="/products/garden/$garden"
                 params={{ garden: g }}
-                className="group relative rounded-md border border-stone-800/60 bg-stone-900 p-10 min-h-[260px] flex flex-col justify-between transition-all ease-in duration-200 hover:border-amber-500/30"
+                className="nx-card group flex min-h-[260px] flex-col justify-between !p-8"
               >
                 <div>
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <div className="font-mono text-xs tracking-[0.25em] uppercase text-amber-500">
+                      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
                         {meta.priceRange}
                       </div>
-                      <h2 className="mt-3 font-display text-4xl group-hover:text-amber-500 transition-colors">
+                      <h2 className="mt-3 font-display text-3xl sm:text-4xl text-foreground group-hover:text-banana transition-colors">
                         {meta.name}
                       </h2>
                     </div>
-                    <ArrowUpRight className="size-6 text-stone-500 group-hover:text-amber-500 transition-colors" />
+                    <ArrowUpRight className="size-6 text-muted-foreground group-hover:text-banana transition-colors" />
                   </div>
-                  <p className="mt-6 text-base text-stone-300 leading-relaxed">
+                  <p className="mt-6 text-base text-muted-foreground leading-relaxed">
                     {meta.description}
                   </p>
                 </div>
                 <div className="mt-8 flex items-center justify-end font-mono text-xs">
-                  <span className="text-amber-500">{count} {count === 1 ? "item" : "items"}</span>
+                  <span className="nx-status-live">
+                    <span className="nx-live-dot" aria-hidden />
+                    {count} {count === 1 ? "item" : "items"}
+                  </span>
                 </div>
               </Link>
             );
