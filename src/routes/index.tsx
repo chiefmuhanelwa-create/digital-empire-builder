@@ -87,7 +87,7 @@ function Landing() {
 
       {/* 1. HERO */}
       <section className="relative overflow-hidden nx-hero-orb">
-        <div className="mx-auto max-w-6xl px-5 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 md:pt-32 md:pb-32">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <span className="nx-status-live">
             <span className="nx-live-dot" aria-hidden /> CHKPLT Engine Activated — Cohort 01 Application Window Open
           </span>
@@ -123,14 +123,14 @@ function Landing() {
 
       {/* 2. THE CORE EQUATION */}
       <section className="border-t border-border/60">
-        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-14 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <div className="nx-label">The Core Equation</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl max-w-3xl tracking-tight">
             Your creative enterprise is governed by a strict,{" "}
             <em className="text-banana not-italic">non-negotiable formula.</em>
           </h2>
 
-          <div className="mt-8 nx-card">
+          <div className="mt-4 nx-card">
             <div className="font-mono flex flex-wrap items-center gap-x-2 gap-y-1 text-base sm:text-xl md:text-2xl leading-relaxed text-foreground/90">
               <span className="text-banana">Mindset (MS)</span>
               <span>×</span>
@@ -158,7 +158,7 @@ function Landing() {
 
       {/* 3. THE 7-STAGE CURRICULUM */}
       <section className="border-t border-border/60">
-        <div className="mx-auto max-w-6xl px-5 sm:px-6 py-14 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <div className="nx-label">The Flagship Transformation</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl max-w-3xl tracking-tight">
             The 7-Stage System —{" "}
@@ -215,7 +215,7 @@ function Landing() {
 
       {/* 4. THE DATA SANCTUARY (ANTI-SELL) */}
       <section className="border-t border-border/60">
-        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-14 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <div className="nx-status-live" style={{ color: "var(--nx-orange-deep)" }}>
             <span className="nx-live-dot" aria-hidden /> The Data Sanctuary
           </div>
