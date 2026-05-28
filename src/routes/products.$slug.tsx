@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
 import { initializeCheckout } from "@/lib/checkout.functions";
+import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
@@ -301,19 +302,160 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   }
 
   if (product.requires_application) {
-    return (
-      <div className="mt-12">
-        <Button size="lg" disabled variant="outline">
-          By application — applications open soon
-        </Button>
-      </div>
-    );
+    return <ApplicationGate product={product} priceLabel={priceLabel} />;
   }
 
   return (
     <div className="mt-12 border border-border p-6">
       <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · ZAR</div>
       <h3 className="mt-2 font-display text-2xl">Buy {product.title}</h3>
+      <div className="mt-6 grid gap-3 md:grid-cols-3">
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
+          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Full name</label>
+          <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" placeholder="Optional" />
+        </div>
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Phone</label>
+          <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1" placeholder="Optional" />
+        </div>
+      </div>
+      <div className="mt-5">
+        <TurnstileGate onToken={setTsToken} />
+      </div>
+      <Button
+        size="lg"
+        disabled={!email || !tsToken || mut.isPending}
+        onClick={() =>
+          mut.mutate({
+            data: {
+              productSlug: product.slug,
+              email,
+              fullName: fullName || undefined,
+              phone: phone || undefined,
+              turnstileToken: tsToken ?? undefined,
+            },
+          })
+        }
+        className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90"
+      >
+        {mut.isPending ? "Starting…" : `Pay ${priceLabel} →`}
+      </Button>
+      <p className="mt-3 text-xs text-muted-foreground">
+        You'll be sent to our secure checkout, then brought back here once payment is complete.
+      </p>
+    </div>
+  );
+}
+
+function ApplicationGate({ product, priceLabel }: { product: any; priceLabel: string }) {
+  const { user } = useAuth();
+  const checkFn = useServerFn(checkQualification);
+  const email = user?.email;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["qualification", email],
+    enabled: !!email,
+    queryFn: () => checkFn({ data: { email: email! } }),
+    staleTime: 60_000,
+  });
+
+  // Not signed in → must apply first (we need their email to check qualification)
+  if (!user) {
+    return (
+      <div className="mt-12 border border-border bg-muted/20 p-6">
+        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+          By application only
+        </div>
+        <h3 className="mt-2 font-display text-2xl">Take the assessment first</h3>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Premium Programs are gated by our 23-point Contentpreneur diagnostic. Complete it to unlock checkout.
+        </p>
+        <Link
+          to="/apply"
+          className="cta-glow mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm"
+        >
+          Start the assessment →
+        </Link>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="mt-12 border border-border p-6 animate-pulse">
+        <div className="h-4 w-40 bg-muted rounded" />
+        <div className="mt-3 h-3 w-64 bg-muted rounded" />
+      </div>
+    );
+  }
+
+  // Qualified → show checkout
+  if (data?.qualified) {
+    return (
+      <div className="mt-12">
+        <div className="border border-banana/40 bg-banana/5 p-4 mb-4">
+          <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+            ✓ Qualified for Premium Programs
+          </div>
+          <p className="mt-1 text-sm text-foreground/80">
+            Your assessment cleared you for this tier. Secure your seat below.
+          </p>
+        </div>
+        <CheckoutForm product={product} priceLabel={priceLabel} />
+      </div>
+    );
+  }
+
+  // Has application but not qualified, OR no application yet → redirect to /apply
+  return (
+    <div className="mt-12 border border-border bg-muted/20 p-6">
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+        By application only
+      </div>
+      <h3 className="mt-2 font-display text-2xl">
+        {data?.hasApplication ? "Not cleared for this tier yet" : "Take the assessment first"}
+      </h3>
+      <p className="mt-3 text-sm text-muted-foreground">
+        {data?.hasApplication
+          ? "Your latest assessment routed you to a different starting point. Re-take the diagnostic when your numbers change, or browse the recommended standalone package."
+          : "Premium Programs are gated by our 23-point Contentpreneur diagnostic. Complete it to unlock checkout."}
+      </p>
+      <Link
+        to="/apply"
+        className="cta-glow mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm"
+      >
+        {data?.hasApplication ? "Re-take the assessment →" : "Start the assessment →"}
+      </Link>
+    </div>
+  );
+}
+
+function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: string }) {
+  const { user } = useAuth();
+  const initFn = useServerFn(initializeCheckout);
+  const [email, setEmail] = useState<string>(user?.email ?? "");
+  const [fullName, setFullName] = useState<string>(
+    (user?.user_metadata?.full_name as string) ?? "",
+  );
+  const [phone, setPhone] = useState<string>("");
+  const [tsToken, setTsToken] = useState<string | null>(null);
+
+  const mut = useMutation({
+    mutationFn: initFn,
+    onSuccess: (res: any) => {
+      window.location.href = res.authorizationUrl;
+    },
+    onError: (e: any) => toast.error(e.message ?? "Could not start checkout"),
+  });
+
+  return (
+    <div className="border border-border p-6">
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · ZAR</div>
+      <h3 className="mt-2 font-display text-2xl">Secure your seat — {product.title}</h3>
       <div className="mt-6 grid gap-3 md:grid-cols-3">
         <div>
           <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
