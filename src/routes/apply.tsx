@@ -378,7 +378,7 @@ function ApplyPage() {
               )}
 
               {step === 2 && (
-                <Module title="Module 3 · Audience Ownership">
+                <Module eyebrow="Module 03" title="Audience Ownership & Data Control">
                   <YesNo
                     label="Q9 · Do you have an email list?"
                     value={state.owns_email_list}
