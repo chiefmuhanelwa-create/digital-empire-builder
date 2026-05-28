@@ -542,7 +542,7 @@ function Module({
         <span className="nx-label text-[#EA580C] text-[10px] block mb-1">{eyebrow}</span>
         <h3 className="text-xl font-bold tracking-tight">{title}</h3>
       </div>
-      <div className="mt-6 space-y-6">{children}</div>
+      <div className="mt-6 space-y-4">{children}</div>
     </div>
   );
 }
