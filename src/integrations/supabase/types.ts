@@ -56,6 +56,66 @@ export type Database = {
         }
         Relationships: []
       }
+      client_stewardship_applications: {
+        Row: {
+          assigned_package_recommendation: string
+          created_at: string
+          determined_routing_status: string
+          email: string
+          email_subscribers_count: number
+          engagement_rate: number | null
+          follower_count: number
+          full_name: string
+          has_products_for_sale: boolean
+          id: string
+          income_streams_count: number
+          largest_stream_percentage: number
+          monthly_income_value: number
+          owns_email_list: boolean
+          posts_consistently_4x: boolean
+          raw_answers: Json | null
+          vulnerability_phase_tag: string
+        }
+        Insert: {
+          assigned_package_recommendation: string
+          created_at?: string
+          determined_routing_status: string
+          email: string
+          email_subscribers_count?: number
+          engagement_rate?: number | null
+          follower_count: number
+          full_name: string
+          has_products_for_sale: boolean
+          id?: string
+          income_streams_count?: number
+          largest_stream_percentage?: number
+          monthly_income_value?: number
+          owns_email_list: boolean
+          posts_consistently_4x: boolean
+          raw_answers?: Json | null
+          vulnerability_phase_tag: string
+        }
+        Update: {
+          assigned_package_recommendation?: string
+          created_at?: string
+          determined_routing_status?: string
+          email?: string
+          email_subscribers_count?: number
+          engagement_rate?: number | null
+          follower_count?: number
+          full_name?: string
+          has_products_for_sale?: boolean
+          id?: string
+          income_streams_count?: number
+          largest_stream_percentage?: number
+          monthly_income_value?: number
+          owns_email_list?: boolean
+          posts_consistently_4x?: boolean
+          raw_answers?: Json | null
+          vulnerability_phase_tag?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string

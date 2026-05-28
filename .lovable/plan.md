@@ -1,47 +1,79 @@
-## Goal
+# CHKPLT Homepage Rewrite + /apply Assessment Engine
 
-Overwrite `src/routes/index.tsx` with the finalized 5-section Kingdom Integration Layer, binding exclusively to existing CSS primitives (`.nx-hero-orb`, `.nx-card`, `.nx-antisell`, `.nx-antisell-item`, `.cta-glow`) and the cream / black / Harvest Gold / Burnt Orange palette already in `src/styles.css`.
+## Part A — Homepage Copy Refresh (`src/routes/index.tsx`)
 
-The pasted source had its JSX tags stripped by markdown rendering, so I will reconstruct valid TSX from the intended structure and verbatim copy.
+Replace the existing 5-section narrative with the new Master Promise script while keeping the same design primitives (`.nx-hero-orb`, `.nx-status-live`, `.cta-glow`, `nx-card`, `.nx-antisell`, `nx-label`, Harvest Gold + Burnt Orange tokens, Inter type scale, `<SiteFooter />`).
 
-## Sections
+1. **Hero** — Orange live pill "CHKPLT Engine Activated — Cohort 01 Application Window Open"; H1 "Stop posting for likes. Start owning a Kingdom business that scales with honor."; vision statement subhead ("I lead African creators…"); primary `.cta-glow` → `/apply` ("Audit Your Creative Equation →"), secondary outline → `/about` ("Read Our Standards"); credibility ribbon row: "3M+ Combined Followers · 100K+ Email Subscribers · 6,000+ Books Sold · For Children's Children — Proverbs 13:22".
+2. **Foundational Business Law** — Eyebrow "The Core Equation"; formula header rendered as styled inline expression `Mindset (MS) × Skillset (SS) × Toolset (TS) = Digital Asset`; "The Zero Rule" callout in `nx-card` (banana accent on key phrase).
+3. **7-Stage Curriculum** — Eyebrow "The Flagship Transformation"; subheading + Exodus/Leviticus note in muted body; 7 `nx-card`s in `md:grid-cols-2 lg:grid-cols-3` with mono week badges (Weeks 1-2 … Weeks 17-20) in `text-banana`, stage titles in `font-display`, body copy verbatim from script; closing `.cta-glow` → `/apply`.
+4. **Anti-Sell Sanctuary** — Orange-styled `nx-label` eyebrow; `.nx-antisell` panel with 4 `Lock`-iconed rows (Dishonest Tactics, Short-Term Thinking, Lack of Execution, Unstructured Foundations); transition line "If that resonates, you are in the right place."; `.cta-glow` → `/apply` ("Begin Your Stewardship Assessment →").
+5. **Corporate Signature Band** — "Contentpreneur" wordmark in `font-display`; triple-anchor tagline "BUILT FOR CREATORS · GROUNDED IN FAITH · ANCHORED IN AFRICA" in `nx-label` style; then `<SiteFooter />`.
 
-1. **Hero — Sovereign Promise**
-   - `.nx-hero-orb` background accent
-   - Eyebrow: `.nx-status-live` pill with `.nx-live-dot` → "Now Accepting Applicants — Cohort 01"
-   - H1 (`font-display`, tight tracking, responsive `text-4xl → md:text-7xl`): "Stop posting for likes. Start *owning a Kingdom business* that scales with honor." — gold emphasis via `<em className="text-banana not-italic">`
-   - Subheadline in `text-muted-foreground`
-   - CTAs: primary `.cta-glow` → `/signup` ("Apply for Cohort 01"), secondary outline → `/about` ("Read our standards"); `w-full sm:w-auto`
+No `styles.css`, header, or footer edits.
 
-2. **Transformation Matrix**
-   - `nx-label` section header + display subheading
-   - Two `nx-card`s side-by-side on `md:grid-cols-2`
-   - Column A "✕ The Worldly Hustle" — 3 bullets with `X` icon in `text-destructive`
-   - Column B "✦ Kingdom Stewardship" — 3 bullets with `Check` icon in `text-banana`
+## Part B — `/apply` Assessment Engine
 
-3. **5-Stage System**
-   - `nx-card` grid `md:grid-cols-2 lg:grid-cols-3`
-   - Each card: `font-mono text-xs tracking-[0.3em] text-banana` stage number, `font-display text-2xl` title, body in `text-muted-foreground`
-   - Verbatim copy for stages 01–05 (Purpose Alignment, Automated Asset Capture, Qualification Firewall, Diagnostic Session, Enterprise Execution)
+### B1. Database migration
+New isolated table (does not touch existing schema):
 
-4. **NOT FOR Gate — Data Sanctuary**
-   - `.nx-antisell` panel, 4 `.nx-antisell-item` rows with `Lock` icon
-   - Closing line + `.cta-glow` CTA → `/signup` ("Begin your application")
+```
+client_stewardship_applications (
+  id uuid pk, email text, full_name text,
+  follower_count int, engagement_rate int null,
+  posts_consistently_4x bool, owns_email_list bool,
+  email_subscribers_count int default 0,
+  has_products_for_sale bool,
+  monthly_income_value int default 0,
+  income_streams_count int default 1,
+  largest_stream_percentage int default 0,
+  determined_routing_status text,
+  assigned_package_recommendation text,
+  vulnerability_phase_tag text,
+  raw_answers jsonb,          -- store all 23 answers for analysis
+  created_at timestamptz default now()
+)
+```
+- `GRANT INSERT ON ... TO anon, authenticated` (public unauth submissions); `GRANT ALL TO service_role`; `GRANT SELECT TO authenticated` gated by `has_role(auth.uid(), 'admin')` policy.
+- RLS: anon/authenticated can INSERT (with check `true`); only admins can SELECT.
 
-5. **Signature Seal**
-   - Centered "Contentpreneur" wordmark in `font-display text-3xl sm:text-4xl`
-   - Tagline "Built for creators · Grounded in faith · Anchored in Africa" in `nx-label` style
-   - Followed by `<SiteFooter />`
+### B2. Evaluator utility — `src/utils/evaluator.ts`
+Exact cascade from the spec (Stage 1 Discovery → Stage 2 Awareness → Stage 3 Consideration → Stage 4 Conversion → Stage 5 Community). Returns `{ status, recommendedPackage, focusPillars, targetModules, vulnerabilityTag }`.
+
+### B3. Server function — `src/lib/apply.functions.ts`
+`submitApplication` (`createServerFn POST`, no auth middleware = public). Zod-validates the 23-field payload, runs `evaluateRecommendationTree`, inserts via `supabaseAdmin` into `client_stewardship_applications`, returns the recommendation object. (Brevo dispatch deferred — see Out-of-Scope.)
+
+### B4. Route — `src/routes/apply.tsx`
+Public route, file path `/apply`, with `head()` metadata.
+
+Multi-step wizard (5 modules matching the spec) using existing shadcn `Input`, `RadioGroup`, `Switch`, `Select`, `Button`, `Progress`. Mobile-first (`max-w-2xl`, full-width inputs, sticky bottom Next/Back bar on mobile). State held in a single `useState` object; `react-hook-form` + zod resolver for validation per step.
+
+- Q2 engagement rate: numeric input + `Checkbox` "I don't know my engagement rate" → sets value to `null`.
+- Q8/Q10/Q12 only visible when their parent toggle is YES.
+- Progress bar shows module 1/5 … 5/5.
+
+On submit → call `submitApplication` → render one of two result panels in place (no navigation):
+
+- **QUALIFIED_FOR_CORE_PROGRAM** — Success card: "Your metrics validate entry into the 20-Week Core Curriculum." + scheduler CTA placeholder button → `/signup` (real scheduler embed out of scope).
+- **REDIRECT_TO_DOWNSELL** — Diagnostic panel breaking down `vulnerabilityTag` + `focusPillars`, then a downsell `nx-card` whose contents map by tag:
+  - `STAGE_1_DISCOVERY` / `STAGE_2_AWARENESS` → "Content Calendar Template Bundle & Foundation Worksheets"
+  - `STAGE_3_CONSIDERATION` (from Stage 4 spec note) → "Contentpreneur: From Memes to Millions"
+  - `STAGE_4_CONVERSION` → "Tax For Contentpreneurs / PAIDS Tracker"
+  Each card uses `.cta-glow` button → `/products` (cannot deep-link without confirmed slugs).
+- If `engagement_rate === null`, render the "Optimization Notice" line inside the summary.
+
+### B5. Wire navigation
+- Homepage CTAs now point to `/apply` (replacing previous `/signup` targets in hero + anti-sell + curriculum CTAs).
+
+## Out of scope (will flag, not build)
+- **Brevo trigger**: requires confirmation that the Brevo connector should be linked and the list/template IDs. Will leave a TODO + commented dispatch stub in the server function; no Brevo call until secrets confirmed.
+- **Scheduler embed** (Calendly / similar) on the qualified path — placeholder CTA only.
+- **Deep-linking downsell products to exact slugs** — links to `/products` index until exact slugs are confirmed.
+- No edits to existing routes other than the homepage.
 
 ## Technical notes
+- Migration tool: single call with CREATE TABLE + GRANTs + ENABLE RLS + INSERT policy for anon/authenticated + admin SELECT policy.
+- Validation: zod schema mirrors the 23 fields; `engagement_rate: z.number().int().min(0).max(100).nullable()`.
+- File creation order: migration first (await user approval) → then evaluator, server fn, route, homepage edits in parallel.
 
-- Add missing `import { createFileRoute } from "@tanstack/react-router";` (omitted in the pasted snippet).
-- Use `head` inside `createFileRoute({ head: () => ({...}) })` per TanStack pattern, not a separate exported function — keeps metadata working through the router.
-- Mobile spacing: `py-14 sm:py-20 md:py-28`, `px-5 sm:px-8`, `!p-7 sm:!p-8` on cards, `gap-6 sm:gap-8`.
-- Containers: `max-w-6xl` hero/matrix/stages, `max-w-4xl` antisell, `max-w-3xl` seal.
-- All colors via semantic tokens — no hardcoded hex.
-
-## Out of scope
-
-- No edits to `src/styles.css`, `__root.tsx`, `site-header`, `site-footer`, or any other route.
-- No new components, routes, backend, data, or auth changes.
+Confirm to proceed, or tell me to change the Brevo handling / scheduler / downsell slugs before I build.
