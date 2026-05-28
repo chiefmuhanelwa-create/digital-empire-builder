@@ -248,7 +248,7 @@ function ApplyPage() {
           )}
 
           {!result && (
-            <div className="nx-card">
+            <div className="nx-card p-5 sm:p-6">
               {step === 0 && (
                 <Module eyebrow="Module 01" title="Follower Count & Engagement">
                   <Field label="Your full name">
