@@ -105,11 +105,8 @@ function Landing() {
           <div className="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
             <Button asChild size="lg" className="cta-glow w-full sm:w-auto">
               <Link to="/apply">
-                Audit Your Business Now <ArrowRight />
+                Apply for Cohort 1 Now <ArrowRight />
               </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <Link to="/about">About CHKPLT</Link>
             </Button>
           </div>
 
