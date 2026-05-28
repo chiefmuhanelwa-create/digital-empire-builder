@@ -1,66 +1,47 @@
-# Kingdom Integration Layer — Homepage Rewrite
+## Goal
 
-Single-file edit to `src/routes/index.tsx`. Replace the current 3-section landing with the approved 5-section narrative. Uses existing tokens/primitives only — no styles.css changes, no new components, no new routes.
+Overwrite `src/routes/index.tsx` with the finalized 5-section Kingdom Integration Layer, binding exclusively to existing CSS primitives (`.nx-hero-orb`, `.nx-card`, `.nx-antisell`, `.nx-antisell-item`, `.cta-glow`) and the cream / black / Harvest Gold / Burnt Orange palette already in `src/styles.css`.
 
-## SEO head()
+The pasted source had its JSX tags stripped by markdown rendering, so I will reconstruct valid TSX from the intended structure and verbatim copy.
 
-- `title`: "Contentpreneur — Build a Kingdom business that scales with honor"
-- `description`: "Digital systems, audience acquisition funnels, and tax compliance frameworks for Kingdom Contentpreneurs. Built on faith, ethics, and generational impact."
-- og:title / og:description mirroring above
+## Sections
 
-## Section 1 — Hero (`nx-hero-orb`)
+1. **Hero — Sovereign Promise**
+   - `.nx-hero-orb` background accent
+   - Eyebrow: `.nx-status-live` pill with `.nx-live-dot` → "Now Accepting Applicants — Cohort 01"
+   - H1 (`font-display`, tight tracking, responsive `text-4xl → md:text-7xl`): "Stop posting for likes. Start *owning a Kingdom business* that scales with honor." — gold emphasis via `<em className="text-banana not-italic">`
+   - Subheadline in `text-muted-foreground`
+   - CTAs: primary `.cta-glow` → `/signup` ("Apply for Cohort 01"), secondary outline → `/about` ("Read our standards"); `w-full sm:w-auto`
 
-- Eyebrow: `.nx-status-live` pill with `.nx-live-dot` → `NOW ACCEPTING APPLICANTS — COHORT 01`
-- H1 (`font-display`, responsive `text-4xl → md:text-7xl`): "Stop posting for likes. **Start owning a Kingdom business that scales with honor.**" — second sentence wrapped in `<em className="text-banana not-italic">` for gold emphasis.
-- Subheadline: the full approved paragraph in `text-muted-foreground`.
-- Primary CTA: `cta-glow` → `/signup` ("Apply for Cohort 01")
-- Secondary outline button → `/about` ("Read our standards")
+2. **Transformation Matrix**
+   - `nx-label` section header + display subheading
+   - Two `nx-card`s side-by-side on `md:grid-cols-2`
+   - Column A "✕ The Worldly Hustle" — 3 bullets with `X` icon in `text-destructive`
+   - Column B "✦ Kingdom Stewardship" — 3 bullets with `Check` icon in `text-banana`
 
-## Section 2 — Creator Transformation Matrix (two-column)
+3. **5-Stage System**
+   - `nx-card` grid `md:grid-cols-2 lg:grid-cols-3`
+   - Each card: `font-mono text-xs tracking-[0.3em] text-banana` stage number, `font-display text-2xl` title, body in `text-muted-foreground`
+   - Verbatim copy for stages 01–05 (Purpose Alignment, Automated Asset Capture, Qualification Firewall, Diagnostic Session, Enterprise Execution)
 
-- Eyebrow `.nx-label`: "THE CONTEXT SHIFT"
-- H2: "From worldly hustle to Kingdom stewardship."
-- Two `nx-card`s side-by-side on `md:grid-cols-2`, stacked on mobile:
-  - **The Worldly Hustle** — 3 problem bullets, each prefixed with a subtle red-tinted `×` icon (lucide `X`) using `text-destructive`.
-  - **Kingdom Stewardship** — 3 solution bullets prefixed with lucide `Check` in `text-banana`.
-- Exact copy from the brief.
+4. **NOT FOR Gate — Data Sanctuary**
+   - `.nx-antisell` panel, 4 `.nx-antisell-item` rows with `Lock` icon
+   - Closing line + `.cta-glow` CTA → `/signup` ("Begin your application")
 
-## Section 3 — The 5-Stage System
+5. **Signature Seal**
+   - Centered "Contentpreneur" wordmark in `font-display text-3xl sm:text-4xl`
+   - Tagline "Built for creators · Grounded in faith · Anchored in Africa" in `nx-label` style
+   - Followed by `<SiteFooter />`
 
-- Eyebrow `.nx-label`: "THE STRUCTURAL CORE"
-- H2: "The five stages from creator to compliant Kingdom enterprise."
-- Grid of 5 `nx-card`s (`md:grid-cols-2 lg:grid-cols-3` with the 5th spanning when needed, or `md:grid-cols-2` with the last full-width — go with 2-col grid on md, 3 on lg, last card spans 2 on lg via `lg:col-span-1` natural flow).
-- Each card: large `font-mono text-banana` stage number ("STAGE 01"), then `font-display text-2xl` title, then body copy in `text-muted-foreground`.
-- Cards: Purpose Alignment & Authority / Automated Asset Capture / The Qualification Firewall / The Diagnostic Session / Enterprise Execution — all copy verbatim from the brief.
+## Technical notes
 
-## Section 4 — The "NOT FOR" Gate (`nx-antisell`)
-
-- Eyebrow `.nx-label` in orange tone via inline class: "THE DATA SANCTUARY"
-- H2 inside the panel: "The CHKPLT Program is strictly closed to:"
-- 4 `nx-antisell-item` rows, each starting with a `🔒` glyph + the exact copy lines from the brief.
-- Closing line beneath the panel: "If that resonates, you're in the right place." with a `cta-glow` CTA → `/signup` ("Begin your application").
-
-## Section 5 — Signature Seal (footer band, above SiteFooter)
-
-- Centered, tight band, `border-t border-border/60`.
-- Wordmark: "Contentpreneur" in `font-display text-3xl sm:text-4xl tracking-tight`.
-- Tagline below in `nx-label` style: "BUILT FOR CREATORS · GROUNDED IN FAITH · ANCHORED IN AFRICA"
-- Then existing `<SiteFooter />` renders underneath.
-
-## Mobile rules (re-applied throughout)
-
-- Section padding: `py-14 sm:py-20 md:py-28`
-- Card padding inside `nx-card`: rely on default; tighten to `!p-7 sm:!p-8` where needed.
-- All primary CTAs: `w-full sm:w-auto`
-- H1 floor `text-4xl`, H2 floor `text-2xl sm:text-3xl`
+- Add missing `import { createFileRoute } from "@tanstack/react-router";` (omitted in the pasted snippet).
+- Use `head` inside `createFileRoute({ head: () => ({...}) })` per TanStack pattern, not a separate exported function — keeps metadata working through the router.
+- Mobile spacing: `py-14 sm:py-20 md:py-28`, `px-5 sm:px-8`, `!p-7 sm:!p-8` on cards, `gap-6 sm:gap-8`.
+- Containers: `max-w-6xl` hero/matrix/stages, `max-w-4xl` antisell, `max-w-3xl` seal.
+- All colors via semantic tokens — no hardcoded hex.
 
 ## Out of scope
 
-- No edits to `styles.css`, `site-header`, footer, or any other route.
-- No new components or routes.
-- No backend, no data fetch, no auth changes.
-- Imagery: text-only render in this turn (no new image generation).
-
-## Risk note
-
-This replaces the current "Build your brand / Monetize your calling" hero and the Learn/Build/Earn pillars entirely. Existing nav links (`/products`, `/about`, `/signup`) all remain valid.
+- No edits to `src/styles.css`, `__root.tsx`, `site-header`, `site-footer`, or any other route.
+- No new components, routes, backend, data, or auth changes.
