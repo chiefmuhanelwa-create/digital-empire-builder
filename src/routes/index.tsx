@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, X } from "lucide-react";
+import { ArrowRight, Check, X, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -79,13 +79,14 @@ function Landing() {
       <section className="relative overflow-hidden nx-hero-orb">
         <div className="mx-auto max-w-6xl px-5 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 md:pt-32 md:pb-32">
           <span className="nx-status-live">
-            <span className="nx-live-dot" aria-hidden /> Now accepting applicants — Cohort 01
+            <span className="nx-live-dot" aria-hidden /> Now Accepting Applicants — Cohort 01
           </span>
-          <h1 className="mt-5 font-display text-4xl leading-[1.05] sm:text-5xl md:text-7xl lg:text-[5.5rem] max-w-5xl">
-            Stop posting for likes.{" "}
-            <em className="text-banana not-italic">
-              Start owning a Kingdom business that scales with honor.
-            </em>
+          <h1 className="mt-5 font-display text-4xl leading-[1.05] sm:text-5xl md:text-7xl lg:text-[5.5rem] max-w-5xl tracking-tight">
+            Stop posting for likes.
+            <br />
+            Start{" "}
+            <em className="text-banana not-italic">owning a Kingdom business</em>{" "}
+            that scales with honor.
           </h1>
           <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
             The exact digital systems, audience acquisition funnels, and tax compliance frameworks
@@ -116,10 +117,9 @@ function Landing() {
 
           <div className="mt-10 grid gap-5 sm:gap-6 md:grid-cols-2">
             <div className="nx-card">
-              <div className="font-mono text-xs tracking-[0.25em] uppercase text-destructive">
-                The Worldly Hustle
-              </div>
-              <h3 className="mt-3 font-display text-2xl sm:text-3xl">What you leave behind.</h3>
+              <h3 className="font-display text-2xl sm:text-3xl text-destructive">
+                ✕ The Worldly Hustle
+              </h3>
               <ul className="mt-6 space-y-4">
                 {PROBLEMS.map((p) => (
                   <li key={p} className="flex gap-3 text-sm sm:text-base text-muted-foreground">
@@ -131,10 +131,9 @@ function Landing() {
             </div>
 
             <div className="nx-card">
-              <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-                Kingdom Stewardship
-              </div>
-              <h3 className="mt-3 font-display text-2xl sm:text-3xl">What you step into.</h3>
+              <h3 className="font-display text-2xl sm:text-3xl text-banana">
+                ✦ Kingdom Stewardship
+              </h3>
               <ul className="mt-6 space-y-4">
                 {SOLUTIONS.map((s) => (
                   <li key={s} className="flex gap-3 text-sm sm:text-base text-foreground/85">
@@ -193,7 +192,7 @@ function Landing() {
             <ul className="mt-7 space-y-2.5">
               {NOT_FOR.map((line) => (
                 <li key={line} className="nx-antisell-item flex items-start gap-3 normal-case tracking-normal">
-                  <span aria-hidden className="text-base leading-none mt-0.5">🔒</span>
+                  <Lock className="mt-0.5 size-4 shrink-0 text-banana" aria-hidden />
                   <span>{line}</span>
                 </li>
               ))}
