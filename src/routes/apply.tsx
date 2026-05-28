@@ -239,11 +239,11 @@ function ApplyPage() {
         <div className="mx-auto max-w-2xl px-5 sm:px-6 py-10 sm:py-14">
           {!result && (
             <div className="mb-8">
-              <div className="flex items-center justify-between text-xs font-mono tracking-[0.2em] uppercase text-muted-foreground">
-                <span>Module {step + 1} of {TOTAL_STEPS}</span>
-                <span>{Math.round(progress)}%</span>
+              <div className="flex items-center justify-between text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground">
+                <span>Stewardship Module {step + 1} / {TOTAL_STEPS}</span>
+                <span>{Math.round(progress)}% Complete</span>
               </div>
-              <Progress value={progress} className="mt-3 h-1.5" />
+              <Progress value={progress} className="mt-3 h-1.5 [&>div]:bg-banana" />
             </div>
           )}
 
