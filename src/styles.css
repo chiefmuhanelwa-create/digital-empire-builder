@@ -84,6 +84,11 @@
   --nx-gold-bright:    #E6C871;   /* Bright gold */
   --nx-gold-deep:      #8C6F1F;   /* Deep gold for text-on-cream */
 
+  /* Burnt Orange — reserved for live/active micro-elements only */
+  --nx-orange:         #D4541F;
+  --nx-orange-bright:  #F2701E;
+  --nx-orange-deep:    #9A3A12;
+
   --nx-btn-gradient:   linear-gradient(135deg, #D4B65C, #C9A646 60%, #8C6F1F);
   --nx-video-border:   linear-gradient(135deg, #E6C871 0%, #C9A646 50%, #8C6F1F 100%);
 
