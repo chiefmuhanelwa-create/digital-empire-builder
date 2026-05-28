@@ -158,7 +158,7 @@ function Landing() {
 
       {/* 3. THE 7-STAGE CURRICULUM */}
       <section className="border-t border-border/60">
-        <div className="mx-auto max-w-6xl px-5 sm:px-6 py-14 sm:py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <div className="nx-label">The Flagship Transformation</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl max-w-3xl tracking-tight">
             The 7-Stage System —{" "}
