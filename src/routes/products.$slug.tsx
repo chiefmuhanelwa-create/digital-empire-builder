@@ -13,6 +13,7 @@ import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
+import { ProCohortBreakdown, VipTierBreakdown } from "@/components/PremiumProgramBreakdown";
 
 export const Route = createFileRoute("/products/$slug")({
   loader: async ({ params }) => {
@@ -168,6 +169,10 @@ function ProductDetail() {
             {product.description}
           </p>
         )}
+
+        {/* Premium Program breakdowns (etz_pri tier) */}
+        {product.slug === "contentpreneur-90day-cohort" && <ProCohortBreakdown />}
+        {product.slug === "contentpreneur-vip-tier" && <VipTierBreakdown />}
 
         {/* Primary CTA */}
         <div id="buy" />
