@@ -61,74 +61,80 @@
 }
 
 /* ═══════════════════════════════════════════════════
-   PREMIUM EDITORIAL LIGHT PALETTE — CHKPLT HARDENING
+   THE NEXUS × CHKPLT COUTURE LIGHT TOKENS
 ═══════════════════════════════════════════════════ */
 :root {
   --radius: 0.5rem;
 
-  /* Core Background Hierarchy (Soft Warm Off-White) */
-  --background:        oklch(0.985 0.003 80);      /* #FAFAF7 Canvas */
-  --bg-surface:        oklch(0.975 0.004 80);
+  /* Page Canvas (Heavy, Editorial Warm-White) */
+  --background:        oklch(0.985 0.003 80);
+  --bg-surface:        oklch(0.970 0.005 80);
   --bg-card:           oklch(1 0 0);
-  --bg-card-hi:        oklch(0.965 0.005 80);
+  --bg-card-hi:        oklch(0.955 0.006 80);
 
-  /* Structural Typography (Deep Stone Ink) */
-  --foreground:        oklch(0.18 0.005 80);
-  --text-body:         oklch(0.32 0.008 80);
-  --text-dim:          oklch(0.55 0.006 80);
+  /* Structural Typography & Inks */
+  --foreground:        oklch(0.14 0.006 80);
+  --text-body:         oklch(0.28 0.008 80);
+  --text-dim:          oklch(0.48 0.006 80);
+  --text-subtle:       oklch(0.62 0.005 80);
 
-  /* Harvest Gold & Accent Branding */
-  --banana:            oklch(0.76 0.14 85);        /* #C8A84B */
-  --primary:           var(--banana);
-  --banana-foreground: oklch(0.12 0.005 80);
-  --accent:            var(--banana);
-  --accent-foreground: var(--banana-foreground);
-  --primary-foreground: var(--banana-foreground);
+  /* Harvest Gold Accent System */
+  --banana:            oklch(0.74 0.13 82);
+  --gold-bright:       oklch(0.80 0.11 85);
+  --gold-pale:         oklch(0.94 0.04 85);
+  --gold-dim:          oklch(0.48 0.09 78);
+
+  --primary:              var(--banana);
+  --accent:               var(--banana);
+  --banana-foreground:    oklch(0.12 0.005 80);
+  --accent-foreground:    var(--banana-foreground);
+  --primary-foreground:   var(--banana-foreground);
 
   /* Hairline Borders */
-  --border:            color-mix(in oklab, var(--foreground) 6%, transparent);
+  --border:            color-mix(in oklab, var(--foreground) 7%, transparent);
+  --border-hover:      color-mix(in oklab, var(--banana) 45%, transparent);
   --input:             color-mix(in oklab, var(--foreground) 10%, transparent);
   --ring:              var(--banana);
 
-  /* Micro-Glow Layers */
-  --gold-glow-tight:   rgba(200, 168, 75, 0.18);
+  /* Layered Glow System */
+  --gold-glow-tight:   rgba(200, 168, 75, 0.16);
   --gold-glow-mid:     rgba(200, 168, 75, 0.08);
   --gold-glow-ambient: rgba(200, 168, 75, 0.03);
 
   /* shadcn semantic bridges */
-  --card:              var(--bg-card);
-  --card-foreground:   var(--foreground);
-  --popover:           var(--bg-card);
-  --popover-foreground: var(--foreground);
-  --muted:             var(--bg-surface);
-  --muted-foreground:  var(--text-dim);
-  --secondary:         var(--bg-surface);
+  --card:                 var(--bg-card);
+  --card-foreground:      var(--foreground);
+  --popover:              var(--bg-card);
+  --popover-foreground:   var(--foreground);
+  --muted:                var(--bg-surface);
+  --muted-foreground:     var(--text-dim);
+  --secondary:            var(--bg-surface);
   --secondary-foreground: var(--foreground);
-  --obsidian:          var(--foreground);
+  --obsidian:             var(--foreground);
 
-  --destructive:           oklch(0.55 0.22 27);
+  --destructive:            oklch(0.55 0.22 27);
   --destructive-foreground: oklch(0.985 0.001 106);
 
-  --chart-1: oklch(0.76 0.14 85);
-  --chart-2: oklch(0.82 0.12 85);
+  --chart-1: oklch(0.74 0.13 82);
+  --chart-2: oklch(0.80 0.11 85);
   --chart-3: oklch(0.65 0.13 70);
   --chart-4: oklch(0.55 0.08 80);
-  --chart-5: oklch(0.32 0.008 80);
+  --chart-5: oklch(0.28 0.008 80);
 
   /* Sidebar */
-  --sidebar:                       var(--bg-surface);
-  --sidebar-foreground:            var(--text-body);
-  --sidebar-primary:               var(--banana);
-  --sidebar-primary-foreground:    var(--banana-foreground);
-  --sidebar-accent:                var(--bg-card-hi);
-  --sidebar-accent-foreground:     var(--foreground);
-  --sidebar-border:                var(--border);
-  --sidebar-ring:                  var(--banana);
+  --sidebar:                    var(--bg-surface);
+  --sidebar-foreground:         var(--text-body);
+  --sidebar-primary:            var(--banana);
+  --sidebar-primary-foreground: var(--banana-foreground);
+  --sidebar-accent:             var(--bg-card-hi);
+  --sidebar-accent-foreground:  var(--foreground);
+  --sidebar-border:             var(--border);
+  --sidebar-ring:               var(--banana);
 
-  /* Typography stacks */
-  --f-head: "Outfit", -apple-system, sans-serif;
-  --f-ui:   "Sora", -apple-system, sans-serif;
-  --f-body: "DM Sans", -apple-system, sans-serif;
+  /* Typography Stacks — unified Inter */
+  --f-head: 'Inter', -apple-system, sans-serif;
+  --f-ui:   'Inter', -apple-system, sans-serif;
+  --f-body: 'Inter', -apple-system, sans-serif;
 }
 
 .dark {
@@ -144,18 +150,46 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    letter-spacing: -0.01em;
-  }
-  h1, h2, h3, h4, .font-display {
-    font-family: var(--f-head);
-    letter-spacing: -0.02em;
-    font-weight: 600;
-  }
-  h1, h2, .font-display {
-    font-weight: 700;
   }
 
-  /* Smooth globals: gentle transitions on interactive elements */
+  /* The Signature Nexus Headline Rule */
+  h1, .nx-h1 {
+    font-family: var(--f-head);
+    font-size: clamp(42px, 6vw, 76px);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    color: var(--foreground);
+  }
+  h1 strong, .nx-h1 strong {
+    font-weight: 800;
+    color: color-mix(in oklab, var(--foreground) 90%, var(--banana));
+  }
+
+  h2, .nx-h2 {
+    font-family: var(--f-head);
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--foreground);
+  }
+
+  h3, h4, .font-display {
+    font-family: var(--f-head);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  /* Small uppercase eyebrow labels */
+  .nx-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
   a, button, input, select, textarea {
     transition:
       color 200ms ease,
@@ -170,7 +204,7 @@
    THE LUXURY CTA GLOW UTILITY
 ═══════════════════════════════════════════════════ */
 .cta-glow {
-  background: linear-gradient(135deg, oklch(0.82 0.12 85), var(--banana));
+  background: linear-gradient(135deg, var(--gold-bright), var(--banana));
   color: var(--banana-foreground) !important;
   font-weight: 600;
   border: 1px solid color-mix(in oklab, var(--banana) 30%, transparent);
@@ -186,4 +220,102 @@
     0 0 0 1px color-mix(in oklab, var(--banana) 45%, transparent),
     0 12px 24px -4px color-mix(in oklab, var(--banana) 40%, transparent),
     0 4px 8px -2px color-mix(in oklab, var(--banana) 20%, transparent);
+}
+
+/* ═══════════════════════════════════════════════════
+   NEXUS-POLISHED COMPONENT MODULES
+═══════════════════════════════════════════════════ */
+
+.nx-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+}
+.nx-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--banana), transparent);
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.nx-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 30px -10px var(--gold-glow-tight),
+    0 4px 12px -4px var(--gold-glow-mid),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.nx-card:hover::before { opacity: 1; }
+
+.nx-video-wrapper {
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid color-mix(in oklab, var(--banana) 25%, transparent);
+  box-shadow:
+    0 12px 36px -8px var(--gold-glow-tight),
+    0 4px 12px -4px var(--gold-glow-mid);
+}
+
+.nx-antisell {
+  background: color-mix(in oklab, var(--bg-surface) 96%, var(--gold-pale));
+  border: 1px solid color-mix(in oklab, var(--banana) 30%, transparent);
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow:
+    0 16px 48px -12px var(--gold-glow-mid),
+    inset 0 0 40px rgba(200, 168, 75, 0.02);
+  position: relative;
+}
+.nx-antisell::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 19px;
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--banana) 25%, transparent) 0%,
+    transparent 100%
+  );
+  z-index: -1;
+}
+.nx-antisell-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 20px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.nx-hero-orb {
+  position: relative;
+}
+.nx-hero-orb::before {
+  content: '';
+  position: absolute;
+  top: -180px; left: 50%;
+  transform: translateX(-50%);
+  width: 650px; height: 650px;
+  background: radial-gradient(circle,
+    color-mix(in oklab, var(--banana) 8%, transparent) 0%,
+    color-mix(in oklab, var(--banana) 3%, transparent) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: glow-breathe 6s ease-in-out infinite;
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+  50%      { opacity: 1;   transform: translateX(-50%) scale(1.05); }
 }
