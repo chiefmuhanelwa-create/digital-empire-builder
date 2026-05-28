@@ -312,7 +312,7 @@ function ApplyPage() {
               )}
 
               {step === 1 && (
-                <Module title="Module 2 · Monetization">
+                <Module eyebrow="Module 02" title="Monetization Current State">
                   <Field label="Q4 · Current monthly income from content (ZAR)">
                     <Input
                       inputMode="numeric"
