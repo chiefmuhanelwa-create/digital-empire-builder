@@ -162,31 +162,31 @@
 
   h1, .nx-h1 {
     font-family: var(--f-head);
-    font-size: clamp(40px, 6vw, 72px);
+    font-size: clamp(32px, 6vw, 72px);
     font-weight: 700;
-    letter-spacing: -2px;
+    letter-spacing: -0.035em;
     line-height: 1.05;
-    color: #ffffff;
+    color: var(--foreground);
   }
   h1 strong, .nx-h1 strong {
     font-weight: 800;
-    color: #ffffff;
+    color: var(--nx-gold-deep);
   }
 
   h2, .nx-h2 {
     font-family: var(--f-head);
-    font-size: clamp(28px, 4vw, 48px);
+    font-size: clamp(24px, 4.2vw, 48px);
     font-weight: 700;
-    letter-spacing: -1.5px;
+    letter-spacing: -0.03em;
     line-height: 1.1;
-    color: #ffffff;
+    color: var(--foreground);
   }
 
   h3, h4 {
     font-family: var(--f-head);
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--foreground);
   }
 
   .font-display {
@@ -205,15 +205,24 @@
   .nx-label {
     font-size: 12px;
     font-weight: 600;
-    letter-spacing: 2px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--nx-blue-bright);
+    color: var(--nx-gold-deep);
   }
 
   .nx-metric {
     font-size: 13px;
     font-weight: 500;
     color: var(--text-subtle);
+  }
+
+  /* Mobile tuning */
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    .nx-card { padding: 22px; border-radius: 14px; }
+    .nx-antisell { padding: 24px; border-radius: 16px; }
+    .nx-hero-orb::before { width: 380px; height: 380px; top: -100px; }
+    .cta-glow { width: 100%; }
   }
 
   a, button, input, select, textarea {
