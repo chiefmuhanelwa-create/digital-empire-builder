@@ -87,7 +87,7 @@ function Landing() {
 
       {/* 1. HERO */}
       <section className="relative overflow-hidden nx-hero-orb">
-        <div className="mx-auto max-w-6xl px-5 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 md:pt-32 md:pb-32">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 py-8 sm:py-12 md:py-16">
           <span className="nx-status-live">
             <span className="nx-live-dot" aria-hidden /> CHKPLT Engine Activated — Cohort 01 Application Window Open
           </span>
