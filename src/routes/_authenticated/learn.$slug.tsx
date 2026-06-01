@@ -95,8 +95,18 @@ function CoursePage() {
         </div>
 
         {data.modules.length === 0 && (
-          <div className="mt-12 border border-border p-10 text-center text-muted-foreground">
-            No curriculum published yet.
+          <div className="mt-12 border border-banana/30 bg-banana/5 p-8 md:p-10">
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              Cohort 01 — Curriculum loading
+            </div>
+            <h2 className="mt-3 font-display text-2xl md:text-3xl leading-tight">
+              Your seat is confirmed. The scrolls are being finalised.
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {data.hasAccess
+                ? "We are recording the final modules and assembling your cohort materials. The moment a module goes live it will appear here, and we will email you at the address on your order. You do not need to do anything."
+                : "This program opens in cohort form. Enrolment is gated through the Stewardship Application — once you qualify and complete checkout, your portal unlocks here."}
+            </p>
           </div>
         )}
 
