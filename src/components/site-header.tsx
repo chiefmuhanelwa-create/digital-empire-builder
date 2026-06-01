@@ -179,8 +179,14 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/60">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
         <div className="font-mono tracking-[0.18em] uppercase">CHKPLT — Kingdom Contentpreneurs</div>
+        <nav className="flex flex-wrap gap-x-6 gap-y-2">
+          <Link to="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+          <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+          <Link to="/refund-policy" className="hover:text-foreground transition-colors">Refunds</Link>
+          <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
+        </nav>
         <div>© {new Date().getFullYear()} Christ Kingdom Platform. All rights reserved.</div>
       </div>
     </footer>
