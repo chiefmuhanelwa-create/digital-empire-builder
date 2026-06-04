@@ -1,65 +1,72 @@
-# Launch Readiness Audit
+# Export the full CHKPLT UI as a downloadable bundle
 
-Honest scan of code, database, and infrastructure. Grouped by severity.
+You want everything that makes the site look and function the way it does — fonts, CSS, layout, components — packaged so you can hand it off, study it, or rebuild it elsewhere. Here's what I'll deliver.
 
----
+## What you'll get
 
-## 🔴 Blockers (must fix before launch)
+A single zip at `/mnt/documents/chkplt-ui-export.zip` containing:
 
-### 1. Email domain is **drifted**
-`notify.chkplt.com` was verified previously but DNS no longer matches. **No email will send** — that breaks magic-link login, signup confirmation, order receipts, application notifications, password reset, and the queued email pipeline.
-- **Fix:** re-verify in Cloud → Emails → Manage Domains, or restore the NS records (`ns3.lovable.cloud`, `ns4.lovable.cloud`) and the TXT record at the domain registrar.
+```
+chkplt-ui-export/
+├── README.md                     ← how to open/use the bundle
+├── DESIGN-SYSTEM.md              ← all tokens, fonts, components documented
+├── pages/                        ← rendered HTML snapshot of every public route
+│   ├── index.html                ← /
+│   ├── about.html
+│   ├── products.html
+│   ├── products-90day-cohort.html
+│   ├── products-vip-tier.html
+│   ├── apply.html
+│   ├── contact.html
+│   ├── login.html
+│   ├── signup.html
+│   ├── terms.html
+│   ├── privacy.html
+│   └── refund-policy.html
+├── css/
+│   ├── styles.css                ← the full compiled Tailwind v4 + custom CSS
+│   └── tokens.css                ← isolated color/font/shadow tokens
+├── fonts/
+│   └── inter/                    ← Inter font files (woff2, all weights used)
+└── components/                   ← standalone HTML+CSS for each reusable block
+    ├── cta-button.html           ← .cta-glow gold gradient pill
+    ├── card.html                 ← .nx-card with hover lift
+    ├── antisell.html             ← .nx-antisell highlight block
+    ├── hero-orb.html             ← glowing radial hero
+    ├── live-badge.html           ← burnt-orange live pulse
+    └── premium-program.html      ← R18k/R45k phase-grid block
+```
 
-### 2. Premium Programs have zero curriculum
-`contentpreneur-90day-cohort` (R18k) and `contentpreneur-vip-tier` (R45k) are `published` and gated, but have **0 modules / 0 lessons**. The moment someone qualifies + pays, `/learn/$slug` will be empty.
-- **Fix:** either build the curriculum in admin, OR switch them to a `not_built_yet`-style placeholder until cohort 01 opens.
+## How I'll build it
 
-### 3. No-one is qualified — gate will reject everyone
-`client_stewardship_applications` has 1 row, 0 qualified. The 23-point assessment wizard either isn't routing applicants to `QUALIFIED_FOR_CORE_PROGRAM`, or no real applications have been completed. Premium checkout is effectively closed.
-- **Fix:** test the `/apply` flow end-to-end, confirm the evaluator assigns `QUALIFIED_FOR_CORE_PROGRAM` correctly, and seed/qualify at least the founder account.
+1. **Render every public route to static HTML.** Start the dev server, navigate to each route, capture the fully-rendered DOM (after React hydration) and save it as a standalone `.html` file with absolute asset paths rewritten to relative `./css/styles.css`.
 
-### 4. Project is not published
-`is_published: false`. Nothing is live yet.
+2. **Extract the compiled CSS.** Pull the Vite-built CSS bundle so you get the full Tailwind v4 output plus all custom rules from `src/styles.css` (Nexus Dark tokens, `.cta-glow`, `.nx-card`, `.nx-antisell`, `.nx-hero-orb`, live-pulse keyframes, etc.) as a single file.
 
----
+3. **Download the Inter font files locally.** The site loads Inter from Google Fonts via `<link>`. I'll fetch the actual `.woff2` files for weights 300/400/500/600/700/800/900 and rewrite the CSS `@font-face` so the bundle works offline.
 
-## 🟡 Should fix before launch
+4. **Write a DESIGN-SYSTEM.md reference.** Documents:
+   - Full color palette with hex values (cream `#FAF7F0`, gold `#C9A646`, gold-deep `#8C6F1F`, burnt-orange `#D4541F`, ink `#0A0A0A`)
+   - Font stack and weight usage (Inter display + body)
+   - Spacing, radius, shadow tokens
+   - Animation keyframes (`glow-breathe`, `card-enter`, `video-pulse`, `live-pulse`)
+   - Each `.nx-*` component with HTML example + screenshot
 
-### 5. Catalog is mostly archived
-Only **5 of 31 products are published**: `niche-clarity-workbook`, `tax-guide-content-creators`, `paids-framework`, `influencers-code-ebook`, plus the two premium programs. Everything in the original CHKPLT roadmap (PAIDS masterclass, Brand Partnership Mastery, free starter kit, rate-card calculator, newsletter signup, books) is archived. Confirm this is intentional — if launch is "lean catalog", fine; if not, republish.
+5. **Extract standalone component snippets.** Pull each reusable visual block into its own self-contained HTML file so you can paste them directly into any project.
 
-### 6. `delivery_type` field doesn't exist
-Spec calls for `lms_only | lms_plus_pdf | download_only | not_built_yet` routing on `/checkout/success`. The DB has `download_path` + LMS modules but no enum to drive the 4-way conditional. Currently fulfillment is implicit (file → download, modules → learn). Either:
-   - Add the enum + update `checkout.success.tsx` to branch on it, OR
-   - Accept the implicit logic and remove that section from the project knowledge.
+6. **Write the README** explaining the bundle layout, how to open the HTML files in a browser, and which CSS classes map to which components.
 
-### 7. VAT / tax reserve columns
-Spec calls for `vat_allocation_cents` (15%) and `tax_reserve_cents` (25%) on every transaction. Worth confirming `orders` / `audit_ledgers` actually compute and store these — if not, the "Compliance Shield" promise is marketing copy without backing logic.
+## Important caveats (please read)
 
-### 8. Paystack webhook signature
-`/api/public/paystack-webhook.ts` exists — verify it validates the `x-paystack-signature` HMAC before granting `product_grants`. A missing check = free product unlocks.
+- **Static snapshot only.** The exported HTML is visual/structural — buttons, forms, and the qualification wizard won't be wired to a backend. Interactivity that depends on React state (live form steps, auth, checkout, the `/apply` wizard) will look correct but won't function. That's inherent to any HTML/CSS export of a React app.
+- **Auth-gated pages excluded** (`/dashboard`, `/learn/*`, `/admin/*`) because they require a logged-in session to render meaningful content. If you want them, I can render them logged-out (will mostly show redirects) or you'd need to provide a test session.
+- **If you need the live, working version**, the right move is "Connect to GitHub" from the Lovable editor instead — that gives you the actual runnable source code (React + Tailwind + server functions). The static bundle is for design reference / handoff, not running the platform.
 
----
+## Technical details
 
-## 🟢 Pre-launch polish (nice-to-have)
+- Vite build output goes to `dist/`; I'll pull `dist/assets/*.css` for the compiled stylesheet.
+- DOM capture uses the browser tool against the dev preview at each route, grabs `document.documentElement.outerHTML`, then post-processes to inline any critical styles and rewrite asset URLs.
+- Font files come from `fonts.gstatic.com` via the URLs in the Google Fonts CSS response, saved into `fonts/inter/`.
+- The `.asset.json` CDN-hosted assets (if any are referenced visually) get downloaded into an `assets/` folder and rewritten to relative paths.
 
-- **Legal pages:** no `/terms`, `/privacy`, `/refund-policy` routes — Paystack and POPIA both expect these.
-- **404 + error boundaries:** confirm `__root.tsx` has `notFoundComponent` and routes with loaders have `errorComponent`.
-- **SEO:** confirm each route has unique `head()` meta + og:image (home looks good, spot-check `/products/*`).
-- **Analytics:** no tracking script detected — add before paid traffic.
-- **Turnstile:** confirm site key is wired on `/apply`, `/signup`, `/login`, `/contact`, checkout.
-- **Test the full happy path once on live:** signup → magic link → apply → qualify → checkout → Paystack → webhook → grant → `/learn`.
-
----
-
-## Recommended order
-
-1. Re-verify email domain (everything else depends on it).
-2. Decide premium program curriculum: build it or switch to placeholder.
-3. Fix the qualification routing so `/apply` actually qualifies people.
-4. Audit Paystack webhook signature verification.
-5. Add legal pages.
-6. Smoke-test the full purchase flow on a preview deploy.
-7. Publish.
-
-Want me to tackle these in order, or pick a subset?
+Approve and I'll generate the bundle.
