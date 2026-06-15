@@ -1,10 +1,93 @@
 import { createServerFn } from "@tanstack/react-start";
+import { randomUUID } from "crypto";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import {
   evaluateRecommendationTree,
   type RecommendationResult,
 } from "@/utils/evaluator";
+
+const SITE_NAME = "CHKPLT";
+const ROOT_DOMAIN = "chkplt.com";
+const SENDER_DOMAIN = "notify.chkplt.com";
+
+function qualifiedHtml(name: string): string {
+  return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#111111;color:#FAF7F0;padding:40px 32px;">
+<p style="color:#C9A84C;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Christ's Kingdom Platform</p>
+<h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">You're qualified, ${name}.</h1>
+<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">Your stewardship audit passed. Your metrics validate entry into the 20-Week Called Expert Accelerator.</p>
+<p style="font-size:16px;line-height:1.6;margin:0 0 32px;">One step left: book your 20-minute strategy call so we can confirm the right cohort start date for you.</p>
+<a href="https://${ROOT_DOMAIN}/apply" style="display:inline-block;background:#C9A84C;color:#111111;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Book Your Strategy Call</a>
+<p style="font-size:13px;color:#888;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
+<p style="font-size:11px;color:#555;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
+</div>`;
+}
+
+function downsellHtml(name: string, focusPillars: string, targetModules: string): string {
+  return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#111111;color:#FAF7F0;padding:40px 32px;">
+<p style="color:#EA580C;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Stewardship Diagnostic</p>
+<h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">Your results are in, ${name}.</h1>
+<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">You're not ready for the core programme yet — and that's not a failure. It means we caught your structural gap before you paid R18,000 for something you'd struggle to execute.</p>
+<p style="font-size:16px;line-height:1.6;margin:0 0 8px;"><strong>Your immediate priority:</strong><br>${focusPillars}</p>
+<p style="font-size:16px;line-height:1.6;margin:0 0 32px;"><strong>What to study:</strong><br>${targetModules}</p>
+<a href="https://${ROOT_DOMAIN}/products" style="display:inline-block;background:#C9A84C;color:#111111;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Get Your Foundation Resources</a>
+<p style="font-size:13px;color:#888;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
+<p style="font-size:11px;color:#555;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
+</div>`;
+}
+
+async function sendApplicationEmail(
+  applicationId: string,
+  email: string,
+  name: string,
+  recommendation: RecommendationResult,
+): Promise<void> {
+  const isQualified = recommendation.status === "QUALIFIED_FOR_CORE_PROGRAM";
+  const label = isQualified ? "qualify_qualified" : "qualify_downsell";
+  const messageId = `qualify:${applicationId}:${label}`;
+
+  const { error: claimErr } = await supabaseAdmin.from("email_send_log").insert({
+    message_id: messageId,
+    template_name: label,
+    recipient_email: email,
+    status: "pending",
+  });
+  // 23505 = unique_violation → DB trigger already claimed this slot
+  if (claimErr && (claimErr as { code?: string }).code !== "23505") {
+    console.error("[apply] failed to claim email log", claimErr);
+    return;
+  }
+  if (claimErr) return; // already claimed by trigger
+
+  const html = isQualified
+    ? qualifiedHtml(name)
+    : downsellHtml(name, recommendation.focusPillars, recommendation.targetModules);
+
+  const subject = isQualified
+    ? "You're qualified — one step left"
+    : "Your CHKPLT diagnostic results";
+
+  const text = isQualified
+    ? `You're qualified. Book your strategy call at https://${ROOT_DOMAIN}/apply`
+    : `Your results: ${recommendation.focusPillars}. Resources at https://${ROOT_DOMAIN}/products`;
+
+  await supabaseAdmin.rpc("enqueue_email", {
+    queue_name: "transactional_emails",
+    payload: {
+      run_id: randomUUID(),
+      message_id: messageId,
+      to: email,
+      from: `Ndivhuwo — ${SITE_NAME} <noreply@${ROOT_DOMAIN}>`,
+      sender_domain: SENDER_DOMAIN,
+      subject,
+      html,
+      text,
+      purpose: "transactional",
+      label,
+      queued_at: new Date().toISOString(),
+    },
+  });
+}
 
 const applicationSchema = z.object({
   email: z.string().trim().email().max(255),
@@ -84,9 +167,10 @@ export const submitApplication = createServerFn({ method: "POST" })
         throw new Error("Could not save your application. Please try again.");
       }
 
-      // TODO(brevo): dispatch nurture sequence with `vulnerability_phase_tag`
-      // as a custom contact variable once the Brevo connector + list IDs are
-      // confirmed. Intentionally not awaited to avoid blocking submit.
+      // Fire-and-forget: email send failure must never block the submit response.
+      sendApplicationEmail(row.id, data.email, data.full_name, recommendation).catch(
+        (err) => console.error("[apply] sendApplicationEmail failed", err),
+      );
 
       return { ...recommendation, applicationId: row.id };
     },
