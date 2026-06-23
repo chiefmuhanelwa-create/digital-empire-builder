@@ -25,7 +25,47 @@ export const getMyCourses = createServerFn({ method: "GET" })
       .is("revoked_at", null)
       .order("granted_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return { courses: data ?? [] };
+
+    const grants = data ?? [];
+    const productIds = grants.map((g: any) => g.product_id).filter(Boolean);
+
+    // Progress read-back: total vs completed lessons per granted product.
+    const totals: Record<string, number> = {};
+    const done: Record<string, number> = {};
+    if (productIds.length) {
+      const { data: modules } = await supabaseAdmin
+        .from("modules").select("id, product_id").in("product_id", productIds);
+      const moduleToProduct = new Map((modules ?? []).map((m: any) => [m.id, m.product_id]));
+      const moduleIds = (modules ?? []).map((m: any) => m.id);
+      if (moduleIds.length) {
+        const { data: lessons } = await supabaseAdmin
+          .from("lessons").select("id, module_id").in("module_id", moduleIds);
+        const lessonToProduct = new Map(
+          (lessons ?? []).map((l: any) => [l.id, moduleToProduct.get(l.module_id)]),
+        );
+        const { data: prog } = await supabaseAdmin
+          .from("lesson_progress").select("lesson_id").eq("user_id", userId);
+        const completed = new Set((prog ?? []).map((p: any) => p.lesson_id));
+        for (const l of lessons ?? []) {
+          const pid = lessonToProduct.get((l as any).id);
+          if (!pid) continue;
+          totals[pid] = (totals[pid] ?? 0) + 1;
+          if (completed.has((l as any).id)) done[pid] = (done[pid] ?? 0) + 1;
+        }
+      }
+    }
+
+    const courses = grants.map((g: any) => {
+      const total = totals[g.product_id] ?? 0;
+      const completedCount = done[g.product_id] ?? 0;
+      return {
+        ...g,
+        total_lessons: total,
+        completed_lessons: completedCount,
+        percent_complete: total > 0 ? Math.round((completedCount / total) * 100) : 0,
+      };
+    });
+    return { courses };
   });
 
 export const getLessonBody = createServerFn({ method: "POST" })

@@ -8,7 +8,17 @@ Last reviewed: 2026-06-15
 
 ## 🔴 BLOCKERS (Nothing Works Until These Are Fixed)
 
-### BLOCKER-001: Email Domain Drifted
+### BLOCKER-001: Transactional Email Wiring
+**UPDATE 2026-06-21:** Provider is **Resend** (not Lovable Cloud — that was stale).
+`notify.chkplt.com` is **VERIFIED** in Resend (DNS verified via Cloudflare Jun 16,
+"ready to send emails"). DNS is NOT the blocker. Remaining = confirm the wiring:
+(1) Cloudflare Worker `tanstack-start-app` has secrets `RESEND_API_KEY` +
+`SUPABASE_AUTH_HOOK_SECRET`; (2) Supabase → Authentication → **Send Email Hook**
+is ENABLED, URL `https://chkplt.com/api/email/auth/webhook`, secret matching
+`SUPABASE_AUTH_HOOK_SECRET`; (3) live-test `/reset-password` → check Resend Logs
+for `delivered`. Sender flow: Supabase Auth → hook → `src/routes/api/email/auth/webhook.ts` → Resend.
+
+_Original (obsolete) framing below — kept for history:_
 **What's broken:** `notify.chkplt.com` DNS no longer verified in Lovable Cloud.
 
 **Impact:** ALL transactional email is broken:
@@ -25,7 +35,18 @@ Last reviewed: 2026-06-15
 5. Wait for DNS propagation (up to 48 hours)
 6. Test: trigger a magic-link login and confirm email arrives at chiefmuhanelwa@gmail.com
 
-**Status:** ❌ Not fixed
+**Code-side workaround for FIRST-ADMIN access (no email needed):**
+The DNS fix above is owner-only and manual. To get an admin account NOW without
+waiting for email, use the service-role bootstrap script — it creates a
+pre-confirmed admin and skips the broken confirmation email entirely:
+```
+bun run admin:bootstrap -- chiefmuhanelwa@gmail.com <your-password>
+```
+(reads SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY from `.env`; idempotent;
+see `scripts/bootstrap-admin.ts`). Then sign in at `/auth`. This does NOT fix
+transactional email for end-users — the DNS re-verification above is still required.
+
+**Status:** ✅ Resend domain VERIFIED (DNS done) · ⏳ confirm Supabase Send-Email hook + prod secrets, then live-test · ✅ first-admin access unblocked via `admin:bootstrap`
 
 ---
 

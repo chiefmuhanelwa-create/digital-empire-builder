@@ -4,6 +4,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { GARDENS, type Garden } from "@/lib/gardens";
 import { formatPrice } from "@/lib/gardens";
+import { useCountry } from "@/lib/currency";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -52,6 +53,7 @@ export const Route = createFileRoute("/products/garden/$garden")({
 
 function GardenPage() {
   const { garden } = Route.useParams();
+  const country = useCountry();
   if (!isGarden(garden)) throw notFound();
   const meta = GARDENS[garden];
 
@@ -109,7 +111,7 @@ function GardenPage() {
               </div>
               <div className="mt-8 flex items-end justify-between">
                 <div className="font-mono text-sm text-foreground">
-                  {formatPrice(p.price_cents, p.currency, p.is_free)}
+                  {formatPrice(p.price_cents, p.currency, p.is_free, p.slug, country)}
                   {p.requires_application && (
                     <span className="ml-2 text-xs text-muted-foreground">/ application</span>
                   )}

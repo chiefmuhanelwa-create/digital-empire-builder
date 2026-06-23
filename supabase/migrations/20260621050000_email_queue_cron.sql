@@ -1,0 +1,38 @@
+-- Email queue drainer — DOCUMENTATION ONLY (intentionally inert).
+--
+-- The live cron job `drain-email-queue` is created MANUALLY in the Supabase SQL
+-- Editor, because it needs the real service-role key in its Authorization header
+-- and we don't commit secrets. This file is therefore a no-op so that a future
+-- `supabase db push` does NOT reschedule the job with a placeholder/Vault key and
+-- break the working one.
+--
+-- Root cause history (2026-06-21): ALL transactional email (auth hook, /apply,
+-- order receipts) enqueues into pgmq via enqueue_email(). Nothing drained the
+-- queue, so zero email sent store-wide. The processor at
+-- POST /api/email/queue/process requires Authorization: Bearer <service_role_key>
+-- and must use the LEGACY service_role JWT (eyJ...), NOT the new sb_secret_ key —
+-- the Worker validates against the legacy JWT and 403s anything else.
+--
+-- To (re)create the cron after a DB reset, run this in the SQL Editor with the
+-- LEGACY service_role JWT (same value as SUPABASE_SERVICE_ROLE_KEY in .env):
+--
+--   create extension if not exists pg_cron;
+--   create extension if not exists pg_net;
+--   do $$ begin
+--     if exists (select 1 from cron.job where jobname='drain-email-queue')
+--     then perform cron.unschedule('drain-email-queue'); end if;
+--   end $$;
+--   select cron.schedule('drain-email-queue','* * * * *', $job$
+--     select net.http_post(
+--       url := 'https://chkplt.com/api/email/queue/process',
+--       headers := jsonb_build_object(
+--         'Content-Type','application/json',
+--         'Authorization','Bearer <LEGACY_SERVICE_ROLE_JWT>'
+--       ),
+--       body := '{}'::jsonb
+--     );
+--   $job$);
+--
+-- Verify:  select jobname, schedule, active from cron.job where jobname='drain-email-queue';
+
+select 1;  -- no-op

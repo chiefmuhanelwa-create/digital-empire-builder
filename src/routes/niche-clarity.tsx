@@ -23,13 +23,13 @@ const SLUG = "niche-clarity-workbook";
 export const Route = createFileRoute("/niche-clarity")({
   head: () => ({
     meta: [
-      { title: "Niche Clarity Workbook — R299 — Christ Kingdom Platform" },
+      { title: "Niche Clarity Workbook — $16 — Christ Kingdom Platform" },
       {
         name: "description",
         content:
-          "Stop guessing what to post. In a single afternoon, lock in the one niche that fits your story, your skills, and your calling — for R299.",
+          "Stop guessing what to post. In a single afternoon, lock in the one niche that fits your story, your skills, and your calling — for $16.",
       },
-      { property: "og:title", content: "Niche Clarity Workbook — R299" },
+      { property: "og:title", content: "Niche Clarity Workbook — $16" },
       {
         property: "og:description",
         content:
@@ -56,7 +56,7 @@ function NicheClarityPage() {
 
   const priceLabel = product
     ? formatPrice(product.price_cents, product.currency, product.is_free)
-    : "R299";
+    : "$16";
 
   return (
     <div className="min-h-screen bg-background text-foreground">

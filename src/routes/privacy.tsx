@@ -79,8 +79,7 @@ function PrivacyPage() {
             <strong>Paystack</strong> — payment processing.
           </li>
           <li>
-            <strong>Lovable Cloud</strong> — hosting, database, email
-            infrastructure.
+            <strong>CHKPLT infrastructure</strong> — Cloudflare Workers (hosting), Supabase (database), Resend (email).
           </li>
           <li>
             <strong>Cloudflare Turnstile</strong> — bot protection on forms.

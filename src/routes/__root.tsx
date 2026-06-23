@@ -8,9 +8,39 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 
+import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
+import { captureUtm } from "@/lib/utm";
+import { CurrencyProvider } from "@/lib/currency";
+
+const FB_PIXEL_ID = import.meta.env.VITE_FB_PIXEL_ID as string | undefined;
+const GA_ID = import.meta.env.VITE_GA_ID as string | undefined;
+
+function TrackingScripts() {
+  return (
+    <>
+      {FB_PIXEL_ID && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${FB_PIXEL_ID}');fbq('track','PageView');`,
+          }}
+        />
+      )}
+      {GA_ID && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`,
+            }}
+          />
+        </>
+      )}
+    </>
+  );
+}
 
 function NotFoundComponent() {
   return (
@@ -75,7 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head><HeadContent /></head>
+      <head><HeadContent /><TrackingScripts /></head>
       <body>{children}<Scripts /></body>
     </html>
   );
@@ -83,11 +113,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => {
+    captureUtm();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
-        <Toaster />
+        <CurrencyProvider>
+          <Outlet />
+          <Toaster />
+        </CurrencyProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

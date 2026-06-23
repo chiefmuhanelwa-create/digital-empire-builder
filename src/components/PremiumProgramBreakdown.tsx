@@ -19,7 +19,7 @@ const PRO_COHORT_PHASES: Phase[] = [
       },
       {
         title: "Authority Studio Setup",
-        body: "Personalized recording kit recommendations tailored to your exact budget — from R500 setups to premium gear environments.",
+        body: "Personalized recording kit recommendations tailored to your exact budget — from $30 starter setups to premium gear environments.",
       },
       {
         title: "Private 1:1 Strategy Session (30 min)",
@@ -50,7 +50,7 @@ const PRO_COHORT_PHASES: Phase[] = [
       },
       {
         title: "Editor Hiring & Standards SOPs",
-        body: "Replicable SOPs to self-edit in CapCut or hire local video editors for R500–R2,000/month.",
+        body: "Replicable SOPs to self-edit in CapCut or hire local video editors for $30–$110/month.",
       },
       {
         title: "The Sunday Batch-Shooting System",
@@ -193,7 +193,7 @@ export function ProCohortBreakdown() {
       <dl className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-px bg-border border border-border">
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Investment</dt>
-          <dd className="mt-2 text-sm">R18,000 once-off <span className="text-banana">(save R9,000)</span> · or 2× R10,000, 30 days apart</dd>
+          <dd className="mt-2 text-sm">$970 once-off <span className="text-banana">(save $485)</span> · or 2× $540, 30 days apart · billed in ZAR</dd>
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Capacity</dt>
@@ -224,7 +224,7 @@ export function VipTierBreakdown() {
       <dl className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-px bg-border border border-border">
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Investment</dt>
-          <dd className="mt-2 text-sm">R45,000 once-off.</dd>
+          <dd className="mt-2 text-sm">$2,430 once-off · billed in ZAR.</dd>
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Capacity</dt>

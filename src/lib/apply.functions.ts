@@ -6,6 +6,7 @@ import {
   evaluateRecommendationTree,
   type RecommendationResult,
 } from "@/utils/evaluator";
+import { addToMailerLiteGroup } from "@/lib/mailerlite";
 
 const SITE_NAME = "CHKPLT";
 const ROOT_DOMAIN = "chkplt.com";
@@ -27,7 +28,7 @@ function downsellHtml(name: string, focusPillars: string, targetModules: string)
   return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#111111;color:#FAF7F0;padding:40px 32px;">
 <p style="color:#EA580C;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Stewardship Diagnostic</p>
 <h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">Your results are in, ${name}.</h1>
-<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">You're not ready for the core programme yet — and that's not a failure. It means we caught your structural gap before you paid R18,000 for something you'd struggle to execute.</p>
+<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">You're not ready for the core programme yet — and that's not a failure. It means we caught your structural gap before you paid $970 for something you'd struggle to execute.</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 8px;"><strong>Your immediate priority:</strong><br>${focusPillars}</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 32px;"><strong>What to study:</strong><br>${targetModules}</p>
 <a href="https://${ROOT_DOMAIN}/products" style="display:inline-block;background:#C9A84C;color:#111111;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Get Your Foundation Resources</a>
@@ -77,7 +78,7 @@ async function sendApplicationEmail(
       run_id: randomUUID(),
       message_id: messageId,
       to: email,
-      from: `Ndivhuwo — ${SITE_NAME} <noreply@${ROOT_DOMAIN}>`,
+      from: `Ndivhuwo — ${SITE_NAME} <noreply@${SENDER_DOMAIN}>`,
       sender_domain: SENDER_DOMAIN,
       subject,
       html,
@@ -170,6 +171,16 @@ export const submitApplication = createServerFn({ method: "POST" })
       // Fire-and-forget: email send failure must never block the submit response.
       sendApplicationEmail(row.id, data.email, data.full_name, recommendation).catch(
         (err) => console.error("[apply] sendApplicationEmail failed", err),
+      );
+
+      // Sync applicant to MailerLite — qualified → Called Expert group, else → Knowledge Audit nurture.
+      const nameParts = data.full_name.trim().split(/\s+/);
+      void addToMailerLiteGroup(
+        data.email,
+        recommendation.status === "QUALIFIED_FOR_CORE_PROGRAM"
+          ? process.env.MAILERLITE_GROUP_ID_CALLED_EXPERT
+          : process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,
+        { first_name: nameParts[0], last_name: nameParts.slice(1).join(" ") || null },
       );
 
       return { ...recommendation, applicationId: row.id };

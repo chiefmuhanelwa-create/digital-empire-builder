@@ -1,14 +1,24 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, useRef } from "react";
 import Papa from "papaparse";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { importContactsBatch } from "@/lib/contacts-import.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/import-contacts")({
   head: () => ({ meta: [{ title: "Import Contacts — Admin" }] }),
+  beforeLoad: async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) throw redirect({ to: "/login" });
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: u.user.id,
+      _role: "admin",
+    });
+    if (!isAdmin) throw redirect({ to: "/dashboard" });
+  },
   component: ImportContacts,
 });
 

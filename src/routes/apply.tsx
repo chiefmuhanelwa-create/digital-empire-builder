@@ -1,15 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, ArrowLeft, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -17,689 +14,702 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TurnstileGate } from "@/components/TurnstileGate";
 
-import { submitApplication, type ApplicationInput } from "@/lib/apply.functions";
+import { submitApplication } from "@/lib/apply.functions";
 import type { RecommendationResult } from "@/utils/evaluator";
 
 export const Route = createFileRoute("/apply")({
   head: () => ({
     meta: [
-      { title: "Audit Your Creative Equation — CHKPLT Cohort 01" },
+      { title: "Apply — 90-Day Called Expert Accelerator PRO | CHKPLT" },
       {
         name: "description",
         content:
-          "A 23-question diagnostic that maps your creator operation against the 7-stage CHKPLT system and routes you to the right next step.",
-      },
-      { property: "og:title", content: "Audit Your Creative Equation — CHKPLT Cohort 01" },
-      {
-        property: "og:description",
-        content:
-          "Find your structural bottleneck in under 4 minutes. Then get a tailored Kingdom-business plan.",
+          "Apply for the 90-Day Called Expert Accelerator PRO. 4 minutes. We review within 24 hours.",
       },
     ],
   }),
   component: ApplyPage,
 });
 
-type FormState = Partial<ApplicationInput> & {
-  dont_know_engagement?: boolean;
+const TOTAL_STEPS = 4;
+
+const STEPS = [
+  { num: "01", label: "Who You Are" },
+  { num: "02", label: "Expertise & Income" },
+  { num: "03", label: "Your Owned Assets" },
+  { num: "04", label: "Readiness & Mindset" },
+];
+
+const GOLD_GLOW = {
+  boxShadow: "0 0 24px rgba(201,168,76,0.55), 0 0 56px rgba(201,168,76,0.25)",
+} as const;
+
+const FOLLOWER_MAP: Record<string, number> = {
+  "0": 0,
+  "1-500": 250,
+  "500-2000": 1250,
+  "2000-10000": 6000,
+  "10000-50000": 30000,
+  "50000+": 75000,
 };
 
-const TOTAL_STEPS = 5;
-
-const PRIMARY_E_OPTIONS = ["Entertain", "Educate", "Encourage", "Earn"] as const;
-
-const initialState: FormState = {
-  email: "",
-  full_name: "",
-  total_followers: undefined,
-  engagement_rate: undefined,
-  dont_know_engagement: false,
-  posts_consistently_4x: undefined,
-  monthly_income_value: undefined,
-  income_streams_count: 1,
-  largest_stream_percentage: undefined,
-  has_products_for_sale: undefined,
-  product_sales_last_month: 0,
-  owns_email_list: undefined,
-  email_subscribers_count: 0,
-  has_private_community: undefined,
-  community_members_count: 0,
-  email_open_rate: undefined,
-  has_automated_funnels: undefined,
-  uses_email_marketing_software: undefined,
-  batches_content: undefined,
-  runs_without_owner_1_week: undefined,
-  has_documented_sops: undefined,
-  has_clear_niche: undefined,
-  has_done_swot: undefined,
-  primary_e: undefined,
-  abundance_mindset: undefined,
-  building_horizon: undefined,
+const INCOME_MAP: Record<string, number> = {
+  "under-10": 9000,
+  "10-30": 20000,
+  "30-70": 50000,
+  "70-150": 110000,
+  "150+": 200000,
 };
 
-function ApplyPage() {
-  const submit = useServerFn(submitApplication);
-  const [step, setStep] = useState(0);
-  const [state, setState] = useState<FormState>(initialState);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<RecommendationResult | null>(null);
+const STREAM_MAP: Record<string, number> = {
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5+": 5,
+};
 
-  const progress = useMemo(
-    () => ((result ? TOTAL_STEPS + 1 : step + 1) / (TOTAL_STEPS + 1)) * 100,
-    [step, result],
-  );
+const DOMINANCE_MAP: Record<string, number> = {
+  "90-100": 95,
+  "70-89": 80,
+  "50-69": 60,
+  "under-50": 40,
+};
 
-  const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
-    setState((s) => ({ ...s, [key]: value }));
-
-  const validateStep = (): string | null => {
-    if (step === 0) {
-      if (!state.full_name?.trim()) return "Please share your full name.";
-      if (!state.email?.trim()) return "Please share an email we can reach you on.";
-      if (state.total_followers == null || Number.isNaN(state.total_followers))
-        return "Combined follower count is required.";
-      if (!state.dont_know_engagement && (state.engagement_rate == null || Number.isNaN(state.engagement_rate)))
-        return "Engagement rate is required (or tick the box).";
-      if (state.posts_consistently_4x == null)
-        return "Tell us whether you post 4+ times per week.";
-    }
-    if (step === 1) {
-      if (state.monthly_income_value == null) return "Monthly income is required.";
-      if (state.income_streams_count == null) return "Income streams is required.";
-      if (state.largest_stream_percentage == null)
-        return "Largest stream % is required.";
-      if (state.has_products_for_sale == null)
-        return "Tell us whether you have products for sale.";
-      if (state.has_products_for_sale && state.product_sales_last_month == null)
-        return "Enter how many sales you made last month.";
-    }
-    if (step === 2) {
-      if (state.owns_email_list == null) return "Email list status is required.";
-      if (state.owns_email_list && state.email_subscribers_count == null)
-        return "Subscriber count is required.";
-      if (state.has_private_community == null)
-        return "Community status is required.";
-      if (state.has_private_community && state.community_members_count == null)
-        return "Community member count is required.";
-      if (state.email_open_rate == null) return "Email open rate is required.";
-    }
-    if (step === 3) {
-      const required: Array<keyof FormState> = [
-        "has_automated_funnels",
-        "uses_email_marketing_software",
-        "batches_content",
-        "runs_without_owner_1_week",
-        "has_documented_sops",
-      ];
-      if (required.some((k) => state[k] == null))
-        return "Please answer every systems question.";
-    }
-    if (step === 4) {
-      if (state.has_clear_niche == null) return "Niche question is required.";
-      if (state.has_done_swot == null) return "SWOT question is required.";
-      if (!state.primary_e) return "Pick your primary E.";
-      if (state.abundance_mindset == null)
-        return "Abundance mindset is required.";
-      if (!state.building_horizon) return "Pick your building horizon.";
-    }
-    return null;
-  };
-
-  const next = () => {
-    const v = validateStep();
-    if (v) {
-      setError(v);
-      return;
-    }
-    setError(null);
-    setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1));
-  };
-
-  const back = () => {
-    setError(null);
-    setStep((s) => Math.max(s - 1, 0));
-  };
-
-  const handleSubmit = async () => {
-    const v = validateStep();
-    if (v) {
-      setError(v);
-      return;
-    }
-    setError(null);
-    setSubmitting(true);
-    try {
-      const payload: ApplicationInput = {
-        email: state.email!,
-        full_name: state.full_name!,
-        total_followers: Number(state.total_followers),
-        engagement_rate: state.dont_know_engagement
-          ? null
-          : Number(state.engagement_rate),
-        posts_consistently_4x: state.posts_consistently_4x!,
-        monthly_income_value: Number(state.monthly_income_value),
-        income_streams_count: Number(state.income_streams_count),
-        largest_stream_percentage: Number(state.largest_stream_percentage),
-        has_products_for_sale: state.has_products_for_sale!,
-        product_sales_last_month: Number(state.product_sales_last_month ?? 0),
-        owns_email_list: state.owns_email_list!,
-        email_subscribers_count: Number(state.email_subscribers_count ?? 0),
-        has_private_community: state.has_private_community!,
-        community_members_count: Number(state.community_members_count ?? 0),
-        email_open_rate: Number(state.email_open_rate),
-        has_automated_funnels: state.has_automated_funnels!,
-        uses_email_marketing_software: state.uses_email_marketing_software!,
-        batches_content: state.batches_content!,
-        runs_without_owner_1_week: state.runs_without_owner_1_week!,
-        has_documented_sops: state.has_documented_sops!,
-        has_clear_niche: state.has_clear_niche!,
-        has_done_swot: state.has_done_swot!,
-        primary_e: state.primary_e!,
-        abundance_mindset: state.abundance_mindset!,
-        building_horizon: state.building_horizon!,
-      };
-      const res = await submit({ data: payload });
-      setResult(res);
-      if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch (err) {
-      console.error(err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Submission failed. Please try again in a moment.",
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <SiteHeader />
-
-      <section className="border-b border-border/60 nx-hero-orb">
-        <div className="mx-auto max-w-3xl px-5 sm:px-6 pt-12 pb-8 sm:pt-16">
-          <span className="nx-status-live">
-            <span className="nx-live-dot" aria-hidden /> Stewardship Assessment — Cohort 01
-          </span>
-          <h1 className="mt-5 font-display text-3xl sm:text-4xl md:text-5xl tracking-tight">
-            Audit your{" "}
-            <em className="text-banana not-italic">creative equation.</em>
-          </h1>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-            Twenty-three diagnostic questions. We map your operation against the
-            7-stage CHKPLT system and route you to the right next step.
-          </p>
-        </div>
-      </section>
-
-      <section>
-        <div className="mx-auto max-w-2xl px-5 sm:px-6 py-10 sm:py-14 pb-32 sm:pb-14">
-          {!result && (
-            <div className="mb-8">
-              <div className="flex items-center justify-between text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground">
-                <span>Stewardship Module {step + 1} / {TOTAL_STEPS}</span>
-                <span>{Math.round(progress)}% Complete</span>
-              </div>
-              <Progress value={progress} className="mt-3 h-1.5 [&>div]:bg-banana" />
-            </div>
-          )}
-
-          {!result && (
-            <div className="nx-card p-5 sm:p-6">
-              {step === 0 && (
-                <Module eyebrow="Module 01" title="Follower Count & Engagement">
-                  <Field label="Your full name">
-                    <Input
-                      value={state.full_name ?? ""}
-                      onChange={(e) => set("full_name", e.target.value)}
-                      placeholder="Jane Doe"
-                    />
-                  </Field>
-                  <Field label="Email we can reach you on">
-                    <Input
-                      type="email"
-                      value={state.email ?? ""}
-                      onChange={(e) => set("email", e.target.value)}
-                      placeholder="you@domain.com"
-                    />
-                  </Field>
-                  <Field label="Q1 · Total followers across all platforms">
-                    <Input
-                      inputMode="numeric"
-                      value={state.total_followers ?? ""}
-                      onChange={(e) =>
-                        set(
-                          "total_followers",
-                          e.target.value === "" ? undefined : Number(e.target.value),
-                        )
-                      }
-                      placeholder="e.g. 12500"
-                    />
-                  </Field>
-                  <Field label="Q2 · Average engagement rate (%)">
-                    <Input
-                      inputMode="decimal"
-                      value={state.engagement_rate ?? ""}
-                      disabled={!!state.dont_know_engagement}
-                      onChange={(e) =>
-                        set(
-                          "engagement_rate",
-                          e.target.value === "" ? undefined : Number(e.target.value),
-                        )
-                      }
-                      placeholder="e.g. 4"
-                    />
-                    <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground cursor-pointer min-h-[48px] py-2">
-                      <Checkbox
-                        checked={!!state.dont_know_engagement}
-                        onCheckedChange={(c) => {
-                          set("dont_know_engagement", c === true);
-                          if (c === true) set("engagement_rate", undefined);
-                        }}
-                      />
-                      I don't know my engagement rate
-                    </label>
-                  </Field>
-                  <YesNo
-                    label="Q3 · Do you post consistently (4+ times/week)?"
-                    value={state.posts_consistently_4x}
-                    onChange={(v) => set("posts_consistently_4x", v)}
-                  />
-                </Module>
-              )}
-
-              {step === 1 && (
-                <Module eyebrow="Module 02" title="Monetization Current State">
-                  <Field label="Q4 · Current monthly income from content (ZAR)">
-                    <Input
-                      inputMode="numeric"
-                      value={state.monthly_income_value ?? ""}
-                      onChange={(e) =>
-                        set(
-                          "monthly_income_value",
-                          e.target.value === "" ? undefined : Number(e.target.value),
-                        )
-                      }
-                      placeholder="e.g. 8500"
-                    />
-                  </Field>
-                  <Field label="Q5 · How many income streams do you have?">
-                    <Select
-                      value={state.income_streams_count?.toString()}
-                      onValueChange={(v) => set("income_streams_count", Number(v))}
-                    >
-                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                      <SelectContent>
-                        {[1, 2, 3, 4, 5].map((n) => (
-                          <SelectItem key={n} value={n.toString()}>
-                            {n === 5 ? "5+" : n.toString()}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label="Q6 · What % comes from your largest stream?">
-                    <Input
-                      inputMode="numeric"
-                      value={state.largest_stream_percentage ?? ""}
-                      onChange={(e) =>
-                        set(
-                          "largest_stream_percentage",
-                          e.target.value === "" ? undefined : Number(e.target.value),
-                        )
-                      }
-                      placeholder="e.g. 60"
-                    />
-                  </Field>
-                  <YesNo
-                    label="Q7 · Do you have products or services for sale?"
-                    value={state.has_products_for_sale}
-                    onChange={(v) => set("has_products_for_sale", v)}
-                  />
-                  {state.has_products_for_sale && (
-                    <Field label="Q8 · How many sales did you make last month?">
-                      <Input
-                        inputMode="numeric"
-                        value={state.product_sales_last_month ?? ""}
-                        onChange={(e) =>
-                          set(
-                            "product_sales_last_month",
-                            e.target.value === "" ? undefined : Number(e.target.value),
-                          )
-                        }
-                        placeholder="e.g. 12"
-                      />
-                    </Field>
-                  )}
-                </Module>
-              )}
-
-              {step === 2 && (
-                <Module eyebrow="Module 03" title="Audience Ownership & Data Control">
-                  <YesNo
-                    label="Q9 · Do you have an email list?"
-                    value={state.owns_email_list}
-                    onChange={(v) => set("owns_email_list", v)}
-                  />
-                  {state.owns_email_list && (
-                    <Field label="Q10 · How many email subscribers?">
-                      <Input
-                        inputMode="numeric"
-                        value={state.email_subscribers_count ?? ""}
-                        onChange={(e) =>
-                          set(
-                            "email_subscribers_count",
-                            e.target.value === "" ? undefined : Number(e.target.value),
-                          )
-                        }
-                        placeholder="e.g. 250"
-                      />
-                    </Field>
-                  )}
-                  <YesNo
-                    label="Q11 · Do you have a private community?"
-                    value={state.has_private_community}
-                    onChange={(v) => set("has_private_community", v)}
-                  />
-                  {state.has_private_community && (
-                    <Field label="Q12 · How many active members?">
-                      <Input
-                        inputMode="numeric"
-                        value={state.community_members_count ?? ""}
-                        onChange={(e) =>
-                          set(
-                            "community_members_count",
-                            e.target.value === "" ? undefined : Number(e.target.value),
-                          )
-                        }
-                        placeholder="e.g. 80"
-                      />
-                    </Field>
-                  )}
-                  <Field label="Q13 · Email open rate (%)">
-                    <Input
-                      inputMode="numeric"
-                      value={state.email_open_rate ?? ""}
-                      onChange={(e) =>
-                        set(
-                          "email_open_rate",
-                          e.target.value === "" ? undefined : Number(e.target.value),
-                        )
-                      }
-                      placeholder="e.g. 35"
-                    />
-                  </Field>
-                </Module>
-              )}
-
-              {step === 3 && (
-                <Module eyebrow="Module 04" title="Business Systems">
-                  <YesNo label="Q14 · Do you have automated sales funnels?" value={state.has_automated_funnels} onChange={(v) => set("has_automated_funnels", v)} />
-                  <YesNo label="Q15 · Do you use email marketing software?" value={state.uses_email_marketing_software} onChange={(v) => set("uses_email_marketing_software", v)} />
-                  <YesNo label="Q16 · Do you batch-create content?" value={state.batches_content} onChange={(v) => set("batches_content", v)} />
-                  <YesNo label="Q17 · Can your business run without you for 1 week?" value={state.runs_without_owner_1_week} onChange={(v) => set("runs_without_owner_1_week", v)} />
-                  <YesNo label="Q18 · Do you have SOPs documented?" value={state.has_documented_sops} onChange={(v) => set("has_documented_sops", v)} />
-                </Module>
-              )}
-
-              {step === 4 && (
-                <Module eyebrow="Module 05" title="Mindset & Strategy">
-                  <YesNo label="Q19 · Do you have a clear niche?" value={state.has_clear_niche} onChange={(v) => set("has_clear_niche", v)} />
-                  <YesNo label="Q20 · Have you done a SWOT analysis?" value={state.has_done_swot} onChange={(v) => set("has_done_swot", v)} />
-                  <Field label="Q21 · What is your primary E?">
-                    <Select
-                      value={state.primary_e}
-                      onValueChange={(v) => set("primary_e", v as ApplicationInput["primary_e"])}
-                    >
-                      <SelectTrigger><SelectValue placeholder="Pick one" /></SelectTrigger>
-                      <SelectContent>
-                        {PRIMARY_E_OPTIONS.map((o) => (
-                          <SelectItem key={o} value={o}>{o}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <YesNo label="Q22 · Do you believe in abundance over scarcity?" value={state.abundance_mindset} onChange={(v) => set("abundance_mindset", v)} />
-                  <Field label="Q23 · Are you building for generations or just today?">
-                    <Select
-                      value={state.building_horizon}
-                      onValueChange={(v) => set("building_horizon", v as ApplicationInput["building_horizon"])}
-                    >
-                      <SelectTrigger><SelectValue placeholder="Pick one" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="GENERATIONS">Generations</SelectItem>
-                        <SelectItem value="TODAY">Today</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                </Module>
-              )}
-
-              {error && (
-                <div className="mt-6 flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
-                  <AlertTriangle className="size-4 mt-0.5 shrink-0" />
-                  <span>{error}</span>
-                </div>
-              )}
-
-              <div className="mt-8 fixed bottom-0 left-0 right-0 z-30 flex flex-row gap-3 justify-between border-t border-border bg-background/85 backdrop-blur-md p-4 sm:static sm:border-0 sm:bg-transparent sm:backdrop-blur-none sm:p-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={back}
-                  disabled={step === 0 || submitting}
-                  className="flex-1 sm:flex-none sm:w-auto min-h-[48px]"
-                >
-                  <ArrowLeft /> Back
-                </Button>
-                {step < TOTAL_STEPS - 1 ? (
-                  <Button type="button" onClick={next} className="cta-glow flex-1 sm:flex-none sm:w-auto min-h-[48px]">
-                    Continue <ArrowRight />
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={submitting}
-                    className="cta-glow flex-1 sm:flex-none sm:w-auto min-h-[48px]"
-                  >
-                    {submitting ? <><Loader2 className="animate-spin" /> Submitting…</> : <>Submit assessment <ArrowRight /></>}
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {result && (
-            <ResultPanel
-              result={result}
-              engagementUnknown={!!state.dont_know_engagement}
-            />
-          )}
-        </div>
-      </section>
-
-      <SiteFooter />
-    </div>
-  );
+interface Fields {
+  full_name: string;
+  email: string;
+  followers: string;
+  posts_content: "" | "yes" | "no";
+  income_range: string;
+  income_streams: string;
+  income_dominance: string;
+  has_products: "" | "yes" | "no";
+  product_sales: string;
+  has_email_list: "" | "yes" | "no";
+  subscribers: string;
+  has_community: "" | "yes" | "no";
+  community_members: string;
+  uses_email_tools: "" | "yes" | "no";
+  can_commit_hours: "" | "yes" | "no";
+  has_clear_niche: "" | "yes" | "no";
+  has_done_swot: "" | "yes" | "no";
+  primary_e: "" | "Educate" | "Entertain" | "Encourage" | "Earn";
+  expertise_worth_more: "" | "yes" | "no";
+  building_for: "" | "GENERATIONS" | "TODAY";
 }
 
-function Module({
-  eyebrow,
-  title,
-  children,
+const INITIAL: Fields = {
+  full_name: "",
+  email: "",
+  followers: "",
+  posts_content: "",
+  income_range: "",
+  income_streams: "",
+  income_dominance: "",
+  has_products: "",
+  product_sales: "0",
+  has_email_list: "",
+  subscribers: "0",
+  has_community: "",
+  community_members: "0",
+  uses_email_tools: "",
+  can_commit_hours: "",
+  has_clear_niche: "",
+  has_done_swot: "",
+  primary_e: "",
+  expertise_worth_more: "",
+  building_for: "",
+};
+
+function YesNo({
+  value,
+  onChange,
+  yesLabel = "Yes",
+  noLabel = "No",
 }: {
-  eyebrow: string;
-  title: string;
-  children: React.ReactNode;
+  value: "" | "yes" | "no";
+  onChange: (v: "yes" | "no") => void;
+  yesLabel?: string;
+  noLabel?: string;
 }) {
   return (
-    <div>
-      <div className="border-b border-border/60 pb-3">
-        <span className="nx-label text-[#EA580C] text-[10px] block mb-1">{eyebrow}</span>
-        <h3 className="text-xl font-bold tracking-tight">{title}</h3>
-      </div>
-      <div className="mt-6 space-y-4">{children}</div>
+    <div className="flex gap-3">
+      {(["yes", "no"] as const).map((opt) => (
+        <button
+          key={opt}
+          type="button"
+          onClick={() => onChange(opt)}
+          className={`flex-1 py-3 px-4 border font-display font-bold uppercase text-sm tracking-wide transition-all ${
+            value === opt
+              ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
+              : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C] hover:text-[#1C1C1C]"
+          }`}
+        >
+          {opt === "yes" ? yesLabel : noLabel}
+        </button>
+      ))}
     </div>
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function FieldRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <Label className="text-sm font-medium">{label}</Label>
+      <Label className="font-display text-[#1C1C1C] text-sm font-bold leading-snug">{label}</Label>
       {children}
     </div>
   );
 }
 
-function YesNo({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: boolean | undefined;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <div className="space-y-2">
-      <Label className="text-sm font-medium">{label}</Label>
-      <RadioGroup
-        value={value === undefined ? "" : value ? "yes" : "no"}
-        onValueChange={(v) => onChange(v === "yes")}
-        className="flex gap-3"
-      >
-        {[
-          { v: "yes", l: "Yes" },
-          { v: "no", l: "No" },
-        ].map((o) => (
-          <label
-            key={o.v}
-            className={
-              "flex flex-1 items-center justify-center gap-2 rounded-md border px-4 py-3.5 min-h-[48px] text-sm font-medium cursor-pointer transition " +
-              ((value === true && o.v === "yes") || (value === false && o.v === "no")
-                ? "border-banana bg-banana/10 text-foreground"
-                : "border-border hover:border-banana/60")
-            }
-          >
-            <RadioGroupItem value={o.v} className="sr-only" />
-            {o.l}
-          </label>
-        ))}
-      </RadioGroup>
-    </div>
-  );
-}
+function ApplyPage() {
+  const submit = useServerFn(submitApplication);
+  const [step, setStep] = useState(0);
+  const [fields, setFields] = useState<Fields>(INITIAL);
+  const [tsToken, setTsToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<(RecommendationResult & { applicationId: string }) | null>(null);
 
-const DOWNSELL: Record<RecommendationResult["vulnerabilityTag"], { title: string; body: string }> = {
-  STAGE_1_DISCOVERY: {
-    title: "Content Calendar Template Bundle & Foundation Worksheets",
-    body: "Set your baseline metrics, master consistency, and outline your complete 4E content balance platform.",
-  },
-  STAGE_2_AWARENESS: {
-    title: "Content Calendar Template Bundle & Foundation Worksheets",
-    body: "Set your baseline metrics, master consistency, and outline your complete 4E content balance platform.",
-  },
-  STAGE_3_CONSIDERATION: {
-    title: "Contentpreneur: From Memes to Millions",
-    body: "Our flagship handbook guide to establishing asset ownership and leaving platform slavery behind.",
-  },
-  STAGE_4_CONVERSION: {
-    title: "Tax For Contentpreneurs / PAIDS Tracker",
-    body: "Secure your corporate structure, compute precise deductions, and balance multi-stream risk.",
-  },
-  STAGE_5_COMMUNITY: { title: "", body: "" },
-};
+  const set = <K extends keyof Fields>(key: K, val: Fields[K]) =>
+    setFields((f) => ({ ...f, [key]: val }));
 
-function ResultPanel({
-  result,
-  engagementUnknown,
-}: {
-  result: RecommendationResult;
-  engagementUnknown: boolean;
-}) {
-  if (result.status === "QUALIFIED_FOR_CORE_PROGRAM") {
-    return (
-      <div className="nx-card relative overflow-hidden text-center !p-8">
-        <div className="absolute top-0 left-0 w-full h-[4px] bg-banana" />
-        <div className="w-16 h-16 bg-banana/10 text-banana rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle2 className="h-8 w-8" />
-        </div>
-        <h2 className="font-sans text-3xl font-bold tracking-tight mb-4 text-foreground">
-          Stewardship Audited Successfully
-        </h2>
-        <p className="text-muted-foreground text-base max-w-md mx-auto mb-8 leading-relaxed">
-          Your metrics validate entry into the 20-Week Core Curriculum. Your structural foundation balances our strict system equation parameters.
-        </p>
-        <Button asChild className="w-full sm:w-auto px-8 py-6 uppercase font-bold text-xs tracking-widest cta-glow rounded-xl">
-          <Link to="/signup">Secure Your Master Profile</Link>
-        </Button>
-      </div>
-    );
+  function canProceed(): boolean {
+    if (step === 0) {
+      return (
+        fields.full_name.trim().length >= 2 &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email) &&
+        fields.followers !== "" &&
+        fields.posts_content !== ""
+      );
+    }
+    if (step === 1) {
+      return (
+        fields.income_range !== "" &&
+        fields.income_streams !== "" &&
+        fields.income_dominance !== "" &&
+        fields.has_products !== ""
+      );
+    }
+    if (step === 2) {
+      return (
+        fields.has_email_list !== "" &&
+        fields.has_community !== "" &&
+        fields.uses_email_tools !== ""
+      );
+    }
+    if (step === 3) {
+      return (
+        fields.can_commit_hours !== "" &&
+        fields.has_clear_niche !== "" &&
+        fields.has_done_swot !== "" &&
+        fields.primary_e !== "" &&
+        fields.expertise_worth_more !== "" &&
+        fields.building_for !== "" &&
+        tsToken !== null
+      );
+    }
+    return false;
   }
 
-  const downsell = DOWNSELL[result.vulnerabilityTag];
-  const tagLabel = result.vulnerabilityTag.replace(/_/g, " ");
+  async function handleSubmit() {
+    if (!canProceed()) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await submit({
+        data: {
+          full_name: fields.full_name.trim(),
+          email: fields.email.trim().toLowerCase(),
+          total_followers: FOLLOWER_MAP[fields.followers] ?? 0,
+          engagement_rate: null,
+          posts_consistently_4x: fields.posts_content === "yes",
+          monthly_income_value: INCOME_MAP[fields.income_range] ?? 0,
+          income_streams_count: STREAM_MAP[fields.income_streams] ?? 1,
+          largest_stream_percentage: DOMINANCE_MAP[fields.income_dominance] ?? 80,
+          has_products_for_sale: fields.has_products === "yes",
+          product_sales_last_month: parseInt(fields.product_sales, 10) || 0,
+          owns_email_list: fields.has_email_list === "yes",
+          email_subscribers_count: parseInt(fields.subscribers, 10) || 0,
+          has_private_community: fields.has_community === "yes",
+          community_members_count: parseInt(fields.community_members, 10) || 0,
+          email_open_rate: 0,
+          has_automated_funnels: false,
+          uses_email_marketing_software: fields.uses_email_tools === "yes",
+          batches_content: false,
+          runs_without_owner_1_week: fields.can_commit_hours === "yes",
+          has_documented_sops: false,
+          has_clear_niche: fields.has_clear_niche === "yes",
+          has_done_swot: fields.has_done_swot === "yes",
+          primary_e: fields.primary_e as "Educate" | "Entertain" | "Encourage" | "Earn",
+          abundance_mindset: fields.expertise_worth_more === "yes",
+          building_horizon: fields.building_for as "GENERATIONS" | "TODAY",
+        },
+      });
+      setResult(res);
+    } catch (e) {
+      setError(
+        e instanceof Error ? e.message : "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const isQualified = result?.status === "QUALIFIED_FOR_CORE_PROGRAM";
 
   return (
-    <div className="space-y-6">
-      <div className="nx-card relative overflow-hidden !p-8">
-        <div className="absolute top-0 left-0 w-full h-[4px] bg-[#EA580C]" />
-        <div className="flex items-center gap-3 text-[#EA580C] mb-4">
-          <AlertTriangle className="h-5 w-5" />
-          <span className="text-xs font-bold uppercase tracking-[0.18em]">Diagnostic Evaluation</span>
+    <div className="min-h-screen bg-white">
+      <SiteHeader />
+
+      <div className="mx-auto max-w-2xl px-4 sm:px-6 pt-20 pb-24">
+
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-banana mb-3">
+            Application
+          </div>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-[#1C1C1C] leading-[1.05] tracking-tight uppercase mb-4">
+            90-Day Called Expert
+            <br /><span className="text-banana">Accelerator PRO</span>
+          </h1>
+          <p className="text-[#777] text-base leading-relaxed max-w-md mx-auto">
+            4 minutes. We review within 24 hours. No sales call pressure — just an honest qualification to make sure you're ready.
+          </p>
         </div>
-        <h2 className="font-sans text-2xl font-bold tracking-tight mb-3 text-foreground">
-          Foundational Vulnerability Detected
-        </h2>
-        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-6">
-          To protect your resources, you do not qualify for the complete 20-week
-          program until your baseline tracking structure is safe. Your primary
-          operational bottleneck occurs inside{" "}
-          <strong className="text-foreground">{tagLabel}</strong>.
-        </p>
 
-        <div className="border-t border-border/60 pt-4 space-y-2 text-sm">
-          <div className="text-muted-foreground">
-            <strong className="text-foreground">Immediate Priority Focus:</strong>{" "}
-            {result.focusPillars}
+        {/* Result state */}
+        {result ? (
+          <div
+            className="border-2 bg-white p-8 sm:p-10 text-center"
+            style={{
+              borderColor: isQualified ? "#C9A84C" : "#d0c8bc",
+              ...GOLD_GLOW,
+            }}
+          >
+            {isQualified ? (
+              <>
+                <CheckCircle2 className="size-12 text-banana mx-auto mb-4" />
+                <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-banana mb-3">
+                  YOU QUALIFY
+                </div>
+                <h2 className="font-display text-2xl sm:text-3xl text-[#1C1C1C] uppercase mb-4">
+                  You're In, {fields.full_name.split(" ")[0]}.
+                </h2>
+                <p className="text-[#555] text-base leading-relaxed mb-6 max-w-sm mx-auto">
+                  Your diagnostic passed. Check your inbox — we sent you the next steps. One more thing to do: create your account and we'll confirm your cohort start date.
+                </p>
+                <Link
+                  to="/signup"
+                  className="inline-flex items-center justify-center gap-2 bg-[#C9A84C] text-[#111] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#b8963e] transition-colors w-full max-w-xs"
+                  style={GOLD_GLOW}
+                >
+                  Create Your Account
+                  <ArrowRight className="size-4" />
+                </Link>
+                <p className="mt-4 text-[#555] text-xs">
+                  Free to create · No payment until cohort confirmation
+                </p>
+              </>
+            ) : (
+              <>
+                <XCircle className="size-12 text-banana/50 mx-auto mb-4" />
+                <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5a5a5a] mb-3">
+                  NOT YET
+                </div>
+                <h2 className="font-display text-2xl sm:text-3xl text-[#1C1C1C] uppercase mb-4">
+                  The Foundation Kit First.
+                </h2>
+                <p className="text-[#555] text-base leading-relaxed mb-6 max-w-sm mx-auto">
+                  You're not ready for the Accelerator PRO yet — and that's not a failure. It means we caught your gap before you paid $970 for something you'd struggle to execute. Start with the Foundation Kit. Build the base. Apply again in 90 days.
+                </p>
+                {result.focusPillars && (
+                  <p className="text-[#777] text-sm mb-6 max-w-xs mx-auto">
+                    <strong className="text-[#1C1C1C]">Your focus area:</strong> {result.focusPillars}
+                  </p>
+                )}
+                <Link
+                  to="/"
+                  className="inline-flex items-center justify-center gap-2 bg-[#C9A84C] text-[#111] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#b8963e] transition-colors w-full max-w-xs"
+                  style={GOLD_GLOW}
+                >
+                  Get the Foundation Kit
+                  <ArrowRight className="size-4" />
+                </Link>
+              </>
+            )}
           </div>
-          <div className="text-muted-foreground">
-            <strong className="text-foreground">Required Learning Framework:</strong>{" "}
-            {result.targetModules}
-          </div>
-
-          {engagementUnknown && (
-            <div className="mt-4 p-3 rounded-lg bg-muted/40 border border-border text-xs text-[#EA580C] leading-relaxed">
-              <strong>Optimization Notice:</strong> You indicated you don&apos;t
-              know your average engagement rate. We will address tracking this
-              baseline immediately inside your recommended package resources.
+        ) : (
+          <>
+            {/* Step indicator */}
+            <div className="flex items-center gap-0 mb-8">
+              {STEPS.map((s, i) => (
+                <div key={i} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center flex-1">
+                    <div
+                      className={`size-8 flex items-center justify-center font-mono text-xs font-bold border transition-all ${
+                        i < step
+                          ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
+                          : i === step
+                          ? "border-[#C9A84C] text-banana bg-white"
+                          : "border-[#d0c8bc] text-[#555] bg-white"
+                      }`}
+                    >
+                      {i < step ? "✓" : s.num}
+                    </div>
+                    <div
+                      className={`mt-1 font-mono text-[9px] tracking-wide uppercase hidden sm:block ${
+                        i === step ? "text-[#1C1C1C]" : "text-[#555]"
+                      }`}
+                    >
+                      {s.label}
+                    </div>
+                  </div>
+                  {i < TOTAL_STEPS - 1 && (
+                    <div
+                      className={`h-px flex-1 mx-1 transition-colors ${
+                        i < step ? "bg-[#C9A84C]" : "bg-[#d0c8bc]"
+                      }`}
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+
+            {/* Step content */}
+            <div className="border border-[#d0c8bc] bg-white p-6 sm:p-8">
+              <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana mb-1">
+                Step {step + 1} of {TOTAL_STEPS}
+              </div>
+              <h2 className="font-display text-xl sm:text-2xl text-[#1C1C1C] uppercase mb-6">
+                {STEPS[step].label}
+              </h2>
+
+              <div className="space-y-5">
+
+                {/* ── STEP 1: Who You Are ─────────────────────────────── */}
+                {step === 0 && (
+                  <>
+                    <FieldRow label="Your full name">
+                      <Input
+                        value={fields.full_name}
+                        onChange={(e) => set("full_name", e.target.value)}
+                        placeholder="Your full name"
+                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                      />
+                    </FieldRow>
+                    <FieldRow label="Your email address">
+                      <Input
+                        type="email"
+                        value={fields.email}
+                        onChange={(e) => set("email", e.target.value)}
+                        placeholder="you@domain.com"
+                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                      />
+                    </FieldRow>
+                    <FieldRow label="How many people follow you across all your platforms? (LinkedIn, Instagram, Facebook, YouTube — total)">
+                      <Select
+                        value={fields.followers}
+                        onValueChange={(v) => set("followers", v)}
+                      >
+                        <SelectTrigger className="h-12 border-[#d0c8bc] bg-white">
+                          <SelectValue placeholder="Select a range" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="0">I don't have a following yet (0)</SelectItem>
+                          <SelectItem value="1-500">1 – 500 followers</SelectItem>
+                          <SelectItem value="500-2000">500 – 2,000 followers</SelectItem>
+                          <SelectItem value="2000-10000">2,000 – 10,000 followers</SelectItem>
+                          <SelectItem value="10000-50000">10,000 – 50,000 followers</SelectItem>
+                          <SelectItem value="50000+">50,000+ followers</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FieldRow>
+                    <FieldRow label="Do you currently post or share content about your expertise — even occasionally?">
+                      <YesNo
+                        value={fields.posts_content}
+                        onChange={(v) => set("posts_content", v)}
+                        yesLabel="Yes, I post"
+                        noLabel="Not yet"
+                      />
+                    </FieldRow>
+                  </>
+                )}
+
+                {/* ── STEP 2: Expertise & Income ──────────────────────── */}
+                {step === 1 && (
+                  <>
+                    <FieldRow label="What is your approximate monthly income from your professional work? (salary, freelance, consulting, business — combined)">
+                      <Select
+                        value={fields.income_range}
+                        onValueChange={(v) => set("income_range", v)}
+                      >
+                        <SelectTrigger className="h-12 border-[#d0c8bc] bg-white">
+                          <SelectValue placeholder="Select a range" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="under-10">Under $500/month</SelectItem>
+                          <SelectItem value="10-30">$500 – $1,500/month</SelectItem>
+                          <SelectItem value="30-70">$1,500 – $4,000/month</SelectItem>
+                          <SelectItem value="70-150">$4,000 – $8,000/month</SelectItem>
+                          <SelectItem value="150+">$8,000+/month</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FieldRow>
+                    <FieldRow label="How many different income sources do you currently have?">
+                      <Select
+                        value={fields.income_streams}
+                        onValueChange={(v) => set("income_streams", v)}
+                      >
+                        <SelectTrigger className="h-12 border-[#d0c8bc] bg-white">
+                          <SelectValue placeholder="Number of income sources" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">Just 1 (salary or single business)</SelectItem>
+                          <SelectItem value="2">2 sources</SelectItem>
+                          <SelectItem value="3">3 sources</SelectItem>
+                          <SelectItem value="4">4 sources</SelectItem>
+                          <SelectItem value="5+">5 or more</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FieldRow>
+                    <FieldRow label="What percentage of your total income comes from a single source?">
+                      <Select
+                        value={fields.income_dominance}
+                        onValueChange={(v) => set("income_dominance", v)}
+                      >
+                        <SelectTrigger className="h-12 border-[#d0c8bc] bg-white">
+                          <SelectValue placeholder="Select a percentage range" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="90-100">90–100% (one source dominates)</SelectItem>
+                          <SelectItem value="70-89">70–89%</SelectItem>
+                          <SelectItem value="50-69">50–69%</SelectItem>
+                          <SelectItem value="under-50">Less than 50% (balanced)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FieldRow>
+                    <FieldRow label="Do you already have any paid offerings — courses, consulting, ebooks, speaking, coaching?">
+                      <YesNo
+                        value={fields.has_products}
+                        onChange={(v) => set("has_products", v)}
+                        yesLabel="Yes"
+                        noLabel="Not yet"
+                      />
+                    </FieldRow>
+                    {fields.has_products === "yes" && (
+                      <FieldRow label="How many clients or sales did you deliver/close last month?">
+                        <Input
+                          type="number"
+                          min={0}
+                          value={fields.product_sales}
+                          onChange={(e) => set("product_sales", e.target.value)}
+                          placeholder="0"
+                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                        />
+                      </FieldRow>
+                    )}
+                  </>
+                )}
+
+                {/* ── STEP 3: Owned Assets ─────────────────────────────── */}
+                {step === 2 && (
+                  <>
+                    <FieldRow label="Do you have an email list or subscriber database?">
+                      <YesNo
+                        value={fields.has_email_list}
+                        onChange={(v) => set("has_email_list", v)}
+                      />
+                    </FieldRow>
+                    {fields.has_email_list === "yes" && (
+                      <FieldRow label="How many subscribers?">
+                        <Input
+                          type="number"
+                          min={0}
+                          value={fields.subscribers}
+                          onChange={(e) => set("subscribers", e.target.value)}
+                          placeholder="0"
+                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                        />
+                      </FieldRow>
+                    )}
+                    <FieldRow label="Do you have a private online community? (WhatsApp group, Telegram, Facebook group, Discord)">
+                      <YesNo
+                        value={fields.has_community}
+                        onChange={(v) => set("has_community", v)}
+                      />
+                    </FieldRow>
+                    {fields.has_community === "yes" && (
+                      <FieldRow label="How many active members?">
+                        <Input
+                          type="number"
+                          min={0}
+                          value={fields.community_members}
+                          onChange={(e) => set("community_members", e.target.value)}
+                          placeholder="0"
+                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                        />
+                      </FieldRow>
+                    )}
+                    <FieldRow label="Do you use any email or audience communication tools? (MailerLite, WhatsApp Business, Substack, Mailchimp)">
+                      <YesNo
+                        value={fields.uses_email_tools}
+                        onChange={(v) => set("uses_email_tools", v)}
+                      />
+                    </FieldRow>
+                  </>
+                )}
+
+                {/* ── STEP 4: Readiness & Mindset ─────────────────────── */}
+                {step === 3 && (
+                  <>
+                    <FieldRow label="If your current job or income continued as normal, could you dedicate 5–7 hours per week to building this alongside it?">
+                      <YesNo
+                        value={fields.can_commit_hours}
+                        onChange={(v) => set("can_commit_hours", v)}
+                        yesLabel="Yes, I can"
+                        noLabel="Not right now"
+                      />
+                    </FieldRow>
+                    <FieldRow label="Do you have a clear area of expertise you want to build a business around?">
+                      <YesNo
+                        value={fields.has_clear_niche}
+                        onChange={(v) => set("has_clear_niche", v)}
+                        yesLabel="Yes, I know it"
+                        noLabel="Still figuring it out"
+                      />
+                    </FieldRow>
+                    <FieldRow label="Have you ever done a serious self-assessment of your strengths, knowledge gaps, and growth opportunities?">
+                      <YesNo
+                        value={fields.has_done_swot}
+                        onChange={(v) => set("has_done_swot", v)}
+                        yesLabel="Yes"
+                        noLabel="Not formally"
+                      />
+                    </FieldRow>
+                    <FieldRow label="What type of content feels most natural to you?">
+                      <div className="grid grid-cols-2 gap-2">
+                        {(["Educate", "Entertain", "Encourage", "Earn"] as const).map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => set("primary_e", opt)}
+                            className={`py-3 px-4 border font-display font-bold uppercase text-sm tracking-wide transition-all ${
+                              fields.primary_e === opt
+                                ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
+                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C]"
+                            }`}
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    </FieldRow>
+                    <FieldRow label="Do you believe your expertise is currently worth more than what you earn from it?">
+                      <YesNo
+                        value={fields.expertise_worth_more}
+                        onChange={(v) => set("expertise_worth_more", v)}
+                        yesLabel="100%, yes"
+                        noLabel="I'm not sure"
+                      />
+                    </FieldRow>
+                    <FieldRow label="Who are you building this for?">
+                      <div className="flex gap-3">
+                        {([
+                          { val: "GENERATIONS", label: "My children & legacy" },
+                          { val: "TODAY", label: "My own freedom now" },
+                        ] as const).map((opt) => (
+                          <button
+                            key={opt.val}
+                            type="button"
+                            onClick={() => set("building_for", opt.val)}
+                            className={`flex-1 py-3 px-3 border font-display font-bold text-sm tracking-wide transition-all text-center ${
+                              fields.building_for === opt.val
+                                ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
+                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C]"
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    </FieldRow>
+                    <TurnstileGate onToken={setTsToken} className="pt-1" />
+                  </>
+                )}
+
+              </div>
+
+              {/* Error */}
+              {error && (
+                <div className="mt-5 border border-red-200 bg-red-50 px-4 py-3 text-red-700 text-sm">
+                  {error}
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="mt-7 flex items-center justify-between gap-4">
+                {step > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => setStep((s) => s - 1)}
+                    className="flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#1C1C1C] transition-colors"
+                  >
+                    <ArrowLeft className="size-3.5" />
+                    Back
+                  </button>
+                ) : (
+                  <div />
+                )}
+
+                {step < TOTAL_STEPS - 1 ? (
+                  <Button
+                    type="button"
+                    disabled={!canProceed()}
+                    onClick={() => setStep((s) => s + 1)}
+                    className="bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={canProceed() ? GOLD_GLOW : undefined}
+                  >
+                    Continue
+                    <ArrowRight className="size-4 ml-1" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    disabled={!canProceed() || loading}
+                    onClick={handleSubmit}
+                    className="bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={canProceed() && !loading ? GOLD_GLOW : undefined}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin mr-1" />
+                        Submitting…
+                      </>
+                    ) : (
+                      <>
+                        Submit Application
+                        <ArrowRight className="size-4 ml-1" />
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {/* Footer note */}
+            <p className="mt-6 text-center text-[#555] text-xs leading-relaxed">
+              We review every application within 24 hours. No automated rejection — a real human reads your answers.
+              <br />
+              Investment: $970 once-off or $350 × 3 months · billed in ZAR. Application is free and non-binding.
+            </p>
+          </>
+        )}
       </div>
 
-      {downsell.title && (
-        <div className="nx-card relative overflow-hidden text-center !p-8 border border-banana/30">
-          <div className="absolute top-0 left-0 w-full h-[4px] bg-banana" />
-          <span className="nx-label text-muted-foreground text-[10px] tracking-[0.2em] block mb-2">
-            Recommended Framework Entry
-          </span>
-          <h3 className="font-sans text-xl font-bold mb-3 text-foreground">
-            {downsell.title}
-          </h3>
-          <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-6 leading-relaxed">
-            {downsell.body}
-          </p>
-          <Button asChild className="w-full sm:w-auto px-8 py-5 uppercase font-bold text-xs tracking-widest cta-glow rounded-xl">
-            <Link to="/products">Get Standalone Package</Link>
-          </Button>
-        </div>
-      )}
+      <SiteFooter />
     </div>
   );
 }

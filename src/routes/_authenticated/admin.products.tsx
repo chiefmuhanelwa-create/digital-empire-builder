@@ -16,7 +16,7 @@ import {
 
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/products")({
   head: () => ({ meta: [{ title: "Products — Admin" }] }),
@@ -78,6 +78,18 @@ function emptyProduct(): Product {
 
 function sanitizeName(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/-+/g, "-");
+}
+
+const COVER_EXTS = ["png", "jpg", "jpeg", "webp"];
+const FILE_EXTS = ["pdf", "epub", "zip"];
+
+// Trust only a real, whitelisted extension — never `split(".").pop()` blindly
+// (a file with no dot returns the whole name, producing a garbage storage path).
+function pickExt(name: string, allowed: string[]) {
+  const parts = name.split(".");
+  if (parts.length < 2) return null;
+  const ext = (parts.pop() || "").toLowerCase();
+  return allowed.includes(ext) ? ext : null;
 }
 
 
@@ -177,7 +189,10 @@ function AdminProducts() {
                 {p.garden ? GARDENS[p.garden]?.name ?? p.garden : "—"}
               </div>
               <div className="col-span-2 text-right font-mono">
-                {formatPrice(p.price_cents, p.currency, p.is_free)}
+                <div>{formatPrice(p.price_cents, p.currency, p.is_free, p.slug)}</div>
+                {!p.is_free && p.currency === "ZAR" && (
+                  <div className="text-[10px] text-muted-foreground">charged R{(p.price_cents / 100).toLocaleString("en-ZA")}</div>
+                )}
               </div>
               <div className="col-span-2">
                 <select
@@ -200,6 +215,14 @@ function AdminProducts() {
                 )}
               </div>
               <div className="col-span-2 flex justify-end gap-2">
+                <Link
+                  to="/admin/curriculum/$productSlug"
+                  params={{ productSlug: p.slug }}
+                  title="Edit curriculum"
+                  className="inline-flex items-center justify-center h-8 w-8 rounded hover:bg-muted text-muted-foreground hover:text-banana"
+                >
+                  <BookOpen className="size-4" />
+                </Link>
                 <Button size="sm" variant="ghost" onClick={() => setEditing(p)}>
                   <Pencil className="size-4" />
                 </Button>
@@ -277,10 +300,11 @@ function EditDrawer({
     if (!f) return;
     if (f.size > 10 * 1024 * 1024) return toast.error("Cover must be < 10MB");
     if (!p.slug) return toast.error("Set a slug before uploading");
+    const ext = pickExt(f.name, COVER_EXTS);
+    if (!ext) return toast.error("Cover must be a PNG, JPG or WEBP");
     setUploading("cover");
     try {
-      const ext = sanitizeName(f.name.split(".").pop() || "png");
-      const path = `${p.slug}-${Date.now()}.${ext}`;
+      const path = `${sanitizeName(p.slug)}-${Date.now()}.${ext}`;
       const { error } = await supabase.storage
         .from("product-covers")
         .upload(path, f, { contentType: f.type || "image/png", upsert: true });
@@ -301,10 +325,11 @@ function EditDrawer({
     if (!f) return;
     if (f.size > 50 * 1024 * 1024) return toast.error("File must be < 50MB");
     if (!p.slug) return toast.error("Set a slug before uploading");
+    const ext = pickExt(f.name, FILE_EXTS);
+    if (!ext) return toast.error("File must be a PDF, EPUB or ZIP");
     setUploading("file");
     try {
-      const ext = sanitizeName(f.name.split(".").pop() || "pdf");
-      const path = `${p.slug}.${ext}`;
+      const path = `${sanitizeName(p.slug)}.${ext}`;
       const { error } = await supabase.storage
         .from("product-files")
         .upload(path, f, { contentType: f.type || "application/pdf", upsert: true });

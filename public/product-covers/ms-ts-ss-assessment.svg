@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="MS x TS x SS Foundation Self-Assessment">
+  <rect width="800" height="800" fill="#1C1C1C"/>
+  <rect x="24" y="24" width="752" height="752" fill="none" stroke="#C9A84C" stroke-width="8"/>
+  <text x="400" y="300" text-anchor="middle" font-family="Montserrat, Arial, Helvetica, sans-serif" font-weight="900" font-size="150" fill="#C9A84C" letter-spacing="4">MS</text>
+  <text x="400" y="430" text-anchor="middle" font-family="Montserrat, Arial, Helvetica, sans-serif" font-weight="900" font-size="150" fill="#FAF7F0" letter-spacing="4">TS</text>
+  <text x="400" y="560" text-anchor="middle" font-family="Montserrat, Arial, Helvetica, sans-serif" font-weight="900" font-size="150" fill="#C9A84C" letter-spacing="4">SS</text>
+  <text x="400" y="650" text-anchor="middle" font-family="Montserrat, Arial, Helvetica, sans-serif" font-weight="700" font-size="40" fill="#FAF7F0" letter-spacing="6">SELF-ASSESSMENT</text>
+  <text x="400" y="745" text-anchor="middle" font-family="Lato, Arial, Helvetica, sans-serif" font-weight="700" font-size="24" fill="#C9A84C" letter-spacing="2">contentcreatorhub.online</text>
+</svg>

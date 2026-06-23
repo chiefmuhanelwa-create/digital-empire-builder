@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { GARDENS, GARDEN_ORDER, type Garden } from "@/lib/gardens";
 import { ArrowUpRight } from "lucide-react";
@@ -8,10 +9,10 @@ import { ArrowUpRight } from "lucide-react";
 export const Route = createFileRoute("/products/")({
   head: () => ({
     meta: [
-      { title: "Shop — Christ Kingdom Platform" },
-      { name: "description", content: "Free tools, paid workbooks and courses, premium programs, and books for Kingdom Contentpreneurs." },
-      { property: "og:title", content: "Shop — Christ Kingdom Platform" },
-      { property: "og:description", content: "Everything we offer, in one place." },
+      { title: "Products — Christ Kingdom Platform" },
+      { name: "description", content: "Workbooks, courses, and the Called Expert Accelerator. Pick your level." },
+      { property: "og:title", content: "Products — Christ Kingdom Platform" },
+      { property: "og:description", content: "Every tool. Every framework. Every system." },
     ],
   }),
   component: Catalog,
@@ -57,18 +58,33 @@ function Catalog() {
       <SiteHeader />
       <section className="mx-auto max-w-6xl px-6 pt-24 pb-16">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-          Shop
+          Products
         </div>
         <h1 className="mt-4 font-display text-5xl md:text-7xl leading-[1.05] max-w-3xl">
-          Everything you need<br />
-          <em className="text-banana not-italic">to grow as a Kingdom Contentpreneur.</em>
+          Every tool.{" "}
+          <em className="text-banana not-italic">Every framework. Every system.</em>
         </h1>
         <p className="mt-8 max-w-xl text-lg text-muted-foreground">
-          Free tools to get started. Paid workbooks and courses when you're ready to level up.
-          Premium programs when you go full-time.
+          Workbooks, courses, and the Called Expert Accelerator. Pick your level.
         </p>
 
-        <div className="mt-20 grid gap-6 md:grid-cols-2">
+        {/* Entry offer spotlight */}
+        <div className="mt-12 border-2 border-banana/40 bg-banana/5 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-banana">Start here</div>
+            <h2 className="mt-1 font-display text-2xl sm:text-3xl text-foreground">Called Expert Foundation Kit</h2>
+            <p className="mt-2 text-sm text-muted-foreground max-w-md leading-relaxed">
+              Frameworks, templates, content calendar. The complete starting system — $97, instant access.
+            </p>
+          </div>
+          <Button asChild className="cta-glow shrink-0 h-11 px-6 font-bold text-sm">
+            <Link to="/products/$slug" params={{ slug: "called-expert-foundation-kit" }}>
+              Get the Kit — $97 →
+            </Link>
+          </Button>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
           {GARDEN_ORDER.map((g: Garden) => {
             const meta = GARDENS[g];
             const count = counts?.[g] ?? 0;

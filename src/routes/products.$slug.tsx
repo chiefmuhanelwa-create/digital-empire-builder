@@ -8,7 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
-import { initializeCheckout } from "@/lib/checkout.functions";
+import { initializeCheckout, initializeSubscription } from "@/lib/checkout.functions";
+
+const SUBSCRIPTION_SLUGS = ["called-expert-inner-circle"];
+import { getUtm } from "@/lib/utm";
+import { trackLead } from "@/lib/track";
+import { useCountry } from "@/lib/currency";
 import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
@@ -112,8 +117,9 @@ function ProductDetail() {
   }
   if (!product) return null;
 
+  const country = useCountry();
   const gardenMeta = product.garden ? GARDENS[product.garden as Garden] : null;
-  const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free);
+  const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -137,7 +143,7 @@ function ProductDetail() {
         <div className="mt-10 flex items-baseline gap-4 flex-wrap">
           <div className="font-display text-5xl text-banana">{priceLabel}</div>
           {!product.is_free && !product.requires_application && (
-            <div className="font-mono text-xs text-muted-foreground">one-time payment · instant download</div>
+            <div className="font-mono text-xs text-muted-foreground">one-time payment · instant download · billed in ZAR at checkout</div>
           )}
           {product.requires_application && (
             <div className="font-mono text-xs text-muted-foreground">/ by application</div>
@@ -266,7 +272,7 @@ function ProductDetail() {
                 </h3>
               </div>
               <div className="flex items-center gap-3 font-mono text-sm text-muted-foreground">
-                <span>{formatPrice(seedProduct.price_cents, seedProduct.currency, seedProduct.is_free)}</span>
+                <span>{formatPrice(seedProduct.price_cents, seedProduct.currency, seedProduct.is_free, seedProduct.slug, country)}</span>
                 <ArrowRight className="size-4 group-hover:text-banana transition-colors" />
               </div>
             </div>
@@ -280,7 +286,10 @@ function ProductDetail() {
 
 function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string }) {
   const { user } = useAuth();
-  const initFn = useServerFn(initializeCheckout);
+  const isSubscription = SUBSCRIPTION_SLUGS.includes(product.slug);
+  const priceText = isSubscription ? `${priceLabel}/mo` : priceLabel;
+  const initCheckout = useServerFn(initializeCheckout);
+  const initSub = useServerFn(initializeSubscription);
   const [email, setEmail] = useState<string>(user?.email ?? "");
   const [fullName, setFullName] = useState<string>(
     (user?.user_metadata?.full_name as string) ?? "",
@@ -289,7 +298,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   const [tsToken, setTsToken] = useState<string | null>(null);
 
   const mut = useMutation({
-    mutationFn: initFn,
+    mutationFn: isSubscription ? initSub : initCheckout,
     onSuccess: (res: any) => {
       window.location.href = res.authorizationUrl;
     },
@@ -299,9 +308,11 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   if (product.is_free) {
     return (
       <div className="mt-12">
-        <Button size="lg" disabled className="bg-banana text-banana-foreground">
-          Get free — opt-in coming soon
-        </Button>
+        <Link to="/signup">
+          <Button size="lg" className="bg-banana text-banana-foreground">
+            Create a free account to access
+          </Button>
+        </Link>
       </div>
     );
   }
@@ -313,7 +324,19 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   return (
     <div className="mt-12 border border-border p-6">
       <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · ZAR</div>
-      <h3 className="mt-2 font-display text-2xl">Buy {product.title}</h3>
+      <h3 className="mt-2 font-display text-2xl">{isSubscription ? "Join" : "Buy"} {product.title}</h3>
+      {Array.isArray(product.benefits) && product.benefits.length > 0 && (
+        <div className="mt-4 rounded-md bg-banana/5 border border-banana/20 p-4">
+          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-banana mb-2">What you get for {priceText}</div>
+          <ul className="space-y-1.5">
+            {product.benefits.map((b: string, i: number) => (
+              <li key={i} className="flex gap-2 text-sm text-foreground">
+                <span className="text-banana shrink-0">✓</span><span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="mt-6 grid gap-3 md:grid-cols-3">
         <div>
           <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
@@ -334,7 +357,8 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
       <Button
         size="lg"
         disabled={!email || !tsToken || mut.isPending}
-        onClick={() =>
+        onClick={() => {
+          trackLead();
           mut.mutate({
             data: {
               productSlug: product.slug,
@@ -342,12 +366,13 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
               fullName: fullName || undefined,
               phone: phone || undefined,
               turnstileToken: tsToken ?? undefined,
+              ...getUtm(),
             },
-          })
-        }
+          });
+        }}
         className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90"
       >
-        {mut.isPending ? "Starting…" : `Pay ${priceLabel} →`}
+        {mut.isPending ? "Starting…" : isSubscription ? `Subscribe — ${priceText} →` : `Pay ${priceLabel} →`}
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">
         You'll be sent to our secure checkout, then brought back here once payment is complete.
@@ -441,6 +466,8 @@ function ApplicationGate({ product, priceLabel }: { product: any; priceLabel: st
 
 function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: string }) {
   const { user } = useAuth();
+  const isSubscription = SUBSCRIPTION_SLUGS.includes(product.slug);
+  const priceText = isSubscription ? `${priceLabel}/mo` : priceLabel;
   const initFn = useServerFn(initializeCheckout);
   const [email, setEmail] = useState<string>(user?.email ?? "");
   const [fullName, setFullName] = useState<string>(
@@ -481,7 +508,8 @@ function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: strin
       <Button
         size="lg"
         disabled={!email || !tsToken || mut.isPending}
-        onClick={() =>
+        onClick={() => {
+          trackLead();
           mut.mutate({
             data: {
               productSlug: product.slug,
@@ -489,12 +517,13 @@ function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: strin
               fullName: fullName || undefined,
               phone: phone || undefined,
               turnstileToken: tsToken ?? undefined,
+              ...getUtm(),
             },
-          })
-        }
+          });
+        }}
         className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90"
       >
-        {mut.isPending ? "Starting…" : `Pay ${priceLabel} →`}
+        {mut.isPending ? "Starting…" : isSubscription ? `Subscribe — ${priceText} →` : `Pay ${priceLabel} →`}
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">
         You'll be sent to our secure checkout, then brought back here once payment is complete.

@@ -1,5 +1,6 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
@@ -20,6 +21,15 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/curriculum/$productSlug")({
   head: ({ params }) => ({ meta: [{ title: `Curriculum: ${params.productSlug} — Christ Kingdom Platform` }] }),
+  beforeLoad: async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) throw redirect({ to: "/login" });
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: u.user.id,
+      _role: "admin",
+    });
+    if (!isAdmin) throw redirect({ to: "/dashboard" });
+  },
   component: CurriculumAdmin,
   errorComponent: ({ error, reset }) => {
     const router = useRouter();

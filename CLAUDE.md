@@ -302,3 +302,12 @@ See `docs/BLOCKERS.md` for full detail and fix instructions.
 - When a major insight, correction, or preference is uncovered — log it in `Learnings.md` before the session ends
 - `Learnings.md` is the living record. Treat it as authoritative.
 - For the content system (batch plans, hooks, scripts) — that project lives at `~/Desktop/VS code/full-content-system/`. Do not confuse the two.
+
+---
+
+## Teachable Knowledge Capture (Called Expert Accelerator)
+We're building NOCHILL to TEACH Called Experts (ICP 1) how to do it. Capture in two layers, every session:
+- **Raw receipt → `Learnings.md`** in this folder (what broke / what worked).
+- **Teachable asset → the MASTER Called Expert Curriculum:** `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md`. Tag each: Stage (7-Stage) · MS/TS/SS · Framework (4E/SEEDS/PAIDS/DARES/3Cs/POSSESS) · Lesson · Steps (SOP) · Proof.
+- Rule: if a Called Expert would need it to do this themselves → it's a teachable asset (Curriculum), not just a receipt (Learnings).
+- Also enforced in global `~/.claude/CLAUDE.md`.

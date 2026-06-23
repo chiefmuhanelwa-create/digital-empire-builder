@@ -1,9 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 
@@ -41,6 +42,15 @@ const getAuditLedger = createServerFn({ method: "GET" })
 
 export const Route = createFileRoute("/_authenticated/admin/ledger")({
   head: () => ({ meta: [{ title: "Audit Ledger — Admin" }] }),
+  beforeLoad: async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) throw redirect({ to: "/login" });
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: u.user.id,
+      _role: "admin",
+    });
+    if (!isAdmin) throw redirect({ to: "/dashboard" });
+  },
   component: LedgerPage,
 });
 

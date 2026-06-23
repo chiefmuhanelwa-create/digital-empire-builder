@@ -17,17 +17,17 @@ export const GARDENS: Record<Garden, {
   },
   esev: {
     slug: "esev",
-    name: "Workbooks & Courses",
-    tagline: "Step-by-step paid products.",
+    name: "Products & Mini-Courses",
+    tagline: "Rungs 2–5 — paid workbooks, courses & (soon) interactive apps.",
     description:
-      "Paid workbooks, mini-courses and frameworks. Each one solves one specific problem in your content business.",
+      "Paid workbooks, mini-courses, masterclasses and frameworks — each solves one specific problem in your expertise business. Interactive pain-point apps are rolling out here next (less PDF, more tools that resolve the blocker on the spot).",
   },
   etz_pri: {
     slug: "etz_pri",
-    name: "Premium Programs",
-    tagline: "Coaching, cohorts and mentorship.",
+    name: "Coaching & Accelerator",
+    tagline: "Rungs 6–7 — Accelerator, coaching & done-with-you.",
     description:
-      "Live cohorts, group programs and 1-on-1 mentorship for Kingdom Contentpreneurs ready to go full-time.",
+      "The 90-Day Called Expert Accelerator PRO, live cohorts, 1-on-1 mentorship and done-with-you facilitation for Called Experts ready to go full-time.",
   },
   devarim: {
     slug: "devarim",
@@ -37,11 +37,48 @@ export const GARDENS: Record<Garden, {
   },
 };
 
-export const GARDEN_ORDER: Garden[] = ["deshe", "esev", "etz_pri", "devarim"];
+export const GARDEN_ORDER: Garden[] = ["esev", "etz_pri", "devarim"];
 
-export function formatPrice(cents: number, currency: string, isFree?: boolean) {
+// The funnel DISPLAYS one currency globally: USD. Everything is still CHARGED in
+// ZAR (Paystack can't bill USD) — buyers see "billed in ZAR at checkout".
+// USD_DISPLAY holds clean marketing prices for the headline products; any other
+// ZAR product is auto-converted to whole USD via ZAR_PER_USD below.
+export const ZAR_PER_USD = 18.5;
+
+export const USD_DISPLAY: Record<string, number> = {
+  "called-expert-foundation-kit": 9700,   // $97  (charged ~R1,800)
+  "called-expert-starter-bundle": 9700,   // $97  (charged ~R1,800)
+  "called-expert-foundations": 29700,     // $297 (charged ~R5,500)
+  "called-expert-facilitator": 400000,    // $4,000 (charged R75,000)
+  "called-expert-inner-circle": 2900,     // $29/mo (charged R540/mo)
+  "contentpreneur-90day-cohort": 97000,   // $970 (charged R18,000 — Accelerator PRO)
+  "creator-swipe-vault": 1700,            // $17 order bump (charged R290)
+  "asset-accelerator": 19700,             // $197 1-click upsell (charged R3,600)
+  "personal-brand-30-days": 4900,         // $49 video course (charged R899)
+};
+
+// Country param kept for signature compatibility; display is now USD for everyone.
+export function formatPrice(
+  cents: number,
+  currency: string,
+  isFree?: boolean,
+  slug?: string,
+  _country?: string | null,
+) {
   if (isFree || cents === 0) return "Free";
-  const symbol = currency === "ZAR" ? "R" : currency === "NGN" ? "₦" : `${currency} `;
-  const v = (cents / 100).toLocaleString("en-ZA");
-  return `${symbol}${v}`;
+
+  // Resolve a USD-cents value: explicit marketing override → native USD → convert ZAR.
+  let usdCents: number | null = null;
+  if (slug && USD_DISPLAY[slug] != null) usdCents = USD_DISPLAY[slug];
+  else if (currency === "USD") usdCents = cents;
+  else if (currency === "ZAR") usdCents = Math.max(100, Math.round(cents / ZAR_PER_USD / 100) * 100);
+
+  if (usdCents != null) {
+    const u = usdCents / 100;
+    return `$${u.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
+  }
+
+  // Last resort: render in the native currency.
+  const symbol = currency === "NGN" ? "₦" : currency === "USD" ? "$" : `${currency} `;
+  return `${symbol}${(cents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 }

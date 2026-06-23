@@ -5,6 +5,7 @@ import * as React from "react";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { OrderReceiptEmail } from "@/lib/email-templates/order-receipt";
 import { reportError } from "@/lib/error-logger";
+import { addToMailerLiteGroup } from "@/lib/mailerlite";
 
 const SITE_NAME = "Christ Kingdom Platform";
 const ROOT_DOMAIN = "chkplt.com";
@@ -217,6 +218,28 @@ async function handleChargeSuccess(payload: any) {
   const first_name = nameParts[0] || null;
   const last_name = nameParts.slice(1).join(" ") || null;
 
+  // Capture the reusable card authorization → powers the 1-click post-purchase upsell.
+  // NON-FATAL: never let this break grants/receipts (e.g. if the table isn't migrated yet).
+  const auth = dataObj.authorization;
+  if (email && auth?.authorization_code) {
+    try {
+      await supabaseAdmin.from("payment_authorizations" as any).upsert(
+        {
+          email,
+          authorization_code: auth.authorization_code,
+          last4: auth.last4 ?? null,
+          card_type: auth.card_type ?? null,
+          bank: auth.bank ?? null,
+          reusable: auth.reusable === true,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "email" },
+      );
+    } catch (err) {
+      console.error("[paystack-webhook] auth capture skipped", err);
+    }
+  }
+
   const { data: subUp, error: subErr } = await supabaseAdmin
     .from("subscribers")
     .upsert(
@@ -309,6 +332,75 @@ async function handleChargeSuccess(payload: any) {
       orderId: order.id,
     });
   }
+
+  // Sync buyer to MailerLite (fire-and-forget — never blocks receipt)
+  void addToMailerLiteGroup(
+    email,
+    process.env.MAILERLITE_GROUP_ID_BUYERS,
+    { first_name, last_name },
+  );
+}
+
+// ── Subscription (Paystack Plans) handlers ────────────────────────────────
+// Runs on EVERY charge.success that carries a plan (initial + recurring) and
+// keeps the access window fresh. Access is gated on subscriptions.current_period_end.
+async function handleSubscriptionCharge(payload: any) {
+  const d = payload?.data ?? {};
+  const email = (d.customer?.email || "").toLowerCase();
+  const planCode = d.plan?.plan_code;
+  if (!email || !planCode) return;
+  const paidAt = d.paid_at ? new Date(d.paid_at) : new Date();
+  const periodEnd = new Date(paidAt);
+  periodEnd.setMonth(periodEnd.getMonth() + 1);
+  periodEnd.setDate(periodEnd.getDate() + 3); // grace for retries
+
+  let userId: string | null = null;
+  const { data: prof } = await supabaseAdmin.from("profiles").select("id").eq("email", email).maybeSingle();
+  if (prof) userId = prof.id;
+
+  await supabaseAdmin.from("subscriptions" as any).upsert(
+    {
+      email,
+      user_id: userId,
+      plan_code: planCode,
+      status: "active",
+      current_period_end: periodEnd.toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "email,plan_code" },
+  );
+}
+
+async function handleSubscriptionCreate(payload: any) {
+  const d = payload?.data ?? {};
+  const email = (d.customer?.email || "").toLowerCase();
+  const planCode = d.plan?.plan_code;
+  if (!email || !planCode) return;
+  await supabaseAdmin.from("subscriptions" as any).upsert(
+    {
+      email,
+      plan_code: planCode,
+      subscription_code: d.subscription_code ?? null,
+      customer_code: d.customer?.customer_code ?? null,
+      status: "active",
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "email,plan_code" },
+  );
+}
+
+async function handleSubscriptionCancel(payload: any) {
+  const d = payload?.data ?? {};
+  const patch = { status: "cancelled", updated_at: new Date().toISOString() };
+  if (d.subscription_code) {
+    await supabaseAdmin.from("subscriptions" as any).update(patch).eq("subscription_code", d.subscription_code);
+  } else if (d.customer?.email && d.plan?.plan_code) {
+    await supabaseAdmin
+      .from("subscriptions" as any)
+      .update(patch)
+      .eq("email", (d.customer.email || "").toLowerCase())
+      .eq("plan_code", d.plan.plan_code);
+  }
 }
 
 export const Route = createFileRoute("/api/public/paystack-webhook")({
@@ -343,8 +435,18 @@ export const Route = createFileRoute("/api/public/paystack-webhook")({
         }
 
         try {
-          if (payload?.event === "charge.success") {
+          const event = payload?.event;
+          if (event === "charge.success") {
+            // A plan on the charge = subscription (initial or recurring) → refresh access.
+            if (payload?.data?.plan && payload.data.plan.plan_code) {
+              await handleSubscriptionCharge(payload);
+            }
+            // Grants/receipt for the order (initial charge has one; recurring no-ops).
             await handleChargeSuccess(payload);
+          } else if (event === "subscription.create") {
+            await handleSubscriptionCreate(payload);
+          } else if (event === "subscription.disable" || event === "subscription.not_renew") {
+            await handleSubscriptionCancel(payload);
           } else {
             // Log all events for visibility
             await supabaseAdmin.from("payments").insert({

@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
-import { Download } from "lucide-react";
+import { Download, BookOpen, User, ShieldCheck, FileText, Users, Receipt, AlertCircle, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Christ Kingdom Platform" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — CHKPLT" }] }),
   component: Dashboard,
 });
 
@@ -23,10 +23,7 @@ function Dashboard() {
     queryKey: ["is-admin", user?.id],
     enabled: !!user?.id,
     queryFn: async () => {
-      const { data } = await supabase.rpc("has_role", {
-        _user_id: user!.id,
-        _role: "admin",
-      });
+      const { data } = await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" });
       return !!data;
     },
   });
@@ -38,8 +35,7 @@ function Dashboard() {
 
   const dlMut = useMutation({
     mutationFn: dlFn,
-    onSuccess: (res: { url: string }) =>
-      window.open(res.url, "_blank", "noopener,noreferrer"),
+    onSuccess: (res: { url: string }) => window.open(res.url, "_blank", "noopener,noreferrer"),
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -55,144 +51,166 @@ function Dashboard() {
     } | null;
   }>;
 
+  const firstName = user?.user_metadata?.full_name?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "Expert";
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
-      <section className="mx-auto max-w-6xl px-6 pt-20 pb-16">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Dashboard</div>
-        <h1 className="mt-4 font-display text-5xl md:text-6xl">
-          Welcome, {user?.user_metadata?.full_name ?? user?.email}.
-        </h1>
-        <p className="mt-6 text-muted-foreground max-w-2xl">
-          Your purchases, courses, and account live here.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            to="/learn"
-            className="inline-flex items-center gap-2 border border-banana/40 px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-banana hover:bg-banana hover:text-banana-foreground transition-colors"
-          >
-            My Courses →
-          </Link>
-          <Link
-            to="/account"
-            className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
-          >
-            Account &amp; Privacy →
-          </Link>
-          {isAdminQ.data && (
-            <>
-              <Link
-                to="/admin/products"
-                className="inline-flex items-center gap-2 border border-banana/40 px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-banana hover:bg-banana hover:text-banana-foreground transition-colors"
-              >
-                Admin · Products →
-              </Link>
-              <Link
-                to="/admin/contacts"
-                className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
-              >
-                Admin · Contacts &amp; Tags →
-              </Link>
-              <Link
-                to="/admin/import-contacts"
-                className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
-              >
-                Admin · Import CSV →
-              </Link>
-              <Link
-                to="/admin/ledger"
-                className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
-              >
-                Admin · Audit Ledger →
-              </Link>
-              <Link
-                to="/admin/incidents"
-                className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground hover:text-banana hover:border-banana/40 transition-colors"
-              >
-                Admin · Incidents →
-              </Link>
-            </>
-          )}
+
+      {/* Welcome banner */}
+      <section className="nx-hero-orb border-b border-border">
+        <div className="mx-auto max-w-6xl px-5 sm:px-6 pt-12 pb-10 sm:pt-16">
+          <div className="nx-label">Dashboard</div>
+          <h1 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl">
+            Welcome back, <em className="text-banana not-italic">{firstName}.</em>
+          </h1>
+          <p className="mt-3 text-muted-foreground max-w-xl text-base">
+            Your courses, downloads, and account — all in one place.
+          </p>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-6xl px-5 sm:px-6 py-10 space-y-12">
+
+        {/* Quick nav tiles */}
+        <div>
+          <div className="nx-label mb-4">Quick access</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <Link to="/learn" className="dash-tile group">
+              <BookOpen className="size-5 text-banana" />
+              <div className="font-display text-base mt-1">My Courses</div>
+              <div className="text-xs text-muted-foreground">Enter the LMS</div>
+            </Link>
+            <Link to="/account" className="dash-tile group">
+              <User className="size-5 text-banana" />
+              <div className="font-display text-base mt-1">Account</div>
+              <div className="text-xs text-muted-foreground">Privacy &amp; data</div>
+            </Link>
+            <Link to="/products" className="dash-tile group">
+              <FileText className="size-5 text-banana" />
+              <div className="font-display text-base mt-1">Products</div>
+              <div className="text-xs text-muted-foreground">Browse the store</div>
+            </Link>
+            <Link to="/apply" className="dash-tile group">
+              <ArrowRight className="size-5 text-banana" />
+              <div className="font-display text-base mt-1">Accelerator</div>
+              <div className="text-xs text-muted-foreground">Apply or re-assess</div>
+            </Link>
+          </div>
         </div>
 
-        {/* Purchases */}
-        <div className="mt-16">
-          <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-            Your purchases
+        {/* Admin tiles — conditionally shown */}
+        {isAdminQ.data && (
+          <div>
+            <div className="nx-label mb-4 text-[#E8601F]">Admin tools</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {[
+                { to: "/admin/products", icon: ShieldCheck, label: "Products", sub: "Manage catalog" },
+                { to: "/admin/contacts", icon: Users, label: "Contacts", sub: "View & tag" },
+                { to: "/admin/import-contacts", icon: FileText, label: "Import CSV", sub: "Bulk upload" },
+                { to: "/admin/ledger", icon: Receipt, label: "Ledger", sub: "Audit log" },
+                { to: "/admin/incidents", icon: AlertCircle, label: "Incidents", sub: "Error log" },
+              ].map((t) => (
+                <Link key={t.to} to={t.to as any} className="dash-tile group">
+                  <t.icon className="size-4 text-[#E8601F]" />
+                  <div className="font-display text-sm mt-1">{t.label}</div>
+                  <div className="text-xs text-muted-foreground">{t.sub}</div>
+                </Link>
+              ))}
+            </div>
           </div>
-          <h2 className="mt-3 font-display text-3xl">Downloads &amp; access</h2>
+        )}
+
+        {/* Library */}
+        <div>
+          <div className="nx-label mb-1">Your library</div>
+          <h2 className="font-display text-2xl sm:text-3xl mb-5">Downloads &amp; access</h2>
 
           {purchases.isLoading && (
-            <div className="mt-6 text-sm text-muted-foreground">Loading…</div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[1, 2].map((i) => (
+                <div key={i} className="nx-card !p-5 animate-pulse">
+                  <div className="flex gap-4">
+                    <div className="size-20 rounded-lg bg-muted shrink-0" />
+                    <div className="flex-1 space-y-2 pt-1">
+                      <div className="h-4 bg-muted rounded w-3/4" />
+                      <div className="h-3 bg-muted rounded w-1/2" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
 
           {!purchases.isLoading && grants.length === 0 && (
-            <div className="mt-6 border border-border p-8 text-center">
-              <p className="text-sm text-muted-foreground">
-                You haven't bought anything yet.
+            <div className="nx-card !p-10 text-center">
+              <BookOpen className="size-10 text-muted-foreground/40 mx-auto" />
+              <h3 className="mt-4 font-display text-xl text-foreground">Nothing here yet.</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                When you purchase a product or enrol in a programme, it appears here.
               </p>
-              <Button asChild className="mt-4 bg-banana text-banana-foreground hover:bg-banana/90">
+              <Button asChild className="mt-6 cta-glow">
                 <Link to="/products">Browse products →</Link>
               </Button>
             </div>
           )}
 
-          <div className="mt-6 grid gap-px bg-border md:grid-cols-2">
-            {grants.map((g) =>
-              g.product ? (
-                <div
-                  key={g.product.id}
-                  className="bg-background p-5 flex gap-4 items-start"
-                >
-                  {g.product.cover_image_url ? (
-                    <img
-                      src={g.product.cover_image_url}
-                      alt=""
-                      className="h-20 w-20 object-cover border border-border shrink-0"
-                    />
-                  ) : (
-                    <div className="h-20 w-20 bg-muted shrink-0" />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <Link
-                      to="/products/$slug"
-                      params={{ slug: g.product.slug }}
-                      className="font-display text-lg hover:text-banana"
-                    >
-                      {g.product.title}
-                    </Link>
-                    {g.product.tagline && (
-                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                        {g.product.tagline}
-                      </p>
+          {grants.length > 0 && (
+            <div className="grid sm:grid-cols-2 gap-4">
+              {grants.map((g) =>
+                g.product ? (
+                  <div key={g.product.id} className="nx-card !p-5 flex gap-4 items-start">
+                    {g.product.cover_image_url ? (
+                      <img
+                        src={g.product.cover_image_url}
+                        alt=""
+                        className="size-20 rounded-lg object-cover border border-border shrink-0"
+                      />
+                    ) : (
+                      <div className="size-20 rounded-lg bg-muted shrink-0 flex items-center justify-center">
+                        <BookOpen className="size-7 text-muted-foreground/40" />
+                      </div>
                     )}
-                    <div className="mt-3 flex gap-2">
-                      {g.product.download_path ? (
-                        <Button
-                          size="sm"
-                          onClick={() =>
-                            dlMut.mutate({
-                              data: { productSlug: g.product!.slug },
-                            })
-                          }
-                          disabled={dlMut.isPending}
-                          className="bg-banana text-banana-foreground hover:bg-banana/90"
-                        >
-                          <Download className="size-3.5 mr-1.5" /> Download
-                        </Button>
-                      ) : (
-                        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
-                          Access granted
-                        </span>
+                    <div className="flex-1 min-w-0">
+                      <Link
+                        to="/products/$slug"
+                        params={{ slug: g.product.slug }}
+                        className="font-display text-base leading-snug hover:text-banana transition-colors line-clamp-2"
+                      >
+                        {g.product.title}
+                      </Link>
+                      {g.product.tagline && (
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{g.product.tagline}</p>
                       )}
+                      <div className="mt-3">
+                        {g.product.download_path ? (
+                          <Button
+                            size="sm"
+                            onClick={() => dlMut.mutate({ data: { productSlug: g.product!.slug } })}
+                            disabled={dlMut.isPending}
+                            className="cta-glow h-9 px-4 text-xs"
+                          >
+                            <Download className="size-3.5 mr-1.5" /> Download
+                          </Button>
+                        ) : (
+                          <Link
+                            to="/learn/$slug"
+                            params={{ slug: g.product.slug }}
+                            className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.18em] uppercase text-banana hover:text-banana/80 transition-colors"
+                          >
+                            Open course <ArrowRight className="size-3" />
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : null,
-            )}
-          </div>
+                ) : null,
+              )}
+            </div>
+          )}
         </div>
-      </section>
+      </div>
+
       <SiteFooter />
     </div>
   );

@@ -2,13 +2,15 @@ import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
-import { verifyCheckout, initializeCheckout } from "@/lib/checkout.functions";
+import { verifyCheckout, initializeCheckout, chargeUpsell } from "@/lib/checkout.functions";
 import { getDownloadUrl } from "@/lib/products.functions";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/gardens";
 import { supabase } from "@/integrations/supabase/client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { toast } from "sonner";
+import { trackPurchase } from "@/lib/track";
+import { useCountry } from "@/lib/currency";
 import { Check, Download } from "lucide-react";
 
 
@@ -20,17 +22,23 @@ export const Route = createFileRoute("/checkout/success")({
   component: CheckoutSuccess,
 });
 
-// Upsell chain that runs after a Niche Clarity purchase.
-// Order: highest-price first.
+// Upsell chains per product. Order: most relevant first.
 const NICHE_CLARITY_UPSELLS = [
   "paids-framework",
   "9-modules-personal-branding",
   "tax-guide-content-creators",
-] as const;
+] as const satisfies readonly string[];
+
+// After Foundation Kit purchase: bump at R299, then upgrade to full course.
+const FOUNDATION_KIT_UPSELLS = [
+  "called-expert-foundation-kit-bonus",
+  "called-expert-foundations",
+] as const satisfies readonly string[];
 
 function CheckoutSuccess() {
   const { reference } = useSearch({ from: "/checkout/success" });
   const verify = useServerFn(verifyCheckout);
+  const country = useCountry();
 
   const attempts = useRef(0);
   const q = useQuery({
@@ -47,7 +55,21 @@ function CheckoutSuccess() {
 
   const status = q.data?.status;
   const purchasedSlug = q.data?.purchasedSlug;
-  const isNicheClarity = purchasedSlug === "niche-clarity-workbook";
+
+  const purchaseFired = useRef(false);
+  useEffect(() => {
+    if (status === "paid" && !purchaseFired.current) {
+      purchaseFired.current = true;
+      trackPurchase((q.data?.total_cents ?? 0) / 100, q.data?.currency ?? "ZAR");
+    }
+  }, [status, q.data?.total_cents, q.data?.currency]);
+
+  const upsellSlugs =
+    purchasedSlug === "niche-clarity-workbook"
+      ? NICHE_CLARITY_UPSELLS
+      : purchasedSlug === "called-expert-foundation-kit"
+        ? FOUNDATION_KIT_UPSELLS
+        : null;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -88,9 +110,16 @@ function CheckoutSuccess() {
             {purchasedSlug && (
               <DownloadCard slug={purchasedSlug} reference={reference} />
             )}
+            {(q.data?.bumpSlugs ?? []).map((bs: string) => (
+              <DownloadCard key={bs} slug={bs} reference={reference} />
+            ))}
 
-            {isNicheClarity ? (
-              <UpsellFlow buyerEmail={q.data?.email ?? ""} />
+            {purchasedSlug === "called-expert-foundation-kit" && (
+              <OneClickUpsell email={q.data?.email ?? ""} country={country} />
+            )}
+
+            {upsellSlugs ? (
+              <UpsellFlow buyerEmail={q.data?.email ?? ""} slugs={upsellSlugs} />
             ) : (
               <>
                 <div className="mt-10 flex justify-center gap-3">
@@ -114,7 +143,7 @@ function CheckoutSuccess() {
                     )}
                     <div className="mt-6 flex items-center justify-between gap-4">
                       <div className="font-display text-2xl">
-                        {formatPrice(q.data.nextSeed.price_cents, q.data.nextSeed.currency, false)}
+                        {formatPrice(q.data.nextSeed.price_cents, q.data.nextSeed.currency, false, q.data.nextSeed.slug, country)}
                       </div>
                       <Button
                         asChild
@@ -145,21 +174,22 @@ function CheckoutSuccess() {
   );
 }
 
-function UpsellFlow({ buyerEmail }: { buyerEmail: string }) {
+function UpsellFlow({ buyerEmail, slugs }: { buyerEmail: string; slugs: readonly string[] }) {
   const [step, setStep] = useState(0);
+  const isFoundationChain = slugs === FOUNDATION_KIT_UPSELLS;
 
   // Load each upsell product
   const products = useQuery({
-    queryKey: ["upsell-products"],
+    queryKey: ["upsell-products", slugs],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
         .select("slug,title,tagline,description,price_cents,currency")
-        .in("slug", NICHE_CLARITY_UPSELLS as unknown as string[]);
+        .in("slug", slugs as unknown as string[]);
       if (error) throw error;
       // Re-order to match our intended sequence
       const map = new Map(data.map((p) => [p.slug, p]));
-      return NICHE_CLARITY_UPSELLS.map((s) => map.get(s)).filter(Boolean) as Array<{
+      return slugs.map((s) => map.get(s)).filter(Boolean) as Array<{
         slug: string;
         title: string;
         tagline: string | null;
@@ -192,6 +222,27 @@ function UpsellFlow({ buyerEmail }: { buyerEmail: string }) {
   const done = step >= list.length;
 
   if (done || !current) {
+    if (isFoundationChain) {
+      return (
+        <div className="mt-12 border-2 border-banana/40 bg-banana/5 p-8 text-center">
+          <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Now take it further.</div>
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl">You have the frameworks.</h2>
+          <p className="mt-4 text-muted-foreground max-w-sm mx-auto leading-relaxed">
+            The next step is applying them inside the live 90-day cohort —
+            weekly sessions, accountability, and direct access to the full curriculum.
+          </p>
+          <Button asChild size="lg" className="cta-glow mt-8 text-base px-10 py-6 h-auto w-full sm:w-auto">
+            <Link to="/apply">Apply for the Accelerator PRO →</Link>
+          </Button>
+          <div className="mt-4">
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/dashboard">Go to my dashboard →</Link>
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="mt-12 border border-banana/40 bg-banana/5 p-8 text-center">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">You're all set</div>
@@ -206,7 +257,7 @@ function UpsellFlow({ buyerEmail }: { buyerEmail: string }) {
     );
   }
 
-  const priceLabel = formatPrice(current.price_cents, current.currency, false);
+  const priceLabel = formatPrice(current.price_cents, current.currency, false, current.slug, useCountry());
 
   return (
     <div className="mt-12">
@@ -272,6 +323,59 @@ function UpsellFlow({ buyerEmail }: { buyerEmail: string }) {
   );
 }
 
+function OneClickUpsell({ email, country }: { email: string; country: string | null }) {
+  const charge = useServerFn(chargeUpsell);
+  const [state, setState] = useState<"offer" | "working" | "added" | "declined">("offer");
+  const [upRef, setUpRef] = useState<string | null>(null);
+  const price = formatPrice(360000, "ZAR", false, "asset-accelerator", country);
+
+  if (state === "declined") return null;
+  if (state === "added" && upRef) {
+    return (
+      <div className="mt-8">
+        <div className="text-center font-display text-xl text-banana mb-3">✓ Added — The Asset Accelerator Vault</div>
+        <DownloadCard slug="asset-accelerator" reference={upRef} />
+      </div>
+    );
+  }
+
+  async function take() {
+    setState("working");
+    try {
+      const res: any = await charge({ data: { email, productSlug: "asset-accelerator" } });
+      if (res.ok) {
+        setUpRef(res.reference);
+        setState("added");
+      } else if (res.reason === "no_authorization") {
+        window.location.href = "/products/asset-accelerator"; // no card on file → normal checkout
+      } else {
+        toast.error(res.message || "Card was declined. You can grab it from the catalog.");
+        setState("offer");
+      }
+    } catch (e) {
+      toast.error((e as Error).message);
+      setState("offer");
+    }
+  }
+
+  return (
+    <div className="mt-10 border-2 border-banana bg-banana/5 p-6 sm:p-8 text-left">
+      <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">One-time offer · add in 1 click</div>
+      <h3 className="mt-2 font-display text-2xl sm:text-3xl">The Asset Accelerator Vault — {price}</h3>
+      <p className="mt-3 text-muted-foreground leading-relaxed">
+        You have the frameworks. Now watch me <strong className="text-foreground">build the income assets</strong> step by step —
+        unreleased PAIDS-engine walkthroughs + the DARES asset model, built live. Charged to the card you just used.
+      </p>
+      <div className="mt-6 flex flex-col sm:flex-row gap-3">
+        <Button onClick={take} disabled={state === "working"} className="bg-banana text-banana-foreground hover:bg-banana/90">
+          {state === "working" ? "Adding…" : `Yes — add for ${price} (1 click)`}
+        </Button>
+        <Button variant="outline" onClick={() => setState("declined")}>No thanks, I'll pass</Button>
+      </div>
+    </div>
+  );
+}
+
 function DownloadCard({ slug, reference }: { slug: string; reference: string }) {
   const dl = useServerFn(getDownloadUrl);
   const mut = useMutation({
@@ -285,7 +389,7 @@ function DownloadCard({ slug, reference }: { slug: string; reference: string }) 
     <div className="mt-10 border-2 border-banana bg-banana/5 p-6 text-center">
       <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Your download</div>
       <p className="mt-2 text-sm text-muted-foreground">
-        Click below to download your file. The link is valid for 30 minutes — you can always grab a fresh one from your dashboard.
+        Click below to download your file. The link is valid for 24 hours — you can always grab a fresh one from your dashboard.
       </p>
       <Button
         onClick={() => mut.mutate({ data: { productSlug: slug, reference } })}

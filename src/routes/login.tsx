@@ -1,8 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +9,7 @@ import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Sign in — Christ Kingdom Platform" }] }),
+  head: () => ({ meta: [{ title: "Sign in — CHKPLT" }] }),
   component: LoginPage,
 });
 
@@ -21,7 +20,7 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [tsToken, setTsToken] = useState<string | null>(null);
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
     if (!tsToken) { toast.error("Please complete the security check."); return; }
     setLoading(true);
@@ -33,45 +32,65 @@ function LoginPage() {
   };
 
   const onGoogle = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
-    if (r.error) toast.error("Google sign-in failed.");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + "/dashboard" },
+    });
+    if (error) toast.error("Google sign-in failed.");
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <SiteHeader />
-      <div className="mx-auto max-w-md px-6 pt-20 pb-16">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Sign in</div>
-        <h1 className="mt-4 font-display text-5xl">Welcome back.</h1>
+      <div className="flex-1 flex items-center justify-center px-5 py-16">
+        <div className="w-full max-w-md">
+          <div className="auth-card">
+            <div className="nx-label text-center mb-2">Sign in</div>
+            <h1 className="font-display text-3xl sm:text-4xl text-center tracking-tight">
+              Welcome back.
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground text-center">
+              Your courses and purchases are waiting.
+            </p>
 
-        <Button onClick={onGoogle} variant="outline" className="mt-10 w-full">
-          Continue with Google
-        </Button>
-        <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground font-mono">
-          <div className="h-px flex-1 bg-border" /> OR <div className="h-px flex-1 bg-border" />
-        </div>
+            <Button
+              onClick={onGoogle}
+              variant="outline"
+              className="mt-8 w-full h-12 border-border/60 hover:border-banana/40 hover:text-banana font-semibold"
+            >
+              Continue with Google
+            </Button>
 
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5" />
-          </div>
-          <div>
-            <div className="flex justify-between items-end">
-              <Label htmlFor="password">Password</Label>
-              <Link to="/reset-password" className="text-xs text-muted-foreground hover:text-banana">Forgot?</Link>
+            <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground font-mono">
+              <div className="h-px flex-1 bg-border" /> or sign in with email <div className="h-px flex-1 bg-border" />
             </div>
-            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" />
-          </div>
-          <TurnstileGate onToken={setTsToken} className="pt-1" />
-          <Button type="submit" disabled={loading || !tsToken} className="w-full bg-banana text-banana-foreground hover:bg-banana/90">
-            {loading ? "Signing in..." : "Sign in"}
-          </Button>
-        </form>
 
-        <p className="mt-6 text-sm text-muted-foreground">
-          New here? <Link to="/signup" className="text-banana">Create an account</Link>
-        </p>
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="email">Email address</Label>
+                <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="h-12" />
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <Link to="/reset-password" className="text-xs text-muted-foreground hover:text-banana transition-colors">Forgot password?</Link>
+                </div>
+                <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="h-12" />
+              </div>
+              <TurnstileGate onToken={setTsToken} className="pt-1" />
+              <Button type="submit" disabled={loading || !tsToken} className="cta-glow w-full h-12 font-bold">
+                {loading ? "Signing in…" : "Sign in →"}
+              </Button>
+            </form>
+
+            <p className="mt-6 text-sm text-muted-foreground text-center">
+              New here?{" "}
+              <Link to="/signup" className="text-banana font-semibold hover:text-banana/80 transition-colors">
+                Create an account
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
