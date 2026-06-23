@@ -1073,7 +1073,7 @@ function Landing() {
                 { rung: "01", label: "Free Tools", price: "Free", sub: "Win first, no card", tag: "START HERE", kind: "catalog" as const },
                 { rung: "02", label: "Foundation Kit", price: "$97", sub: "6 frameworks, once-off", tag: "", kind: "product" as const, slug: "called-expert-foundation-kit" },
                 { rung: "03", label: "Inner Circle", price: "$29/mo", sub: "Recurring community", tag: "RECURRING", kind: "product" as const, slug: "called-expert-inner-circle" },
-                { rung: "04", label: "Interactive Apps", price: "Coming", sub: "Pain-point resolvers", tag: "NEW", kind: "catalog" as const },
+                { rung: "04", label: "Offer Builder", price: "Free", sub: "Build your offer in 4 min", tag: "NEW · LIVE", kind: "app" as const },
                 { rung: "05", label: "Masterclasses", price: "from $49", sub: "Video deep-dives", tag: "", kind: "product" as const, slug: "personal-brand-30-days" },
                 { rung: "06", label: "Accelerator PRO", price: "$970", sub: "90-day, live coaching", tag: "MOST POPULAR", kind: "apply" as const },
                 { rung: "07", label: "Certified Facilitator", price: "By application", sub: "Done-with-you / licence", tag: "HIGH-TOUCH", kind: "product" as const, slug: "called-expert-facilitator" },
@@ -1092,10 +1092,11 @@ function Landing() {
                 const cls = "block border border-[#e0d8cc] bg-white p-3.5 text-left hover:border-[#C9A84C] transition-colors shrink-0 w-[150px] sm:w-[160px]";
                 if (t.kind === "product") return <Link key={t.label} to="/products/$slug" params={{ slug: t.slug! }} className={cls}>{inner}</Link>;
                 if (t.kind === "apply") return <Link key={t.label} to="/apply" className={cls}>{inner}</Link>;
+                if (t.kind === "app") return <Link key={t.label} to="/offer-builder" className={cls}>{inner}</Link>;
                 return <Link key={t.label} to="/products" className={cls}>{inner}</Link>;
               })}
             </div>
-            <p className="text-center text-[#999] text-[11px] mt-4 italic">Rung 04 — interactive pain-point apps — is rolling out next: tools that resolve a Called Expert's blocker on the spot, not another PDF.</p>
+            <p className="text-center text-[#777] text-[11px] mt-4 italic">Rung 04 is live: the <Link to="/offer-builder" className="text-banana underline underline-offset-2">free Offer Builder</Link> turns your skill into a complete, sellable offer in 4 minutes — the first of the interactive apps.</p>
           </div>
         </div>
       </section>

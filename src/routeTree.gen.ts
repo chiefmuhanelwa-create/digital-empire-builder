@@ -14,6 +14,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as OfferBuilderRouteImport } from './routes/offer-builder'
 import { Route as NicheClarityRouteImport } from './routes/niche-clarity'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -64,6 +65,11 @@ const RefundPolicyRoute = RefundPolicyRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfferBuilderRoute = OfferBuilderRouteImport.update({
+  id: '/offer-builder',
+  path: '/offer-builder',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NicheClarityRoute = NicheClarityRouteImport.update({
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
+  '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -243,6 +250,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
+  '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -277,6 +285,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/niche-clarity': typeof NicheClarityRoute
+  '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -311,6 +320,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/niche-clarity'
+    | '/offer-builder'
     | '/privacy'
     | '/refund-policy'
     | '/reset-password'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/niche-clarity'
+    | '/offer-builder'
     | '/privacy'
     | '/refund-policy'
     | '/reset-password'
@@ -376,6 +387,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/niche-clarity'
+    | '/offer-builder'
     | '/privacy'
     | '/refund-policy'
     | '/reset-password'
@@ -410,6 +422,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
   NicheClarityRoute: typeof NicheClarityRoute
+  OfferBuilderRoute: typeof OfferBuilderRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -460,6 +473,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offer-builder': {
+      id: '/offer-builder'
+      path: '/offer-builder'
+      fullPath: '/offer-builder'
+      preLoaderRoute: typeof OfferBuilderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/niche-clarity': {
@@ -710,6 +730,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
   NicheClarityRoute: NicheClarityRoute,
+  OfferBuilderRoute: OfferBuilderRoute,
   PrivacyRoute: PrivacyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
