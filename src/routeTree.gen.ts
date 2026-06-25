@@ -39,7 +39,9 @@ import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedDashboardToolsRouteImport } from './routes/_authenticated/dashboard.tools'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
+import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
+import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
@@ -205,10 +207,22 @@ const AuthenticatedDashboardFoundationKitRoute =
     path: '/foundation-kit',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedAppsPaidsAuditorRoute =
+  AuthenticatedAppsPaidsAuditorRouteImport.update({
+    id: '/apps/paids-auditor',
+    path: '/apps/paids-auditor',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsNicheClarityBuilderRoute =
   AuthenticatedAppsNicheClarityBuilderRouteImport.update({
     id: '/apps/niche-clarity-builder',
     path: '/apps/niche-clarity-builder',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsKnowledgeAuditRoute =
+  AuthenticatedAppsKnowledgeAuditRouteImport.update({
+    id: '/apps/knowledge-audit',
+    path: '/apps/knowledge-audit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminProductsRoute =
@@ -310,7 +324,9 @@ export interface FileRoutesByFullPath {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
+  '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -354,7 +370,9 @@ export interface FileRoutesByTo {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
+  '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -400,7 +418,9 @@ export interface FileRoutesById {
   '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
+  '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/_authenticated/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -446,7 +466,9 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/knowledge-audit'
     | '/apps/niche-clarity-builder'
+    | '/apps/paids-auditor'
     | '/dashboard/foundation-kit'
     | '/dashboard/tools'
     | '/learn/$slug'
@@ -490,7 +512,9 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/knowledge-audit'
     | '/apps/niche-clarity-builder'
+    | '/apps/paids-auditor'
     | '/dashboard/foundation-kit'
     | '/dashboard/tools'
     | '/learn/$slug'
@@ -535,7 +559,9 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/incidents'
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
+    | '/_authenticated/apps/knowledge-audit'
     | '/_authenticated/apps/niche-clarity-builder'
+    | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/dashboard/foundation-kit'
     | '/_authenticated/dashboard/tools'
     | '/_authenticated/learn/$slug'
@@ -793,11 +819,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardFoundationKitRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/apps/paids-auditor': {
+      id: '/_authenticated/apps/paids-auditor'
+      path: '/apps/paids-auditor'
+      fullPath: '/apps/paids-auditor'
+      preLoaderRoute: typeof AuthenticatedAppsPaidsAuditorRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/niche-clarity-builder': {
       id: '/_authenticated/apps/niche-clarity-builder'
       path: '/apps/niche-clarity-builder'
       fullPath: '/apps/niche-clarity-builder'
       preLoaderRoute: typeof AuthenticatedAppsNicheClarityBuilderRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/knowledge-audit': {
+      id: '/_authenticated/apps/knowledge-audit'
+      path: '/apps/knowledge-audit'
+      fullPath: '/apps/knowledge-audit'
+      preLoaderRoute: typeof AuthenticatedAppsKnowledgeAuditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/products': {
@@ -945,7 +985,9 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminIncidentsRoute: typeof AuthenticatedAdminIncidentsRoute
   AuthenticatedAdminLedgerRoute: typeof AuthenticatedAdminLedgerRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
+  AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
+  AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
   AuthenticatedAdminCurriculumProductSlugRoute: typeof AuthenticatedAdminCurriculumProductSlugRoute
 }
 
@@ -958,8 +1000,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminIncidentsRoute: AuthenticatedAdminIncidentsRoute,
   AuthenticatedAdminLedgerRoute: AuthenticatedAdminLedgerRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
+  AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
   AuthenticatedAppsNicheClarityBuilderRoute:
     AuthenticatedAppsNicheClarityBuilderRoute,
+  AuthenticatedAppsPaidsAuditorRoute: AuthenticatedAppsPaidsAuditorRoute,
   AuthenticatedAdminCurriculumProductSlugRoute:
     AuthenticatedAdminCurriculumProductSlugRoute,
 }

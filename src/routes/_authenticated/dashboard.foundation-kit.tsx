@@ -17,8 +17,8 @@ export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")
 // `pdf` = key in getKitFileUrl whitelist once the fillable PDF is uploaded.
 const FRAMEWORKS: { name: string; blurb: string; app?: string; pdf?: string }[] = [
   { name: "Niche Clarity", blurb: "Lock your niche in one afternoon.", app: "/apps/niche-clarity-builder", pdf: "niche-clarity" },
-  { name: "Knowledge Audit", blurb: "Find the product hiding in your expertise — in 2 hours." },
-  { name: "PAIDS Income Map", blurb: "Map your 5 income streams from what you already know.", pdf: "paids" },
+  { name: "Knowledge Audit", blurb: "Find the product hiding in your expertise — in 2 hours.", app: "/apps/knowledge-audit" },
+  { name: "PAIDS Income Map", blurb: "Map your 5 income streams from what you already know.", app: "/apps/paids-auditor", pdf: "paids" },
   { name: "DARES Asset Model", blurb: "Build income that doesn't need you to show up daily." },
   { name: "4E Content Calendar", blurb: "30 days of content at the ratio that converts." },
   { name: "SEEDS Pipeline", blurb: "Your first sales funnel, step by step." },
