@@ -4,7 +4,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
+import { myPurchases, getMyDownloadUrl, getKitFileUrl } from "@/lib/products.functions";
 import { TOOLS } from "@/lib/tools";
 import { Download, Lock, ArrowRight, BookOpen } from "lucide-react";
 import { toast } from "sonner";
@@ -16,11 +16,12 @@ export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")
 
 const KIT_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
 
-// The 7 frameworks the $97 kit promises. `app` is set once an interactive version ships.
-const FRAMEWORKS: { name: string; blurb: string; app?: "/niche-clarity" }[] = [
-  { name: "Niche Clarity", blurb: "Lock your niche in one afternoon.", app: "/niche-clarity" },
+// The 7 frameworks the $97 kit promises. `app` = live interactive version;
+// `pdf` = key in getKitFileUrl whitelist once the fillable PDF is uploaded.
+const FRAMEWORKS: { name: string; blurb: string; app?: "/niche-clarity"; pdf?: string }[] = [
+  { name: "Niche Clarity", blurb: "Lock your niche in one afternoon.", app: "/niche-clarity", pdf: "niche-clarity" },
   { name: "Knowledge Audit", blurb: "Find the product hiding in your expertise — in 2 hours." },
-  { name: "PAIDS Income Map", blurb: "Map your 5 income streams from what you already know." },
+  { name: "PAIDS Income Map", blurb: "Map your 5 income streams from what you already know.", pdf: "paids" },
   { name: "DARES Asset Model", blurb: "Build income that doesn't need you to show up daily." },
   { name: "4E Content Calendar", blurb: "30 days of content at the ratio that converts." },
   { name: "SEEDS Pipeline", blurb: "Your first sales funnel, step by step." },
@@ -46,6 +47,13 @@ function FoundationKitWorkspace() {
 
   const dlMut = useMutation({
     mutationFn: dlFn,
+    onSuccess: (res: { url: string }) => window.open(res.url, "_blank", "noopener,noreferrer"),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const kitFileFn = useServerFn(getKitFileUrl);
+  const kitFileMut = useMutation({
+    mutationFn: kitFileFn,
     onSuccess: (res: { url: string }) => window.open(res.url, "_blank", "noopener,noreferrer"),
     onError: (e: Error) => toast.error(e.message),
   });
@@ -102,15 +110,24 @@ function FoundationKitWorkspace() {
                 <div key={f.name} className="nx-card !p-5 flex flex-col">
                   <div className="font-display text-lg text-[var(--foreground)]">{f.name}</div>
                   <p className="text-sm text-[var(--text-dim)] mt-1 flex-1">{f.blurb}</p>
-                  <div className="mt-4">
+                  <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
                     {f.app ? (
                       <Link to={f.app} className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--nx-gold-text)] hover:underline">
                         Open interactive app <ArrowRight className="size-4" />
                       </Link>
                     ) : (
                       <span className="inline-block rounded-full bg-[var(--bg-card-hi)] px-3 py-1 text-xs font-semibold text-[var(--text-subtle)]">
-                        Interactive app — coming soon · use the PDF
+                        App coming soon
                       </span>
+                    )}
+                    {f.pdf && (
+                      <button
+                        onClick={() => kitFileMut.mutate({ data: { key: f.pdf! } })}
+                        disabled={kitFileMut.isPending}
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-dim)] hover:text-[var(--foreground)] disabled:opacity-50"
+                      >
+                        <Download className="size-4" /> Workbook PDF
+                      </button>
                     )}
                   </div>
                 </div>

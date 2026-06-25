@@ -270,3 +270,45 @@ export const getMyDownloadUrl = createServerFn({ method: "POST" })
     if (sErr) throw new Error(sErr.message);
     return { url: signed.signedUrl, title: product.title };
   });
+
+// ── Foundation Kit per-framework downloads ───────────────────────────────────
+// Whitelist of kit deliverable files in product-files (key → filename). Add an
+// entry as each framework's fillable PDF is uploaded.
+const KIT_FILES: Record<string, string> = {
+  "niche-clarity": "niche-clarity-workbook.pdf",
+  paids: "paids-framework-workbook.pdf",
+};
+const KIT_OWNER_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
+
+export const getKitFileUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ key: z.string().min(1).max(60) }).parse(input))
+  .handler(async ({ data, context }) => {
+    const file = KIT_FILES[data.key];
+    if (!file) throw new Error("Unknown kit file.");
+    const { userId } = context;
+
+    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", { _user_id: userId, _role: "admin" });
+    let allowed = !!isAdmin;
+    if (!allowed) {
+      const { data: kits } = await supabaseAdmin.from("products").select("id").in("slug", KIT_OWNER_SLUGS);
+      const ids = (kits ?? []).map((k) => k.id);
+      if (ids.length) {
+        const { data: grant } = await supabaseAdmin
+          .from("product_grants")
+          .select("id")
+          .eq("user_id", userId)
+          .in("product_id", ids)
+          .is("revoked_at", null)
+          .maybeSingle();
+        allowed = !!grant;
+      }
+    }
+    if (!allowed) throw new Error("You don't have access to the Foundation Kit.");
+
+    const { data: signed, error } = await supabaseAdmin.storage
+      .from("product-files")
+      .createSignedUrl(file, 60 * 60 * 24);
+    if (error) throw new Error(error.message);
+    return { url: signed.signedUrl };
+  });
