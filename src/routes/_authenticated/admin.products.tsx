@@ -159,8 +159,8 @@ function AdminProducts() {
           />
         </div>
 
-        <div className="mt-8 border border-border">
-          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+        <div className="mt-8 border border-border overflow-x-auto">
+          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground min-w-[680px]">
             <div className="col-span-4">Title</div>
             <div className="col-span-2">Garden</div>
             <div className="col-span-2 text-right">Price</div>
@@ -173,7 +173,7 @@ function AdminProducts() {
           {filtered.map((p) => (
             <div
               key={p.id}
-              className="grid grid-cols-12 gap-2 border-b border-border/60 px-4 py-3 text-sm items-center"
+              className="grid grid-cols-12 gap-2 border-b border-border/60 px-4 py-3 text-sm items-center min-w-[680px]"
             >
               <div className="col-span-4">
                 <Link

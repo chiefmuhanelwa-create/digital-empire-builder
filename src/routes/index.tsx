@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { TurnstileGate } from "@/components/TurnstileGate";
@@ -86,46 +86,58 @@ function CheckoutModal({
       toast.error(e.message ?? "Could not start checkout. Please try again."),
   });
 
+  // Close on Escape; lock background scroll while the modal is open.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+
   const inputCls =
-    "w-full bg-white border border-[#CBD5E1] px-4 py-3 text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#F59E0B] transition-colors rounded-none";
+    "w-full bg-white border border-[#CBD5E1] px-4 py-3 text-base text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#F59E0B] transition-colors rounded-lg";
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-black/70 flex items-end sm:items-center justify-center sm:p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className="bg-white w-full max-w-sm relative my-4 border border-[#F59E0B]"
-        style={GOLD_GLOW}
+        className="bg-white w-full sm:max-w-md max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-[#F59E0B] shadow-2xl relative"
       >
-        <button
-          onClick={onClose}
-          className="absolute top-1.5 right-1.5 z-10 inline-flex items-center justify-center h-11 w-11 text-[#475569] hover:text-[#0F172A]"
-          aria-label="Close"
-        >
-          <X className="size-5" />
-        </button>
+        {/* Sticky close bar — always reachable while scrolling */}
+        <div className="sticky top-0 z-20 flex items-center justify-between bg-white/95 backdrop-blur px-4 py-2 border-b border-[#E2E8F0]">
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-banana">Secure Checkout</span>
+          <button
+            onClick={onClose}
+            className="inline-flex items-center justify-center h-10 w-10 rounded-full text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0F172A] transition-colors"
+            aria-label="Close checkout"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
 
         {/* Header */}
-        <div className="bg-white px-6 pt-7 pb-5 text-center border-b border-[#E2E8F0]">
-          <div className="font-mono text-[10px] tracking-[0.28em] uppercase text-banana mb-2">
-            INSTANT ACCESS — LIMITED OFFER
-          </div>
-          <h3 className="font-display text-xl text-[#0F172A] leading-snug">
+        <div className="bg-white px-5 sm:px-6 pt-4 pb-5 text-center border-b border-[#E2E8F0]">
+          <h3 className="font-display text-lg sm:text-xl text-[#0F172A] leading-snug">
             Called Expert Foundation Kit
           </h3>
-          <div className="mt-4">
+          <div className="mt-3">
             <div className="flex items-center justify-center gap-3 mb-1">
               <span className="text-[#64748B] text-sm line-through font-mono">
                 {comparePrice}
               </span>
-              <span className="bg-green-600 text-white text-[11px] font-bold px-2 py-0.5">
+              <span className="bg-green-600 text-white text-[11px] font-bold px-2 py-0.5 rounded">
                 Save {savings}!
               </span>
             </div>
-            <div className="font-display text-5xl text-banana">
+            <div className="font-display text-4xl sm:text-5xl text-banana">
               {displayPrice}
               <span className="text-base text-[#475569] font-mono ml-1">
                 today
@@ -142,7 +154,7 @@ function CheckoutModal({
 
         {/* Form */}
         <form
-          className="px-6 py-5 space-y-3"
+          className="px-5 sm:px-6 py-5 space-y-3"
           onSubmit={(e) => {
             e.preventDefault();
             trackLead();

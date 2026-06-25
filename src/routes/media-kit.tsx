@@ -108,7 +108,7 @@ function MediaKitPage() {
 
             <Section title="Platforms & reach">
               {k.platforms.map((p, i) => (
-                <div key={i} className="grid grid-cols-[1.2fr_1fr_1fr] gap-2">
+                <div key={i} className="grid grid-cols-1 sm:grid-cols-[1.2fr_1fr_1fr] gap-2">
                   <Input className={FLD} value={p.name} onChange={(e) => setArr<Platform>("platforms", i, "name", e.target.value)} placeholder="Platform" />
                   <Input className={FLD} value={p.followers} onChange={(e) => setArr<Platform>("platforms", i, "followers", e.target.value)} placeholder="Followers" />
                   <Input className={FLD} value={p.er} onChange={(e) => setArr<Platform>("platforms", i, "er", e.target.value)} placeholder="ER %" />
@@ -131,7 +131,7 @@ function MediaKitPage() {
 
             <Section title="Content pillars">
               {k.pillars.map((p, i) => (
-                <div key={i} className="grid grid-cols-[1fr_1.4fr] gap-2">
+                <div key={i} className="grid grid-cols-1 sm:grid-cols-[1fr_1.4fr] gap-2">
                   <Input className={FLD} value={p.name} onChange={(e) => setArr<Pillar>("pillars", i, "name", e.target.value)} placeholder={`Pillar ${i + 1}`} />
                   <Input className={FLD} value={p.desc} onChange={(e) => setArr<Pillar>("pillars", i, "desc", e.target.value)} placeholder="What you cover" />
                 </div>
@@ -140,7 +140,7 @@ function MediaKitPage() {
 
             <Section title="Rate card">
               {k.rates.map((r, i) => (
-                <div key={i} className="grid grid-cols-[1.6fr_1fr] gap-2">
+                <div key={i} className="grid grid-cols-1 sm:grid-cols-[1.6fr_1fr] gap-2">
                   <Input className={FLD} value={r.name} onChange={(e) => setArr<Rate>("rates", i, "name", e.target.value)} placeholder="Package" />
                   <Input className={FLD} value={r.price} onChange={(e) => setArr<Rate>("rates", i, "price", e.target.value)} placeholder="R 4,500" />
                 </div>
@@ -237,7 +237,7 @@ function KitPreview({ k }: { k: Kit }) {
         {k.bio && <p className="text-[#2A2A2A] text-sm leading-relaxed">{k.bio}</p>}
 
         {platforms.length > 0 && (
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {platforms.map((p) => (
               <div key={p.name} className="border border-[#e8e0d4] rounded-xl p-3 text-center bg-[#FBFAF8]">
                 <div className="font-display text-2xl text-banana">{p.followers}</div>

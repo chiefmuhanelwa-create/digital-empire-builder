@@ -222,8 +222,8 @@ function AdminContacts() {
         </div>
 
         {/* Table */}
-        <div className="mt-4 border border-border">
-          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+        <div className="mt-4 border border-border overflow-x-auto">
+          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground min-w-[680px]">
             <div className="col-span-4">Email</div>
             <div className="col-span-2">Name</div>
             <div className="col-span-2">Source</div>
@@ -231,7 +231,7 @@ function AdminContacts() {
             <div className="col-span-2 text-right">Status</div>
           </div>
           {(list.data?.rows ?? []).map((r: any) => (
-            <div key={r.id} className="grid grid-cols-12 gap-2 border-b border-border/60 px-4 py-3 text-sm items-center">
+            <div key={r.id} className="grid grid-cols-12 gap-2 border-b border-border/60 px-4 py-3 text-sm items-center min-w-[680px]">
               <div className="col-span-4 truncate">{r.email}</div>
               <div className="col-span-2 truncate text-muted-foreground">
                 {[r.first_name, r.last_name].filter(Boolean).join(" ") || "—"}

@@ -112,7 +112,7 @@ function About() {
       {/* PHOTO STRIP */}
       <section className="border-t border-[#E2E8F0]">
         <div className="mx-auto max-w-5xl px-5 sm:px-6 py-10">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
               { src: "/IMG_5125.JPG", alt: "NoChill speaking at workshop" },
               { src: "/founder-award.jpg", alt: "NoChill — Humanz Top 20 Award 2026" },

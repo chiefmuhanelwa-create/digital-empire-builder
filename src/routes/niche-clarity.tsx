@@ -67,7 +67,7 @@ function NicheClarityPage() {
         <div className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.25em] uppercase text-banana">
           <Sparkles className="size-3.5" /> The Niche Clarity Workbook
         </div>
-        <h1 className="mt-6 font-display text-5xl md:text-7xl leading-[1.02]">
+        <h1 className="mt-6 font-display text-4xl sm:text-5xl md:text-7xl leading-[1.02]">
           You don't have a content problem.<br />
           <em className="not-italic text-banana">You have a niche problem.</em>
         </h1>
@@ -78,7 +78,7 @@ function NicheClarityPage() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-baseline gap-4">
-          <div className="font-display text-6xl text-banana">{priceLabel}</div>
+          <div className="font-display text-5xl sm:text-6xl text-banana">{priceLabel}</div>
           <div className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">
             one-time · instant download
           </div>

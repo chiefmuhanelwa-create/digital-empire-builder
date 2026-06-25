@@ -60,7 +60,7 @@ function Catalog() {
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
           Products
         </div>
-        <h1 className="mt-4 font-display text-5xl md:text-7xl leading-[1.05] max-w-3xl">
+        <h1 className="mt-4 font-display text-4xl sm:text-5xl md:text-7xl leading-[1.05] max-w-3xl">
           Every tool.{" "}
           <em className="text-banana not-italic">Every framework. Every system.</em>
         </h1>

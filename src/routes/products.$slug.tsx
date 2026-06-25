@@ -122,11 +122,11 @@ function ProductDetail() {
         <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">
           {product.tagline}
         </div>
-        <h1 className="mt-3 font-display text-5xl md:text-6xl leading-[1.05]">{product.title}</h1>
+        <h1 className="mt-3 font-display text-3xl sm:text-5xl md:text-6xl leading-[1.05]">{product.title}</h1>
 
 
         <div className="mt-10 flex items-baseline gap-4 flex-wrap">
-          <div className="font-display text-5xl text-banana">{priceLabel}</div>
+          <div className="font-display text-4xl sm:text-5xl text-banana">{priceLabel}</div>
           {!product.is_free && !product.requires_application && (
             <div className="font-mono text-xs text-muted-foreground">one-time payment · instant download · billed in ZAR at checkout</div>
           )}
