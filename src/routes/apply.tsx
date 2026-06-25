@@ -43,7 +43,7 @@ const STEPS = [
 ];
 
 const GOLD_GLOW = {
-  boxShadow: "0 0 24px rgba(201,168,76,0.55), 0 0 56px rgba(201,168,76,0.25)",
+  boxShadow: "0 0 24px rgba(245,158,11,0.55), 0 0 56px rgba(245,158,11,0.25)",
 } as const;
 
 const FOLLOWER_MAP: Record<string, number> = {
@@ -144,8 +144,8 @@ function YesNo({
           onClick={() => onChange(opt)}
           className={`flex-1 py-3 px-4 border font-display font-bold uppercase text-sm tracking-wide transition-all ${
             value === opt
-              ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
-              : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C] hover:text-[#1C1C1C]"
+              ? "bg-[#F59E0B] border-[#F59E0B] text-[#111]"
+              : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#F59E0B] hover:text-[#0F172A]"
           }`}
         >
           {opt === "yes" ? yesLabel : noLabel}
@@ -158,7 +158,7 @@ function YesNo({
 function FieldRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <Label className="font-display text-[#1C1C1C] text-sm font-bold leading-snug">{label}</Label>
+      <Label className="font-display text-[#0F172A] text-sm font-bold leading-snug">{label}</Label>
       {children}
     </div>
   );
@@ -271,7 +271,7 @@ function ApplyPage() {
           <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-banana mb-3">
             Application
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-[#1C1C1C] leading-[1.05] tracking-tight uppercase mb-4">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-[#0F172A] leading-[1.05] tracking-tight uppercase mb-4">
             90-Day Called Expert
             <br /><span className="text-banana">Accelerator PRO</span>
           </h1>
@@ -285,7 +285,7 @@ function ApplyPage() {
           <div
             className="border-2 bg-white p-8 sm:p-10 text-center"
             style={{
-              borderColor: isQualified ? "#C9A84C" : "#d0c8bc",
+              borderColor: isQualified ? "#F59E0B" : "#d0c8bc",
               ...GOLD_GLOW,
             }}
           >
@@ -295,7 +295,7 @@ function ApplyPage() {
                 <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-banana mb-3">
                   YOU QUALIFY
                 </div>
-                <h2 className="font-display text-2xl sm:text-3xl text-[#1C1C1C] uppercase mb-4">
+                <h2 className="font-display text-2xl sm:text-3xl text-[#0F172A] uppercase mb-4">
                   You're In, {fields.full_name.split(" ")[0]}.
                 </h2>
                 <p className="text-[#555] text-base leading-relaxed mb-6 max-w-sm mx-auto">
@@ -303,7 +303,7 @@ function ApplyPage() {
                 </p>
                 <Link
                   to="/signup"
-                  className="inline-flex items-center justify-center gap-2 bg-[#C9A84C] text-[#111] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#b8963e] transition-colors w-full max-w-xs"
+                  className="inline-flex items-center justify-center gap-2 bg-[#F59E0B] text-[#111] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#b8963e] transition-colors w-full max-w-xs"
                   style={GOLD_GLOW}
                 >
                   Create Your Account
@@ -319,7 +319,7 @@ function ApplyPage() {
                 <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#5a5a5a] mb-3">
                   NOT YET
                 </div>
-                <h2 className="font-display text-2xl sm:text-3xl text-[#1C1C1C] uppercase mb-4">
+                <h2 className="font-display text-2xl sm:text-3xl text-[#0F172A] uppercase mb-4">
                   The Foundation Kit First.
                 </h2>
                 <p className="text-[#555] text-base leading-relaxed mb-6 max-w-sm mx-auto">
@@ -327,17 +327,23 @@ function ApplyPage() {
                 </p>
                 {result.focusPillars && (
                   <p className="text-[#777] text-sm mb-6 max-w-xs mx-auto">
-                    <strong className="text-[#1C1C1C]">Your focus area:</strong> {result.focusPillars}
+                    <strong className="text-[#0F172A]">Your focus area:</strong> {result.focusPillars}
                   </p>
                 )}
                 <Link
-                  to="/"
-                  className="inline-flex items-center justify-center gap-2 bg-[#C9A84C] text-[#111] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#b8963e] transition-colors w-full max-w-xs"
+                  to="/products/$slug"
+                  params={{ slug: "called-expert-foundation-kit" }}
+                  className="inline-flex items-center justify-center gap-2 bg-[#F59E0B] text-[#0F172A] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#D97706] transition-colors w-full max-w-xs"
                   style={GOLD_GLOW}
                 >
-                  Get the Foundation Kit
+                  Get the Foundation Kit — $97
                   <ArrowRight className="size-4" />
                 </Link>
+                <p className="mt-4 text-sm">
+                  <Link to="/tools" className="text-[var(--nx-gold-text)] font-semibold hover:underline">
+                    Or start with the free tools →
+                  </Link>
+                </p>
               </>
             )}
           </div>
@@ -351,9 +357,9 @@ function ApplyPage() {
                     <div
                       className={`size-8 flex items-center justify-center font-mono text-xs font-bold border transition-all ${
                         i < step
-                          ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
+                          ? "bg-[#F59E0B] border-[#F59E0B] text-[#111]"
                           : i === step
-                          ? "border-[#C9A84C] text-banana bg-white"
+                          ? "border-[#F59E0B] text-banana bg-white"
                           : "border-[#d0c8bc] text-[#555] bg-white"
                       }`}
                     >
@@ -361,7 +367,7 @@ function ApplyPage() {
                     </div>
                     <div
                       className={`mt-1 font-mono text-[9px] tracking-wide uppercase hidden sm:block ${
-                        i === step ? "text-[#1C1C1C]" : "text-[#555]"
+                        i === step ? "text-[#0F172A]" : "text-[#555]"
                       }`}
                     >
                       {s.label}
@@ -370,7 +376,7 @@ function ApplyPage() {
                   {i < TOTAL_STEPS - 1 && (
                     <div
                       className={`h-px flex-1 mx-1 transition-colors ${
-                        i < step ? "bg-[#C9A84C]" : "bg-[#d0c8bc]"
+                        i < step ? "bg-[#F59E0B]" : "bg-[#d0c8bc]"
                       }`}
                     />
                   )}
@@ -383,7 +389,7 @@ function ApplyPage() {
               <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana mb-1">
                 Step {step + 1} of {TOTAL_STEPS}
               </div>
-              <h2 className="font-display text-xl sm:text-2xl text-[#1C1C1C] uppercase mb-6">
+              <h2 className="font-display text-xl sm:text-2xl text-[#0F172A] uppercase mb-6">
                 {STEPS[step].label}
               </h2>
 
@@ -397,7 +403,7 @@ function ApplyPage() {
                         value={fields.full_name}
                         onChange={(e) => set("full_name", e.target.value)}
                         placeholder="Your full name"
-                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                       />
                     </FieldRow>
                     <FieldRow label="Your email address">
@@ -406,7 +412,7 @@ function ApplyPage() {
                         value={fields.email}
                         onChange={(e) => set("email", e.target.value)}
                         placeholder="you@domain.com"
-                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                       />
                     </FieldRow>
                     <FieldRow label="How many people follow you across all your platforms? (LinkedIn, Instagram, Facebook, YouTube — total)">
@@ -507,7 +513,7 @@ function ApplyPage() {
                           value={fields.product_sales}
                           onChange={(e) => set("product_sales", e.target.value)}
                           placeholder="0"
-                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                         />
                       </FieldRow>
                     )}
@@ -531,7 +537,7 @@ function ApplyPage() {
                           value={fields.subscribers}
                           onChange={(e) => set("subscribers", e.target.value)}
                           placeholder="0"
-                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                         />
                       </FieldRow>
                     )}
@@ -549,7 +555,7 @@ function ApplyPage() {
                           value={fields.community_members}
                           onChange={(e) => set("community_members", e.target.value)}
                           placeholder="0"
-                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                          className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                         />
                       </FieldRow>
                     )}
@@ -598,8 +604,8 @@ function ApplyPage() {
                             onClick={() => set("primary_e", opt)}
                             className={`py-3 px-4 border font-display font-bold uppercase text-sm tracking-wide transition-all ${
                               fields.primary_e === opt
-                                ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
-                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C]"
+                                ? "bg-[#F59E0B] border-[#F59E0B] text-[#111]"
+                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#F59E0B]"
                             }`}
                           >
                             {opt}
@@ -627,8 +633,8 @@ function ApplyPage() {
                             onClick={() => set("building_for", opt.val)}
                             className={`flex-1 py-3 px-3 border font-display font-bold text-sm tracking-wide transition-all text-center ${
                               fields.building_for === opt.val
-                                ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
-                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C]"
+                                ? "bg-[#F59E0B] border-[#F59E0B] text-[#111]"
+                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#F59E0B]"
                             }`}
                           >
                             {opt.label}
@@ -655,7 +661,7 @@ function ApplyPage() {
                   <button
                     type="button"
                     onClick={() => setStep((s) => s - 1)}
-                    className="flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#1C1C1C] transition-colors"
+                    className="flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#0F172A] transition-colors"
                   >
                     <ArrowLeft className="size-3.5" />
                     Back
@@ -669,7 +675,7 @@ function ApplyPage() {
                     type="button"
                     disabled={!canProceed()}
                     onClick={() => setStep((s) => s + 1)}
-                    className="bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
                     style={canProceed() ? GOLD_GLOW : undefined}
                   >
                     Continue
@@ -680,7 +686,7 @@ function ApplyPage() {
                     type="button"
                     disabled={!canProceed() || loading}
                     onClick={handleSubmit}
-                    className="bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
                     style={canProceed() && !loading ? GOLD_GLOW : undefined}
                   >
                     {loading ? (

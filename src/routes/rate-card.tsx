@@ -170,10 +170,10 @@ function compute(inp: Inputs) {
 }
 
 // ── UI ────────────────────────────────────────────────────────────────────
-const LABEL = "font-display text-[#1C1C1C] text-sm font-bold leading-snug block mb-1.5";
+const LABEL = "font-display text-[#0F172A] text-sm font-bold leading-snug block mb-1.5";
 const HINT = "text-[#555] text-xs mb-2";
 const NUM =
-  "w-full h-11 border border-[#d0c8bc] bg-white rounded-md px-3 text-[15px] text-[#1C1C1C] focus:border-[#C9A84C] focus:outline-none focus:ring-0";
+  "w-full h-11 border border-[#d0c8bc] bg-white rounded-md px-3 text-[15px] text-[#0F172A] focus:border-[#F59E0B] focus:outline-none focus:ring-0";
 const SEL = NUM + " appearance-none";
 
 function RateCardPage() {
@@ -186,7 +186,7 @@ function RateCardPage() {
   const R = useMemo(() => compute(inp), [inp]);
 
   return (
-    <div className="min-h-screen bg-white text-[#1C1C1C]">
+    <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
         <div className="text-center mb-8">
@@ -225,7 +225,7 @@ function RateCardPage() {
                       type="button"
                       onClick={() => toggle("platforms", k)}
                       className={`text-left py-2.5 px-3 border rounded-lg text-sm font-medium transition-all ${
-                        on ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]" : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C]"
+                        on ? "bg-[#F59E0B] border-[#F59E0B] text-[#111]" : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#F59E0B]"
                       }`}
                     >
                       {p.name}
@@ -288,11 +288,11 @@ function RateCardPage() {
                       type="button"
                       onClick={() => toggle("addons", k)}
                       className={`flex items-center justify-between gap-3 text-left py-2.5 px-3 border rounded-lg transition-all ${
-                        on ? "border-[#C9A84C] bg-[#FBF7EC]" : "border-[#d0c8bc] bg-white hover:border-[#C9A84C]"
+                        on ? "border-[#F59E0B] bg-[#FBF7EC]" : "border-[#d0c8bc] bg-white hover:border-[#F59E0B]"
                       }`}
                     >
                       <span>
-                        <span className="font-display font-bold text-sm text-[#1C1C1C]">{a.label}</span>
+                        <span className="font-display font-bold text-sm text-[#0F172A]">{a.label}</span>
                         <span className="block text-[#555] text-xs">{a.desc}</span>
                       </span>
                       <span className="font-mono text-xs text-banana shrink-0">{a.pct}</span>
@@ -302,8 +302,8 @@ function RateCardPage() {
               </div>
             </div>
 
-            <label className="flex items-center gap-3 text-sm text-[#1C1C1C] cursor-pointer">
-              <input type="checkbox" checked={inp.includeProduction} onChange={(e) => set("includeProduction", e.target.checked)} className="size-4 accent-[#C9A84C]" />
+            <label className="flex items-center gap-3 text-sm text-[#0F172A] cursor-pointer">
+              <input type="checkbox" checked={inp.includeProduction} onChange={(e) => set("includeProduction", e.target.checked)} className="size-4 accent-[#F59E0B]" />
               Add production cost ({fmtZAR(CONTENT_TYPE[inp.contentType].prod)} for {CONTENT_TYPE[inp.contentType].label.toLowerCase()})
             </label>
 
@@ -311,7 +311,7 @@ function RateCardPage() {
               type="button"
               disabled={!R.valid}
               onClick={() => setShowResult(true)}
-              className="w-full bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto disabled:opacity-40"
+              className="w-full bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto disabled:opacity-40"
             >
               Calculate my rate <ArrowRight className="size-4 ml-1" />
             </Button>
@@ -345,14 +345,14 @@ function RateResult({ R, inp, onReset }: { R: ReturnType<typeof compute>; inp: I
 
       <div className="border border-[#e8e0d4] rounded-2xl bg-white p-6 sm:p-8 space-y-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.10)]">
         <div className="grid sm:grid-cols-2 gap-4">
-          <div className="border border-[#C9A84C]/40 rounded-xl p-4 bg-[#FBF7EC]">
+          <div className="border border-[#F59E0B]/40 rounded-xl p-4 bg-[#FBF7EC]">
             <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">Minimum floor</div>
-            <div className="font-display text-2xl text-[#1C1C1C]">{fmtZAR(R.low)}</div>
+            <div className="font-display text-2xl text-[#0F172A]">{fmtZAR(R.low)}</div>
             <p className="text-[#555] text-sm mt-1">Don't go below this. Walk away instead.</p>
           </div>
           <div className="border border-[#e8e0d4] rounded-xl p-4 bg-[#FBFAF8]">
             <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">Priced on your</div>
-            <div className="font-display text-2xl text-[#1C1C1C] capitalize">{R.leadMetric}</div>
+            <div className="font-display text-2xl text-[#0F172A] capitalize">{R.leadMetric}</div>
             <p className="text-[#555] text-sm mt-1">The stronger of your reach vs engagement set this rate.</p>
           </div>
         </div>
@@ -376,7 +376,7 @@ function RateResult({ R, inp, onReset }: { R: ReturnType<typeof compute>; inp: I
         <button
           type="button"
           onClick={onReset}
-          className="flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#1C1C1C] transition-colors"
+          className="flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#0F172A] transition-colors"
         >
           <RotateCcw className="size-3.5" /> Recalculate
         </button>
@@ -397,7 +397,7 @@ function RateResult({ R, inp, onReset }: { R: ReturnType<typeof compute>; inp: I
           </Link>
           <Link
             to="/offer-builder"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#C9A84C] text-[#1C1C1C] hover:bg-[#C9A84C] hover:text-[#111] transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#F59E0B] text-[#0F172A] hover:bg-[#F59E0B] hover:text-[#111] transition-colors"
           >
             Build your offer next
           </Link>
@@ -411,7 +411,7 @@ function Row({ k, v }: { k: string; v: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-[#f0ebe1] pb-2">
       <span className="text-[#555]">{k}</span>
-      <span className="font-mono text-[#1C1C1C]">{v}</span>
+      <span className="font-mono text-[#0F172A]">{v}</span>
     </div>
   );
 }

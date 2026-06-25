@@ -13,27 +13,27 @@ const ROOT_DOMAIN = "chkplt.com";
 const SENDER_DOMAIN = "notify.chkplt.com";
 
 function qualifiedHtml(name: string): string {
-  return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#111111;color:#FAF7F0;padding:40px 32px;">
-<p style="color:#C9A84C;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Christ's Kingdom Platform</p>
+  return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#0F172A;color:#F8FAFC;padding:40px 32px;">
+<p style="color:#F59E0B;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Christ's Kingdom Platform</p>
 <h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">You're qualified, ${name}.</h1>
 <p style="font-size:16px;line-height:1.6;margin:0 0 16px;">Your stewardship audit passed. Your metrics validate entry into the 20-Week Called Expert Accelerator.</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 32px;">One step left: book your 20-minute strategy call so we can confirm the right cohort start date for you.</p>
-<a href="https://${ROOT_DOMAIN}/apply" style="display:inline-block;background:#C9A84C;color:#111111;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Book Your Strategy Call</a>
-<p style="font-size:13px;color:#888;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
-<p style="font-size:11px;color:#555;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
+<a href="https://${ROOT_DOMAIN}/apply" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Book Your Strategy Call</a>
+<p style="font-size:13px;color:#94A3B8;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
+<p style="font-size:11px;color:#64748B;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
 </div>`;
 }
 
 function downsellHtml(name: string, focusPillars: string, targetModules: string): string {
-  return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#111111;color:#FAF7F0;padding:40px 32px;">
+  return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#0F172A;color:#F8FAFC;padding:40px 32px;">
 <p style="color:#EA580C;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Stewardship Diagnostic</p>
 <h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">Your results are in, ${name}.</h1>
 <p style="font-size:16px;line-height:1.6;margin:0 0 16px;">You're not ready for the core programme yet — and that's not a failure. It means we caught your structural gap before you paid $970 for something you'd struggle to execute.</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 8px;"><strong>Your immediate priority:</strong><br>${focusPillars}</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 32px;"><strong>What to study:</strong><br>${targetModules}</p>
-<a href="https://${ROOT_DOMAIN}/products" style="display:inline-block;background:#C9A84C;color:#111111;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Get Your Foundation Resources</a>
-<p style="font-size:13px;color:#888;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
-<p style="font-size:11px;color:#555;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
+<a href="https://${ROOT_DOMAIN}/products/called-expert-foundation-kit" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:9999px;">Get the Foundation Kit — $97</a>
+<p style="font-size:13px;color:#94A3B8;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
+<p style="font-size:11px;color:#64748B;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
 </div>`;
 }
 

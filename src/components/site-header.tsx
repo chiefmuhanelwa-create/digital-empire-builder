@@ -1,51 +1,82 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth-context";
+import { supabase } from "@/integrations/supabase/client";
 
-const GOLD_GLOW_SOFT = {
-  boxShadow: "0 0 14px rgba(201,168,76,0.35), 0 0 32px rgba(201,168,76,0.12)",
-} as const;
+const navLink =
+  "text-[15px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-1 py-1";
+const navActive = { className: "text-[var(--foreground)] font-semibold" };
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
 
+  // Only fetch role once we know there's a user; cached so it doesn't refetch per page.
+  const isAdminQ = useQuery({
+    queryKey: ["is-admin", user?.id],
+    enabled: !!user?.id,
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" });
+      return !!data;
+    },
+  });
+
   return (
-    <header className="sticky top-0 z-40 border-b border-[#e0d8cc] bg-white/95">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="font-display text-sm sm:text-base font-black tracking-[0.22em] uppercase text-[#1C1C1C]">
+    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link
+          to="/"
+          className="font-display text-base sm:text-lg font-extrabold tracking-[0.18em] uppercase text-[var(--foreground)] shrink-0"
+        >
           CHKPLT
         </Link>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Primary nav — clear, labelled, scrollable on small screens */}
+        <nav className="flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar">
           {user ? (
             <>
-              <Link
-                to="/dashboard"
-                className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#555] hover:text-[#1C1C1C] transition-colors px-3 py-1.5"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={() => signOut()}
-                className="font-mono text-[11px] tracking-[0.15em] uppercase border border-[#e0d8cc] text-[#555] hover:border-[#C9A84C] hover:text-banana transition-colors px-3 py-1.5"
-              >
-                Sign out
-              </button>
+              <Link to="/dashboard" className={navLink} activeProps={navActive}>Dashboard</Link>
+              <Link to="/dashboard/tools" className={navLink} activeProps={navActive}>Free Tools</Link>
+              <Link to="/dashboard/products/free" className={navLink} activeProps={navActive}>Products</Link>
+              <Link to="/learn" className={navLink} activeProps={navActive}>Courses</Link>
+              <Link to="/account" className={navLink} activeProps={navActive}>Account</Link>
+              {isAdminQ.data && (
+                <Link to="/admin/products" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
+                  Admin
+                </Link>
+              )}
             </>
+          ) : (
+            <>
+              <Link to="/tools" className={`hidden sm:block ${navLink}`} activeProps={navActive}>Free Tools</Link>
+              <Link to="/about" className={`hidden sm:block ${navLink}`} activeProps={navActive}>About</Link>
+              <Link to="/contact" className={`hidden sm:block ${navLink}`} activeProps={navActive}>Contact</Link>
+            </>
+          )}
+        </nav>
+
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {user ? (
+            <button
+              onClick={() => signOut()}
+              className="rounded-full border-2 border-[var(--border-mid)] text-[14px] font-semibold text-[var(--text-dim)] hover:border-[var(--border-hover)] hover:text-[var(--foreground)] transition-colors px-4 py-2 cursor-pointer"
+            >
+              Sign out
+            </button>
           ) : (
             <>
               <Link
                 to="/login"
-                className="font-mono text-[11px] tracking-[0.15em] uppercase text-[#555] hover:text-[#1C1C1C] transition-colors px-3 py-1.5 hidden sm:block"
+                className="hidden sm:block text-[15px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-3 py-2"
               >
                 Sign in
               </Link>
               <Link
                 to="/products/$slug"
-                params={{ slug: "called-expert-starter-bundle" }}
-                className="inline-flex items-center gap-1 border border-[#C9A84C] text-[#1C1C1C] font-mono text-[11px] tracking-[0.15em] uppercase px-3 py-1.5 hover:bg-[#C9A84C] hover:text-[#111] transition-colors"
-                style={GOLD_GLOW_SOFT}
+                params={{ slug: "called-expert-foundation-kit" }}
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--nx-gold)] px-5 py-2.5 text-[14px] font-bold text-[#0F172A] shadow-sm hover:bg-[var(--nx-gold-deep)] hover:-translate-y-px transition-all"
               >
-                Get Started — $97
+                Get the Kit — $97
               </Link>
             </>
           )}
@@ -57,29 +88,36 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[#e0d8cc] bg-[#1C1C1C]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+    <footer className="border-t border-[var(--border)] bg-[#0F172A]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
-          <div className="font-display text-sm font-black tracking-[0.22em] uppercase text-banana">CHKPLT</div>
-          <div className="flex flex-wrap gap-x-12 gap-y-6">
-            <nav className="flex flex-col gap-2.5">
-              <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#C9A84C]">Free Tools</div>
-              {(
-                [
-                  ["Rate Card Calculator", "/rate-card"],
-                  ["Hook Generator", "/hook-generator"],
-                  ["Media Kit Builder", "/media-kit"],
-                  ["SARS 25% Calculator", "/sars-calculator"],
-                  ["Offer Builder", "/offer-builder"],
-                ] as const
-              ).map(([label, to]) => (
-                <Link key={to} to={to} className="text-xs text-[#bbb] hover:text-banana transition-colors">
-                  {label}
-                </Link>
-              ))}
+          <div className="max-w-xs">
+            <div className="font-display text-base font-extrabold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
+              CHKPLT
+            </div>
+            <p className="mt-3 text-sm text-slate-400 leading-relaxed">
+              Christ's Kingdom Platform. Build on land you own.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-x-16 gap-y-6">
+            <nav className="flex flex-col gap-3">
+              <div className="text-xs font-bold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
+                Explore
+              </div>
+              <Link to="/tools" className="text-sm text-slate-300 hover:text-white transition-colors">Free Tools</Link>
+              <Link
+                to="/products/$slug"
+                params={{ slug: "called-expert-foundation-kit" }}
+                className="text-sm text-slate-300 hover:text-white transition-colors"
+              >
+                The Foundation Kit
+              </Link>
+              <Link to="/apply" className="text-sm text-slate-300 hover:text-white transition-colors">Apply</Link>
             </nav>
-            <nav className="flex flex-col gap-2.5">
-              <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#C9A84C]">Company</div>
+            <nav className="flex flex-col gap-3">
+              <div className="text-xs font-bold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
+                Company
+              </div>
               {(
                 [
                   ["About", "/about"],
@@ -89,14 +127,14 @@ export function SiteFooter() {
                   ["Refunds", "/refund-policy"],
                 ] as const
               ).map(([label, to]) => (
-                <Link key={to} to={to} className="text-xs text-[#bbb] hover:text-banana transition-colors">
+                <Link key={to} to={to} className="text-sm text-slate-300 hover:text-white transition-colors">
                   {label}
                 </Link>
               ))}
             </nav>
           </div>
         </div>
-        <div className="mt-8 border-t border-white/10 pt-6 font-mono text-[10px] tracking-[0.08em] uppercase text-[#999]">
+        <div className="mt-10 border-t border-white/10 pt-6 text-xs tracking-[0.05em] text-slate-500">
           © {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07
         </div>
       </div>

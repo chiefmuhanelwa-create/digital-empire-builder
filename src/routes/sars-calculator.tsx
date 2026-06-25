@@ -70,7 +70,7 @@ function SarsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#1C1C1C]">
+    <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
         <div className="text-center mb-8">
@@ -86,7 +86,7 @@ function SarsPage() {
         </div>
 
         {/* The story / why */}
-        <div className="border border-[#C9A84C]/40 rounded-2xl bg-[#FBF7EC] p-5 mb-6">
+        <div className="border border-[#F59E0B]/40 rounded-2xl bg-[#FBF7EC] p-5 mb-6">
           <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">Why 25%, why now</div>
           <p className="text-[#2A2A2A] text-sm leading-relaxed">
             I learned this the hard way: an assessment of <strong>R207,879</strong> landed because the tax was never set aside. Don't let that be you. The fix is boring and it works — the moment money hits your account, move 25% out of reach. When SARS comes, it's already waiting.
@@ -108,7 +108,7 @@ function SarsPage() {
               value={source}
               onChange={(e) => setSource(e.target.value)}
               placeholder="Source (e.g. Capitec brand deal)"
-              className="h-11 border-[#d0c8bc] focus:border-[#C9A84C] focus:ring-0"
+              className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0"
             />
             <Input
               value={amount}
@@ -116,13 +116,13 @@ function SarsPage() {
               onChange={(e) => setAmount(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && add()}
               placeholder="Amount (R)"
-              className="h-11 border-[#d0c8bc] focus:border-[#C9A84C] focus:ring-0"
+              className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0"
             />
             <Button
               type="button"
               onClick={add}
               disabled={parseNum(amount) <= 0}
-              className="h-11 bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-5 disabled:opacity-40"
+              className="h-11 bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-5 disabled:opacity-40"
             >
               <Plus className="size-4 mr-1" /> Add
             </Button>
@@ -136,8 +136,8 @@ function SarsPage() {
 
         {/* The action */}
         {totals.reserve > 0 && (
-          <div className="border border-[#1C1C1C] rounded-2xl bg-[#1C1C1C] text-[#f1e7c3] p-5 mb-6 flex items-start gap-3">
-            <PiggyBank className="size-5 text-[#C9A84C] shrink-0 mt-0.5" />
+          <div className="border border-[#0F172A] rounded-2xl bg-[#0F172A] text-[#f1e7c3] p-5 mb-6 flex items-start gap-3">
+            <PiggyBank className="size-5 text-[#B45309] shrink-0 mt-0.5" />
             <div>
               <div className="font-display text-lg text-white">Move {fmtZAR(totals.reserve)} to your SARS account.</div>
               <p className="text-[#cdc3a8] text-sm mt-1">
@@ -153,11 +153,11 @@ function SarsPage() {
             {entries.map((e) => (
               <div key={e.id} className="flex items-center justify-between gap-3 px-5 py-3 border-b border-[#f0ebe1] last:border-0">
                 <div className="min-w-0">
-                  <div className="text-sm font-medium text-[#1C1C1C] truncate">{e.source}</div>
+                  <div className="text-sm font-medium text-[#0F172A] truncate">{e.source}</div>
                   <div className="text-xs text-[#777]">reserve {fmtZAR(e.amount * RESERVE_RATE)}</div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="font-mono text-sm text-[#1C1C1C]">{fmtZAR(e.amount)}</span>
+                  <span className="font-mono text-sm text-[#0F172A]">{fmtZAR(e.amount)}</span>
                   <button
                     type="button"
                     onClick={() => setEntries((list) => list.filter((x) => x.id !== e.id))}
@@ -191,7 +191,7 @@ function SarsPage() {
             </Link>
             <Link
               to="/rate-card"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#C9A84C] text-[#1C1C1C] hover:bg-[#C9A84C] hover:text-[#111] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#F59E0B] text-[#0F172A] hover:bg-[#F59E0B] hover:text-[#111] transition-colors"
             >
               Price your next deal
             </Link>
@@ -205,8 +205,8 @@ function SarsPage() {
 
 function Stat({ label, value, tone }: { label: string; value: string; tone: "ink" | "gold" }) {
   return (
-    <div className={`rounded-xl p-4 text-center border ${tone === "gold" ? "border-[#C9A84C]/50 bg-[#FBF7EC]" : "border-[#e8e0d4] bg-[#FBFAF8]"}`}>
-      <div className={`font-display text-xl sm:text-2xl ${tone === "gold" ? "text-banana" : "text-[#1C1C1C]"}`}>{value}</div>
+    <div className={`rounded-xl p-4 text-center border ${tone === "gold" ? "border-[#F59E0B]/50 bg-[#FBF7EC]" : "border-[#e8e0d4] bg-[#FBFAF8]"}`}>
+      <div className={`font-display text-xl sm:text-2xl ${tone === "gold" ? "text-banana" : "text-[#0F172A]"}`}>{value}</div>
       <div className="font-mono text-[9px] uppercase tracking-wide text-[#777] mt-1">{label}</div>
     </div>
   );

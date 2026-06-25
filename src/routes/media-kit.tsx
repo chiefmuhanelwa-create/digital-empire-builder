@@ -55,10 +55,10 @@ const INITIAL: Kit = {
   stats: "", brands: "", email: "", booking: "",
 };
 
-const LABEL = "font-display text-[#1C1C1C] text-xs font-bold uppercase tracking-wide block mb-1.5";
-const FLD = "h-10 border-[#d0c8bc] focus:border-[#C9A84C] focus:ring-0";
+const LABEL = "font-display text-[#0F172A] text-xs font-bold uppercase tracking-wide block mb-1.5";
+const FLD = "h-10 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0";
 const TA =
-  "w-full min-h-[72px] border border-[#d0c8bc] bg-white rounded-md px-3 py-2 text-sm text-[#1C1C1C] focus:border-[#C9A84C] focus:outline-none focus:ring-0 resize-y";
+  "w-full min-h-[72px] border border-[#d0c8bc] bg-white rounded-md px-3 py-2 text-sm text-[#0F172A] focus:border-[#F59E0B] focus:outline-none focus:ring-0 resize-y";
 
 function MediaKitPage() {
   const [k, setK] = useState<Kit>(INITIAL);
@@ -75,7 +75,7 @@ function MediaKitPage() {
     }));
 
   return (
-    <div className="min-h-screen bg-white text-[#1C1C1C]">
+    <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 pt-24 pb-20">
         <div className="text-center mb-8 print:hidden">
@@ -160,7 +160,7 @@ function MediaKitPage() {
             <Button
               type="button"
               onClick={() => window.print()}
-              className="w-full bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto"
+              className="w-full bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto"
             >
               <Printer className="size-4 mr-2" /> Save as PDF
             </Button>
@@ -182,7 +182,7 @@ function MediaKitPage() {
             <Link to="/products/$slug" params={{ slug: "called-expert-foundation-kit" }} className="cta-glow inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-display font-black uppercase tracking-wide">
               Get the Foundation Kit <ArrowRight className="size-4" />
             </Link>
-            <Link to="/rate-card" className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#C9A84C] text-[#1C1C1C] hover:bg-[#C9A84C] hover:text-[#111] transition-colors">
+            <Link to="/rate-card" className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#F59E0B] text-[#0F172A] hover:bg-[#F59E0B] hover:text-[#111] transition-colors">
               Price your rate
             </Link>
           </div>
@@ -216,10 +216,10 @@ function KitPreview({ k }: { k: Kit }) {
   return (
     <div className="border border-[#e8e0d4] rounded-2xl overflow-hidden bg-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)] print:shadow-none print:border-0 print:rounded-none">
       {/* Header */}
-      <div className="bg-[#1C1C1C] text-[#f1e7c3] p-7">
-        <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#C9A84C]">Media Kit</div>
+      <div className="bg-[#0F172A] text-[#f1e7c3] p-7">
+        <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#B45309]">Media Kit</div>
         <h2 className="font-display text-3xl mt-1 text-white">{k.name || "Your Name"}</h2>
-        <div className="flex items-center gap-2 text-[#C9A84C] mt-1 text-sm">
+        <div className="flex items-center gap-2 text-[#B45309] mt-1 text-sm">
           <Instagram className="size-3.5" /> {k.handle || "@handle"}
           {k.location && <span className="text-[#9a906f]">· {k.location}</span>}
         </div>
@@ -227,7 +227,7 @@ function KitPreview({ k }: { k: Kit }) {
         {niches.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-4">
             {niches.map((n) => (
-              <span key={n} className="font-mono text-[10px] uppercase tracking-wide bg-[#C9A84C] text-[#111] rounded px-2 py-0.5">{n}</span>
+              <span key={n} className="font-mono text-[10px] uppercase tracking-wide bg-[#F59E0B] text-[#111] rounded px-2 py-0.5">{n}</span>
             ))}
           </div>
         )}
@@ -260,7 +260,7 @@ function KitPreview({ k }: { k: Kit }) {
             <ul className="space-y-1.5">
               {pillars.map((p) => (
                 <li key={p.name} className="text-sm">
-                  <span className="font-display font-bold text-[#1C1C1C]">{p.name}</span>
+                  <span className="font-display font-bold text-[#0F172A]">{p.name}</span>
                   {p.desc && <span className="text-[#555]"> — {p.desc}</span>}
                 </li>
               ))}
@@ -284,7 +284,7 @@ function KitPreview({ k }: { k: Kit }) {
               {rates.map((r) => (
                 <div key={r.name} className="flex items-center justify-between py-1.5 text-sm">
                   <span className="text-[#2A2A2A]">{r.name}</span>
-                  <span className="font-mono font-bold text-[#1C1C1C]">{r.price || "—"}</span>
+                  <span className="font-mono font-bold text-[#0F172A]">{r.price || "—"}</span>
                 </div>
               ))}
             </div>
@@ -303,9 +303,9 @@ function KitPreview({ k }: { k: Kit }) {
       </div>
 
       {(k.email || k.booking) && (
-        <div className="bg-[#FBF7EC] border-t border-[#C9A84C]/30 p-5 flex flex-wrap items-center justify-between gap-2">
+        <div className="bg-[#FBF7EC] border-t border-[#F59E0B]/30 p-5 flex flex-wrap items-center justify-between gap-2">
           <div className="font-display font-bold text-sm uppercase">Let's work together</div>
-          <div className="text-sm text-[#1C1C1C]">
+          <div className="text-sm text-[#0F172A]">
             {k.email}{k.email && k.booking ? " · " : ""}{k.booking}
           </div>
         </div>

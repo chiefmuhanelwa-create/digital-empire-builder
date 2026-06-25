@@ -125,7 +125,7 @@ function cap(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
 
-const LABEL = "font-display text-[#1C1C1C] text-sm font-bold leading-snug block mb-1.5";
+const LABEL = "font-display text-[#0F172A] text-sm font-bold leading-snug block mb-1.5";
 const HINT = "text-[#555] text-xs mb-2";
 
 function HookGeneratorPage() {
@@ -143,7 +143,7 @@ function HookGeneratorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#1C1C1C]">
+    <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
         <div className="text-center mb-8">
@@ -163,17 +163,17 @@ function HookGeneratorPage() {
             <div>
               <label className={LABEL}>What's the topic?</label>
               <p className={HINT}>Your skill, niche, or the thing this post is about.</p>
-              <Input value={t} onChange={(e) => setT(e.target.value)} placeholder="e.g. building a personal brand" className="h-11 border-[#d0c8bc] focus:border-[#C9A84C] focus:ring-0" />
+              <Input value={t} onChange={(e) => setT(e.target.value)} placeholder="e.g. building a personal brand" className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0" />
             </div>
             <div>
               <label className={LABEL}>Who's it for?</label>
               <p className={HINT}>The exact person you want to stop the scroll.</p>
-              <Input value={a} onChange={(e) => setA(e.target.value)} placeholder="e.g. nurses who want a side income" className="h-11 border-[#d0c8bc] focus:border-[#C9A84C] focus:ring-0" />
+              <Input value={a} onChange={(e) => setA(e.target.value)} placeholder="e.g. nurses who want a side income" className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0" />
             </div>
             <div>
               <label className={LABEL}>Your unique angle <span className="text-[#999] font-normal">(optional)</span></label>
               <p className={HINT}>A proof point or one-liner only you can say. Don't invent anything.</p>
-              <Input value={ang} onChange={(e) => setAng(e.target.value)} placeholder="e.g. I built R600K in 4-hour night-shift windows" className="h-11 border-[#d0c8bc] focus:border-[#C9A84C] focus:ring-0" />
+              <Input value={ang} onChange={(e) => setAng(e.target.value)} placeholder="e.g. I built R600K in 4-hour night-shift windows" className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0" />
             </div>
             <div>
               <label className={LABEL}>How aware is your audience?</label>
@@ -185,10 +185,10 @@ function HookGeneratorPage() {
                     type="button"
                     onClick={() => setAw(o.val)}
                     className={`text-left py-3 px-4 border rounded-lg transition-all ${
-                      aw === o.val ? "border-[#C9A84C] bg-[#FBF7EC]" : "border-[#d0c8bc] bg-white hover:border-[#C9A84C]"
+                      aw === o.val ? "border-[#F59E0B] bg-[#FBF7EC]" : "border-[#d0c8bc] bg-white hover:border-[#F59E0B]"
                     }`}
                   >
-                    <div className="font-display font-bold text-sm text-[#1C1C1C]">{o.t}</div>
+                    <div className="font-display font-bold text-sm text-[#0F172A]">{o.t}</div>
                     <div className="text-[#555] text-xs mt-0.5">{o.d}</div>
                   </button>
                 ))}
@@ -199,7 +199,7 @@ function HookGeneratorPage() {
               type="button"
               disabled={!valid}
               onClick={generate}
-              className="w-full bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto disabled:opacity-40"
+              className="w-full bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto disabled:opacity-40"
             >
               Generate my hooks <ArrowRight className="size-4 ml-1" />
             </Button>
@@ -224,7 +224,7 @@ function HookResults({ hooks, onReset }: { hooks: Hook[]; onReset: () => void })
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#1C1C1C] transition-colors"
+          className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#0F172A] transition-colors"
         >
           <RotateCcw className="size-3.5" /> New hooks
         </button>
@@ -251,7 +251,7 @@ function HookResults({ hooks, onReset }: { hooks: Hook[]; onReset: () => void })
           </Link>
           <Link
             to="/offer-builder"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#C9A84C] text-[#1C1C1C] hover:bg-[#C9A84C] hover:text-[#111] transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#F59E0B] text-[#0F172A] hover:bg-[#F59E0B] hover:text-[#111] transition-colors"
           >
             Build your offer
           </Link>
@@ -277,12 +277,12 @@ function HookCard({ hook, n }: { hook: Hook; n: number }) {
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.12em] uppercase text-[#5a5a5a] hover:text-[#1C1C1C] transition-colors"
+          className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.12em] uppercase text-[#5a5a5a] hover:text-[#0F172A] transition-colors"
         >
           {copied ? <><Check className="size-3.5 text-banana" /> Copied</> : <><Copy className="size-3.5" /> Copy</>}
         </button>
       </div>
-      <p className="text-[17px] leading-snug text-[#1C1C1C] font-medium">{hook.text}</p>
+      <p className="text-[17px] leading-snug text-[#0F172A] font-medium">{hook.text}</p>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
