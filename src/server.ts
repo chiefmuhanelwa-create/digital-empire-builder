@@ -102,18 +102,13 @@ export default {
       return;
     }
 
-    // Every-minute email drain — calls the queue processor (Bearer service-role).
+    // Every-minute email drain — runs IN-PROCESS. (A Worker cannot reliably fetch
+    // its own public hostname; that self-request returns Cloudflare 522.)
     ctx.waitUntil(
       (async () => {
         try {
-          const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-          if (!key) { console.error("[email-drain] missing SUPABASE_SERVICE_ROLE_KEY"); return; }
-          const res = await fetch("https://chkplt.com/api/email/queue/process", {
-            method: "POST",
-            headers: { "content-type": "application/json", Authorization: `Bearer ${key}` },
-            body: "{}",
-          });
-          console.log("[email-drain]", res.status, (await res.text()).slice(0, 200));
+          const { drainEmailQueues } = await import("./lib/email-queue");
+          console.log("[email-drain]", JSON.stringify(await drainEmailQueues()));
         } catch (error) {
           console.error("[email-drain] failed", error);
         }
