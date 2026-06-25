@@ -20,6 +20,14 @@ const META_VIDEO_ID = "_JYjzFDrSgs";
 // Real testimonials replace the proof-badge row automatically once added: { quote, name }
 const TESTIMONIALS: { quote: string; name: string }[] = [];
 
+// Real WhatsApp / DM / community testimonial screenshots in /public/testimonials/
+const TESTIMONIAL_SHOTS: string[] = [
+  "t01.png", "t02.png", "t03.png", "t04.jpg", "t05.jpg", "t06.jpg",
+  "t07.jpg", "t08.jpg", "t09.jpg", "t10.jpg", "t11.jpg", "t12.jpg",
+  "t13.jpg", "t14.jpg", "t15.jpg", "t16.jpg", "t17.jpg", "t18.png",
+  "t19.png", "t20.jpg", "t21.jpg", "t22.jpg", "t23.jpg", "t24.jpg",
+];
+
 // Glow helpers — inline so Tailwind purge never strips them
 const GOLD_GLOW = {
   boxShadow: "0 0 24px rgba(245,158,11,0.55), 0 0 56px rgba(245,158,11,0.25)",
@@ -718,23 +726,13 @@ function Landing() {
       <section className="bg-[var(--bg-surface)] border-y border-[var(--border)]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
           <p className="nx-label text-center mb-3">In their own words</p>
-          <h2 className="text-center mb-10">What people say about his content.</h2>
+          <h2 className="text-center mb-10">Real messages. Real lives changed.</h2>
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [&>img]:mb-4">
-            {[
-              "t11-meta-talk-riri.jpg",
-              "t1-monetised-3weeks.png",
-              "t3-content-as-business.png",
-              "t12-faith-creator.png",
-              "t9-podcast-insightful.png",
-              "t4-tax-help-dm.png",
-              "t10-automation-demand.png",
-              "t5-made-47.jpg",
-              "t8-meta-summit-riri.jpg",
-            ].map((file) => (
+            {TESTIMONIAL_SHOTS.map((file) => (
               <img
                 key={file}
                 src={`/testimonials/${file}`}
-                alt="Real comment / receipt from the community"
+                alt="Unedited testimonial from the community"
                 loading="lazy"
                 className="w-full break-inside-avoid rounded-xl border border-[var(--border)] shadow-sm bg-white"
                 onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
@@ -742,7 +740,7 @@ function Landing() {
             ))}
           </div>
           <p className="text-center text-xs text-[var(--text-subtle)] mt-6">
-            Unedited comments &amp; receipts from his community across Facebook &amp; Instagram.
+            Unedited WhatsApp, DM &amp; community messages — nothing staged.
           </p>
         </div>
       </section>
