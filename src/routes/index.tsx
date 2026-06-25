@@ -413,13 +413,13 @@ function Landing() {
   const comparePrice = "$820";
   const savings = "$723";
 
-  const RECEIPTS = ["Meta", "Netflix", "Capitec", "Standard Bank", "SA Tourism", "Showmax", "ABSA"];
+  const RECEIPTS = ["Capitec", "Standard Bank", "Netflix", "Suzuki", "SA Tourism", "Showmax", "ABSA"];
 
   const STATS = [
     ["R600,000+", "in a single year"],
-    ["50+", "brand deals · 23 agencies"],
-    ["3M+", "followers at peak"],
-    ["SAMA31", "judge · Meta speaker"],
+    ["2 books", "published while employed"],
+    ["10 awards", "SAMA 30 & 31 judge"],
+    ["50+ brands", "23 agencies · 3M+ reach"],
   ];
 
   const VALUE_STACK: [string, string][] = [
@@ -436,7 +436,7 @@ function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-[#0F172A] overflow-x-hidden pb-20 sm:pb-0">
+    <div className="min-h-screen bg-white text-[#0F172A] overflow-x-hidden">
       {showModal && (
         <CheckoutModal
           onClose={() => setShowModal(false)}
@@ -522,7 +522,7 @@ function Landing() {
           <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-14 text-center">
             <p className="nx-label mb-3">As seen on</p>
             <h2 className="mb-6">From sleeping in university bathrooms to the Meta stage.</h2>
-            <div className="nx-video-wrapper mx-auto aspect-video max-w-sm">
+            <div className="nx-video-wrapper mx-auto aspect-[9/16] max-w-[300px]">
               <iframe
                 className="w-full h-full"
                 src={`https://www.youtube.com/embed/${META_VIDEO_ID}?rel=0&modestbranding=1`}
@@ -534,6 +534,82 @@ function Landing() {
           </div>
         </section>
       )}
+
+      {/* ── FOUNDER STORY / PROOF ────────────────────────────────────────── */}
+      <section className="bg-white border-b border-[var(--border)]">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
+          <p className="nx-label mb-3">Proof it's possible</p>
+          <h2 className="mb-6 max-w-2xl">
+            He built all of this — while still clocking in for night shifts.
+          </h2>
+
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="nx-body space-y-4">
+              <p>
+                Ndivhuwo Muhanelwa — "NoChill" — grew up the youngest of four brothers in
+                Tshikwarani, Venda. He slept on university bathroom floors in Pretoria. He never
+                finished his degree.
+              </p>
+              <p>
+                Then he stopped waiting for permission. Working night shifts at air traffic control,
+                he built it all in <strong className="text-[var(--foreground)]">4-hour windows</strong> —
+                and crossed <strong className="text-[var(--foreground)]">R600,000+ in a single
+                year</strong>. He wrote <strong className="text-[var(--foreground)]">two books while
+                still employed</strong> (Contentpreneur and The Influencer's Code — 6,000+ copies).
+              </p>
+              <p>
+                Today: <strong className="text-[var(--foreground)]">10 awards</strong>, a{" "}
+                <strong className="text-[var(--foreground)]">SAMA 30 &amp; 31 judge</strong> two years
+                running, a Humanz Top 20 creator, a Meta speaker, and{" "}
+                <strong className="text-[var(--foreground)]">50+ brand deals</strong> with Capitec,
+                Standard Bank, Netflix, Suzuki, SA Tourism, Showmax and ABSA.
+              </p>
+              <p className="text-[var(--foreground)] font-semibold">
+                He never quit first. He built first. So can you.
+              </p>
+
+              <div className="flex flex-wrap gap-2 pt-2">
+                {[
+                  "2 books published",
+                  "10 awards",
+                  "SAMA 30 & 31 judge",
+                  "Humanz Top 20",
+                  "Meta speaker",
+                  "50+ brand deals",
+                ].map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-[var(--border-mid)] bg-[var(--bg-surface)] px-3 py-1 text-xs font-semibold text-[var(--text-body)]"
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <img
+                src="/proof/sama31-red-carpet.jpg"
+                alt="Ndivhuwo on the SAMA31 red carpet"
+                loading="lazy"
+                className="col-span-1 row-span-2 h-full w-full rounded-2xl object-cover border border-[var(--border)]"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+              />
+              <img
+                src="/proof/meta-stage.jpg"
+                alt="Ndivhuwo speaking on stage at Meta"
+                loading="lazy"
+                className="col-span-1 w-full rounded-2xl object-cover border border-[var(--border)] aspect-[4/3]"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+              />
+              <div className="col-span-1 rounded-2xl bg-[#0F172A] p-4 flex flex-col justify-center">
+                <div className="font-display text-3xl text-[#FCD34D] leading-none">R600K+</div>
+                <div className="text-xs text-slate-300 mt-1">in a single year — built on night shifts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── THE REFRAME — stewardship, not side hustle ───────────────────── */}
       <section className="bg-white">
@@ -667,7 +743,10 @@ function Landing() {
         </div>
       </section>
 
-      <SiteFooter />
+      {/* Dark wrapper so the space under the fixed mobile buy-bar is dark, not white */}
+      <div className="bg-[#0F172A] pb-20 sm:pb-0">
+        <SiteFooter />
+      </div>
     </div>
   );
 }

@@ -112,7 +112,7 @@ Always lock onto ONE ICP before writing any content or copy. Never mix them in t
 **SARS story specifics:** VDP was FILED then WITHDRAWN on Thome-Lee Wright's advice. Standard eFiling amended returns used instead — gave better payment terms + penalty objection rights. SARS reference: 2990409167. VDP reference: VDP1059030.
 
 **Full verified story bank (11 stories):** See `docs/STORY-BANK.md`
-**Full verified proof statement:** "From sleeping in university bathrooms to R600,000+ in a single year — with receipts from Capitec, Netflix, Standard Bank, Superbalist, Suzuki, SA Tourism, ABSA, Showmax, Flying Fish, and 40+ other brands — across 23 agencies, 9 awards, a SAMA31 judge seat, and a Meta speaker slot."
+**Full verified proof statement:** "From sleeping in university bathrooms to R600,000+ in a single year — with receipts from Capitec, Netflix, Standard Bank, Superbalist, Suzuki, SA Tourism, ABSA, Showmax, Flying Fish, and 40+ other brands — across 23 agencies, 10 awards, a SAMA 30 & 31 judge seat (consecutive), and a Meta speaker slot."
 
 ### NOCHILL Frameworks (Quick Reference)
 

@@ -48,7 +48,6 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Link to="/tools" className={`hidden sm:block ${navLink}`} activeProps={navActive}>Free Tools</Link>
               <Link to="/about" className={`hidden sm:block ${navLink}`} activeProps={navActive}>About</Link>
               <Link to="/contact" className={`hidden sm:block ${navLink}`} activeProps={navActive}>Contact</Link>
             </>
@@ -104,7 +103,6 @@ export function SiteFooter() {
               <div className="text-xs font-bold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
                 Explore
               </div>
-              <Link to="/tools" className="text-sm text-slate-300 hover:text-white transition-colors">Free Tools</Link>
               <Link
                 to="/products/$slug"
                 params={{ slug: "called-expert-foundation-kit" }}
