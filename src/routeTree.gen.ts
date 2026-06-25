@@ -39,6 +39,7 @@ import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedDashboardToolsRouteImport } from './routes/_authenticated/dashboard.tools'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
+import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
@@ -204,6 +205,12 @@ const AuthenticatedDashboardFoundationKitRoute =
     path: '/foundation-kit',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedAppsNicheClarityBuilderRoute =
+  AuthenticatedAppsNicheClarityBuilderRouteImport.update({
+    id: '/apps/niche-clarity-builder',
+    path: '/apps/niche-clarity-builder',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminProductsRoute =
   AuthenticatedAdminProductsRouteImport.update({
     id: '/admin/products',
@@ -303,6 +310,7 @@ export interface FileRoutesByFullPath {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -346,6 +354,7 @@ export interface FileRoutesByTo {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -391,6 +400,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/_authenticated/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -436,6 +446,7 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/niche-clarity-builder'
     | '/dashboard/foundation-kit'
     | '/dashboard/tools'
     | '/learn/$slug'
@@ -479,6 +490,7 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/niche-clarity-builder'
     | '/dashboard/foundation-kit'
     | '/dashboard/tools'
     | '/learn/$slug'
@@ -523,6 +535,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/incidents'
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
+    | '/_authenticated/apps/niche-clarity-builder'
     | '/_authenticated/dashboard/foundation-kit'
     | '/_authenticated/dashboard/tools'
     | '/_authenticated/learn/$slug'
@@ -780,6 +793,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardFoundationKitRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/apps/niche-clarity-builder': {
+      id: '/_authenticated/apps/niche-clarity-builder'
+      path: '/apps/niche-clarity-builder'
+      fullPath: '/apps/niche-clarity-builder'
+      preLoaderRoute: typeof AuthenticatedAppsNicheClarityBuilderRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/products': {
       id: '/_authenticated/admin/products'
       path: '/admin/products'
@@ -925,6 +945,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminIncidentsRoute: typeof AuthenticatedAdminIncidentsRoute
   AuthenticatedAdminLedgerRoute: typeof AuthenticatedAdminLedgerRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
+  AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
   AuthenticatedAdminCurriculumProductSlugRoute: typeof AuthenticatedAdminCurriculumProductSlugRoute
 }
 
@@ -937,6 +958,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminIncidentsRoute: AuthenticatedAdminIncidentsRoute,
   AuthenticatedAdminLedgerRoute: AuthenticatedAdminLedgerRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
+  AuthenticatedAppsNicheClarityBuilderRoute:
+    AuthenticatedAppsNicheClarityBuilderRoute,
   AuthenticatedAdminCurriculumProductSlugRoute:
     AuthenticatedAdminCurriculumProductSlugRoute,
 }

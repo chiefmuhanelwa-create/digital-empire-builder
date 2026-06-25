@@ -1,12 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth-context";
-import { myPurchases, getMyDownloadUrl, getKitFileUrl } from "@/lib/products.functions";
+import { getMyDownloadUrl, getKitFileUrl } from "@/lib/products.functions";
+import { useKitAccess } from "@/lib/use-kit-access";
 import { TOOLS } from "@/lib/tools";
-import { Download, Lock, ArrowRight, BookOpen } from "lucide-react";
+import { Download, Lock, ArrowRight, BookOpen, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")({
@@ -14,12 +13,10 @@ export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")
   component: FoundationKitWorkspace,
 });
 
-const KIT_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
-
-// The 7 frameworks the $97 kit promises. `app` = live interactive version;
+// The 7 frameworks the $97 kit promises. `app` = live interactive route (gated);
 // `pdf` = key in getKitFileUrl whitelist once the fillable PDF is uploaded.
-const FRAMEWORKS: { name: string; blurb: string; app?: "/niche-clarity"; pdf?: string }[] = [
-  { name: "Niche Clarity", blurb: "Lock your niche in one afternoon.", app: "/niche-clarity", pdf: "niche-clarity" },
+const FRAMEWORKS: { name: string; blurb: string; app?: string; pdf?: string }[] = [
+  { name: "Niche Clarity", blurb: "Lock your niche in one afternoon.", app: "/apps/niche-clarity-builder", pdf: "niche-clarity" },
   { name: "Knowledge Audit", blurb: "Find the product hiding in your expertise — in 2 hours." },
   { name: "PAIDS Income Map", blurb: "Map your 5 income streams from what you already know.", pdf: "paids" },
   { name: "DARES Asset Model", blurb: "Build income that doesn't need you to show up daily." },
@@ -29,21 +26,8 @@ const FRAMEWORKS: { name: string; blurb: string; app?: "/niche-clarity"; pdf?: s
 ];
 
 function FoundationKitWorkspace() {
-  const { user } = useAuth();
-  const purchasesFn = useServerFn(myPurchases);
   const dlFn = useServerFn(getMyDownloadUrl);
-
-  const isAdminQ = useQuery({
-    queryKey: ["is-admin", user?.id],
-    enabled: !!user?.id,
-    staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data } = await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" });
-      return !!data;
-    },
-  });
-
-  const purchases = useQuery({ queryKey: ["my-purchases"], queryFn: () => purchasesFn() });
+  const { access } = useKitAccess();
 
   const dlMut = useMutation({
     mutationFn: dlFn,
@@ -57,10 +41,6 @@ function FoundationKitWorkspace() {
     onSuccess: (res: { url: string }) => window.open(res.url, "_blank", "noopener,noreferrer"),
     onError: (e: Error) => toast.error(e.message),
   });
-
-  const grants = (purchases.data?.grants ?? []) as Array<{ product: { slug: string } | null }>;
-  const ownsKit = grants.some((g) => g.product && KIT_SLUGS.includes(g.product.slug));
-  const access = ownsKit || isAdminQ.data === true;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -88,6 +68,21 @@ function FoundationKitWorkspace() {
               workbooks to keep. Start anywhere; you don't have to do it all at once.
             </p>
 
+            {/* Video course */}
+            <a href="/learn/called-expert-foundation-kit" className="block rounded-2xl bg-[#0F172A] p-5 sm:p-6 mb-6 group">
+              <div className="flex items-center gap-4">
+                <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[var(--nx-gold-bright)]">
+                  <PlayCircle className="size-6" />
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="nx-label !text-[var(--nx-gold-bright)]">Watch · 10 videos</div>
+                  <div className="font-display text-lg text-white mt-0.5">Introduction to Personal Branding</div>
+                  <p className="text-sm text-slate-300">From “what is a personal brand” to building your first online asset.</p>
+                </div>
+                <ArrowRight className="size-5 text-slate-400 group-hover:text-white transition-colors shrink-0" />
+              </div>
+            </a>
+
             {/* Download fillable workbooks */}
             <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
               <div>
@@ -112,9 +107,9 @@ function FoundationKitWorkspace() {
                   <p className="text-sm text-[var(--text-dim)] mt-1 flex-1">{f.blurb}</p>
                   <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
                     {f.app ? (
-                      <Link to={f.app} className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--nx-gold-text)] hover:underline">
+                      <a href={f.app} className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--nx-gold-text)] hover:underline">
                         Open interactive app <ArrowRight className="size-4" />
-                      </Link>
+                      </a>
                     ) : (
                       <span className="inline-block rounded-full bg-[var(--bg-card-hi)] px-3 py-1 text-xs font-semibold text-[var(--text-subtle)]">
                         App coming soon
