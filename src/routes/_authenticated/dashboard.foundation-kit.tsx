@@ -5,7 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { getMyDownloadUrl, getKitFileUrl } from "@/lib/products.functions";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { TOOLS } from "@/lib/tools";
-import { Download, Lock, ArrowRight, BookOpen, PlayCircle } from "lucide-react";
+import { Download, Lock, ArrowRight, BookOpen, PlayCircle, Compass } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")({
@@ -128,6 +128,17 @@ function FoundationKitWorkspace() {
                 </div>
               ))}
             </div>
+
+            {/* Bonus diagnostic */}
+            <h2 className="text-2xl mb-4">Bonus diagnostic</h2>
+            <a href="/apps/right-side-diagnostic" className="nx-card !p-5 flex items-center gap-4 mb-12 group">
+              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)]"><Compass className="size-5" /></span>
+              <div className="flex-1">
+                <div className="font-display text-lg group-hover:text-[var(--nx-gold-text)] transition-colors">The Right Side Diagnostic</div>
+                <p className="text-sm text-[var(--text-dim)]">8 questions: how exposed is your business to a platform ban — and how to move onto owned ground.</p>
+              </div>
+              <ArrowRight className="size-5 text-[var(--text-subtle)] group-hover:text-[var(--nx-gold-text)] transition-colors shrink-0" />
+            </a>
 
             {/* Interactive tools you can use right now */}
             <h2 className="text-2xl mb-1">Your interactive tools</h2>
