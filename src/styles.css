@@ -158,6 +158,8 @@
 
 @layer base {
   * { border-color: var(--color-border); }
+  /* Dark base so bottom overscroll/rubber-band matches the dark footer (no white "end"). */
+  html { background-color: #0F172A; }
   body {
     background-color: var(--background);
     color: var(--text-body);

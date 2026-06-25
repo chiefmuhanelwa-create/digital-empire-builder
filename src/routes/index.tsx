@@ -589,15 +589,15 @@ function Landing() {
 
             <div className="grid grid-cols-2 gap-3">
               <img
-                src="/proof/sama31-red-carpet.jpg"
-                alt="Ndivhuwo on the SAMA31 red carpet"
+                src="/founder-award.jpg"
+                alt="Ndivhuwo holding his Humanz Top 20 Creators Worth Following award"
                 loading="lazy"
                 className="col-span-1 row-span-2 h-full w-full rounded-2xl object-cover border border-[var(--border)]"
                 onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
               />
               <img
-                src="/proof/meta-stage.jpg"
-                alt="Ndivhuwo speaking on stage at Meta"
+                src="/meta-summit-stage.jpg"
+                alt="Ndivhuwo speaking on stage at the Meta Youth Summit"
                 loading="lazy"
                 className="col-span-1 w-full rounded-2xl object-cover border border-[var(--border)] aspect-[4/3]"
                 onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
@@ -606,6 +606,14 @@ function Landing() {
                 <div className="font-display text-3xl text-[#FCD34D] leading-none">R600K+</div>
                 <div className="text-xs text-slate-300 mt-1">in a single year — built on night shifts</div>
               </div>
+              {/* Book cover — auto-appears once /proof/book-contentpreneur.png is added */}
+              <img
+                src="/proof/book-contentpreneur.png"
+                alt="Contentpreneur — the book"
+                loading="lazy"
+                className="col-span-1 w-full rounded-2xl object-cover border border-[var(--border)] aspect-[3/4]"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+              />
             </div>
           </div>
         </div>
@@ -699,6 +707,37 @@ function Landing() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS — real comments ─────────────────────────────────── */}
+      <section className="bg-[var(--bg-surface)] border-y border-[var(--border)]">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
+          <p className="nx-label text-center mb-3">In their own words</p>
+          <h2 className="text-center mb-10">What people say about his content.</h2>
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [&>img]:mb-4">
+            {[
+              "t1-monetised-3weeks.png",
+              "t3-content-as-business.png",
+              "t9-podcast-insightful.png",
+              "t4-tax-help-dm.png",
+              "t10-automation-demand.png",
+              "t5-made-47.jpg",
+              "t8-meta-summit-riri.jpg",
+            ].map((file) => (
+              <img
+                key={file}
+                src={`/testimonials/${file}`}
+                alt="Real comment / receipt from the community"
+                loading="lazy"
+                className="w-full break-inside-avoid rounded-xl border border-[var(--border)] shadow-sm bg-white"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+              />
+            ))}
+          </div>
+          <p className="text-center text-xs text-[var(--text-subtle)] mt-6">
+            Unedited comments &amp; receipts from his community across Facebook &amp; Instagram.
+          </p>
         </div>
       </section>
 

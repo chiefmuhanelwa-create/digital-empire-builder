@@ -98,39 +98,24 @@ export function SiteFooter() {
               Christ's Kingdom Platform. Build on land you own.
             </p>
           </div>
-          <div className="flex flex-wrap gap-x-16 gap-y-6">
-            <nav className="flex flex-col gap-3">
-              <div className="text-xs font-bold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
-                Explore
-              </div>
-              <Link
-                to="/products/$slug"
-                params={{ slug: "called-expert-foundation-kit" }}
-                className="text-sm text-slate-300 hover:text-white transition-colors"
-              >
-                The Foundation Kit
+          <nav className="flex flex-col gap-3">
+            <div className="text-xs font-bold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
+              Company
+            </div>
+            {(
+              [
+                ["About", "/about"],
+                ["Contact", "/contact"],
+                ["Terms", "/terms"],
+                ["Privacy", "/privacy"],
+                ["Refunds", "/refund-policy"],
+              ] as const
+            ).map(([label, to]) => (
+              <Link key={to} to={to} className="text-sm text-slate-300 hover:text-white transition-colors">
+                {label}
               </Link>
-              <Link to="/apply" className="text-sm text-slate-300 hover:text-white transition-colors">Apply</Link>
-            </nav>
-            <nav className="flex flex-col gap-3">
-              <div className="text-xs font-bold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
-                Company
-              </div>
-              {(
-                [
-                  ["About", "/about"],
-                  ["Contact", "/contact"],
-                  ["Terms", "/terms"],
-                  ["Privacy", "/privacy"],
-                  ["Refunds", "/refund-policy"],
-                ] as const
-              ).map(([label, to]) => (
-                <Link key={to} to={to} className="text-sm text-slate-300 hover:text-white transition-colors">
-                  {label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+            ))}
+          </nav>
         </div>
         <div className="mt-10 border-t border-white/10 pt-6 text-xs tracking-[0.05em] text-slate-500">
           © {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07
