@@ -24,14 +24,19 @@ export const Route = createFileRoute("/products/$slug")({
   loader: async ({ params }) => {
     const { data, error } = await supabase
       .from("products")
-      .select("title, tagline, description, cover_image_url")
+      .select("*")
       .eq("slug", params.slug)
       .maybeSingle();
-    if (error) throw error;
-    return { meta: data };
+    if (error) {
+      // Surface the real Supabase error in worker logs (auth/RLS/connection) instead of a blind 500.
+      console.error("[product loader]", params.slug, error.code, error.message);
+      throw error;
+    }
+    if (!data) throw notFound();
+    return data;
   },
   head: ({ params, loaderData }) => {
-    const p = loaderData?.meta;
+    const p = loaderData;
     const title = p ? `${p.title} — Christ Kingdom Platform` : `${params.slug} — Christ Kingdom Platform`;
     const description = (p?.description?.slice(0, 200)) ?? p?.tagline ?? "Tools for Kingdom Contentpreneurs.";
     const image = p?.cover_image_url ?? undefined;
@@ -79,17 +84,10 @@ export const Route = createFileRoute("/products/$slug")({
 });
 
 function ProductDetail() {
-  const { slug } = Route.useParams();
-  const { data: product, isLoading } = useQuery({
-    queryKey: ["product", slug],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products").select("*").eq("slug", slug).maybeSingle();
-      if (error) throw error;
-      if (!data) throw notFound();
-      return data;
-    },
-  });
+  // Product comes from the route loader (which throws notFound() when missing),
+  // so it is always present here — no conditional hooks, no SSR throw.
+  const product = Route.useLoaderData();
+  const country = useCountry();
 
   const { data: seedProduct } = useQuery({
     queryKey: ["product-seed", product?.seed_to_product_id],
@@ -105,19 +103,6 @@ function ProductDetail() {
     },
   });
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background"><SiteHeader />
-        <div className="mx-auto max-w-3xl px-6 py-32 animate-pulse">
-          <div className="h-12 w-2/3 bg-muted rounded" />
-          <div className="mt-6 h-4 w-full bg-muted rounded" />
-        </div>
-      </div>
-    );
-  }
-  if (!product) return null;
-
-  const country = useCountry();
   const gardenMeta = product.garden ? GARDENS[product.garden as Garden] : null;
   const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country);
 
