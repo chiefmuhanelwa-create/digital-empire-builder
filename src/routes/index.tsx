@@ -22,8 +22,8 @@ const TESTIMONIALS: { quote: string; name: string }[] = [];
 
 // Real WhatsApp / DM / community testimonial screenshots in /public/testimonials/
 const TESTIMONIAL_SHOTS: string[] = [
-  "t01.jpg", "t02.jpg", "t03.jpg", "t04.jpg", "t05.jpg",
-  "t06.jpg", "t07.jpg", "t08.jpg", "t09.png",
+  "t01.jpg", "t02.jpg", "t03.jpg", "t04.jpg",
+  "t05.jpg", "t06.jpg", "t07.jpg", "t08.jpg",
 ];
 
 // Glow helpers — inline so Tailwind purge never strips them
