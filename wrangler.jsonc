@@ -9,7 +9,8 @@
     { "pattern": "chkplt.com/*", "zone_name": "chkplt.com" }
   ],
   "triggers": {
-    // Daily 04:10 UTC (06:10 SAST) — reconcile ZAR charges to the live USD→ZAR rate.
-    "crons": ["10 4 * * *"]
+    // "10 4 * * *" daily → reconcile ZAR charges to the live USD→ZAR rate.
+    // "* * * * *" every minute → drain the transactional/auth email queue (Resend).
+    "crons": ["10 4 * * *", "* * * * *"]
   }
 }

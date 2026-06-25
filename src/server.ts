@@ -78,18 +78,44 @@ export default {
     }
   },
 
-  // Cloudflare cron (see wrangler.jsonc "triggers"): pull the live USD→ZAR rate
-  // and reconcile every product's ZAR charge to its fixed USD price. Lazy import
-  // so the FX/Supabase code never loads on the hot request path.
-  async scheduled(_event: unknown, _env: unknown, ctx: { waitUntil: (p: Promise<unknown>) => void }) {
+  // Cloudflare cron (see wrangler.jsonc "triggers").
+  //  • "10 4 * * *"  (daily)        → reconcile every product's ZAR charge to the live USD rate.
+  //  • "* * * * *"   (every minute) → drain the transactional/auth email queue (Resend).
+  async scheduled(
+    event: { cron?: string },
+    _env: unknown,
+    ctx: { waitUntil: (p: Promise<unknown>) => void },
+  ) {
+    const cron = event?.cron ?? "";
+
+    if (cron === "10 4 * * *") {
+      ctx.waitUntil(
+        (async () => {
+          try {
+            const { syncFxRates } = await import("./lib/fx-sync");
+            console.log("[fx-sync]", JSON.stringify(await syncFxRates()));
+          } catch (error) {
+            console.error("[fx-sync] failed", error);
+          }
+        })(),
+      );
+      return;
+    }
+
+    // Every-minute email drain — calls the queue processor (Bearer service-role).
     ctx.waitUntil(
       (async () => {
         try {
-          const { syncFxRates } = await import("./lib/fx-sync");
-          const result = await syncFxRates();
-          console.log("[fx-sync]", JSON.stringify(result));
+          const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          if (!key) { console.error("[email-drain] missing SUPABASE_SERVICE_ROLE_KEY"); return; }
+          const res = await fetch("https://chkplt.com/api/email/queue/process", {
+            method: "POST",
+            headers: { "content-type": "application/json", Authorization: `Bearer ${key}` },
+            body: "{}",
+          });
+          console.log("[email-drain]", res.status, (await res.text()).slice(0, 200));
         } catch (error) {
-          console.error("[fx-sync] failed", error);
+          console.error("[email-drain] failed", error);
         }
       })(),
     );
