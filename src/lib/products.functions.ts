@@ -312,3 +312,30 @@ export const getKitFileUrl = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { url: signed.signedUrl };
   });
+
+// Link any purchases made with this user's email (email-only grants from checkout)
+// to their account. Safety net so access is never stranded if the account was
+// created after — or independently of — the purchase. Idempotent; call on login.
+export const claimMyGrants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { userId } = context;
+    const email = (context.claims as { email?: string } | undefined)?.email?.toLowerCase();
+    if (!email) return { linked: 0 };
+
+    const { data: subs } = await supabaseAdmin
+      .from("subscribers")
+      .select("id")
+      .eq("email", email);
+    const subIds = (subs ?? []).map((s) => s.id);
+    if (!subIds.length) return { linked: 0 };
+
+    const { data: linked, error } = await supabaseAdmin
+      .from("product_grants")
+      .update({ user_id: userId })
+      .in("subscriber_id", subIds)
+      .is("user_id", null)
+      .select("id");
+    if (error) throw new Error(error.message);
+    return { linked: (linked ?? []).length };
+  });

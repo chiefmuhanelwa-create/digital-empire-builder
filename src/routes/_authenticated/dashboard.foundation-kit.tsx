@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
-import { getMyDownloadUrl, getKitFileUrl } from "@/lib/products.functions";
+import { getKitFileUrl } from "@/lib/products.functions";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { TOOLS } from "@/lib/tools";
 import { Download, Lock, ArrowRight, BookOpen, PlayCircle, Compass, CalendarCheck } from "lucide-react";
@@ -26,14 +26,7 @@ const FRAMEWORKS: { name: string; blurb: string; app?: string; pdf?: string }[] 
 ];
 
 function FoundationKitWorkspace() {
-  const dlFn = useServerFn(getMyDownloadUrl);
   const { access } = useKitAccess();
-
-  const dlMut = useMutation({
-    mutationFn: dlFn,
-    onSuccess: (res: { url: string }) => window.open(res.url, "_blank", "noopener,noreferrer"),
-    onError: (e: Error) => toast.error(e.message),
-  });
 
   const kitFileFn = useServerFn(getKitFileUrl);
   const kitFileMut = useMutation({
@@ -82,21 +75,6 @@ function FoundationKitWorkspace() {
                 <ArrowRight className="size-5 text-slate-400 group-hover:text-white transition-colors shrink-0" />
               </div>
             </a>
-
-            {/* Download fillable workbooks */}
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-              <div>
-                <div className="font-display text-lg">Fillable workbooks (PDF)</div>
-                <p className="text-sm text-[var(--text-dim)]">All 7 frameworks + 3 bonuses, ready to fill in.</p>
-              </div>
-              <button
-                onClick={() => dlMut.mutate({ data: { productSlug: "called-expert-foundation-kit" } })}
-                disabled={dlMut.isPending}
-                className="cta-glow inline-flex items-center gap-2 shrink-0 disabled:opacity-50"
-              >
-                <Download className="size-4" /> {dlMut.isPending ? "Preparing…" : "Download workbooks"}
-              </button>
-            </div>
 
             {/* The 7 frameworks */}
             <h2 className="text-2xl mb-4">The 7 frameworks</h2>

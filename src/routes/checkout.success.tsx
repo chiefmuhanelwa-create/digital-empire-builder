@@ -55,6 +55,8 @@ function CheckoutSuccess() {
 
   const status = q.data?.status;
   const purchasedSlug = q.data?.purchasedSlug;
+  const KIT_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
+  const isKit = !!purchasedSlug && KIT_SLUGS.includes(purchasedSlug);
 
   const purchaseFired = useRef(false);
   useEffect(() => {
@@ -107,14 +109,16 @@ function CheckoutSuccess() {
               </p>
             </div>
 
-            {purchasedSlug && (
-              <DownloadCard slug={purchasedSlug} reference={reference} />
+            {isKit ? (
+              <KitOnboarding email={q.data?.email ?? ""} />
+            ) : (
+              purchasedSlug && <DownloadCard slug={purchasedSlug} reference={reference} />
             )}
             {(q.data?.bumpSlugs ?? []).map((bs: string) => (
               <DownloadCard key={bs} slug={bs} reference={reference} />
             ))}
 
-            {purchasedSlug === "called-expert-foundation-kit" && (
+            {isKit && (
               <OneClickUpsell email={q.data?.email ?? ""} country={country} />
             )}
 
@@ -371,6 +375,32 @@ function OneClickUpsell({ email, country }: { email: string; country: string | n
           {state === "working" ? "Adding…" : `Yes — add for ${price} (1 click)`}
         </Button>
         <Button variant="outline" onClick={() => setState("declined")}>No thanks, I'll pass</Button>
+      </div>
+    </div>
+  );
+}
+
+function KitOnboarding({ email }: { email: string }) {
+  return (
+    <div className="mt-10 border-2 border-banana bg-banana/5 p-6 sm:p-8 text-left">
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana text-center">Your Foundation Kit is live</div>
+      <p className="mt-3 text-center text-sm text-muted-foreground">
+        Everything is inside your workspace — videos, interactive apps, and workbooks. Here's how to start:
+      </p>
+      <ol className="mt-5 mx-auto max-w-md space-y-2 text-sm text-foreground">
+        <li><strong>1.</strong> Tap “Open my Foundation Kit” below — you're already signed in.</li>
+        <li><strong>2.</strong> Start with <strong>Introduction to Personal Branding</strong> (10 short videos).</li>
+        <li><strong>3.</strong> Open the <strong>Niche Clarity Builder</strong> to lock your lane.</li>
+        <li><strong>4.</strong> Download the fillable workbooks as you work.</li>
+      </ol>
+      <div className="mt-6 flex flex-col items-center gap-2">
+        <Button asChild className="bg-banana text-banana-foreground hover:bg-banana/90">
+          <Link to="/dashboard/foundation-kit">Open my Foundation Kit →</Link>
+        </Button>
+        <p className="text-xs text-muted-foreground text-center">
+          We also emailed {email || "you"} a one-click sign-in link. If you ever get signed out, use{" "}
+          <Link to="/login" className="underline">chkplt.com/login</Link> with this email.
+        </p>
       </div>
     </div>
   );

@@ -7,8 +7,10 @@ import { OrderReceiptEmail } from "@/lib/email-templates/order-receipt";
 import { reportError } from "@/lib/error-logger";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
 
-const SITE_NAME = "Christ Kingdom Platform";
+const SITE_NAME = "CHKPLT";
 const ROOT_DOMAIN = "chkplt.com";
+// Product slugs whose purchase unlocks the Foundation Kit workspace.
+const KIT_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
 const SENDER_DOMAIN = "notify.chkplt.com";
 // Must be Resend-verified. notify.chkplt.com is verified; bare chkplt.com is NOT,
 // so receipts bounced with "domain is not verified".
@@ -53,7 +55,60 @@ function formatZar(cents: number, currency = "ZAR") {
   return `${symbol} ${(cents / 100).toFixed(2)}`;
 }
 
-async function sendOrderReceipt(orderId: string) {
+// Ensure the buyer has a real login account, then link any email-only grants to
+// it. Returns the user_id (or null if provisioning failed — receipt still sends).
+async function ensureBuyerUserId(
+  email: string,
+  fullName: string | null,
+  subscriberId: string | null,
+): Promise<string | null> {
+  let userId: string | null = null;
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+  if (profile) userId = profile.id;
+
+  if (!userId) {
+    try {
+      const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        email_confirm: true,
+        user_metadata: fullName ? { full_name: fullName } : {},
+      });
+      if (created?.user?.id) {
+        userId = created.user.id;
+      } else if (error) {
+        // Already registered (race / prior signup) — re-resolve from profiles.
+        const { data: p2 } = await supabaseAdmin
+          .from("profiles")
+          .select("id")
+          .eq("email", email)
+          .maybeSingle();
+        userId = p2?.id ?? null;
+        if (!userId) await reportError(error, { endpoint: "paystack-webhook:createUser", meta: { email } });
+      }
+    } catch (err) {
+      await reportError(err, { endpoint: "paystack-webhook:createUser", meta: { email } });
+    }
+  }
+
+  // Back-link any grants currently keyed to the email (subscriber) but missing a user_id.
+  if (userId && subscriberId) {
+    await supabaseAdmin
+      .from("product_grants")
+      .update({ user_id: userId })
+      .eq("subscriber_id", subscriberId)
+      .is("user_id", null);
+  }
+  return userId;
+}
+
+async function sendOrderReceipt(
+  orderId: string,
+  opts?: { actionUrl?: string | null; dashboardPath?: string; hasKit?: boolean },
+) {
   const { data: order } = await supabaseAdmin
     .from("orders")
     .select("id,email,customer_name,total_cents,currency,provider_reference")
@@ -84,37 +139,26 @@ async function sendOrderReceipt(orderId: string) {
     .select("product_title,quantity,line_total_cents")
     .eq("order_id", order.id);
 
-  const html = await render(
-    React.createElement(OrderReceiptEmail, {
-      siteName: SITE_NAME,
-      siteUrl: `https://${ROOT_DOMAIN}`,
-      dashboardUrl: `https://${ROOT_DOMAIN}/dashboard`,
-      customerName: order.customer_name,
-      orderReference: order.provider_reference ?? order.id,
-      items: (items ?? []).map((i) => ({
-        title: i.product_title,
-        quantity: i.quantity,
-        line_total: formatZar(i.line_total_cents, order.currency),
-      })),
-      total: formatZar(order.total_cents, order.currency),
-    }),
-  );
-  const text = await render(
-    React.createElement(OrderReceiptEmail, {
-      siteName: SITE_NAME,
-      siteUrl: `https://${ROOT_DOMAIN}`,
-      dashboardUrl: `https://${ROOT_DOMAIN}/dashboard`,
-      customerName: order.customer_name,
-      orderReference: order.provider_reference ?? order.id,
-      items: (items ?? []).map((i) => ({
-        title: i.product_title,
-        quantity: i.quantity,
-        line_total: formatZar(i.line_total_cents, order.currency),
-      })),
-      total: formatZar(order.total_cents, order.currency),
-    }),
-    { plainText: true },
-  );
+  const dashboardUrl = `https://${ROOT_DOMAIN}${opts?.dashboardPath ?? "/dashboard"}`;
+  const emailProps = {
+    siteName: SITE_NAME,
+    siteUrl: `https://${ROOT_DOMAIN}`,
+    dashboardUrl,
+    actionUrl: opts?.actionUrl ?? null,
+    loginUrl: `https://${ROOT_DOMAIN}/login`,
+    hasKit: opts?.hasKit ?? false,
+    customerName: order.customer_name,
+    customerEmail: order.email,
+    orderReference: order.provider_reference ?? order.id,
+    items: (items ?? []).map((i) => ({
+      title: i.product_title,
+      quantity: i.quantity,
+      line_total: formatZar(i.line_total_cents, order.currency),
+    })),
+    total: formatZar(order.total_cents, order.currency),
+  };
+  const html = await render(React.createElement(OrderReceiptEmail, emailProps));
+  const text = await render(React.createElement(OrderReceiptEmail, emailProps), { plainText: true });
 
   const { error } = await supabaseAdmin.rpc("enqueue_email", {
     queue_name: "transactional_emails",
@@ -283,17 +327,13 @@ async function handleChargeSuccess(payload: any) {
   // Grant access to each product in the order
   const { data: items } = await supabaseAdmin
     .from("order_items")
-    .select("product_id")
+    .select("product_id, products:product_id(slug)")
     .eq("order_id", order.id);
 
-  // Resolve user_id by email (if buyer has an account)
-  let userId: string | null = null;
-  const { data: profile } = await supabaseAdmin
-    .from("profiles")
-    .select("id")
-    .eq("email", email)
-    .maybeSingle();
-  if (profile) userId = profile.id;
+  // Provision a login account for the buyer so access is real (not email-only).
+  // This is THE fix for "I paid but the dashboard is locked": grants must carry a
+  // user_id, and the buyer must have an account they can actually sign into.
+  const userId = await ensureBuyerUserId(email, order.customer_name, subscriberId);
 
   for (const item of items ?? []) {
     await supabaseAdmin
@@ -307,6 +347,23 @@ async function handleChargeSuccess(payload: any) {
         },
         { onConflict: "product_id,subscriber_id", ignoreDuplicates: true },
       );
+  }
+
+  // Does this order unlock the Foundation Kit? Route onboarding straight there.
+  const hasKit = (items ?? []).some((i: any) => i.products && KIT_SLUGS.includes(i.products.slug));
+  const dashboardPath = hasKit ? "/dashboard/foundation-kit" : "/dashboard";
+
+  // One-click sign-in link → drops the buyer straight into their workspace, signed in.
+  let actionUrl: string | null = null;
+  try {
+    const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
+      type: "magiclink",
+      email,
+      options: { redirectTo: `https://${ROOT_DOMAIN}${dashboardPath}` },
+    });
+    actionUrl = (linkData as any)?.properties?.action_link ?? null;
+  } catch (err) {
+    await reportError(err, { endpoint: "paystack-webhook:generateLink", meta: { email } });
   }
 
   // Write the immutable audit ledger row BEFORE the receipt — if the ledger
@@ -327,7 +384,7 @@ async function handleChargeSuccess(payload: any) {
 
   // Send order receipt email (idempotent)
   try {
-    await sendOrderReceipt(order.id);
+    await sendOrderReceipt(order.id, { actionUrl, dashboardPath, hasKit });
   } catch (err) {
     await reportError(err, {
       endpoint: "paystack-webhook:sendOrderReceipt",
