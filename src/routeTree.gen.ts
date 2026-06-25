@@ -43,6 +43,7 @@ import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './rout
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
+import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
@@ -232,6 +233,12 @@ const AuthenticatedAppsKnowledgeAuditRoute =
     path: '/apps/knowledge-audit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsConsistencyBlueprintRoute =
+  AuthenticatedAppsConsistencyBlueprintRouteImport.update({
+    id: '/apps/consistency-blueprint',
+    path: '/apps/consistency-blueprint',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminProductsRoute =
   AuthenticatedAdminProductsRouteImport.update({
     id: '/admin/products',
@@ -331,6 +338,7 @@ export interface FileRoutesByFullPath {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
@@ -378,6 +386,7 @@ export interface FileRoutesByTo {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
@@ -427,6 +436,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
@@ -476,6 +486,7 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/consistency-blueprint'
     | '/apps/knowledge-audit'
     | '/apps/niche-clarity-builder'
     | '/apps/paids-auditor'
@@ -523,6 +534,7 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/consistency-blueprint'
     | '/apps/knowledge-audit'
     | '/apps/niche-clarity-builder'
     | '/apps/paids-auditor'
@@ -571,6 +583,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/incidents'
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
+    | '/_authenticated/apps/consistency-blueprint'
     | '/_authenticated/apps/knowledge-audit'
     | '/_authenticated/apps/niche-clarity-builder'
     | '/_authenticated/apps/paids-auditor'
@@ -860,6 +873,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsKnowledgeAuditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/consistency-blueprint': {
+      id: '/_authenticated/apps/consistency-blueprint'
+      path: '/apps/consistency-blueprint'
+      fullPath: '/apps/consistency-blueprint'
+      preLoaderRoute: typeof AuthenticatedAppsConsistencyBlueprintRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/products': {
       id: '/_authenticated/admin/products'
       path: '/admin/products'
@@ -1005,6 +1025,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminIncidentsRoute: typeof AuthenticatedAdminIncidentsRoute
   AuthenticatedAdminLedgerRoute: typeof AuthenticatedAdminLedgerRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
+  AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
   AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
@@ -1021,6 +1042,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminIncidentsRoute: AuthenticatedAdminIncidentsRoute,
   AuthenticatedAdminLedgerRoute: AuthenticatedAdminLedgerRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
+  AuthenticatedAppsConsistencyBlueprintRoute:
+    AuthenticatedAppsConsistencyBlueprintRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
   AuthenticatedAppsNicheClarityBuilderRoute:
     AuthenticatedAppsNicheClarityBuilderRoute,
