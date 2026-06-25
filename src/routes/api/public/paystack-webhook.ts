@@ -10,7 +10,9 @@ import { addToMailerLiteGroup } from "@/lib/mailerlite";
 const SITE_NAME = "Christ Kingdom Platform";
 const ROOT_DOMAIN = "chkplt.com";
 const SENDER_DOMAIN = "notify.chkplt.com";
-const FROM_DOMAIN = "chkplt.com";
+// Must be Resend-verified. notify.chkplt.com is verified; bare chkplt.com is NOT,
+// so receipts bounced with "domain is not verified".
+const FROM_DOMAIN = "notify.chkplt.com";
 
 // Statutory split — keep in sync with audit_ledgers semantics.
 const VAT_RATE = 0.15;
