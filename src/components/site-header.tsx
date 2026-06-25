@@ -70,13 +70,13 @@ export function SiteHeader() {
               >
                 Sign in
               </Link>
-              <Link
-                to="/products/$slug"
-                params={{ slug: "called-expert-foundation-kit" }}
+              {/* Routes to the homepage and opens the SAME checkout modal as every other CTA */}
+              <a
+                href="/?buy=1"
                 className="inline-flex items-center gap-1 rounded-full bg-[var(--nx-gold)] px-5 py-2.5 text-[14px] font-bold text-[#0F172A] shadow-sm hover:bg-[var(--nx-gold-deep)] hover:-translate-y-px transition-all"
               >
                 Get the Kit — $97
-              </Link>
+              </a>
             </>
           )}
         </div>
@@ -89,33 +89,13 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-[var(--border)] bg-[#0F172A]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
-          <div className="max-w-xs">
-            <div className="font-display text-base font-extrabold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
-              CHKPLT
-            </div>
-            <p className="mt-3 text-sm text-slate-400 leading-relaxed">
-              Christ's Kingdom Platform. Build on land you own.
-            </p>
+        <div className="max-w-xs">
+          <div className="font-display text-base font-extrabold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
+            CHKPLT
           </div>
-          <nav className="flex flex-col gap-3">
-            <div className="text-xs font-bold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
-              Company
-            </div>
-            {(
-              [
-                ["About", "/about"],
-                ["Contact", "/contact"],
-                ["Terms", "/terms"],
-                ["Privacy", "/privacy"],
-                ["Refunds", "/refund-policy"],
-              ] as const
-            ).map(([label, to]) => (
-              <Link key={to} to={to} className="text-sm text-slate-300 hover:text-white transition-colors">
-                {label}
-              </Link>
-            ))}
-          </nav>
+          <p className="mt-3 text-sm text-slate-400 leading-relaxed">
+            Christ's Kingdom Platform. Build on land you own.
+          </p>
         </div>
         <div className="mt-10 border-t border-white/10 pt-6 text-xs tracking-[0.05em] text-slate-500">
           © {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07

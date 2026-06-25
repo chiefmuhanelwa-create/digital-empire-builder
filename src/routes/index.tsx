@@ -26,15 +26,6 @@ const TESTIMONIAL_SHOTS: string[] = [
   "t05.jpg", "t06.jpg", "t07.jpg", "t08.jpg",
 ];
 
-// Glow helpers — inline so Tailwind purge never strips them
-const GOLD_GLOW = {
-  boxShadow: "0 0 24px rgba(245,158,11,0.55), 0 0 56px rgba(245,158,11,0.25)",
-} as const;
-
-const GOLD_GLOW_SOFT = {
-  boxShadow: "0 0 16px rgba(245,158,11,0.35), 0 0 36px rgba(245,158,11,0.12)",
-} as const;
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -226,8 +217,7 @@ function CheckoutModal({
           <button
             type="submit"
             disabled={mut.isPending || !tsToken}
-            className="w-full bg-[#F59E0B] text-[#111] font-display font-black text-base py-4 tracking-[0.06em] uppercase hover:bg-[#D97706] transition-all disabled:opacity-40 disabled:cursor-not-allowed mt-1"
-            style={mut.isPending || !tsToken ? undefined : GOLD_GLOW}
+            className="w-full rounded-full bg-[#F59E0B] text-[#0F172A] font-display font-extrabold text-base py-4 tracking-[0.06em] uppercase shadow-[0_10px_24px_-6px_rgba(217,119,6,0.5)] hover:bg-[#D97706] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none mt-1"
           >
             {mut.isPending ? "Redirecting…" : "GET INSTANT ACCESS NOW"}
           </button>
@@ -265,26 +255,17 @@ function CtaButton({
 }) {
   return (
     <div className="text-center">
-      <div className="relative inline-block w-full max-w-lg">
-        {size === "large" && (
-          <div
-            className="absolute -inset-[3px] animate-pulse"
-            style={{ background: "linear-gradient(90deg, #F59E0B, #B45309, #F59E0B)", opacity: 0.6 }}
-          />
-        )}
-        <button
-          onClick={onClick}
-          className={`relative inline-flex items-center justify-center gap-2 bg-[#F59E0B] text-[#111] font-display font-black uppercase tracking-[0.04em] hover:bg-[#D97706] active:scale-[0.99] transition-all w-full ${
-            size === "large"
-              ? "text-lg sm:text-xl py-5 sm:py-6 px-6 sm:px-12"
-              : "text-base sm:text-lg py-4 sm:py-5 px-6 sm:px-10"
-          }`}
-          style={size === "large" ? { boxShadow: "0 0 32px rgba(245,158,11,0.7), 0 0 80px rgba(245,158,11,0.35)" } : GOLD_GLOW}
-        >
-          {label}
-          <ArrowRight className="size-5 sm:size-6 shrink-0" />
-        </button>
-      </div>
+      <button
+        onClick={onClick}
+        className={`inline-flex items-center justify-center gap-2 w-full max-w-lg rounded-full bg-[#F59E0B] text-[#0F172A] font-display font-extrabold uppercase tracking-[0.04em] shadow-[0_10px_24px_-6px_rgba(217,119,6,0.5)] hover:bg-[#D97706] hover:-translate-y-px active:translate-y-0 transition-all ${
+          size === "large"
+            ? "text-lg sm:text-xl py-4 sm:py-5 px-8"
+            : "text-base sm:text-lg py-3.5 sm:py-4 px-7"
+        }`}
+      >
+        {label}
+        <ArrowRight className="size-5 shrink-0" />
+      </button>
       {sub && <p className="mt-3 text-[#475569] text-xs sm:text-sm">{sub}</p>}
     </div>
   );
@@ -407,6 +388,13 @@ const BEFORE_AFTER: [string, string][] = [
 function Landing() {
   const [showModal, setShowModal] = useState(false);
   const open = () => setShowModal(true);
+
+  // Any "Get the Kit" CTA across the site routes to /?buy=1 and opens this same modal.
+  useEffect(() => {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("buy") === "1") {
+      setShowModal(true);
+    }
+  }, []);
 
   const { data: product } = useQuery({
     queryKey: ["homepage-product-price"],
@@ -628,14 +616,22 @@ function Landing() {
                   </figcaption>
                 </figure>
               ))}
-              {/* Book cover — auto-appears once /proof/book-contentpreneur.png is added */}
-              <img
-                src="/proof/book-contentpreneur.png"
-                alt="Contentpreneur — the book"
-                loading="lazy"
-                className="col-span-2 w-1/2 mx-auto rounded-2xl object-cover border border-[var(--border)] aspect-[3/4]"
-                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-              />
+              {/* The book — "Contentpreneur" */}
+              <figure className="col-span-2 mt-1 flex flex-col items-center">
+                <img
+                  src="/proof/book-contentpreneur.png"
+                  alt="Contentpreneur — the book by Ndivhuwo Muhanelwa"
+                  loading="lazy"
+                  className="w-2/3 max-w-[240px] object-contain drop-shadow-xl"
+                  onError={(e) => {
+                    const fig = (e.currentTarget as HTMLImageElement).closest("figure");
+                    if (fig) (fig as HTMLElement).style.display = "none";
+                  }}
+                />
+                <figcaption className="mt-3 text-xs font-semibold text-[var(--text-dim)] text-center">
+                  "Contentpreneur" — written while still working
+                </figcaption>
+              </figure>
             </div>
           </div>
         </div>
