@@ -193,7 +193,7 @@ export function ProCohortBreakdown() {
       <dl className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-px bg-border border border-border">
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Investment</dt>
-          <dd className="mt-2 text-sm">$970 once-off <span className="text-banana">(save $485)</span> · or 2× $540, 30 days apart · billed in ZAR</dd>
+          <dd className="mt-2 text-sm">$970 once-off <span className="text-banana">(save $80)</span> · or $350 × 3 months · billed in ZAR</dd>
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Capacity</dt>

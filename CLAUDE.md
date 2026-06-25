@@ -4,6 +4,17 @@ Read this file AND `Learnings.md` before every task. These two files are your op
 
 ---
 
+## ⚡ MANDATORY END-OF-SESSION RULE — NON-NEGOTIABLE
+
+After every work session — without being asked — extract ALL teachable content to:
+1. `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md` — any framework, SOP, lesson, or practical step a Called Expert needs to do this themselves. 6-tag format: Stage · MS/TS/SS · Framework · Lesson · Steps(SOP) · Proof.
+2. Project `Learnings.md` — raw technical receipts (what broke, what worked).
+3. Memory system — new preferences, feedback, project facts.
+
+**Never wait to be asked. "Have you recorded the teachable?" should never need to be said.**
+
+---
+
 ## Business & Context Rules
 
 ### About This Business

@@ -7,5 +7,9 @@
   "workers_dev": false,
   "routes": [
     { "pattern": "chkplt.com/*", "zone_name": "chkplt.com" }
-  ]
+  ],
+  "triggers": {
+    // Daily 04:10 UTC (06:10 SAST) — reconcile ZAR charges to the live USD→ZAR rate.
+    "crons": ["10 4 * * *"]
+  }
 }

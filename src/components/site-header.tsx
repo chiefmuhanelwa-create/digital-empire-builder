@@ -58,24 +58,45 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="border-t border-[#e0d8cc] bg-[#1C1C1C]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="font-display text-sm font-black tracking-[0.22em] uppercase text-banana">CHKPLT</div>
-        <nav className="flex flex-wrap gap-x-5 gap-y-2">
-          {(
-            [
-              ["Terms", "/terms"],
-              ["Privacy", "/privacy"],
-              ["Refunds", "/refund-policy"],
-              ["Contact", "/contact"],
-              ["About", "/about"],
-            ] as const
-          ).map(([l, to]) => (
-            <Link key={to} to={to} className="text-xs text-[#bbb] hover:text-banana transition-colors">
-              {l}
-            </Link>
-          ))}
-        </nav>
-        <div className="font-mono text-[10px] tracking-[0.08em] uppercase text-[#999]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
+          <div className="font-display text-sm font-black tracking-[0.22em] uppercase text-banana">CHKPLT</div>
+          <div className="flex flex-wrap gap-x-12 gap-y-6">
+            <nav className="flex flex-col gap-2.5">
+              <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#C9A84C]">Free Tools</div>
+              {(
+                [
+                  ["Rate Card Calculator", "/rate-card"],
+                  ["Hook Generator", "/hook-generator"],
+                  ["Media Kit Builder", "/media-kit"],
+                  ["SARS 25% Calculator", "/sars-calculator"],
+                  ["Offer Builder", "/offer-builder"],
+                ] as const
+              ).map(([label, to]) => (
+                <Link key={to} to={to} className="text-xs text-[#bbb] hover:text-banana transition-colors">
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <nav className="flex flex-col gap-2.5">
+              <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#C9A84C]">Company</div>
+              {(
+                [
+                  ["About", "/about"],
+                  ["Contact", "/contact"],
+                  ["Terms", "/terms"],
+                  ["Privacy", "/privacy"],
+                  ["Refunds", "/refund-policy"],
+                ] as const
+              ).map(([label, to]) => (
+                <Link key={to} to={to} className="text-xs text-[#bbb] hover:text-banana transition-colors">
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+        <div className="mt-8 border-t border-white/10 pt-6 font-mono text-[10px] tracking-[0.08em] uppercase text-[#999]">
           © {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07
         </div>
       </div>

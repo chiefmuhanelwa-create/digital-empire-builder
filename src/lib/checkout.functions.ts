@@ -37,7 +37,7 @@ export const initializeCheckout = createServerFn({ method: "POST" })
     // 1. Load the product
     const { data: product, error: pErr } = await supabaseAdmin
       .from("products")
-      .select("id,slug,title,price_cents,currency,status,garden,is_free")
+      .select("id,slug,title,price_cents,currency,status,garden,is_free,requires_application")
       .eq("slug", data.productSlug)
       .maybeSingle();
     if (pErr) throw new Error(pErr.message);
@@ -45,6 +45,26 @@ export const initializeCheckout = createServerFn({ method: "POST" })
     if (product.status !== "published") throw new Error("Product not available");
     if (product.is_free || product.price_cents <= 0) {
       throw new Error("Free products do not require checkout");
+    }
+
+    // Application-gated products (Premium Programs, etz_pri) require a QUALIFIED
+    // stewardship application for this email. The product page enforces this in
+    // the UI, but re-verify server-side so a hand-crafted request can't bypass
+    // the gate and pay into an empty/covenant-breach program.
+    if (product.requires_application) {
+      const { data: appRow, error: aErr } = await supabaseAdmin
+        .from("client_stewardship_applications")
+        .select("determined_routing_status")
+        .ilike("email", data.email)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (aErr) throw new Error(aErr.message);
+      if (appRow?.determined_routing_status !== "QUALIFIED_FOR_CORE_PROGRAM") {
+        throw new Error(
+          "This program requires a qualified application. Complete the diagnostic at /apply first.",
+        );
+      }
     }
 
     // 1b. Load any order-bump products (same currency, published, paid)

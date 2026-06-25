@@ -407,15 +407,11 @@ function Landing() {
   const country = useCountry();
   const priceCents = product?.price_cents ?? 9700;
   const currency = product?.currency ?? "USD";
-  // Headline price: ZA → R (real charge), elsewhere → "$97" via USD_DISPLAY.
+  // Headline price: always USD ($97 via USD_DISPLAY), charged in ZAR at checkout.
   const displayPrice = formatPrice(priceCents, currency, false, PRODUCT_SLUG, country);
-  // Compare/savings: explicit anchor (passing slug to formatPrice ignores `cents`).
-  // Show value anchors in the same currency the viewer sees.
-  const za = country === "ZA";
-  const anchor = za ? 1800 : 97;
-  const cur = (n: number) => (za ? `R${(n).toLocaleString("en-ZA")}` : `$${n.toLocaleString("en-US")}`);
-  const comparePrice = cur(anchor * 6);
-  const savings = cur(anchor * 5);
+  // Value anchors tie to the Total Value Breakdown below: $820 value − $97 = $723 saved.
+  const comparePrice = "$820";
+  const savings = "$723";
 
   return (
     <div className="min-h-screen bg-white text-[#1C1C1C] overflow-x-hidden pb-20 sm:pb-0">
@@ -1786,7 +1782,7 @@ function Landing() {
 
           <div className="flex items-center justify-center gap-4 mb-6">
             <span className="font-mono text-base text-[#ccc] line-through">
-              $723+ value
+              $820 value
             </span>
             <span className="font-display text-5xl sm:text-6xl text-banana">
               {displayPrice}

@@ -356,8 +356,12 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
       </div>
       <Button
         size="lg"
-        disabled={!email || !tsToken || mut.isPending}
+        disabled={mut.isPending}
         onClick={() => {
+          if (!email) {
+            toast.error("Enter your email above to continue.");
+            return;
+          }
           trackLead();
           mut.mutate({
             data: {
@@ -402,7 +406,7 @@ function ApplicationGate({ product, priceLabel }: { product: any; priceLabel: st
         </div>
         <h3 className="mt-2 font-display text-2xl">Take the assessment first</h3>
         <p className="mt-3 text-sm text-muted-foreground">
-          Premium Programs are gated by our 23-point Contentpreneur diagnostic. Complete it to unlock checkout.
+          Premium Programs are gated by our in-depth Contentpreneur diagnostic. Complete it to unlock checkout.
         </p>
         <Link
           to="/apply"
@@ -452,7 +456,7 @@ function ApplicationGate({ product, priceLabel }: { product: any; priceLabel: st
       <p className="mt-3 text-sm text-muted-foreground">
         {data?.hasApplication
           ? "Your latest assessment routed you to a different starting point. Re-take the diagnostic when your numbers change, or browse the recommended standalone package."
-          : "Premium Programs are gated by our 23-point Contentpreneur diagnostic. Complete it to unlock checkout."}
+          : "Premium Programs are gated by our in-depth Contentpreneur diagnostic. Complete it to unlock checkout."}
       </p>
       <Link
         to="/apply"
@@ -507,8 +511,12 @@ function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: strin
       </div>
       <Button
         size="lg"
-        disabled={!email || !tsToken || mut.isPending}
+        disabled={mut.isPending}
         onClick={() => {
+          if (!email) {
+            toast.error("Enter your email above to continue.");
+            return;
+          }
           trackLead();
           mut.mutate({
             data: {

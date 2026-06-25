@@ -11,12 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SarsCalculatorRouteImport } from './routes/sars-calculator'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
+import { Route as RateCardRouteImport } from './routes/rate-card'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OfferBuilderRouteImport } from './routes/offer-builder'
 import { Route as NicheClarityRouteImport } from './routes/niche-clarity'
+import { Route as MediaKitRouteImport } from './routes/media-kit'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as HookGeneratorRouteImport } from './routes/hook-generator'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AboutRouteImport } from './routes/about'
@@ -30,6 +34,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as ProductsGardenGardenRouteImport } from './routes/products.garden.$garden'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
+import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
@@ -52,6 +57,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SarsCalculatorRoute = SarsCalculatorRouteImport.update({
+  id: '/sars-calculator',
+  path: '/sars-calculator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -60,6 +70,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
   id: '/refund-policy',
   path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RateCardRoute = RateCardRouteImport.update({
+  id: '/rate-card',
+  path: '/rate-card',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -77,9 +92,19 @@ const NicheClarityRoute = NicheClarityRouteImport.update({
   path: '/niche-clarity',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MediaKitRoute = MediaKitRouteImport.update({
+  id: '/media-kit',
+  path: '/media-kit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HookGeneratorRoute = HookGeneratorRouteImport.update({
+  id: '/hook-generator',
+  path: '/hook-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -147,6 +172,11 @@ const ApiPublicPaystackWebhookRoute =
     path: '/api/public/paystack-webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiCronSyncFxRoute = ApiCronSyncFxRouteImport.update({
+  id: '/api/cron/sync-fx',
+  path: '/api/cron/sync-fx',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedLearnSlugRoute = AuthenticatedLearnSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -215,12 +245,16 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
+  '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
+  '/media-kit': typeof MediaKitRoute
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
+  '/rate-card': typeof RateCardRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sars-calculator': typeof SarsCalculatorRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -235,6 +269,7 @@ export interface FileRoutesByFullPath {
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
+  '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
@@ -248,12 +283,16 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
+  '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
+  '/media-kit': typeof MediaKitRoute
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
+  '/rate-card': typeof RateCardRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sars-calculator': typeof SarsCalculatorRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -268,6 +307,7 @@ export interface FileRoutesByTo {
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
+  '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
@@ -283,12 +323,16 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
+  '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
+  '/media-kit': typeof MediaKitRoute
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
+  '/rate-card': typeof RateCardRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/sars-calculator': typeof SarsCalculatorRoute
   '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -303,6 +347,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
+  '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/_authenticated/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
@@ -318,12 +363,16 @@ export interface FileRouteTypes {
     | '/about'
     | '/apply'
     | '/contact'
+    | '/hook-generator'
     | '/login'
+    | '/media-kit'
     | '/niche-clarity'
     | '/offer-builder'
     | '/privacy'
+    | '/rate-card'
     | '/refund-policy'
     | '/reset-password'
+    | '/sars-calculator'
     | '/signup'
     | '/terms'
     | '/account'
@@ -338,6 +387,7 @@ export interface FileRouteTypes {
     | '/admin/ledger'
     | '/admin/products'
     | '/learn/$slug'
+    | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
     | '/admin/curriculum/$productSlug'
@@ -351,12 +401,16 @@ export interface FileRouteTypes {
     | '/about'
     | '/apply'
     | '/contact'
+    | '/hook-generator'
     | '/login'
+    | '/media-kit'
     | '/niche-clarity'
     | '/offer-builder'
     | '/privacy'
+    | '/rate-card'
     | '/refund-policy'
     | '/reset-password'
+    | '/sars-calculator'
     | '/signup'
     | '/terms'
     | '/account'
@@ -371,6 +425,7 @@ export interface FileRouteTypes {
     | '/admin/ledger'
     | '/admin/products'
     | '/learn/$slug'
+    | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
     | '/admin/curriculum/$productSlug'
@@ -385,12 +440,16 @@ export interface FileRouteTypes {
     | '/about'
     | '/apply'
     | '/contact'
+    | '/hook-generator'
     | '/login'
+    | '/media-kit'
     | '/niche-clarity'
     | '/offer-builder'
     | '/privacy'
+    | '/rate-card'
     | '/refund-policy'
     | '/reset-password'
+    | '/sars-calculator'
     | '/signup'
     | '/terms'
     | '/_authenticated/account'
@@ -405,6 +464,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
     | '/_authenticated/learn/$slug'
+    | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
     | '/_authenticated/admin/curriculum/$productSlug'
@@ -420,17 +480,22 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ApplyRoute: typeof ApplyRoute
   ContactRoute: typeof ContactRoute
+  HookGeneratorRoute: typeof HookGeneratorRoute
   LoginRoute: typeof LoginRoute
+  MediaKitRoute: typeof MediaKitRoute
   NicheClarityRoute: typeof NicheClarityRoute
   OfferBuilderRoute: typeof OfferBuilderRoute
   PrivacyRoute: typeof PrivacyRoute
+  RateCardRoute: typeof RateCardRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SarsCalculatorRoute: typeof SarsCalculatorRoute
   SignupRoute: typeof SignupRoute
   TermsRoute: typeof TermsRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
+  ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
   ProductsGardenGardenRoute: typeof ProductsGardenGardenRoute
   ApiEmailAuthPreviewRoute: typeof ApiEmailAuthPreviewRoute
@@ -454,6 +519,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sars-calculator': {
+      id: '/sars-calculator'
+      path: '/sars-calculator'
+      fullPath: '/sars-calculator'
+      preLoaderRoute: typeof SarsCalculatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -466,6 +538,13 @@ declare module '@tanstack/react-router' {
       path: '/refund-policy'
       fullPath: '/refund-policy'
       preLoaderRoute: typeof RefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rate-card': {
+      id: '/rate-card'
+      path: '/rate-card'
+      fullPath: '/rate-card'
+      preLoaderRoute: typeof RateCardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -489,11 +568,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NicheClarityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/media-kit': {
+      id: '/media-kit'
+      path: '/media-kit'
+      fullPath: '/media-kit'
+      preLoaderRoute: typeof MediaKitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hook-generator': {
+      id: '/hook-generator'
+      path: '/hook-generator'
+      fullPath: '/hook-generator'
+      preLoaderRoute: typeof HookGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -585,6 +678,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/paystack-webhook'
       fullPath: '/api/public/paystack-webhook'
       preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cron/sync-fx': {
+      id: '/api/cron/sync-fx'
+      path: '/api/cron/sync-fx'
+      fullPath: '/api/cron/sync-fx'
+      preLoaderRoute: typeof ApiCronSyncFxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/learn/$slug': {
@@ -728,17 +828,22 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ApplyRoute: ApplyRoute,
   ContactRoute: ContactRoute,
+  HookGeneratorRoute: HookGeneratorRoute,
   LoginRoute: LoginRoute,
+  MediaKitRoute: MediaKitRoute,
   NicheClarityRoute: NicheClarityRoute,
   OfferBuilderRoute: OfferBuilderRoute,
   PrivacyRoute: PrivacyRoute,
+  RateCardRoute: RateCardRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SarsCalculatorRoute: SarsCalculatorRoute,
   SignupRoute: SignupRoute,
   TermsRoute: TermsRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   ProductsSlugRoute: ProductsSlugRoute,
   ProductsIndexRoute: ProductsIndexRoute,
+  ApiCronSyncFxRoute: ApiCronSyncFxRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
   ProductsGardenGardenRoute: ProductsGardenGardenRoute,
   ApiEmailAuthPreviewRoute: ApiEmailAuthPreviewRoute,
