@@ -4,6 +4,17 @@ Read this file AND `Learnings.md` before every task. These two files are your op
 
 ---
 
+## ⚡ MANDATORY END-OF-SESSION RULE — NON-NEGOTIABLE
+
+After every work session — without being asked — extract ALL teachable content to:
+1. `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md` — any framework, SOP, lesson, or practical step a Called Expert needs to do this themselves. 6-tag format: Stage · MS/TS/SS · Framework · Lesson · Steps(SOP) · Proof.
+2. Project `Learnings.md` — raw technical receipts (what broke, what worked).
+3. Memory system — new preferences, feedback, project facts.
+
+**Never wait to be asked. "Have you recorded the teachable?" should never need to be said.**
+
+---
+
 ## Business & Context Rules
 
 ### About This Business
@@ -101,7 +112,7 @@ Always lock onto ONE ICP before writing any content or copy. Never mix them in t
 **SARS story specifics:** VDP was FILED then WITHDRAWN on Thome-Lee Wright's advice. Standard eFiling amended returns used instead — gave better payment terms + penalty objection rights. SARS reference: 2990409167. VDP reference: VDP1059030.
 
 **Full verified story bank (11 stories):** See `docs/STORY-BANK.md`
-**Full verified proof statement:** "From sleeping in university bathrooms to R600,000+ in a single year — with receipts from Capitec, Netflix, Standard Bank, Superbalist, Suzuki, SA Tourism, ABSA, Showmax, Flying Fish, and 40+ other brands — across 23 agencies, 9 awards, a SAMA31 judge seat, and a Meta speaker slot."
+**Full verified proof statement:** "From sleeping in university bathrooms to R600,000+ in a single year — with receipts from Capitec, Netflix, Standard Bank, Superbalist, Suzuki, SA Tourism, ABSA, Showmax, Flying Fish, and 40+ other brands — across 23 agencies, 10 awards, a SAMA 30 & 31 judge seat (consecutive), and a Meta speaker slot."
 
 ### NOCHILL Frameworks (Quick Reference)
 

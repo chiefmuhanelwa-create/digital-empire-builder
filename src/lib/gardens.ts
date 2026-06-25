@@ -43,10 +43,17 @@ export const GARDEN_ORDER: Garden[] = ["esev", "etz_pri", "devarim"];
 // ZAR (Paystack can't bill USD) — buyers see "billed in ZAR at checkout".
 // USD_DISPLAY holds clean marketing prices for the headline products; any other
 // ZAR product is auto-converted to whole USD via ZAR_PER_USD below.
-export const ZAR_PER_USD = 18.5;
+//
+// LIVE conversion: the daily Cloudflare cron `sync-fx` (src/lib/fx-sync.ts) pulls
+// the real USD→ZAR rate and rewrites each USD_DISPLAY product's price_cents so the
+// ZAR charge always tracks the fixed USD price. Nothing here is hardwired anymore.
+//
+// ZAR_PER_USD below is ONLY the display fallback for ad-hoc ZAR products that aren't
+// in USD_DISPLAY (and for SSR before the first cron run). Keep it roughly current.
+export const ZAR_PER_USD = 16.58;
 
 export const USD_DISPLAY: Record<string, number> = {
-  "called-expert-foundation-kit": 9700,   // $97  (charged ~R1,800)
+  "called-expert-foundation-kit": 9700,   // $97  (charged R1,604 @ 16.58)
   "called-expert-starter-bundle": 9700,   // $97  (charged ~R1,800)
   "called-expert-foundations": 29700,     // $297 (charged ~R5,500)
   "called-expert-facilitator": 400000,    // $4,000 (charged R75,000)

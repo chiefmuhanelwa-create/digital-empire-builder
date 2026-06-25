@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
-import { Download, BookOpen, User, ShieldCheck, FileText, Users, Receipt, AlertCircle, ArrowRight } from "lucide-react";
+import { Download, BookOpen, User, ShieldCheck, FileText, Users, Receipt, AlertCircle, ArrowRight, Wrench } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -75,21 +75,26 @@ function Dashboard() {
         {/* Quick nav tiles */}
         <div>
           <div className="nx-label mb-4">Quick access</div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <Link to="/learn" className="dash-tile group">
               <BookOpen className="size-5 text-banana" />
               <div className="font-display text-base mt-1">My Courses</div>
               <div className="text-xs text-muted-foreground">Enter the LMS</div>
             </Link>
+            <Link to="/dashboard/tools" className="dash-tile group">
+              <Wrench className="size-5 text-banana" />
+              <div className="font-display text-base mt-1">Free Tools</div>
+              <div className="text-xs text-muted-foreground">5 practical tools</div>
+            </Link>
+            <Link to="/dashboard/products/free" className="dash-tile group">
+              <FileText className="size-5 text-banana" />
+              <div className="font-display text-base mt-1">Products</div>
+              <div className="text-xs text-muted-foreground">Free &amp; paid</div>
+            </Link>
             <Link to="/account" className="dash-tile group">
               <User className="size-5 text-banana" />
               <div className="font-display text-base mt-1">Account</div>
               <div className="text-xs text-muted-foreground">Privacy &amp; data</div>
-            </Link>
-            <Link to="/products" className="dash-tile group">
-              <FileText className="size-5 text-banana" />
-              <div className="font-display text-base mt-1">Products</div>
-              <div className="text-xs text-muted-foreground">Browse the store</div>
             </Link>
             <Link to="/apply" className="dash-tile group">
               <ArrowRight className="size-5 text-banana" />
@@ -150,7 +155,7 @@ function Dashboard() {
                 When you purchase a product or enrol in a programme, it appears here.
               </p>
               <Button asChild className="mt-6 cta-glow">
-                <Link to="/products">Browse products →</Link>
+                <Link to="/dashboard/products/free">Browse products →</Link>
               </Button>
             </div>
           )}

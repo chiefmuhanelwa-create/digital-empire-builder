@@ -77,4 +77,21 @@ export default {
       return brandedErrorResponse();
     }
   },
+
+  // Cloudflare cron (see wrangler.jsonc "triggers"): pull the live USD→ZAR rate
+  // and reconcile every product's ZAR charge to its fixed USD price. Lazy import
+  // so the FX/Supabase code never loads on the hot request path.
+  async scheduled(_event: unknown, _env: unknown, ctx: { waitUntil: (p: Promise<unknown>) => void }) {
+    ctx.waitUntil(
+      (async () => {
+        try {
+          const { syncFxRates } = await import("./lib/fx-sync");
+          const result = await syncFxRates();
+          console.log("[fx-sync]", JSON.stringify(result));
+        } catch (error) {
+          console.error("[fx-sync] failed", error);
+        }
+      })(),
+    );
+  },
 };

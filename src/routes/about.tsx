@@ -34,7 +34,7 @@ const PILLARS = [
 
 function About() {
   return (
-    <div className="min-h-screen bg-white text-[#1C1C1C] overflow-x-hidden">
+    <div className="min-h-screen bg-white text-[#0F172A] overflow-x-hidden">
       <SiteHeader />
 
       {/* HERO */}
@@ -50,16 +50,16 @@ function About() {
       </section>
 
       {/* WHAT IS A CALLED EXPERT */}
-      <section className="border-t border-[#e0d8cc]">
+      <section className="border-t border-[#E2E8F0]">
         <div className="mx-auto max-w-3xl px-5 sm:px-6 py-14 sm:py-20">
           <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">Who is a Called Expert?</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl tracking-tight">
             You were not just trained.{" "}
             <em className="text-banana not-italic">You were called.</em>
           </h2>
-          <div className="mt-8 bg-white border border-[#C9A84C]/30 px-6 sm:px-8 py-6 space-y-4">
+          <div className="mt-8 bg-white border border-[#F59E0B]/30 px-6 sm:px-8 py-6 space-y-4">
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
-              A <strong className="text-[#1C1C1C]">Called Expert</strong> is a professional, teacher, specialist, or healthcare worker who was not just trained in their field — they were{" "}
+              A <strong className="text-[#0F172A]">Called Expert</strong> is a professional, teacher, specialist, or healthcare worker who was not just trained in their field — they were{" "}
               <em className="text-banana not-italic font-semibold">called</em> to it. Their knowledge is not just a skill. It is a stewardship.
             </p>
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
@@ -69,14 +69,14 @@ function About() {
               You don't need to quit your job first. You don't need a massive audience. You need a system. And that's exactly what CHKPLT delivers.
             </p>
           </div>
-          <blockquote className="mt-8 border-l-4 border-[#C9A84C] pl-5 italic text-[#555] text-base sm:text-lg leading-relaxed">
+          <blockquote className="mt-8 border-l-4 border-[#F59E0B] pl-5 italic text-[#555] text-base sm:text-lg leading-relaxed">
             "Unless the LORD builds the house, the builders labor in vain." — Psalm 127:1
           </blockquote>
         </div>
       </section>
 
       {/* ORIGIN STORY + FOUNDER PHOTO */}
-      <section className="border-t border-[#e0d8cc] bg-white">
+      <section className="border-t border-[#E2E8F0] bg-white">
         <div className="mx-auto max-w-5xl px-5 sm:px-6 py-14 sm:py-20 grid md:grid-cols-2 gap-10 items-center">
           <div className="order-2 md:order-1">
             <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">Where this came from</div>
@@ -93,7 +93,7 @@ function About() {
               </p>
               <p>
                 Every time a platform took back what felt like progress, the lesson was the same:{" "}
-                <strong className="text-[#1C1C1C]">social media is a distribution channel, not a destination.</strong> Use it to build your audience. Then move them onto what you own.
+                <strong className="text-[#0F172A]">social media is a distribution channel, not a destination.</strong> Use it to build your audience. Then move them onto what you own.
               </p>
               <p>CHKPLT is that lesson turned into a system.</p>
             </div>
@@ -102,7 +102,7 @@ function About() {
             <img
               src="/founder.jpg"
               alt="Ndivhuwo Muhanelwa — NoChill — speaking at Meta"
-              className="w-full object-cover border border-[#e0d8cc]"
+              className="w-full object-cover border border-[#E2E8F0]"
               style={{ maxHeight: "440px", objectFit: "cover", objectPosition: "top" }}
             />
           </div>
@@ -110,7 +110,7 @@ function About() {
       </section>
 
       {/* PHOTO STRIP */}
-      <section className="border-t border-[#e0d8cc]">
+      <section className="border-t border-[#E2E8F0]">
         <div className="mx-auto max-w-5xl px-5 sm:px-6 py-10">
           <div className="grid grid-cols-3 gap-3">
             {[
@@ -118,7 +118,7 @@ function About() {
               { src: "/founder-award.jpg", alt: "NoChill — Humanz Top 20 Award 2026" },
               { src: "/IMG_4060.JPG", alt: "Book signing — The Influencer's Code" },
             ].map((img, i) => (
-              <div key={i} className="aspect-[4/3] overflow-hidden border border-[#e0d8cc] bg-[#f0ebe0]">
+              <div key={i} className="aspect-[4/3] overflow-hidden border border-[#E2E8F0] bg-[#f0ebe0]">
                 <img
                   src={img.src}
                   alt={img.alt}
@@ -132,7 +132,7 @@ function About() {
       </section>
 
       {/* WHAT WE SOLVE */}
-      <section className="border-t border-[#e0d8cc] bg-white">
+      <section className="border-t border-[#E2E8F0] bg-white">
         <div className="mx-auto max-w-5xl px-5 sm:px-6 py-14 sm:py-20">
           <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">What we solve</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl tracking-tight max-w-3xl">
@@ -144,8 +144,8 @@ function About() {
           </p>
           <div className="mt-10 grid gap-5 sm:gap-6 md:grid-cols-2">
             {PILLARS.map((p) => (
-              <div key={p.t} className="border border-[#e0d8cc] bg-white p-6 sm:p-8 flex flex-col">
-                <h3 className="font-display text-xl sm:text-2xl leading-tight text-[#1C1C1C]">{p.t}</h3>
+              <div key={p.t} className="border border-[#E2E8F0] bg-white p-6 sm:p-8 flex flex-col">
+                <h3 className="font-display text-xl sm:text-2xl leading-tight text-[#0F172A]">{p.t}</h3>
                 <p className="mt-3 text-sm sm:text-base text-[#555] leading-relaxed">{p.d}</p>
               </div>
             ))}
@@ -154,20 +154,20 @@ function About() {
       </section>
 
       {/* FOUNDER BIO */}
-      <section className="border-t border-[#e0d8cc]">
+      <section className="border-t border-[#E2E8F0]">
         <div className="mx-auto max-w-3xl px-5 sm:px-6 py-14 sm:py-20">
           <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">The founder</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl tracking-tight">
             The receipts are real.
           </h2>
-          <div className="mt-8 bg-white border border-[#e0d8cc] p-6 sm:p-8">
+          <div className="mt-8 bg-white border border-[#E2E8F0] p-6 sm:p-8">
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
               Ndivhuwo Muhanelwa — "NoChill" — went from sleeping in university bathrooms in Pretoria to building a knowledge business that crossed six figures in a single year. Over 50 brand campaigns. 23 agencies. A published book. A SAMA31 judge seat. A Meta speaker slot. Not as a tech founder — as a content creator from Tshikwarani, Limpopo who learned the system the hard way and wrote it down so you wouldn't have to.
             </p>
-            <blockquote className="mt-6 border-l-4 border-[#C9A84C] pl-4 italic text-[#555] text-sm sm:text-base leading-relaxed">
+            <blockquote className="mt-6 border-l-4 border-[#F59E0B] pl-4 italic text-[#555] text-sm sm:text-base leading-relaxed">
               "I didn't just hustle — I obeyed the calling. And now I'm handing you the map."
             </blockquote>
-            <div className="mt-6 pt-5 border-t border-[#e0d8cc] font-mono text-xs tracking-[0.12em] uppercase text-[#5a5a5a] space-y-1">
+            <div className="mt-6 pt-5 border-t border-[#E2E8F0] font-mono text-xs tracking-[0.12em] uppercase text-[#5a5a5a] space-y-1">
               <div>Ndivhuwo Muhanelwa — "NoChill"</div>
               <div>Founder · NOCHILL PTY LTD · CHKPLT</div>
               <div>SAMA31 Judge · Meta Speaker · Author</div>
@@ -178,7 +178,7 @@ function About() {
       </section>
 
       {/* SEAL */}
-      <section className="border-t border-[#e0d8cc] bg-[#1C1C1C]">
+      <section className="border-t border-[#E2E8F0] bg-[#0F172A]">
         <div className="mx-auto max-w-4xl px-5 sm:px-6 py-12 sm:py-16 text-center">
           <div className="font-display text-3xl sm:text-4xl tracking-tight text-banana">CHKPLT</div>
           <div className="mt-3 font-mono text-[10px] tracking-[0.25em] uppercase text-[#666]">

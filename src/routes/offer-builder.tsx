@@ -27,7 +27,7 @@ export const Route = createFileRoute("/offer-builder")({
 
 const TOTAL_STEPS = 4;
 const GOLD_GLOW = {
-  boxShadow: "0 0 24px rgba(201,168,76,0.55), 0 0 56px rgba(201,168,76,0.25)",
+  boxShadow: "0 0 24px rgba(245,158,11,0.55), 0 0 56px rgba(245,158,11,0.25)",
 } as const;
 
 type Icp = "called_expert" | "content_creator";
@@ -58,7 +58,7 @@ const INITIAL: Fields = {
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
-      <label className="font-display text-[#1C1C1C] text-sm font-bold leading-snug block">{label}</label>
+      <label className="font-display text-[#0F172A] text-sm font-bold leading-snug block">{label}</label>
       {hint && <p className="text-[#555] text-xs -mt-1">{hint}</p>}
       {children}
     </div>
@@ -66,7 +66,7 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 }
 
 const TA_CLASS =
-  "w-full min-h-[88px] border border-[#d0c8bc] bg-white rounded-md px-3 py-2 text-[15px] text-[#1C1C1C] focus:border-[#C9A84C] focus:outline-none focus:ring-0 resize-y";
+  "w-full min-h-[88px] border border-[#d0c8bc] bg-white rounded-md px-3 py-2 text-[15px] text-[#0F172A] focus:border-[#F59E0B] focus:outline-none focus:ring-0 resize-y";
 
 function OfferBuilderPage() {
   const build = useServerFn(buildOffer);
@@ -121,7 +121,7 @@ function OfferBuilderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-[#1C1C1C]">
+    <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
         {!offer ? (
@@ -143,7 +143,7 @@ function OfferBuilderPage() {
               {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
                 <div
                   key={i}
-                  className={`h-1 flex-1 rounded-full transition-colors ${i <= step ? "bg-[#C9A84C]" : "bg-[#e8e0d4]"}`}
+                  className={`h-1 flex-1 rounded-full transition-colors ${i <= step ? "bg-[#F59E0B]" : "bg-[#e8e0d4]"}`}
                 />
               ))}
             </div>
@@ -164,12 +164,12 @@ function OfferBuilderPage() {
                           onClick={() => set("icp", o.val)}
                           className={`text-left p-4 border rounded-xl transition-all ${
                             fields.icp === o.val
-                              ? "border-[#C9A84C] bg-[#FBF7EC]"
-                              : "border-[#d0c8bc] bg-white hover:border-[#C9A84C]"
+                              ? "border-[#F59E0B] bg-[#FBF7EC]"
+                              : "border-[#d0c8bc] bg-white hover:border-[#F59E0B]"
                           }`}
                           style={fields.icp === o.val ? GOLD_GLOW : undefined}
                         >
-                          <div className="font-display font-bold text-[#1C1C1C]">{o.t}</div>
+                          <div className="font-display font-bold text-[#0F172A]">{o.t}</div>
                           <div className="text-[#555] text-sm mt-1">{o.d}</div>
                         </button>
                       ))}
@@ -204,8 +204,8 @@ function OfferBuilderPage() {
                             onClick={() => set("experienceLevel", o.val)}
                             className={`text-left py-3 px-4 border rounded-lg font-medium text-sm transition-all ${
                               fields.experienceLevel === o.val
-                                ? "bg-[#C9A84C] border-[#C9A84C] text-[#111]"
-                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#C9A84C]"
+                                ? "bg-[#F59E0B] border-[#F59E0B] text-[#111]"
+                                : "border-[#d0c8bc] bg-white text-[#555] hover:border-[#F59E0B]"
                             }`}
                           >
                             {o.t}
@@ -260,7 +260,7 @@ function OfferBuilderPage() {
                         value={fields.name}
                         onChange={(e) => set("name", e.target.value)}
                         placeholder="First name"
-                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                       />
                     </Field>
                     <Field label="Your email">
@@ -269,7 +269,7 @@ function OfferBuilderPage() {
                         value={fields.email}
                         onChange={(e) => set("email", e.target.value)}
                         placeholder="you@email.com"
-                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#C9A84C] focus:ring-0"
+                        className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                       />
                     </Field>
                     <TurnstileGate onToken={setTsToken} className="pt-1" />
@@ -289,7 +289,7 @@ function OfferBuilderPage() {
                   <button
                     type="button"
                     onClick={() => setStep((s) => s - 1)}
-                    className="flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#1C1C1C] transition-colors"
+                    className="flex items-center gap-2 font-mono text-[11px] tracking-[0.15em] uppercase text-[#5a5a5a] hover:text-[#0F172A] transition-colors"
                   >
                     <ArrowLeft className="size-3.5" /> Back
                   </button>
@@ -302,7 +302,7 @@ function OfferBuilderPage() {
                     type="button"
                     disabled={!canProceed()}
                     onClick={() => setStep((s) => s + 1)}
-                    className="bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
                     style={canProceed() ? GOLD_GLOW : undefined}
                   >
                     Continue <ArrowRight className="size-4 ml-1" />
@@ -312,7 +312,7 @@ function OfferBuilderPage() {
                     type="button"
                     disabled={!canProceed() || loading}
                     onClick={handleSubmit}
-                    className="bg-[#C9A84C] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-8 py-3 h-auto disabled:opacity-40 disabled:cursor-not-allowed"
                     style={canProceed() && !loading ? GOLD_GLOW : undefined}
                   >
                     {loading ? (
@@ -369,7 +369,7 @@ function OfferResult({ offer, icp, name }: { offer: GeneratedOffer; icp: Icp; na
             <SectionLabel>Before</SectionLabel>
             <p className="text-[#2A2A2A]">{offer.transformation.before}</p>
           </div>
-          <div className="border border-[#C9A84C]/40 rounded-xl p-4 bg-[#FBF7EC]">
+          <div className="border border-[#F59E0B]/40 rounded-xl p-4 bg-[#FBF7EC]">
             <SectionLabel>After</SectionLabel>
             <p className="text-[#2A2A2A]">{offer.transformation.after}</p>
           </div>
@@ -396,9 +396,9 @@ function OfferResult({ offer, icp, name }: { offer: GeneratedOffer; icp: Icp; na
         <Block label="Your angle">{offer.positioning}</Block>
         <Block label="Your first CTA">{offer.firstCTA}</Block>
 
-        <div className="border border-[#C9A84C]/40 rounded-xl p-5 bg-[#FBF7EC]">
+        <div className="border border-[#F59E0B]/40 rounded-xl p-5 bg-[#FBF7EC]">
           <SectionLabel>Do this week</SectionLabel>
-          <p className="text-[#1C1C1C] font-medium">{offer.thisWeekAction}</p>
+          <p className="text-[#0F172A] font-medium">{offer.thisWeekAction}</p>
         </div>
 
         <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#777]">
@@ -425,7 +425,7 @@ function OfferResult({ offer, icp, name }: { offer: GeneratedOffer; icp: Icp; na
           {icp === "called_expert" && (
             <Link
               to="/apply"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#C9A84C] text-[#1C1C1C] hover:bg-[#C9A84C] hover:text-[#111] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#F59E0B] text-[#0F172A] hover:bg-[#F59E0B] hover:text-[#111] transition-colors"
             >
               Apply for the Accelerator
             </Link>

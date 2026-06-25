@@ -5,14 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * CHKPLT — "Modern Professional" theme.
- * Slate ink + warm amber accent on white. High-contrast, accessible,
- * clear clickable affordances. (Previous Heritage Gold theme backed up in
- * styles.heritage.bak.css.)
- *
- * Token NAMES are kept identical to the old theme (incl. the --nx-gold* /
- * --banana / --nx-orange aliases) so every shadcn component and .nx-* class
- * re-themes automatically — only the VALUES changed.
+ * Christ Kingdom Platform — Cream Light.
+ * Cream canvas, Heritage Gold accent, Inter type system.
  */
 
 @theme inline {
@@ -67,59 +61,59 @@
 }
 
 /* ═══════════════════════════════════════════════════
-   MODERN PROFESSIONAL TOKENS — Slate ink + Amber accent
+   LIGHT CREAM TOKENS — Cream Canvas + Heritage Gold
 ═══════════════════════════════════════════════════ */
 :root {
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 
-  /* Page Canvas — White + slate surfaces */
+  /* Page Canvas — White */
   --background:        #FFFFFF;
-  --bg-surface:        #F8FAFC;   /* slate-50  */
+  --bg-surface:        #F7F6F2;
   --bg-card:           #FFFFFF;
-  --bg-card-hi:        #F1F5F9;   /* slate-100 */
-  --bg-card-raised:    #E2E8F0;   /* slate-200 */
+  --bg-card-hi:        #F3F1EC;
+  --bg-card-raised:    #EAE8E1;
 
-  /* Typography — Slate on White (all AA on white) */
-  --foreground:        #0F172A;   /* slate-900 */
-  --text-body:         #334155;   /* slate-700 */
-  --text-dim:          #475569;   /* slate-600 */
-  --text-subtle:       #64748B;   /* slate-500 */
+  /* Typography — Charcoal on White */
+  --foreground:        #1C1C1C;
+  --text-body:         #2A2A2A;
+  --text-dim:          #4A4A4A;
+  --text-subtle:       #565656;
 
-  /* Brand Accent — Warm Amber (names kept from old gold tokens) */
-  --nx-gold:           #F59E0B;   /* amber-500 — primary accent          */
-  --nx-gold-mid:       #FBBF24;   /* amber-400                           */
-  --nx-gold-bright:    #FCD34D;   /* amber-300 — for use on dark surfaces */
-  --nx-gold-deep:      #D97706;   /* amber-600 — hover/pressed           */
-  /* Amber as TEXT on white — deepened for AA legibility (amber-700, ~4.7:1) */
-  --nx-gold-text:      #B45309;   /* amber-700 */
+  /* Brand Accent — Heritage Gold */
+  --nx-gold:           #C9A84C;
+  --nx-gold-mid:       #D4B65C;
+  --nx-gold-bright:    #B8963E;
+  --nx-gold-deep:      #A88530;
+  /* Gold as TEXT on the white canvas — deepened for AA legibility (4.8:1 on white) */
+  --nx-gold-text:      #8A6D1F;
 
-  /* Secondary warm accent — used for "live"/urgent micro-elements */
-  --nx-orange:         #EA580C;   /* orange-600 */
-  --nx-orange-bright:  #F97316;   /* orange-500 */
-  --nx-orange-deep:    #C2410C;   /* orange-700 */
+  /* Burnt Orange — live micro-elements */
+  --nx-orange:         #E8601F;
+  --nx-orange-bright:  #F2701E;
+  --nx-orange-deep:    #C44E15;
 
-  --nx-btn-gradient:   linear-gradient(135deg, #FBBF24 0%, #F59E0B 55%, #D97706 100%);
-  --nx-video-border:   linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #B45309 100%);
+  --nx-btn-gradient:   linear-gradient(135deg, #D4B65C 0%, #C9A84C 55%, #A88530 100%);
+  --nx-video-border:   linear-gradient(135deg, #D4B65C 0%, #C9A84C 50%, #8C6F1F 100%);
 
   --primary:              var(--nx-gold);
-  --primary-foreground:   #0F172A;        /* dark slate text on amber — ~8.9:1 */
-  --accent:               var(--bg-card-hi);  /* subtle slate hover bg (professional) */
-  --accent-foreground:    var(--foreground);
+  --primary-foreground:   #111111;
+  --accent:               var(--nx-gold-bright);
+  --accent-foreground:    #111111;
 
   --banana:               var(--nx-gold);
-  --banana-foreground:    #0F172A;
+  --banana-foreground:    #111111;
 
-  /* Borders — clean slate lines */
-  --border:            #E2E8F0;            /* slate-200 */
-  --border-mid:        #CBD5E1;            /* slate-300 */
-  --border-hover:      var(--nx-gold-deep);
-  --input:             #CBD5E1;            /* slate-300 — visible field edges */
-  --ring:              var(--nx-gold);     /* amber focus ring */
+  /* Borders — warm lines on light */
+  --border:            rgba(28, 28, 28, 0.12);
+  --border-mid:        rgba(28, 28, 28, 0.18);
+  --border-hover:      rgba(201, 168, 76, 0.65);
+  --input:             rgba(28, 28, 28, 0.18);
+  --ring:              var(--nx-gold);
 
-  /* Glow / elevation — toned down, neutral slate shadows */
-  --nx-glow-tight:     0 10px 24px -8px rgba(15, 23, 42, 0.18);
-  --nx-glow-mid:       0 18px 40px -12px rgba(15, 23, 42, 0.14);
-  --nx-glow-wide:      0 28px 60px -16px rgba(15, 23, 42, 0.10);
+  /* Glow System */
+  --nx-glow-tight:     0 0 24px rgba(201, 168, 76, 0.45);
+  --nx-glow-mid:       0 0 60px rgba(201, 168, 76, 0.20);
+  --nx-glow-wide:      0 0 120px rgba(201, 168, 76, 0.10);
 
   /* shadcn semantic bridges */
   --card:                 var(--bg-card);
@@ -128,27 +122,27 @@
   --popover-foreground:   var(--foreground);
   --muted:                var(--bg-card-hi);
   --muted-foreground:     var(--text-dim);
-  --secondary:            #1E293B;          /* slate-800 — solid secondary button */
-  --secondary-foreground: #FFFFFF;
-  --obsidian:             #0F172A;
+  --secondary:            var(--bg-card-hi);
+  --secondary-foreground: var(--foreground);
+  --obsidian:             #0A0A0A;
 
   --destructive:            oklch(0.55 0.22 27);
   --destructive-foreground: #ffffff;
 
-  --chart-1: #F59E0B;
-  --chart-2: #D97706;
-  --chart-3: #FBBF24;
-  --chart-4: #1E293B;
-  --chart-5: #64748B;
+  --chart-1: #C9A84C;
+  --chart-2: #A88530;
+  --chart-3: #D4B65C;
+  --chart-4: #1C1C1C;
+  --chart-5: #888888;
 
   /* Sidebar */
-  --sidebar:                    #0F172A;    /* slate-900 nav rail */
-  --sidebar-foreground:         #CBD5E1;    /* slate-300 */
+  --sidebar:                    var(--bg-surface);
+  --sidebar-foreground:         var(--text-body);
   --sidebar-primary:            var(--nx-gold);
-  --sidebar-primary-foreground: #0F172A;
-  --sidebar-accent:             #1E293B;    /* slate-800 hover */
-  --sidebar-accent-foreground:  #FFFFFF;
-  --sidebar-border:             #1E293B;
+  --sidebar-primary-foreground: #111111;
+  --sidebar-accent:             var(--bg-card-hi);
+  --sidebar-accent-foreground:  var(--foreground);
+  --sidebar-border:             var(--border);
   --sidebar-ring:               var(--nx-gold);
 }
 
@@ -162,8 +156,6 @@
     background-color: var(--background);
     color: var(--text-body);
     font-family: var(--font-sans);
-    font-size: 17px;                 /* larger base for readability */
-    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -171,70 +163,62 @@
 
   h1, .nx-h1 {
     font-family: var(--font-display);
-    font-size: clamp(32px, 5.5vw, 64px);
-    font-weight: 800;
+    font-size: clamp(30px, 5.5vw, 68px);
+    font-weight: 900;
     letter-spacing: -0.03em;
-    line-height: 1.05;
+    line-height: 1.03;
     color: var(--foreground);
   }
   h1 strong, .nx-h1 strong {
-    font-weight: 800;
+    font-weight: 900;
     color: var(--nx-gold-text);
   }
 
   h2, .nx-h2 {
     font-family: var(--font-display);
-    font-size: clamp(24px, 3.8vw, 42px);
+    font-size: clamp(22px, 3.8vw, 44px);
     font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.12;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
     color: var(--foreground);
   }
 
   h3, h4 {
     font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     color: var(--foreground);
   }
 
   .font-display {
     font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
 
   .nx-body {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.7;
-    color: var(--text-body);
+    line-height: 1.75;
+    color: var(--text-dim);
   }
 
   .nx-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--nx-gold-text);
   }
 
   .nx-metric {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--text-subtle);
   }
 
-  /* Content links read as links: amber, underline on hover. Scoped so it
-     never touches button-styled or nav Links (which carry their own classes). */
-  a:not([class]) {
-    color: var(--nx-gold-text);
-    text-underline-offset: 3px;
-  }
-  a:not([class]):hover { text-decoration: underline; }
-
   @media (max-width: 640px) {
-    body { font-size: 16px; }
+    body { font-size: 15px; }
     .nx-card { padding: 20px 22px; }
     .nx-antisell { padding: 22px; }
     .cta-glow { width: 100%; }
@@ -242,54 +226,37 @@
 
   a, button, input, select, textarea {
     transition:
-      color 180ms ease,
-      background-color 180ms ease,
-      border-color 180ms ease,
-      box-shadow 200ms ease,
-      transform 160ms ease;
-  }
-
-  /* Visible keyboard focus everywhere (a11y) */
-  a:focus-visible,
-  button:focus-visible,
-  [role="button"]:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid var(--nx-gold);
-    outline-offset: 2px;
+      color 200ms ease,
+      background-color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 250ms ease,
+      transform 200ms ease;
   }
 }
 
 /* ═══════════════════════════════════════════════════
-   PRIMARY CTA — solid amber, unmistakably clickable
+   PRIMARY CTA — blazing gold gradient
 ═══════════════════════════════════════════════════ */
 .cta-glow {
-  background: var(--nx-gold);
-  color: #0F172A !important;
+  background: var(--nx-btn-gradient);
+  color: #111111 !important;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 15px;
   letter-spacing: 0.2px;
   border: none;
-  border-radius: 9999px;          /* pill, like the reference */
-  padding: 14px 28px;
-  cursor: pointer;
-  box-shadow: 0 8px 18px -6px rgba(217, 119, 6, 0.45);
-  transition: background .18s ease, transform .16s ease, box-shadow .2s ease;
+  border-radius: 6px;
+  box-shadow:
+    0 0 24px rgba(201, 168, 76, 0.40),
+    0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 .cta-glow:hover {
-  background: var(--nx-gold-deep);
-  transform: translateY(-1px);
-  box-shadow: 0 12px 26px -8px rgba(217, 119, 6, 0.55);
-}
-.cta-glow:active { transform: translateY(0); }
-.cta-glow:disabled,
-.cta-glow[disabled] {
-  background: var(--bg-card-raised);
-  color: var(--text-subtle) !important;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.55),
+    0 0 40px rgba(201, 168, 76, 0.60),
+    0 0 90px rgba(201, 168, 76, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -299,60 +266,69 @@
 .nx-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 28px 32px;
   position: relative;
   overflow: hidden;
-  transition: transform .25s ease, border-color .25s ease, box-shadow .3s ease;
+  transition: transform .3s ease, border-color .3s ease, box-shadow .35s ease;
   animation: card-enter .5s ease both;
 }
 .nx-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  background: var(--nx-gold);
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--nx-gold), transparent);
   opacity: 0;
-  transition: opacity .25s ease;
+  transition: opacity .3s ease;
 }
 .nx-card:hover {
-  border-color: var(--border-mid);
+  border-color: rgba(201, 168, 76, 0.50);
   transform: translateY(-3px);
-  box-shadow: var(--nx-glow-mid);
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.15),
+    0 0 30px rgba(201, 168, 76, 0.12),
+    0 12px 32px -8px rgba(0, 0, 0, 0.12);
 }
 .nx-card:hover::before { opacity: 1; }
 
 .nx-video-wrapper {
   overflow: hidden;
   position: relative;
-  border: 2px solid var(--border-mid);
-  border-radius: 16px;
-  box-shadow: var(--nx-glow-mid);
+  border: 2px solid rgba(201, 168, 76, 0.50);
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.12),
+    0 0 40px rgba(201, 168, 76, 0.22),
+    0 0 80px rgba(201, 168, 76, 0.10);
 }
 
 .nx-antisell {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(201, 168, 76, 0.35);
   border-radius: 16px;
   padding: 40px;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--nx-glow-tight);
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.08),
+    0 0 40px rgba(201, 168, 76, 0.10),
+    0 12px 40px -12px rgba(0, 0, 0, 0.10);
 }
 .nx-antisell::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; height: 4px;
-  background: var(--nx-gold);
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--nx-btn-gradient);
+  opacity: 0.8;
 }
 .nx-antisell-item {
   background: var(--bg-card-hi);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 1px solid rgba(28, 28, 28, 0.08);
+  border-radius: 8px;
   padding: 12px 18px;
   margin-bottom: 10px;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-dim);
 }
@@ -370,93 +346,97 @@
   width: 800px;
   height: 800px;
   background: radial-gradient(circle,
-    rgba(245, 158, 11, 0.10) 0%,
-    rgba(245, 158, 11, 0.04) 35%,
-    transparent 68%
+    rgba(201, 168, 76, 0.14) 0%,
+    rgba(201, 168, 76, 0.06) 30%,
+    rgba(201, 168, 76, 0.02) 55%,
+    transparent 70%
   );
   pointer-events: none;
   animation: glow-breathe 6s ease-in-out infinite;
 }
 
 /* ═══════════════════════════════════════════════════
-   FORM ELEMENTS — light canvas, visible edges
+   FORM ELEMENTS — light canvas
 ═══════════════════════════════════════════════════ */
 
 input:not([type="radio"]):not([type="checkbox"]),
 textarea,
 select {
   background: #ffffff !important;
-  border: 1.5px solid var(--input) !important;
-  color: var(--foreground) !important;
-  border-radius: 10px !important;
-  font-size: 16px !important;
-  transition: border-color .15s ease, box-shadow .15s ease !important;
+  border: 1.5px solid rgba(28, 28, 28, 0.18) !important;
+  color: #1C1C1C !important;
+  border-radius: 6px !important;
+  font-size: 15px !important;
+  transition: border-color .18s ease, box-shadow .18s ease !important;
 }
 input:not([type="radio"]):not([type="checkbox"])::placeholder,
 textarea::placeholder {
-  color: var(--text-subtle) !important;
+  color: rgba(28, 28, 28, 0.35) !important;
 }
 input:not([type="radio"]):not([type="checkbox"]):focus,
 textarea:focus,
 select:focus {
   border-color: var(--nx-gold) !important;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18) !important;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15) !important;
   outline: none !important;
 }
 input:not([type="radio"]):not([type="checkbox"]):disabled {
-  opacity: 0.55 !important;
-  cursor: not-allowed;
+  opacity: 0.50 !important;
 }
 
 label {
   color: var(--text-body);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 [data-radix-select-trigger] {
   background: #ffffff !important;
-  border: 1.5px solid var(--input) !important;
-  color: var(--foreground) !important;
+  border: 1.5px solid rgba(28, 28, 28, 0.18) !important;
+  color: #1C1C1C !important;
 }
 [data-radix-select-content] {
   background: #ffffff !important;
-  border: 1px solid var(--border) !important;
-  color: var(--foreground) !important;
+  border: 1px solid rgba(28, 28, 28, 0.12) !important;
+  color: #1C1C1C !important;
 }
 
 /* Auth / form card */
 .auth-card {
   background: #ffffff;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(28, 28, 28, 0.10);
   border-radius: 16px;
   padding: 40px 36px;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--nx-glow-mid);
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.08),
+    0 0 24px rgba(201, 168, 76, 0.12),
+    0 12px 40px rgba(0, 0, 0, 0.06);
 }
 .auth-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; height: 4px;
-  background: var(--nx-gold);
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--nx-btn-gradient);
 }
 
 /* Dashboard action tile */
 .dash-tile {
   background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  border: 1px solid rgba(28, 28, 28, 0.10);
+  border-radius: 10px;
   padding: 20px 24px;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  cursor: pointer;
-  transition: border-color .18s ease, transform .18s ease, box-shadow .22s ease;
+  transition: border-color .2s ease, transform .2s ease, box-shadow .25s ease;
 }
 .dash-tile:hover {
-  border-color: var(--border-mid);
+  border-color: rgba(201, 168, 76, 0.50);
   transform: translateY(-2px);
-  box-shadow: var(--nx-glow-tight);
+  box-shadow:
+    0 0 20px rgba(201, 168, 76, 0.12),
+    0 6px 20px rgba(0, 0, 0, 0.06);
 }
 
 /* Step indicator */
@@ -471,18 +451,14 @@ label {
   transition: width .3s ease, background .3s ease;
 }
 .step-dot.done   { background: var(--nx-gold); width: 24px; }
-.step-dot.active { background: var(--nx-orange); width: 32px; }
-.step-dot.future { background: var(--border-mid); width: 16px; }
+.step-dot.active { background: var(--nx-orange); width: 32px; box-shadow: 0 0 8px rgba(232,96,31,.40); }
+.step-dot.future { background: rgba(28,28,28,0.15); width: 16px; }
 
-/* Hide scrollbar (used by the horizontally-scrollable member nav) */
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-.no-scrollbar::-webkit-scrollbar { display: none; }
-
-/* Amber divider */
+/* Gold divider */
 .nx-gold-line {
   height: 1px;
   background: linear-gradient(90deg, transparent 0%, var(--nx-gold) 50%, transparent 100%);
-  opacity: 0.5;
+  opacity: 0.35;
   border: none;
 }
 
@@ -490,7 +466,7 @@ label {
    ANIMATIONS
 ═══════════════════════════════════════════════════ */
 @keyframes glow-breathe {
-  0%, 100% { opacity: 0.7; }
+  0%, 100% { opacity: 0.75; }
   50%      { opacity: 1; }
 }
 
@@ -514,14 +490,16 @@ label {
 .reveal-delay-3 { transition-delay: .45s; }
 
 /* Form-step utilities */
-.seg        { background: var(--bg-card-raised); transition: background .4s ease; }
-.seg.done   { background: var(--nx-gold); }
-.seg.active { background: var(--nx-orange); }
+.seg        { background: rgba(28, 28, 28, 0.06); transition: background .4s ease; }
+.seg.done   { background: rgba(201, 168, 76, 0.45); }
+.seg.active { background: var(--nx-orange); box-shadow: 0 0 12px rgba(232, 96, 31, 0.40); }
 
 .opt        { transition: border-color .2s ease, background .2s ease, box-shadow .3s ease; }
 .opt.sel    {
-  border-color: var(--nx-gold);
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+  border-color: var(--nx-orange);
+  box-shadow:
+    0 0 14px rgba(232, 96, 31, 0.20),
+    inset 0 1px 0 rgba(232, 96, 31, 0.10);
 }
 
 .step { animation: step-in .3s ease both; }
@@ -531,7 +509,7 @@ label {
 }
 
 /* ═══════════════════════════════════════════════════
-   LIVE MICRO-ELEMENTS — orange accent
+   LIVE MICRO-ELEMENTS — Burnt Orange
 ═══════════════════════════════════════════════════ */
 .nx-live-dot {
   display: inline-block;
@@ -539,14 +517,14 @@ label {
   height: 8px;
   border-radius: 999px;
   background: var(--nx-orange);
-  box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.60);
+  box-shadow: 0 0 0 0 rgba(232, 96, 31, 0.60);
   animation: live-pulse 1.8s ease-out infinite;
   vertical-align: middle;
 }
 @keyframes live-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.55); }
-  70%  { box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(232, 96, 31, 0.60); }
+  70%  { box-shadow: 0 0 0 10px rgba(232, 96, 31, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 96, 31, 0); }
 }
 
 .nx-status-live {
@@ -557,32 +535,29 @@ label {
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.20em;
   text-transform: uppercase;
-  color: var(--nx-orange-deep);
-  background: rgba(234, 88, 12, 0.08);
-  border: 1px solid rgba(234, 88, 12, 0.30);
+  color: var(--nx-orange-bright);
+  background: rgba(232, 96, 31, 0.08);
+  border: 1px solid rgba(232, 96, 31, 0.30);
+  box-shadow: 0 0 16px rgba(232, 96, 31, 0.10);
 }
 
 /* ═══════════════════════════════════════════════════
-   AMBER TEXT LEGIBILITY
-   .text-banana defaults to the deepened AA amber on white. Dark slate
-   sections opt their accent text back into bright amber via descendant scope.
+   GOLD TEXT LEGIBILITY — white canvas
+   Gold as TEXT defaults to the deepened AA-legible gold on the white
+   page. Dark feature sections (charcoal bands) opt their gold text and
+   strong-emphasis back into bright Heritage Gold via descendant scope.
+   Unlayered → wins over Tailwind's layered utilities.
 ═══════════════════════════════════════════════════ */
 .text-banana { color: var(--nx-gold-text); }
 
-.bg-\[\#0F172A\] .text-banana,
-.bg-\[\#1E293B\] .text-banana,
 .bg-\[\#1C1C1C\] .text-banana,
 .bg-\[\#111111\] .text-banana,
 .bg-\[\#0A0A0A\] .text-banana,
-.bg-obsidian   .text-banana { color: var(--nx-gold-bright); }
+.bg-obsidian   .text-banana { color: var(--nx-gold); }
 
-.bg-\[\#0F172A\] h1 strong,
-.bg-\[\#1E293B\] h1 strong,
 .bg-\[\#1C1C1C\] h1 strong,
 .bg-\[\#111111\] h1 strong,
-.bg-\[\#0F172A\] .nx-label,
-.bg-\[\#1E293B\] .nx-label,
 .bg-\[\#1C1C1C\] .nx-label,
-.bg-\[\#111111\] .nx-label { color: var(--nx-gold-bright); }
+.bg-\[\#111111\] .nx-label { color: var(--nx-gold); }
