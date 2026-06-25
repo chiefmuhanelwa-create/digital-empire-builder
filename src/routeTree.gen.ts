@@ -38,6 +38,7 @@ import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/publi
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedDashboardToolsRouteImport } from './routes/_authenticated/dashboard.tools'
+import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
@@ -197,6 +198,12 @@ const AuthenticatedDashboardToolsRoute =
     path: '/tools',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardFoundationKitRoute =
+  AuthenticatedDashboardFoundationKitRouteImport.update({
+    id: '/foundation-kit',
+    path: '/foundation-kit',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedAdminProductsRoute =
   AuthenticatedAdminProductsRouteImport.update({
     id: '/admin/products',
@@ -296,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
@@ -338,6 +346,7 @@ export interface FileRoutesByTo {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
@@ -382,6 +391,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/_authenticated/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/dashboard/foundation-kit'
     | '/dashboard/tools'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
@@ -468,6 +479,7 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/dashboard/foundation-kit'
     | '/dashboard/tools'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
@@ -511,6 +523,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/incidents'
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
+    | '/_authenticated/dashboard/foundation-kit'
     | '/_authenticated/dashboard/tools'
     | '/_authenticated/learn/$slug'
     | '/api/cron/sync-fx'
@@ -760,6 +773,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardToolsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/foundation-kit': {
+      id: '/_authenticated/dashboard/foundation-kit'
+      path: '/foundation-kit'
+      fullPath: '/dashboard/foundation-kit'
+      preLoaderRoute: typeof AuthenticatedDashboardFoundationKitRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/admin/products': {
       id: '/_authenticated/admin/products'
       path: '/admin/products'
@@ -848,6 +868,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardFoundationKitRoute: typeof AuthenticatedDashboardFoundationKitRoute
   AuthenticatedDashboardToolsRoute: typeof AuthenticatedDashboardToolsRoute
   AuthenticatedDashboardProductsFreeRoute: typeof AuthenticatedDashboardProductsFreeRoute
   AuthenticatedDashboardProductsPaidRoute: typeof AuthenticatedDashboardProductsPaidRoute
@@ -855,6 +876,8 @@ interface AuthenticatedDashboardRouteChildren {
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardFoundationKitRoute:
+      AuthenticatedDashboardFoundationKitRoute,
     AuthenticatedDashboardToolsRoute: AuthenticatedDashboardToolsRoute,
     AuthenticatedDashboardProductsFreeRoute:
       AuthenticatedDashboardProductsFreeRoute,

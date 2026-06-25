@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
-import { Download, BookOpen, User, ShieldCheck, FileText, Users, Receipt, AlertCircle, ArrowRight, Wrench } from "lucide-react";
+import { Download, BookOpen, User, ShieldCheck, FileText, Users, Receipt, AlertCircle, ArrowRight, Wrench, Package } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -75,7 +75,12 @@ function Dashboard() {
         {/* Quick nav tiles */}
         <div>
           <div className="nx-label mb-4">Quick access</div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <Link to="/dashboard/foundation-kit" className="dash-tile group">
+              <Package className="size-5 text-banana" />
+              <div className="font-display text-base mt-1">Foundation Kit</div>
+              <div className="text-xs text-muted-foreground">Apps + workbooks</div>
+            </Link>
             <Link to="/learn" className="dash-tile group">
               <BookOpen className="size-5 text-banana" />
               <div className="font-display text-base mt-1">My Courses</div>
