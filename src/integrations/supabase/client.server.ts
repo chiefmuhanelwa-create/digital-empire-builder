@@ -6,7 +6,10 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
 function createSupabaseAdminClient() {
-  const SUPABASE_URL = process.env.SUPABASE_URL;
+  // The Cloudflare Worker does NOT populate process.env.SUPABASE_URL, but the URL
+  // is build-inlined via Vite (VITE_SUPABASE_URL) — fall back to it. The service-role
+  // key is a real runtime secret and stays on process.env only.
+  const SUPABASE_URL = process.env.SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
   const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
