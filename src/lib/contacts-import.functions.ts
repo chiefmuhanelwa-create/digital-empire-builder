@@ -93,7 +93,12 @@ export const importContactsBatch = createServerFn({ method: "POST" })
       cleaned.push({ ...parsed.data, source: parsed.data.source || "legacy_import" });
     });
 
-    if (cleaned.length === 0) {
+    // De-dupe by email (already lowercased at validation). A single Postgres upsert
+    // rejects a batch that targets the same conflict key twice ("ON CONFLICT DO UPDATE
+    // command cannot affect row a second time"). Last occurrence wins.
+    const deduped = Array.from(new Map(cleaned.map((c) => [c.email, c])).values());
+
+    if (deduped.length === 0) {
       return { inserted: 0, updated: 0, tagged: 0, errors };
     }
 
@@ -101,7 +106,7 @@ export const importContactsBatch = createServerFn({ method: "POST" })
     const { data: upserted, error: upErr } = await supabaseAdmin
       .from("subscribers")
       .upsert(
-        cleaned.map((c) => ({
+        deduped.map((c) => ({
           email: c.email,
           first_name: c.first_name || null,
           last_name: c.last_name || null,
@@ -120,7 +125,7 @@ export const importContactsBatch = createServerFn({ method: "POST" })
           : code === "23505"
             ? "Duplicate Email Conflict"
             : "Database Error";
-      cleaned.forEach((c) =>
+      deduped.forEach((c) =>
         errors.push({
           row: -1,
           email: c.email,
