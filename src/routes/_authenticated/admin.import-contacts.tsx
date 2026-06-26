@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, useRef } from "react";
 import Papa from "papaparse";
-import { SiteHeader, SiteFooter } from "@/components/member-shell";
+import { SiteHeader, SiteFooter } from "@/components/admin-shell";
 import { Button } from "@/components/ui/button";
 import { importContactsBatch } from "@/lib/contacts-import.functions";
 import { supabase } from "@/integrations/supabase/client";

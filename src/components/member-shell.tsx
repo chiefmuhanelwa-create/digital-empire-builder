@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth-context";
-import { supabase } from "@/integrations/supabase/client";
+import { useIsAdmin } from "@/lib/use-is-admin";
 import { LayoutDashboard, GraduationCap, User, ShieldCheck, LogOut } from "lucide-react";
 
 // Secured member-portal chrome. Deliberately NOT the marketing header — no public
@@ -14,16 +13,7 @@ const navActive = { className: "text-[var(--foreground)] font-semibold" };
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
-
-  const isAdminQ = useQuery({
-    queryKey: ["is-admin", user?.id],
-    enabled: !!user?.id,
-    staleTime: 5 * 60 * 1000,
-    queryFn: async () => {
-      const { data } = await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" });
-      return !!data;
-    },
-  });
+  const { isAdmin } = useIsAdmin();
 
   const firstName =
     (user?.user_metadata as { full_name?: string } | undefined)?.full_name?.split(" ")[0] ??
@@ -53,8 +43,8 @@ export function SiteHeader() {
           <Link to="/account" className={navLink} activeProps={navActive}>
             <User className="size-4" /> Account
           </Link>
-          {isAdminQ.data && (
-            <Link to="/admin/products" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
+          {isAdmin && (
+            <Link to="/admin" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
               <ShieldCheck className="size-4" /> Admin
             </Link>
           )}

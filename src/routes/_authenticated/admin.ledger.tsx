@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { supabase } from "@/integrations/supabase/client";
-import { SiteHeader, SiteFooter } from "@/components/member-shell";
+import { SiteHeader, SiteFooter } from "@/components/admin-shell";
 import { Button } from "@/components/ui/button";
 
 const getAuditLedger = createServerFn({ method: "GET" })
