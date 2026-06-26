@@ -52,6 +52,7 @@ import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
 import { Route as AuthenticatedAdminImportContactsRouteImport } from './routes/_authenticated/admin.import-contacts'
 import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin.contacts'
+import { Route as AuthenticatedLearnSlugIndexRouteImport } from './routes/_authenticated/learn.$slug.index'
 import { Route as ApiEmailQueueProcessRouteImport } from './routes/api/email/queue/process'
 import { Route as ApiEmailAuthWebhookRouteImport } from './routes/api/email/auth/webhook'
 import { Route as ApiEmailAuthPreviewRouteImport } from './routes/api/email/auth/preview'
@@ -287,6 +288,12 @@ const AuthenticatedAdminContactsRoute =
     path: '/contacts',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedLearnSlugIndexRoute =
+  AuthenticatedLearnSlugIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedLearnSlugRoute,
+  } as any)
 const ApiEmailQueueProcessRoute = ApiEmailQueueProcessRouteImport.update({
   id: '/api/email/queue/process',
   path: '/api/email/queue/process',
@@ -377,6 +384,7 @@ export interface FileRoutesByFullPath {
   '/api/email/auth/preview': typeof ApiEmailAuthPreviewRoute
   '/api/email/auth/webhook': typeof ApiEmailAuthWebhookRoute
   '/api/email/queue/process': typeof ApiEmailQueueProcessRoute
+  '/learn/$slug/': typeof AuthenticatedLearnSlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -411,7 +419,6 @@ export interface FileRoutesByTo {
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
-  '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
@@ -425,6 +432,7 @@ export interface FileRoutesByTo {
   '/api/email/auth/preview': typeof ApiEmailAuthPreviewRoute
   '/api/email/auth/webhook': typeof ApiEmailAuthWebhookRoute
   '/api/email/queue/process': typeof ApiEmailQueueProcessRoute
+  '/learn/$slug': typeof AuthenticatedLearnSlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -478,6 +486,7 @@ export interface FileRoutesById {
   '/api/email/auth/preview': typeof ApiEmailAuthPreviewRoute
   '/api/email/auth/webhook': typeof ApiEmailAuthWebhookRoute
   '/api/email/queue/process': typeof ApiEmailQueueProcessRoute
+  '/_authenticated/learn/$slug/': typeof AuthenticatedLearnSlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -531,6 +540,7 @@ export interface FileRouteTypes {
     | '/api/email/auth/preview'
     | '/api/email/auth/webhook'
     | '/api/email/queue/process'
+    | '/learn/$slug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -565,7 +575,6 @@ export interface FileRouteTypes {
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
     | '/dashboard/foundation-kit'
-    | '/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
@@ -579,6 +588,7 @@ export interface FileRouteTypes {
     | '/api/email/auth/preview'
     | '/api/email/auth/webhook'
     | '/api/email/queue/process'
+    | '/learn/$slug'
   id:
     | '__root__'
     | '/'
@@ -631,6 +641,7 @@ export interface FileRouteTypes {
     | '/api/email/auth/preview'
     | '/api/email/auth/webhook'
     | '/api/email/queue/process'
+    | '/_authenticated/learn/$slug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -966,6 +977,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminContactsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/learn/$slug/': {
+      id: '/_authenticated/learn/$slug/'
+      path: '/'
+      fullPath: '/learn/$slug/'
+      preLoaderRoute: typeof AuthenticatedLearnSlugIndexRouteImport
+      parentRoute: typeof AuthenticatedLearnSlugRoute
+    }
     '/api/email/queue/process': {
       id: '/api/email/queue/process'
       path: '/api/email/queue/process'
@@ -1067,12 +1085,14 @@ const AuthenticatedDashboardRouteWithChildren =
 
 interface AuthenticatedLearnSlugRouteChildren {
   AuthenticatedLearnSlugLessonSlugRoute: typeof AuthenticatedLearnSlugLessonSlugRoute
+  AuthenticatedLearnSlugIndexRoute: typeof AuthenticatedLearnSlugIndexRoute
 }
 
 const AuthenticatedLearnSlugRouteChildren: AuthenticatedLearnSlugRouteChildren =
   {
     AuthenticatedLearnSlugLessonSlugRoute:
       AuthenticatedLearnSlugLessonSlugRoute,
+    AuthenticatedLearnSlugIndexRoute: AuthenticatedLearnSlugIndexRoute,
   }
 
 const AuthenticatedLearnSlugRouteWithChildren =
