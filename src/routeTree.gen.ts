@@ -34,6 +34,8 @@ import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as ProductsGardenGardenRouteImport } from './routes/products.garden.$garden'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
@@ -183,6 +185,17 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLearnIndexRoute = AuthenticatedLearnIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedLearnRoute,
+} as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -363,6 +376,8 @@ export interface FileRoutesByFullPath {
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/learn/': typeof AuthenticatedLearnIndexRoute
   '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
   '/dashboard/products/free': typeof AuthenticatedDashboardProductsFreeRoute
   '/dashboard/products/paid': typeof AuthenticatedDashboardProductsPaidRoute
@@ -390,8 +405,6 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/account': typeof AuthenticatedAccountRoute
-  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
-  '/learn': typeof AuthenticatedLearnRouteWithChildren
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products': typeof ProductsIndexRoute
@@ -412,6 +425,8 @@ export interface FileRoutesByTo {
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/learn': typeof AuthenticatedLearnIndexRoute
   '/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
   '/dashboard/products/free': typeof AuthenticatedDashboardProductsFreeRoute
   '/dashboard/products/paid': typeof AuthenticatedDashboardProductsPaidRoute
@@ -464,6 +479,8 @@ export interface FileRoutesById {
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/learn/': typeof AuthenticatedLearnIndexRoute
   '/_authenticated/admin/curriculum/$productSlug': typeof AuthenticatedAdminCurriculumProductSlugRoute
   '/_authenticated/dashboard/products/free': typeof AuthenticatedDashboardProductsFreeRoute
   '/_authenticated/dashboard/products/paid': typeof AuthenticatedDashboardProductsPaidRoute
@@ -516,6 +533,8 @@ export interface FileRouteTypes {
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
     | '/admin/'
+    | '/dashboard/'
+    | '/learn/'
     | '/admin/curriculum/$productSlug'
     | '/dashboard/products/free'
     | '/dashboard/products/paid'
@@ -543,8 +562,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/account'
-    | '/dashboard'
-    | '/learn'
     | '/checkout/success'
     | '/products/$slug'
     | '/products'
@@ -565,6 +582,8 @@ export interface FileRouteTypes {
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
     | '/admin'
+    | '/dashboard'
+    | '/learn'
     | '/admin/curriculum/$productSlug'
     | '/dashboard/products/free'
     | '/dashboard/products/paid'
@@ -616,6 +635,8 @@ export interface FileRouteTypes {
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
     | '/_authenticated/admin/'
+    | '/_authenticated/dashboard/'
+    | '/_authenticated/learn/'
     | '/_authenticated/admin/curriculum/$productSlug'
     | '/_authenticated/dashboard/products/free'
     | '/_authenticated/dashboard/products/paid'
@@ -832,6 +853,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/learn/': {
+      id: '/_authenticated/learn/'
+      path: '/'
+      fullPath: '/learn/'
+      preLoaderRoute: typeof AuthenticatedLearnIndexRouteImport
+      parentRoute: typeof AuthenticatedLearnRoute
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/'
@@ -1030,6 +1065,7 @@ const AuthenticatedAdminRouteWithChildren =
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardFoundationKitRoute: typeof AuthenticatedDashboardFoundationKitRoute
   AuthenticatedDashboardToolsRoute: typeof AuthenticatedDashboardToolsRoute
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardProductsFreeRoute: typeof AuthenticatedDashboardProductsFreeRoute
   AuthenticatedDashboardProductsPaidRoute: typeof AuthenticatedDashboardProductsPaidRoute
 }
@@ -1039,6 +1075,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardFoundationKitRoute:
       AuthenticatedDashboardFoundationKitRoute,
     AuthenticatedDashboardToolsRoute: AuthenticatedDashboardToolsRoute,
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardProductsFreeRoute:
       AuthenticatedDashboardProductsFreeRoute,
     AuthenticatedDashboardProductsPaidRoute:
@@ -1067,10 +1104,12 @@ const AuthenticatedLearnSlugRouteWithChildren =
 
 interface AuthenticatedLearnRouteChildren {
   AuthenticatedLearnSlugRoute: typeof AuthenticatedLearnSlugRouteWithChildren
+  AuthenticatedLearnIndexRoute: typeof AuthenticatedLearnIndexRoute
 }
 
 const AuthenticatedLearnRouteChildren: AuthenticatedLearnRouteChildren = {
   AuthenticatedLearnSlugRoute: AuthenticatedLearnSlugRouteWithChildren,
+  AuthenticatedLearnIndexRoute: AuthenticatedLearnIndexRoute,
 }
 
 const AuthenticatedLearnRouteWithChildren =
