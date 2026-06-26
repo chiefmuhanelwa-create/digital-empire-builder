@@ -18,15 +18,35 @@ export const getMyCourses = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { userId } = context as any;
-    const { data, error } = await supabaseAdmin
-      .from("product_grants")
-      .select("product_id, granted_at, products:product_id(id,slug,title,tagline,garden,cover_image_url)")
-      .eq("user_id", userId)
-      .is("revoked_at", null)
-      .order("granted_at", { ascending: false });
-    if (error) throw new Error(error.message);
 
-    const grants = data ?? [];
+    // Admins (the owner) see every course for QA, even without a purchase grant.
+    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", { _user_id: userId, _role: "admin" });
+
+    let grants: any[];
+    if (isAdmin) {
+      const { data: mods } = await supabaseAdmin.from("modules").select("product_id");
+      const courseIds = Array.from(new Set((mods ?? []).map((m: any) => m.product_id).filter(Boolean)));
+      if (courseIds.length) {
+        const { data: prods } = await supabaseAdmin
+          .from("products")
+          .select("id,slug,title,tagline,garden,cover_image_url")
+          .in("id", courseIds)
+          .eq("status", "published");
+        grants = (prods ?? []).map((p: any) => ({ product_id: p.id, granted_at: new Date().toISOString(), products: p }));
+      } else {
+        grants = [];
+      }
+    } else {
+      const { data, error } = await supabaseAdmin
+        .from("product_grants")
+        .select("product_id, granted_at, products:product_id(id,slug,title,tagline,garden,cover_image_url)")
+        .eq("user_id", userId)
+        .is("revoked_at", null)
+        .order("granted_at", { ascending: false });
+      if (error) throw new Error(error.message);
+      grants = data ?? [];
+    }
+
     const productIds = grants.map((g: any) => g.product_id).filter(Boolean);
 
     // Progress read-back: total vs completed lessons per granted product.
@@ -99,7 +119,7 @@ export const getLessonBody = createServerFn({ method: "POST" })
       throw new Error("Lesson not found");
     }
 
-    // 3. Access gate
+    // 3. Access gate — preview OR a grant OR admin (owner QA).
     let hasAccess = lesson.is_preview === true;
     if (!hasAccess) {
       const { data: grant } = await supabaseAdmin
@@ -110,6 +130,10 @@ export const getLessonBody = createServerFn({ method: "POST" })
         .is("revoked_at", null)
         .maybeSingle();
       hasAccess = !!grant;
+    }
+    if (!hasAccess) {
+      const { data: isAdmin } = await supabaseAdmin.rpc("has_role", { _user_id: userId, _role: "admin" });
+      hasAccess = isAdmin === true;
     }
 
     if (!hasAccess) {

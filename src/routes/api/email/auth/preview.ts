@@ -17,7 +17,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
   reauthentication: ReauthenticationEmail,
 }
 
-const SITE_NAME = "Christ Kingdom Platform"
+const SITE_NAME = "CHKPLT"
 const SAMPLE_PROJECT_URL = "https://chkplt.com"
 const SAMPLE_EMAIL = "user@example.test"
 const SAMPLE_DATA: Record<string, object> = {

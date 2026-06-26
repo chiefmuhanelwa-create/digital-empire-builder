@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,11 +8,12 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/reset-password")({
-  head: () => ({ meta: [{ title: "Reset password — Christ Kingdom Platform" }] }),
+  head: () => ({ meta: [{ title: "Reset password — CHKPLT" }] }),
   component: ResetPage,
 });
 
 function ResetPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<"request" | "update">("request");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +40,10 @@ function ResetPage() {
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password });
     setLoading(false);
-    if (error) toast.error(error.message); else toast.success("Password updated. You can sign in now.");
+    if (error) { toast.error(error.message); return; }
+    toast.success("Password updated — you're signed in.");
+    // The recovery link already established a session; drop them straight into the app.
+    navigate({ to: "/dashboard" });
   };
 
   return (

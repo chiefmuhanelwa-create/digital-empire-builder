@@ -51,13 +51,21 @@ function CoursePage() {
         .eq("product_id", product.id)
         .maybeSingle();
 
+      // Admins (owner) get full access for QA even without a grant.
+      let isAdmin = false;
+      const { data: au } = await supabase.auth.getUser();
+      if (au.user) {
+        const { data } = await supabase.rpc("has_role", { _user_id: au.user.id, _role: "admin" });
+        isAdmin = !!data;
+      }
+
       return {
         product,
         modules: (modules ?? []).map((m: any) => ({
           ...m,
           lessons: (m.lessons ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order),
         })),
-        hasAccess: !!grant,
+        hasAccess: !!grant || isAdmin,
       };
     },
   });

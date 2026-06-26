@@ -45,7 +45,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
   reauthentication: ReauthenticationEmail,
 }
 
-const SITE_NAME = "Christ Kingdom Platform"
+const SITE_NAME = "CHKPLT"
 const SENDER_DOMAIN = "notify.chkplt.com"
 const ROOT_DOMAIN = "chkplt.com"
 
