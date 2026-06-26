@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { getKitFileUrl } from "@/lib/products.functions";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { TOOLS } from "@/lib/tools";

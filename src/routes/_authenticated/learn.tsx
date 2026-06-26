@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { getMyCourses } from "@/lib/lms.functions";
 import { GARDENS, type Garden } from "@/lib/gardens";
 import { BookOpen, ArrowRight, Lock } from "lucide-react";

@@ -6,7 +6,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { supabase } from "@/integrations/supabase/client";
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { Button } from "@/components/ui/button";
 
 const listIncidents = createServerFn({ method: "GET" })

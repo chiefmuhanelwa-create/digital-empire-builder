@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { Lock, ArrowRight, ShieldAlert } from "lucide-react";
 

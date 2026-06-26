@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { TOOLS } from "@/lib/tools";
 
 export const Route = createFileRoute("/_authenticated/dashboard/tools")({
