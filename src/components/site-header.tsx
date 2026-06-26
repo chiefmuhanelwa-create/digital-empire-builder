@@ -35,13 +35,11 @@ export function SiteHeader() {
         <nav className="flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar">
           {user ? (
             <>
-              <Link to="/dashboard" className={navLink} activeProps={navActive}>Dashboard</Link>
-              <Link to="/dashboard/tools" className={navLink} activeProps={navActive}>Free Tools</Link>
-              <Link to="/dashboard/products/free" className={navLink} activeProps={navActive}>Products</Link>
-              <Link to="/learn" className={navLink} activeProps={navActive}>Courses</Link>
-              <Link to="/account" className={navLink} activeProps={navActive}>Account</Link>
+              <Link to="/dashboard" className={navLink} activeProps={navActive}>My workspace</Link>
+              <Link to="/tools" className={navLink} activeProps={navActive}>Free Tools</Link>
+              <Link to="/products" className={navLink} activeProps={navActive}>Products</Link>
               {isAdminQ.data && (
-                <Link to="/admin/products" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
+                <Link to="/admin" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
                   Admin
                 </Link>
               )}

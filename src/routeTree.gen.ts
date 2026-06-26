@@ -41,7 +41,6 @@ import { Route as ProductsGardenGardenRouteImport } from './routes/products.gard
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
-import { Route as AuthenticatedDashboardToolsRouteImport } from './routes/_authenticated/dashboard.tools'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
@@ -222,12 +221,6 @@ const AuthenticatedLearnSlugRoute = AuthenticatedLearnSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => AuthenticatedLearnRoute,
 } as any)
-const AuthenticatedDashboardToolsRoute =
-  AuthenticatedDashboardToolsRouteImport.update({
-    id: '/tools',
-    path: '/tools',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
 const AuthenticatedDashboardFoundationKitRoute =
   AuthenticatedDashboardFoundationKitRouteImport.update({
     id: '/foundation-kit',
@@ -370,7 +363,6 @@ export interface FileRoutesByFullPath {
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
-  '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -419,7 +411,6 @@ export interface FileRoutesByTo {
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
-  '/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -473,7 +464,6 @@ export interface FileRoutesById {
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
-  '/_authenticated/dashboard/tools': typeof AuthenticatedDashboardToolsRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -527,7 +517,6 @@ export interface FileRouteTypes {
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
     | '/dashboard/foundation-kit'
-    | '/dashboard/tools'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
@@ -576,7 +565,6 @@ export interface FileRouteTypes {
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
     | '/dashboard/foundation-kit'
-    | '/dashboard/tools'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
@@ -629,7 +617,6 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/apps/right-side-diagnostic'
     | '/_authenticated/dashboard/foundation-kit'
-    | '/_authenticated/dashboard/tools'
     | '/_authenticated/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
@@ -902,13 +889,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLearnSlugRouteImport
       parentRoute: typeof AuthenticatedLearnRoute
     }
-    '/_authenticated/dashboard/tools': {
-      id: '/_authenticated/dashboard/tools'
-      path: '/tools'
-      fullPath: '/dashboard/tools'
-      preLoaderRoute: typeof AuthenticatedDashboardToolsRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
-    }
     '/_authenticated/dashboard/foundation-kit': {
       id: '/_authenticated/dashboard/foundation-kit'
       path: '/foundation-kit'
@@ -1064,7 +1044,6 @@ const AuthenticatedAdminRouteWithChildren =
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardFoundationKitRoute: typeof AuthenticatedDashboardFoundationKitRoute
-  AuthenticatedDashboardToolsRoute: typeof AuthenticatedDashboardToolsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardProductsFreeRoute: typeof AuthenticatedDashboardProductsFreeRoute
   AuthenticatedDashboardProductsPaidRoute: typeof AuthenticatedDashboardProductsPaidRoute
@@ -1074,7 +1053,6 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
     AuthenticatedDashboardFoundationKitRoute:
       AuthenticatedDashboardFoundationKitRoute,
-    AuthenticatedDashboardToolsRoute: AuthenticatedDashboardToolsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardProductsFreeRoute:
       AuthenticatedDashboardProductsFreeRoute,

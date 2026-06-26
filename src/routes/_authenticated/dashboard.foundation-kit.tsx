@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { getKitFileUrl } from "@/lib/products.functions";
 import { useKitAccess } from "@/lib/use-kit-access";
-import { TOOLS } from "@/lib/tools";
 import { Download, Lock, ArrowRight, BookOpen, PlayCircle, Compass, CalendarCheck } from "lucide-react";
 import { toast } from "sonner";
 
@@ -128,25 +127,7 @@ function FoundationKitWorkspace() {
               </a>
             </div>
 
-            {/* Interactive tools you can use right now */}
-            <h2 className="text-2xl mb-1">Your interactive tools</h2>
-            <p className="text-sm text-[var(--text-dim)] mb-4">Built to give you a real win in minutes — no extra cost.</p>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {TOOLS.map((t) => {
-                const Icon = t.icon;
-                return (
-                  <Link key={t.path} to={t.path} className="dash-tile group">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)]">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <span className="mt-2 font-display text-base group-hover:text-[var(--nx-gold-text)] transition-colors">{t.name}</span>
-                    <span className="text-xs text-[var(--text-dim)] leading-relaxed">{t.blurb}</span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <div className="mt-12 rounded-2xl bg-[#0F172A] p-6 text-center">
+            <div className="mt-4 rounded-2xl bg-[#0F172A] p-6 text-center">
               <BookOpen className="size-7 text-[var(--nx-gold-bright)] mx-auto" />
               <h2 className="text-white text-2xl mt-3">Ready for the full system?</h2>
               <p className="text-slate-300 max-w-lg mx-auto mt-2 mb-5">

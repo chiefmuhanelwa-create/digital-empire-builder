@@ -8,7 +8,7 @@ import { useIsAdmin } from "@/lib/use-is-admin";
 import { supabase } from "@/integrations/supabase/client";
 import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
 import { KIT_SLUGS } from "@/lib/use-kit-access";
-import { Download, BookOpen, User, ArrowRight, Package, GraduationCap, ShieldCheck, Sparkles } from "lucide-react";
+import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
@@ -90,34 +90,7 @@ function Dashboard() {
           </Link>
         )}
 
-        {/* Quick access — member only */}
-        <div>
-          <div className="nx-label mb-4">Quick access</div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <Link to="/dashboard/foundation-kit" className="dash-tile group">
-              <Package className="size-5 text-banana" />
-              <div className="font-display text-base mt-1">Foundation Kit</div>
-              <div className="text-xs text-muted-foreground">Apps, course &amp; workbooks</div>
-            </Link>
-            <Link to="/learn" className="dash-tile group">
-              <GraduationCap className="size-5 text-banana" />
-              <div className="font-display text-base mt-1">My Courses</div>
-              <div className="text-xs text-muted-foreground">Watch &amp; track progress</div>
-            </Link>
-            <Link to="/dashboard/products/free" className="dash-tile group">
-              <BookOpen className="size-5 text-banana" />
-              <div className="font-display text-base mt-1">Browse Products</div>
-              <div className="text-xs text-muted-foreground">Free &amp; paid</div>
-            </Link>
-            <Link to="/account" className="dash-tile group">
-              <User className="size-5 text-banana" />
-              <div className="font-display text-base mt-1">Account</div>
-              <div className="text-xs text-muted-foreground">Settings &amp; privacy</div>
-            </Link>
-          </div>
-        </div>
-
-        {/* My Access */}
+        {/* My Access — lead with what they own */}
         <div>
           <div className="nx-label mb-1">My access</div>
           <h2 className="font-display text-2xl sm:text-3xl mb-5">Everything you've unlocked</h2>
