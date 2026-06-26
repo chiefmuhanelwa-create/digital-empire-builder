@@ -76,10 +76,10 @@ function FoundationKitWorkspace() {
               </div>
             </a>
 
-            {/* The 7 frameworks */}
-            <h2 className="text-2xl mb-4">The 7 frameworks</h2>
+            {/* Frameworks — only show what's actually available right now */}
+            <h2 className="text-2xl mb-4">Your frameworks</h2>
             <div className="grid gap-4 sm:grid-cols-2 mb-12">
-              {FRAMEWORKS.map((f) => (
+              {FRAMEWORKS.filter((f) => f.app || f.pdf).map((f) => (
                 <div key={f.name} className="nx-card !p-5 flex flex-col">
                   <div className="font-display text-lg text-[var(--foreground)]">{f.name}</div>
                   <p className="text-sm text-[var(--text-dim)] mt-1 flex-1">{f.blurb}</p>
