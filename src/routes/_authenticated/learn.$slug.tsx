@@ -45,11 +45,12 @@ function CoursePage() {
         .order("sort_order", { ascending: true });
       if (me) throw me;
 
-      const { data: grant } = await supabase
+      const { data: grantRows } = await supabase
         .from("product_grants")
         .select("id")
         .eq("product_id", product.id)
-        .maybeSingle();
+        .limit(1);
+      const grant = (grantRows ?? [])[0] ?? null;
 
       // Admins (owner) get full access for QA even without a grant.
       let isAdmin = false;
