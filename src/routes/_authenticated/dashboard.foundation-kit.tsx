@@ -21,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")
 const AVAILABLE_PDFS = new Set([
   "niche-clarity", "paids", "ms-ts-ss", "knowledge-audit",
   "4e-content-calendar", "seeds-pipeline", "dares-asset-model",
+  "90-day-planner", "cheat-sheet", "30-day-tracker",
 ]);
 
 function ClaritySystem() {
@@ -170,17 +171,22 @@ function ClaritySystem() {
           <h2 className="text-xl mb-3">Bonus tools</h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {CLARITY_BONUSES.map((b) => (
-              b.route && !b.soon ? (
-                <a key={b.name} href={b.route} className="nx-card !p-4 flex items-center justify-between gap-3 group">
-                  <span className="font-display text-sm group-hover:text-[var(--nx-gold-text)] transition-colors">{b.name}</span>
-                  <ArrowRight className="size-4 text-[var(--text-subtle)] group-hover:text-[var(--nx-gold-text)] shrink-0" />
-                </a>
-              ) : (
-                <div key={b.name} className="nx-card !p-4 flex items-center justify-between gap-3 opacity-70">
-                  <span className="font-display text-sm">{b.name}</span>
-                  <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--text-subtle)]">soon</span>
+              <div key={b.name} className="nx-card !p-4 flex flex-col gap-2">
+                <span className="font-display text-sm">{b.name}</span>
+                <div className="mt-auto flex items-center gap-3">
+                  {b.route && (
+                    <a href={b.route} className="inline-flex items-center gap-1 text-sm font-bold text-[var(--nx-gold-text)] hover:underline">
+                      Open <ArrowRight className="size-3.5" />
+                    </a>
+                  )}
+                  {b.pdf && AVAILABLE_PDFS.has(b.pdf) && (
+                    <button onClick={() => kitFileMut.mutate({ data: { key: b.pdf! } })} disabled={kitFileMut.isPending}
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--text-dim)] hover:text-foreground disabled:opacity-50">
+                      <Download className="size-3.5" /> PDF
+                    </button>
+                  )}
                 </div>
-              )
+              </div>
             ))}
           </div>
         </div>

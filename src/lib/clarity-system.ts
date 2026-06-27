@@ -97,9 +97,9 @@ export const CLARITY_TOTAL = CLARITY_STEPS.length;
 
 // Cross-cutting bonuses (not numbered steps — support the whole journey).
 export const CLARITY_BONUSES: ClarityTool[] = [
-  { name: "30-Day Consistency Blueprint", route: "/apps/consistency-blueprint" },
-  { name: "90-Day First Income Planner", route: "/apps/first-income-planner", soon: true },
-  { name: "Called Expert Cheat Sheet", pdf: "cheat-sheet", soon: true },
+  { name: "30-Day Consistency Blueprint", route: "/apps/consistency-blueprint", pdf: "30-day-tracker" },
+  { name: "90-Day First Income Planner", route: "/apps/first-income-planner", pdf: "90-day-planner" },
+  { name: "Called Expert Cheat Sheet", pdf: "cheat-sheet" },
 ];
 
 // localStorage progress

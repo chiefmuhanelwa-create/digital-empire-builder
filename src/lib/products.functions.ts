@@ -282,6 +282,9 @@ const KIT_FILES: Record<string, string> = {
   "4e-content-calendar": "4e-content-calendar-workbook.pdf",
   "seeds-pipeline": "seeds-pipeline-workbook.pdf",
   "dares-asset-model": "dares-asset-model-workbook.pdf",
+  "90-day-planner": "90-day-first-income-planner.pdf",
+  "cheat-sheet": "called-expert-cheat-sheet.pdf",
+  "30-day-tracker": "30-day-accountability-tracker.pdf",
 };
 const KIT_OWNER_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
 

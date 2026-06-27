@@ -49,6 +49,7 @@ import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_aut
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
 import { Route as AuthenticatedAppsMsTsSsRouteImport } from './routes/_authenticated/apps.ms-ts-ss'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
+import { Route as AuthenticatedAppsFirstIncomePlannerRouteImport } from './routes/_authenticated/apps.first-income-planner'
 import { Route as AuthenticatedAppsDaresAssetModelRouteImport } from './routes/_authenticated/apps.dares-asset-model'
 import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
 import { Route as AuthenticatedApps4eContentCalendarRouteImport } from './routes/_authenticated/apps.4e-content-calendar'
@@ -273,6 +274,12 @@ const AuthenticatedAppsKnowledgeAuditRoute =
     path: '/apps/knowledge-audit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsFirstIncomePlannerRoute =
+  AuthenticatedAppsFirstIncomePlannerRouteImport.update({
+    id: '/apps/first-income-planner',
+    path: '/apps/first-income-planner',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsDaresAssetModelRoute =
   AuthenticatedAppsDaresAssetModelRouteImport.update({
     id: '/apps/dares-asset-model',
@@ -401,6 +408,7 @@ export interface FileRoutesByFullPath {
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -455,6 +463,7 @@ export interface FileRoutesByTo {
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -513,6 +522,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/_authenticated/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/_authenticated/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/_authenticated/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -572,6 +582,7 @@ export interface FileRouteTypes {
     | '/apps/4e-content-calendar'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
+    | '/apps/first-income-planner'
     | '/apps/knowledge-audit'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
@@ -626,6 +637,7 @@ export interface FileRouteTypes {
     | '/apps/4e-content-calendar'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
+    | '/apps/first-income-planner'
     | '/apps/knowledge-audit'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
@@ -683,6 +695,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/4e-content-calendar'
     | '/_authenticated/apps/consistency-blueprint'
     | '/_authenticated/apps/dares-asset-model'
+    | '/_authenticated/apps/first-income-planner'
     | '/_authenticated/apps/knowledge-audit'
     | '/_authenticated/apps/ms-ts-ss'
     | '/_authenticated/apps/niche-clarity-builder'
@@ -1020,6 +1033,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsKnowledgeAuditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/first-income-planner': {
+      id: '/_authenticated/apps/first-income-planner'
+      path: '/apps/first-income-planner'
+      fullPath: '/apps/first-income-planner'
+      preLoaderRoute: typeof AuthenticatedAppsFirstIncomePlannerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/dares-asset-model': {
       id: '/_authenticated/apps/dares-asset-model'
       path: '/apps/dares-asset-model'
@@ -1220,6 +1240,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedApps4eContentCalendarRoute: typeof AuthenticatedApps4eContentCalendarRoute
   AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
   AuthenticatedAppsDaresAssetModelRoute: typeof AuthenticatedAppsDaresAssetModelRoute
+  AuthenticatedAppsFirstIncomePlannerRoute: typeof AuthenticatedAppsFirstIncomePlannerRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
   AuthenticatedAppsMsTsSsRoute: typeof AuthenticatedAppsMsTsSsRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -1238,6 +1259,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsConsistencyBlueprintRoute:
     AuthenticatedAppsConsistencyBlueprintRoute,
   AuthenticatedAppsDaresAssetModelRoute: AuthenticatedAppsDaresAssetModelRoute,
+  AuthenticatedAppsFirstIncomePlannerRoute:
+    AuthenticatedAppsFirstIncomePlannerRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
   AuthenticatedAppsMsTsSsRoute: AuthenticatedAppsMsTsSsRoute,
   AuthenticatedAppsNicheClarityBuilderRoute:
