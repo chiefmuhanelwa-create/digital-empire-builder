@@ -43,11 +43,15 @@ import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/publi
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
+import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
+import { Route as AuthenticatedAppsMsTsSsRouteImport } from './routes/_authenticated/apps.ms-ts-ss'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
+import { Route as AuthenticatedAppsDaresAssetModelRouteImport } from './routes/_authenticated/apps.dares-asset-model'
 import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
+import { Route as AuthenticatedApps4eContentCalendarRouteImport } from './routes/_authenticated/apps.4e-content-calendar'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
@@ -234,6 +238,12 @@ const AuthenticatedDashboardFoundationKitRoute =
     path: '/foundation-kit',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedAppsSeedsPipelineRoute =
+  AuthenticatedAppsSeedsPipelineRouteImport.update({
+    id: '/apps/seeds-pipeline',
+    path: '/apps/seeds-pipeline',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsRightSideDiagnosticRoute =
   AuthenticatedAppsRightSideDiagnosticRouteImport.update({
     id: '/apps/right-side-diagnostic',
@@ -252,16 +262,33 @@ const AuthenticatedAppsNicheClarityBuilderRoute =
     path: '/apps/niche-clarity-builder',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsMsTsSsRoute = AuthenticatedAppsMsTsSsRouteImport.update({
+  id: '/apps/ms-ts-ss',
+  path: '/apps/ms-ts-ss',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAppsKnowledgeAuditRoute =
   AuthenticatedAppsKnowledgeAuditRouteImport.update({
     id: '/apps/knowledge-audit',
     path: '/apps/knowledge-audit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsDaresAssetModelRoute =
+  AuthenticatedAppsDaresAssetModelRouteImport.update({
+    id: '/apps/dares-asset-model',
+    path: '/apps/dares-asset-model',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsConsistencyBlueprintRoute =
   AuthenticatedAppsConsistencyBlueprintRouteImport.update({
     id: '/apps/consistency-blueprint',
     path: '/apps/consistency-blueprint',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedApps4eContentCalendarRoute =
+  AuthenticatedApps4eContentCalendarRouteImport.update({
+    id: '/apps/4e-content-calendar',
+    path: '/apps/4e-content-calendar',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdminProductsRoute =
@@ -371,11 +398,15 @@ export interface FileRoutesByFullPath {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
+  '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
+  '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
+  '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
@@ -421,11 +452,15 @@ export interface FileRoutesByTo {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
+  '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
+  '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
+  '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -475,11 +510,15 @@ export interface FileRoutesById {
   '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/_authenticated/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
+  '/_authenticated/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
+  '/_authenticated/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
+  '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
@@ -530,11 +569,15 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/4e-content-calendar'
     | '/apps/consistency-blueprint'
+    | '/apps/dares-asset-model'
     | '/apps/knowledge-audit'
+    | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
+    | '/apps/seeds-pipeline'
     | '/dashboard/foundation-kit'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
@@ -580,11 +623,15 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/apps/4e-content-calendar'
     | '/apps/consistency-blueprint'
+    | '/apps/dares-asset-model'
     | '/apps/knowledge-audit'
+    | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
+    | '/apps/seeds-pipeline'
     | '/dashboard/foundation-kit'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
@@ -633,11 +680,15 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/incidents'
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
+    | '/_authenticated/apps/4e-content-calendar'
     | '/_authenticated/apps/consistency-blueprint'
+    | '/_authenticated/apps/dares-asset-model'
     | '/_authenticated/apps/knowledge-audit'
+    | '/_authenticated/apps/ms-ts-ss'
     | '/_authenticated/apps/niche-clarity-builder'
     | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/apps/right-side-diagnostic'
+    | '/_authenticated/apps/seeds-pipeline'
     | '/_authenticated/dashboard/foundation-kit'
     | '/_authenticated/learn/$slug'
     | '/api/cron/sync-fx'
@@ -927,6 +978,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardFoundationKitRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/apps/seeds-pipeline': {
+      id: '/_authenticated/apps/seeds-pipeline'
+      path: '/apps/seeds-pipeline'
+      fullPath: '/apps/seeds-pipeline'
+      preLoaderRoute: typeof AuthenticatedAppsSeedsPipelineRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/right-side-diagnostic': {
       id: '/_authenticated/apps/right-side-diagnostic'
       path: '/apps/right-side-diagnostic'
@@ -948,6 +1006,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsNicheClarityBuilderRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/ms-ts-ss': {
+      id: '/_authenticated/apps/ms-ts-ss'
+      path: '/apps/ms-ts-ss'
+      fullPath: '/apps/ms-ts-ss'
+      preLoaderRoute: typeof AuthenticatedAppsMsTsSsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/knowledge-audit': {
       id: '/_authenticated/apps/knowledge-audit'
       path: '/apps/knowledge-audit'
@@ -955,11 +1020,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsKnowledgeAuditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/dares-asset-model': {
+      id: '/_authenticated/apps/dares-asset-model'
+      path: '/apps/dares-asset-model'
+      fullPath: '/apps/dares-asset-model'
+      preLoaderRoute: typeof AuthenticatedAppsDaresAssetModelRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/consistency-blueprint': {
       id: '/_authenticated/apps/consistency-blueprint'
       path: '/apps/consistency-blueprint'
       fullPath: '/apps/consistency-blueprint'
       preLoaderRoute: typeof AuthenticatedAppsConsistencyBlueprintRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/4e-content-calendar': {
+      id: '/_authenticated/apps/4e-content-calendar'
+      path: '/apps/4e-content-calendar'
+      fullPath: '/apps/4e-content-calendar'
+      preLoaderRoute: typeof AuthenticatedApps4eContentCalendarRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/products': {
@@ -1138,11 +1217,15 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRouteWithChildren
+  AuthenticatedApps4eContentCalendarRoute: typeof AuthenticatedApps4eContentCalendarRoute
   AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
+  AuthenticatedAppsDaresAssetModelRoute: typeof AuthenticatedAppsDaresAssetModelRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
+  AuthenticatedAppsMsTsSsRoute: typeof AuthenticatedAppsMsTsSsRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
   AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
   AuthenticatedAppsRightSideDiagnosticRoute: typeof AuthenticatedAppsRightSideDiagnosticRoute
+  AuthenticatedAppsSeedsPipelineRoute: typeof AuthenticatedAppsSeedsPipelineRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -1150,14 +1233,19 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
   AuthenticatedLearnRoute: AuthenticatedLearnRouteWithChildren,
+  AuthenticatedApps4eContentCalendarRoute:
+    AuthenticatedApps4eContentCalendarRoute,
   AuthenticatedAppsConsistencyBlueprintRoute:
     AuthenticatedAppsConsistencyBlueprintRoute,
+  AuthenticatedAppsDaresAssetModelRoute: AuthenticatedAppsDaresAssetModelRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
+  AuthenticatedAppsMsTsSsRoute: AuthenticatedAppsMsTsSsRoute,
   AuthenticatedAppsNicheClarityBuilderRoute:
     AuthenticatedAppsNicheClarityBuilderRoute,
   AuthenticatedAppsPaidsAuditorRoute: AuthenticatedAppsPaidsAuditorRoute,
   AuthenticatedAppsRightSideDiagnosticRoute:
     AuthenticatedAppsRightSideDiagnosticRoute,
+  AuthenticatedAppsSeedsPipelineRoute: AuthenticatedAppsSeedsPipelineRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

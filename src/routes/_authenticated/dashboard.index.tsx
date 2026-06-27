@@ -1,14 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { useIsAdmin } from "@/lib/use-is-admin";
+import { useKitAccess, KIT_SLUGS } from "@/lib/use-kit-access";
 import { supabase } from "@/integrations/supabase/client";
 import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
-import { KIT_SLUGS } from "@/lib/use-kit-access";
-import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { CLARITY_STEPS, CLARITY_TOTAL, readClarityProgress, nextClarityStep } from "@/lib/clarity-system";
+import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles, Compass } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
@@ -30,8 +32,15 @@ type Grant = {
 function Dashboard() {
   const { user } = useAuth();
   const { isAdmin } = useIsAdmin();
+  const { access: hasKit } = useKitAccess();
   const purchasesFn = useServerFn(myPurchases);
   const dlFn = useServerFn(getMyDownloadUrl);
+
+  const [clarity, setClarity] = useState<{ done: number; next: number }>({ done: 0, next: 1 });
+  useEffect(() => {
+    const p = readClarityProgress();
+    setClarity({ done: CLARITY_STEPS.filter((s) => p[s.n]).length, next: nextClarityStep(p) });
+  }, []);
 
   const purchases = useQuery({ queryKey: ["my-purchases"], queryFn: () => purchasesFn() });
 
@@ -87,6 +96,30 @@ function Dashboard() {
             <ShieldCheck className="size-5 text-[var(--nx-orange-deep)]" />
             <span className="text-sm font-semibold text-[var(--nx-orange-deep)]">You're an owner — open the Admin console</span>
             <ArrowRight className="size-4 text-[var(--nx-orange-deep)] ml-auto" />
+          </Link>
+        )}
+
+        {/* Continue your Clarity System — the primary next action */}
+        {hasKit && (
+          <Link to="/dashboard/foundation-kit" className="block rounded-2xl bg-[#0F172A] p-5 sm:p-7 group">
+            <div className="flex items-center gap-4">
+              <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[var(--nx-gold-bright)]"><Compass className="size-6" /></span>
+              <div className="flex-1 min-w-0">
+                <div className="nx-label !text-[var(--nx-gold-bright)]">Your Clarity System · {clarity.done}/{CLARITY_TOTAL} done</div>
+                {clarity.next <= CLARITY_TOTAL ? (
+                  <>
+                    <div className="font-display text-xl text-white mt-0.5">Continue — Step {clarity.next}: {CLARITY_STEPS[clarity.next - 1].title}</div>
+                    <p className="text-sm text-slate-300">{CLARITY_STEPS[clarity.next - 1].nextAction}</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="font-display text-xl text-white mt-0.5">All 7 steps done — you have your plan.</div>
+                    <p className="text-sm text-slate-300">Open your kit to review your Clarity Plan, then apply for the Accelerator to execute it.</p>
+                  </>
+                )}
+              </div>
+              <ArrowRight className="size-5 text-slate-400 group-hover:text-white transition-colors shrink-0" />
+            </div>
           </Link>
         )}
 
