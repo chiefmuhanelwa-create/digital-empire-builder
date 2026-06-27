@@ -36,7 +36,6 @@ export function SiteHeader() {
           {user ? (
             <>
               <Link to="/dashboard" className={navLink} activeProps={navActive}>My workspace</Link>
-              <Link to="/tools" className={navLink} activeProps={navActive}>Free Tools</Link>
               <Link to="/products" className={navLink} activeProps={navActive}>Products</Link>
               {isAdminQ.data && (
                 <Link to="/admin" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>

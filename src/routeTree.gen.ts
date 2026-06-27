@@ -24,6 +24,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as HookGeneratorRouteImport } from './routes/hook-generator'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ApplyRouteImport } from './routes/apply'
+import { Route as AlignAccelerateExcelRouteImport } from './routes/align-accelerate-excel'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -134,6 +135,11 @@ const ContactRoute = ContactRouteImport.update({
 const ApplyRoute = ApplyRouteImport.update({
   id: '/apply',
   path: '/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlignAccelerateExcelRoute = AlignAccelerateExcelRouteImport.update({
+  id: '/align-accelerate-excel',
+  path: '/align-accelerate-excel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -337,6 +343,7 @@ const AuthenticatedAdminCurriculumProductSlugRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
   '/hook-generator': typeof HookGeneratorRoute
@@ -389,6 +396,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
   '/hook-generator': typeof HookGeneratorRoute
@@ -439,6 +447,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
   '/hook-generator': typeof HookGeneratorRoute
@@ -493,6 +502,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/align-accelerate-excel'
     | '/apply'
     | '/contact'
     | '/hook-generator'
@@ -545,6 +555,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/align-accelerate-excel'
     | '/apply'
     | '/contact'
     | '/hook-generator'
@@ -594,6 +605,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/align-accelerate-excel'
     | '/apply'
     | '/contact'
     | '/hook-generator'
@@ -648,6 +660,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AlignAccelerateExcelRoute: typeof AlignAccelerateExcelRoute
   ApplyRoute: typeof ApplyRoute
   ContactRoute: typeof ContactRoute
   HookGeneratorRoute: typeof HookGeneratorRoute
@@ -779,6 +792,13 @@ declare module '@tanstack/react-router' {
       path: '/apply'
       fullPath: '/apply'
       preLoaderRoute: typeof ApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/align-accelerate-excel': {
+      id: '/align-accelerate-excel'
+      path: '/align-accelerate-excel'
+      fullPath: '/align-accelerate-excel'
+      preLoaderRoute: typeof AlignAccelerateExcelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1148,6 +1168,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  AlignAccelerateExcelRoute: AlignAccelerateExcelRoute,
   ApplyRoute: ApplyRoute,
   ContactRoute: ContactRoute,
   HookGeneratorRoute: HookGeneratorRoute,
