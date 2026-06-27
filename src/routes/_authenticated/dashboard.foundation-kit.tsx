@@ -17,8 +17,11 @@ export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")
   component: ClaritySystem,
 });
 
-// PDFs that actually exist in storage today (extended in Phase 3 as more upload).
-const AVAILABLE_PDFS = new Set(["niche-clarity", "paids"]);
+// PDFs that exist in storage. (All 7 workbooks generated + uploaded in Phase 3.)
+const AVAILABLE_PDFS = new Set([
+  "niche-clarity", "paids", "ms-ts-ss", "knowledge-audit",
+  "4e-content-calendar", "seeds-pipeline", "dares-asset-model",
+]);
 
 function ClaritySystem() {
   const { access } = useKitAccess();

@@ -277,6 +277,11 @@ export const getMyDownloadUrl = createServerFn({ method: "POST" })
 const KIT_FILES: Record<string, string> = {
   "niche-clarity": "niche-clarity-workbook.pdf",
   paids: "paids-framework-workbook.pdf",
+  "ms-ts-ss": "ms-ts-ss-workbook.pdf",
+  "knowledge-audit": "knowledge-audit-workbook.pdf",
+  "4e-content-calendar": "4e-content-calendar-workbook.pdf",
+  "seeds-pipeline": "seeds-pipeline-workbook.pdf",
+  "dares-asset-model": "dares-asset-model-workbook.pdf",
 };
 const KIT_OWNER_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
 
