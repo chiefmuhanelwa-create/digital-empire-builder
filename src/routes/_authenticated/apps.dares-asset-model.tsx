@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, Boxes } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/dares-asset-model")({
@@ -87,6 +88,8 @@ function DaresAssetModel() {
           <h2 className="text-white text-2xl mt-2">{r.title}</h2>
           <p className="text-slate-300 mt-2 max-w-lg mx-auto">Lowest: <strong style={{ color: "var(--nx-gold-bright)" }}>{r.weakest.name}</strong> — {r.weakest.lift}</p>
         </div>
+
+        <AiCoach tool="dares-asset-model" getPayload={() => JSON.stringify({ idea, scores: v })} />
 
         <div className="nx-card !p-5 mt-5 text-center">
           <span className="nx-label">Your next action</span>

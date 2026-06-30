@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, Workflow } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/seeds-pipeline")({
@@ -63,6 +64,8 @@ function SeedsPipeline() {
             </div>
           );
         })}
+
+        <AiCoach tool="seeds-pipeline" getPayload={() => JSON.stringify(v)} />
 
         <div className="rounded-2xl bg-[#0F172A] p-6 text-center mt-4">
           <p className="nx-label !text-[var(--nx-gold-bright)]">Your next action</p>

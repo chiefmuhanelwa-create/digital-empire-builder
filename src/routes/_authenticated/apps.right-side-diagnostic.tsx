@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ArrowLeft, Compass } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/right-side-diagnostic")({
@@ -162,6 +163,8 @@ function RightSideDiagnostic() {
               <p className="font-display text-lg leading-snug">"Build on land you own, not rent. Instagram owes you nothing. Your email list cannot be taken away."</p>
               <p className="text-sm text-[var(--text-body)] mt-3">The fix is always the same three moves: <strong>start an email list</strong> you control, <strong>own your storefront</strong> (not just a marketplace), and <strong>run more than one PAIDS stream</strong> so no single platform can take you to zero.</p>
             </div>
+
+            <AiCoach tool="right-side" getPayload={() => JSON.stringify({ percentOwned: pct, areas: areaRows.map((a) => ({ area: a.label, status: a.tag })) })} />
 
             <div className="mt-5 rounded-2xl bg-[#0F172A] p-6 text-center">
               <h3 className="text-white text-xl font-display">Get your Ownership Roadmap</h3>

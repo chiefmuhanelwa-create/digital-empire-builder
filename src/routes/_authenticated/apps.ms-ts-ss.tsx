@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, Gauge } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/ms-ts-ss")({
@@ -92,6 +93,8 @@ function MsTsSs() {
           <span className="nx-label">Your next action — fix this first</span>
           <p className="text-sm text-[var(--text-body)] mt-2"><strong>{r.weak.label}.</strong> {r.weak.fix}</p>
         </div>
+
+        <AiCoach tool="ms-ts-ss" getPayload={() => JSON.stringify({ mindset: v.ms, toolset: v.ts, skillset: v.ss, score: r.product })} />
 
         <div className="mt-6 text-center">
           <Link to="/dashboard/foundation-kit" className="cta-glow inline-flex items-center gap-2">Mark done → next step <ArrowRight className="size-4" /></Link>

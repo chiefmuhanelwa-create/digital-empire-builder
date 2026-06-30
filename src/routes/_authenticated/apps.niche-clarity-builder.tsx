@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, Copy, Check, Target, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
@@ -188,6 +189,7 @@ function NicheClarityBuilder() {
               ))}
             </ul>
           </div>
+          <AiCoach tool="niche-clarity" getPayload={() => JSON.stringify(f)} />
         </div>
       </main>
 

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/knowledge-audit")({
@@ -168,6 +169,8 @@ function KnowledgeAudit() {
                 </div>
               </div>
             )}
+
+            <AiCoach tool="knowledge-audit" getPayload={() => JSON.stringify({ ...fields, ms, ts, ss })} />
 
             <div className="mt-6 rounded-2xl bg-[var(--bg-surface)] border border-border p-6 text-center">
               <h3 className="font-display text-xl">Get your Knowledge-to-Product roadmap</h3>

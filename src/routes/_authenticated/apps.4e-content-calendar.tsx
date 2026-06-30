@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, CalendarDays, RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/4e-content-calendar")({
@@ -139,6 +140,8 @@ function FourECalendar() {
             </div>
           ))}
         </div>
+
+        <AiCoach tool="4e-content-calendar" getPayload={() => JSON.stringify({ who, topic, pain, after })} />
 
         <div className="rounded-2xl bg-[#0F172A] p-6 text-center mt-8">
           <p className="nx-label !text-[var(--nx-gold-bright)]">Your next action</p>

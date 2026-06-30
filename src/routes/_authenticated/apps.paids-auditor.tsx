@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
+import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ShieldAlert } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/paids-auditor")({
@@ -177,6 +178,7 @@ function PaidsAuditor() {
             <p className="text-sm text-[var(--text-dim)] mt-1">{r.next.why}</p>
             <p className="text-sm text-[var(--text-body)] mt-2"><strong>Where to start:</strong> {r.next.product}</p>
           </div>
+          <AiCoach tool="paids" getPayload={() => JSON.stringify(amounts)} />
         </div>
       </main>
 

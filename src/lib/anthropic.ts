@@ -10,6 +10,8 @@ import Anthropic from "@anthropic-ai/sdk";
  * makes cost a concern (Sonnet is ~40% the price).
  */
 export const OFFER_MODEL = "claude-opus-4-8";
+// Cheaper model for high-volume, lower-stakes calls (per-tool coaching blocks).
+export const COACH_MODEL = "claude-sonnet-4-6";
 
 let _client: Anthropic | null = null;
 

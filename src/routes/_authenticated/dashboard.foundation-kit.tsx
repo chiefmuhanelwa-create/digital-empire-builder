@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { getKitFileUrl } from "@/lib/products.functions";
+import { buildClarityPlan } from "@/lib/tool-ai.functions";
 import { useKitAccess } from "@/lib/use-kit-access";
 import {
   CLARITY_STEPS, CLARITY_BONUSES, CLARITY_TOTAL, STREAM_BASE,
@@ -32,6 +33,28 @@ function ClaritySystem() {
     onSuccess: (res: { url: string }) => window.open(res.url, "_blank", "noopener,noreferrer"),
     onError: (e: Error) => toast.error(e.message),
   });
+
+  // Clarity Plan — synthesise all 7 tools' saved answers into one personalised plan.
+  const planFn = useServerFn(buildClarityPlan);
+  const planMut = useMutation({ mutationFn: planFn, onError: (e: Error) => toast.error(e.message) });
+  const gatherAnswers = () => {
+    const KEYS: [string, string][] = [
+      ["Niche", "nochill-niche-v1"], ["Knowledge Audit", "nochill-knowledge-v1"],
+      ["MS×TS×SS", "nochill-msts-v1"], ["4E Calendar", "nochill-4e-v1"],
+      ["SEEDS", "nochill-seeds-v1"], ["DARES", "nochill-dares-v1"],
+      ["PAIDS", "nochill-paids-v1"], ["Right Side", "nochill-rightside-v1"],
+    ];
+    const parts: string[] = [];
+    for (const [label, key] of KEYS) {
+      try { const v = localStorage.getItem(key); if (v && v !== "null" && v !== "{}") parts.push(`${label}: ${v}`); } catch { /* ignore */ }
+    }
+    return parts.join("\n");
+  };
+  const runPlan = () => {
+    const answers = gatherAnswers();
+    if (!answers) { toast.error("Do a couple of the tools first, then build your plan."); return; }
+    planMut.mutate({ data: { answers: answers.slice(0, 11500) } });
+  };
 
   const [progress, setProgress] = useState<Record<number, boolean>>({});
   useEffect(() => { setProgress(readClarityProgress()); }, []);
@@ -77,6 +100,16 @@ function ClaritySystem() {
       </section>
 
       <main className="mx-auto max-w-4xl px-4 sm:px-6 py-10 space-y-6">
+        {/* Orientation */}
+        <div className="nx-card !p-5">
+          <p className="nx-label">How your kit works · ~one focused afternoon</p>
+          <p className="nx-body mt-1">
+            Work top to bottom. Each step: <strong>1)</strong> watch the short video, <strong>2)</strong> do the tool —
+            it reads your answers and your <em>AI coach</em> tells you what to do, <strong>3)</strong> take the one next
+            action, then tick it complete. Finish all 7 and hit <strong>Build my Clarity Plan</strong> for your personalised written plan.
+          </p>
+        </div>
+
         {CLARITY_STEPS.map((step) => {
           const done = !!progress[step.n];
           const isNext = step.n === next;
@@ -163,8 +196,30 @@ function ClaritySystem() {
               <p className="text-slate-300 max-w-lg mx-auto mt-2 mb-5">{next <= CLARITY_TOTAL ? CLARITY_STEPS[next - 1].nextAction : "Finish your remaining steps to unlock your full plan."}</p>
             </>
           )}
-          <Link to="/apply" className="cta-glow inline-block">Apply for the Accelerator</Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button onClick={runPlan} disabled={planMut.isPending}
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--nx-gold)] px-5 py-3 text-sm font-bold text-[#0F172A] hover:bg-[var(--nx-gold-deep)] transition-colors disabled:opacity-50">
+              <Sparkles className="size-4" /> {planMut.isPending ? "Building your plan…" : planMut.data ? "Rebuild my Clarity Plan" : "Build my Clarity Plan"}
+            </button>
+            <Link to="/apply" className="inline-flex items-center rounded-full border border-white/25 px-5 py-3 text-sm font-semibold text-white hover:border-white/60 transition-colors">Apply for the Accelerator</Link>
+          </div>
         </div>
+
+        {/* The personalised Clarity Plan output (printable) */}
+        {planMut.data && (
+          <div className="nx-card !p-6 sm:!p-8" id="clarity-plan">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="nx-label">Your Clarity Plan</p>
+                <h2 className="text-2xl">Built from your own answers.</h2>
+              </div>
+              <button onClick={() => window.print()} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-dim)] hover:text-foreground shrink-0">
+                <Download className="size-4" /> Print / Save PDF
+              </button>
+            </div>
+            <div className="mt-4 text-[15px] text-[var(--text-body)] leading-relaxed whitespace-pre-line">{planMut.data.plan}</div>
+          </div>
+        )}
 
         {/* Bonuses */}
         <div>
