@@ -10,7 +10,7 @@ import { useKitAccess, KIT_SLUGS } from "@/lib/use-kit-access";
 import { supabase } from "@/integrations/supabase/client";
 import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
 import { CLARITY_STEPS, CLARITY_TOTAL, readClarityProgress, nextClarityStep } from "@/lib/clarity-system";
-import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles, Compass } from "lucide-react";
+import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles, Compass, Users } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
@@ -173,6 +173,16 @@ function Dashboard() {
             </>
           )}
         </div>
+
+        {/* Inner Circle — the recurring rung */}
+        <Link to="/dashboard/inner-circle" className="flex items-center gap-4 rounded-2xl border border-[var(--nx-gold)]/40 bg-[var(--bg-surface)] p-5 group">
+          <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)]"><Users className="size-5" /></span>
+          <div className="flex-1 min-w-0">
+            <div className="font-display text-lg group-hover:text-[var(--nx-gold-text)] transition-colors">The Inner Circle · $39/mo</div>
+            <p className="text-sm text-[var(--text-dim)]">Monthly coaching + a community that keeps you executing your plan. Cancel anytime.</p>
+          </div>
+          <ArrowRight className="size-5 text-[var(--text-subtle)] group-hover:text-[var(--nx-gold-text)] shrink-0" />
+        </Link>
 
         {/* Complete your toolkit — funnel continues, clearly separated, only what they don't own */}
         {recommended.length > 0 && (

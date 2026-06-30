@@ -42,6 +42,7 @@ import { Route as ProductsGardenGardenRouteImport } from './routes/products.gard
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
+import { Route as AuthenticatedDashboardInnerCircleRouteImport } from './routes/_authenticated/dashboard.inner-circle'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
@@ -233,6 +234,12 @@ const AuthenticatedLearnSlugRoute = AuthenticatedLearnSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => AuthenticatedLearnRoute,
 } as any)
+const AuthenticatedDashboardInnerCircleRoute =
+  AuthenticatedDashboardInnerCircleRouteImport.update({
+    id: '/inner-circle',
+    path: '/inner-circle',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardFoundationKitRoute =
   AuthenticatedDashboardFoundationKitRouteImport.update({
     id: '/foundation-kit',
@@ -416,6 +423,7 @@ export interface FileRoutesByFullPath {
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
+  '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -471,6 +479,7 @@ export interface FileRoutesByTo {
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
+  '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
@@ -530,6 +539,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
+  '/_authenticated/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -590,6 +600,7 @@ export interface FileRouteTypes {
     | '/apps/right-side-diagnostic'
     | '/apps/seeds-pipeline'
     | '/dashboard/foundation-kit'
+    | '/dashboard/inner-circle'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
@@ -645,6 +656,7 @@ export interface FileRouteTypes {
     | '/apps/right-side-diagnostic'
     | '/apps/seeds-pipeline'
     | '/dashboard/foundation-kit'
+    | '/dashboard/inner-circle'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
     | '/products/garden/$garden'
@@ -703,6 +715,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/right-side-diagnostic'
     | '/_authenticated/apps/seeds-pipeline'
     | '/_authenticated/dashboard/foundation-kit'
+    | '/_authenticated/dashboard/inner-circle'
     | '/_authenticated/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
@@ -984,6 +997,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLearnSlugRouteImport
       parentRoute: typeof AuthenticatedLearnRoute
     }
+    '/_authenticated/dashboard/inner-circle': {
+      id: '/_authenticated/dashboard/inner-circle'
+      path: '/inner-circle'
+      fullPath: '/dashboard/inner-circle'
+      preLoaderRoute: typeof AuthenticatedDashboardInnerCircleRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/foundation-kit': {
       id: '/_authenticated/dashboard/foundation-kit'
       path: '/foundation-kit'
@@ -1181,6 +1201,7 @@ const AuthenticatedAdminRouteWithChildren =
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardFoundationKitRoute: typeof AuthenticatedDashboardFoundationKitRoute
+  AuthenticatedDashboardInnerCircleRoute: typeof AuthenticatedDashboardInnerCircleRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardProductsFreeRoute: typeof AuthenticatedDashboardProductsFreeRoute
   AuthenticatedDashboardProductsPaidRoute: typeof AuthenticatedDashboardProductsPaidRoute
@@ -1190,6 +1211,8 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
     AuthenticatedDashboardFoundationKitRoute:
       AuthenticatedDashboardFoundationKitRoute,
+    AuthenticatedDashboardInnerCircleRoute:
+      AuthenticatedDashboardInnerCircleRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardProductsFreeRoute:
       AuthenticatedDashboardProductsFreeRoute,
