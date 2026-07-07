@@ -180,6 +180,7 @@ function CheckoutSuccess() {
 
 function UpsellFlow({ buyerEmail, slugs }: { buyerEmail: string; slugs: readonly string[] }) {
   const [step, setStep] = useState(0);
+  const [addedRef, setAddedRef] = useState<string | null>(null);
   const isFoundationChain = slugs === FOUNDATION_KIT_UPSELLS;
 
   // Load each upsell product
@@ -204,13 +205,31 @@ function UpsellFlow({ buyerEmail, slugs }: { buyerEmail: string; slugs: readonly
     },
   });
 
+  // True 1-click: charge the card the buyer just used. Falls back to a normal
+  // Paystack redirect only if no reusable authorization was saved on the main sale.
+  const chargeFn = useServerFn(chargeUpsell);
   const initFn = useServerFn(initializeCheckout);
-  const mut = useMutation({
+
+  const redirectMut = useMutation({
     mutationFn: initFn,
     onSuccess: (res: { authorizationUrl: string }) => {
       window.location.href = res.authorizationUrl;
     },
     onError: (e: Error) => toast.error(e.message ?? "Could not start checkout"),
+  });
+
+  const oneClick = useMutation({
+    mutationFn: chargeFn,
+    onSuccess: (res: any, variables: { data: { productSlug: string; email: string } }) => {
+      if (res.ok) {
+        setAddedRef(res.reference);
+      } else if (res.reason === "no_authorization") {
+        redirectMut.mutate({ data: { productSlug: variables.data.productSlug, email: buyerEmail } });
+      } else {
+        toast.error(res.message || "Could not add that automatically — try again or skip.");
+      }
+    },
+    onError: (e: Error) => toast.error(e.message ?? "Could not add this offer"),
   });
 
   if (products.isLoading) {
@@ -263,6 +282,35 @@ function UpsellFlow({ buyerEmail, slugs }: { buyerEmail: string; slugs: readonly
 
   const priceLabel = formatPrice(current.price_cents, current.currency, false, current.slug, useCountry());
 
+  if (addedRef) {
+    return (
+      <div className="mt-12">
+        <div className="border-2 border-banana bg-banana/5 p-8 text-center">
+          <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">✓ Added</div>
+          <h3 className="mt-3 font-display text-2xl md:text-3xl">{current.title}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Charged to the card you just used. Grab it below.
+          </p>
+        </div>
+        <DownloadCard slug={current.slug} reference={addedRef} />
+        <div className="mt-6 text-center">
+          <Button
+            size="lg"
+            className="bg-banana text-banana-foreground hover:bg-banana/90"
+            onClick={() => {
+              setAddedRef(null);
+              setStep((s) => s + 1);
+            }}
+          >
+            Continue →
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const isBusy = oneClick.isPending || redirectMut.isPending;
+
   return (
     <div className="mt-12">
       <div className="text-center font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">
@@ -303,15 +351,15 @@ function UpsellFlow({ buyerEmail, slugs }: { buyerEmail: string; slugs: readonly
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button
             size="lg"
-            disabled={mut.isPending || !buyerEmail}
+            disabled={isBusy || !buyerEmail}
             onClick={() =>
-              mut.mutate({
+              oneClick.mutate({
                 data: { productSlug: current.slug, email: buyerEmail },
               })
             }
             className="bg-banana text-banana-foreground hover:bg-banana/90 sm:flex-1"
           >
-            {mut.isPending ? "Starting…" : `Yes — add for ${priceLabel}`}
+            {isBusy ? "Adding…" : `Yes — add for ${priceLabel}`}
           </Button>
           <Button
             size="lg"

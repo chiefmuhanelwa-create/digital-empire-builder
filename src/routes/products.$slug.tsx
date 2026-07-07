@@ -17,7 +17,6 @@ import { useCountry } from "@/lib/currency";
 import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
-import { ArrowRight } from "lucide-react";
 import { ProCohortBreakdown, VipTierBreakdown } from "@/components/PremiumProgramBreakdown";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -88,20 +87,6 @@ function ProductDetail() {
   // so it is always present here — no conditional hooks, no SSR throw.
   const product = Route.useLoaderData();
   const country = useCountry();
-
-  const { data: seedProduct } = useQuery({
-    queryKey: ["product-seed", product?.seed_to_product_id],
-    enabled: !!product?.seed_to_product_id,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("slug, title, tagline, price_cents, currency, is_free, garden")
-        .eq("id", product!.seed_to_product_id!)
-        .maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-  });
 
   const gardenMeta = product.garden ? GARDENS[product.garden as Garden] : null;
   const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country);
@@ -235,33 +220,6 @@ function ProductDetail() {
               Buy now → {priceLabel}
             </a>
           </div>
-        )}
-
-
-
-        {/* Seed to next */}
-        {seedProduct && (
-          <Link
-            to="/products/$slug"
-            params={{ slug: seedProduct.slug }}
-            className="group mt-20 block border-t border-border pt-10"
-          >
-            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-              You might also like →
-            </div>
-            <div className="mt-4 flex items-end justify-between gap-6">
-              <div>
-                <div className="font-mono text-xs text-muted-foreground">{seedProduct.tagline}</div>
-                <h3 className="mt-2 font-display text-3xl group-hover:text-banana transition-colors">
-                  {seedProduct.title}
-                </h3>
-              </div>
-              <div className="flex items-center gap-3 font-mono text-sm text-muted-foreground">
-                <span>{formatPrice(seedProduct.price_cents, seedProduct.currency, seedProduct.is_free, seedProduct.slug, country)}</span>
-                <ArrowRight className="size-4 group-hover:text-banana transition-colors" />
-              </div>
-            </div>
-          </Link>
         )}
       </article>
       <SiteFooter />
