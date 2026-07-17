@@ -31,25 +31,21 @@ export function SiteHeader() {
           CHKPLT
         </Link>
 
-        {/* Primary nav — clear, labelled, scrollable on small screens */}
-        <nav className="flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar">
-          {user ? (
-            <>
-              <Link to="/dashboard" className={navLink} activeProps={navActive}>My workspace</Link>
-              <Link to="/products" className={navLink} activeProps={navActive}>Products</Link>
-              {isAdminQ.data && (
-                <Link to="/admin" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
-                  Admin
-                </Link>
-              )}
-            </>
-          ) : (
-            <>
-              <Link to="/about" className={`hidden sm:block ${navLink}`} activeProps={navActive}>About</Link>
-              <Link to="/contact" className={`hidden sm:block ${navLink}`} activeProps={navActive}>Contact</Link>
-            </>
-          )}
-        </nav>
+        {/* Members see workspace nav. The public funnel stays distraction-free —
+            no About/Contact/etc up top; those live small in the footer. */}
+        {user ? (
+          <nav className="flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar">
+            <Link to="/dashboard" className={navLink} activeProps={navActive}>My workspace</Link>
+            <Link to="/products" className={navLink} activeProps={navActive}>Products</Link>
+            {isAdminQ.data && (
+              <Link to="/admin" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
+                Admin
+              </Link>
+            )}
+          </nav>
+        ) : (
+          <div className="flex-1" />
+        )}
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {user ? (
@@ -94,7 +90,17 @@ export function SiteFooter() {
             Christ's Kingdom Platform. Build on land you own.
           </p>
         </div>
-        <div className="mt-10 border-t border-white/10 pt-6 text-xs tracking-[0.05em] text-slate-500">
+
+        {/* Secondary links live here, small — kept off the funnel header. */}
+        <nav className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500">
+          <Link to="/about" className="hover:text-slate-300 transition-colors">About</Link>
+          <Link to="/contact" className="hover:text-slate-300 transition-colors">Contact</Link>
+          <Link to="/terms" className="hover:text-slate-300 transition-colors">Terms</Link>
+          <Link to="/privacy" className="hover:text-slate-300 transition-colors">Privacy</Link>
+          <Link to="/refund-policy" className="hover:text-slate-300 transition-colors">Refund Policy</Link>
+        </nav>
+
+        <div className="mt-8 border-t border-white/10 pt-6 text-xs tracking-[0.05em] text-slate-500">
           © {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07
         </div>
       </div>
