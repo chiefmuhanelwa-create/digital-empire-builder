@@ -4,6 +4,24 @@ The living record of what was discovered, what broke, what was corrected, and wh
 
 ---
 
+## 2026-07-17 — Stripe rail, live keys, full "Called Expert" → Contentpreneur rebrand
+
+- **Deploy ≠ push.** chkplt.com is a Cloudflare Worker with **no CI/CD** — a `git push` does NOT update the live site. Must run `bun run build && bunx wrangler deploy`. The site was frozen on the PR-#1 build until manually deployed. Same for the rebrand.
+- **`.env` ≠ Worker secrets.** The deployed Worker reads secrets set via `bunx wrangler secret put`, NOT `.env` (which is local-dev only). Updating `.env` changes nothing in production. Pattern to set from .env without printing: `v=$(grep '^KEY=' .env | cut -d= -f2- | tr -d '" '); printf '%s' "$v" | bunx wrangler secret put KEY`.
+- **Live keys now set on Worker:** `PAYSTACK_SECRET_KEY` (sk_live), `STRIPE_SECRET_KEY` (sk_live), `STRIPE_WEBHOOK_SECRET`, `MAILERLITE_API_KEY`, `MAILERLITE_GROUP_ID_BUYERS`/`_ALIGNED`. **MailerLite was completely dead before** — `MAILERLITE_API_KEY` had never been deployed, so `addToMailerLiteGroup` silently no-op'd every sync.
+- **Webhook health tell:** POST with no signature → **401** = secret loaded; **503** = secret missing/empty (`if (!secret) return 503`). Fast way to check a secret is live without reading its value.
+- **Stripe on Cloudflare Workers gotchas:** must use `new Stripe(key, { httpClient: Stripe.createFetchHttpClient() })` and verify webhooks with `await stripe.webhooks.constructEventAsync(body, sig, secret, undefined, Stripe.createSubtleCryptoProvider())` — the sync `constructEvent()` uses Node crypto and throws on Workers.
+- **`orders.provider` is plain `text`** (not an enum) — inserting `'stripe'` needed no migration. Confirmed via the seed migration.
+- **New TanStack route → route tree must regenerate.** `createFileRoute("/api/public/stripe-webhook")` failed tsc with "not assignable to keyof FileRoutesByPath" until `bun run build` regenerated `routeTree.gen.ts`. Order: create file → build (regenerates + esbuild ignores TS errors) → tsc to verify.
+- **Shared fulfillment extraction:** moved subscriber/tags/grants/account/ledger/receipt/MailerLite out of the Paystack webhook into `src/lib/order-fulfillment.ts` `fulfillPaidOrder()`; both webhooks call it after their own signature-verify + atomic order claim. Keeps the two rails identical and idempotent.
+- **Currency routing:** `shouldUseStripe(country)` in `currency.tsx` — African countries → Paystack (ZAR), else Stripe (USD), unknown → Paystack (home market). Stripe charges the clean USD price via `resolveUsdCents()` (mirrors `formatPrice`).
+- **LMS table names are `modules` / `lessons` / `lesson_progress`** — NOT `lms_modules`/`lms_lessons` (CLAUDE.md doc + a migration were wrong; a Supabase SQL run errored `relation "lms_modules" does not exist`). Fixed both.
+- **Applying DB changes to prod:** `supabase/config.toml` is linked to a STALE project (`yarzvth…`); live is `usxjlyl…`, and no service-role key is in `.env`, so `supabase db push` can't be used from here. Path that works: paste SQL in the Supabase SQL editor for `usxjlylquvrmlwxykgyt`. Supabase editor autocommits per-statement, so a later failing statement doesn't roll back earlier ones.
+- **Rebrand mechanics:** removed 15 user-facing "Called Expert" strings from code (kept slugs + the `called_expert` enum key — functional IDs). DB rebrand via idempotent `REPLACE(field,'Called Expert','Contentpreneur')` across products (title/tagline/description/long_description/target_audience/benefits::jsonb) + modules/lessons titles. Email receipts read `order_items.product_title` (copied from `products.title` at checkout) → renaming the product record is what cleans future receipts. Left `Learnings.md` intact (historical); preserved the cross-project `CALLED-EXPERT-CURRICULUM.md` path referenced by global CLAUDE.md.
+- **Security:** live Paystack + Stripe secret keys were pasted into the chat. `.env` is gitignored (won't commit) but the values are in the session — rotate if the transcript is ever shared.
+
+---
+
 ## 2026-07-17 — Positioning pivot: "Contentpreneur" umbrella + 2 buyer lanes (full-funnel copy + gate wording + docs)
 
 - **Why:** Owner's discovery — aspiring content creators don't have money; the buyer with money is anyone with real expertise (salaried OR self-employed) who wants owned income. Decision: own the word "Contentpreneur" as an umbrella, put **Lane A (Called Expert, salaried)** + **Lane B (Knowledge Creator, self-employed coach/podcaster/consultant)** under it, keep the broke-aspiring creator as a traffic tier (not a buyer), never insulted.

@@ -29,18 +29,20 @@ const TESTIMONIAL_SHOTS: string[] = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Contentpreneur Foundation Kit — Your Knowledge Is Worth More Than You're Being Paid For It" },
+      { title: "Contentpreneur — Turn What You Know Into Income You Own | CHKPLT" },
       {
         name: "description",
         content:
-          "The 7-framework system that turns real expertise into income you own — for professionals and knowledge creators alike, built in 4-hour windows around the life you already have.",
+          "A Contentpreneur turns what they already know into income they own. CHKPLT is the 7-framework system that packages your expertise into digital products and income — for professionals and knowledge creators across Africa.",
       },
-      { property: "og:title", content: "Contentpreneur Foundation Kit — $97" },
+      { name: "keywords", content: "Contentpreneur, contentpreneurship, knowledge business, digital products, monetise expertise, South Africa, Africa" },
+      { property: "og:title", content: "Contentpreneur — Turn What You Know Into Income You Own" },
       {
         property: "og:description",
         content:
-          "PAIDS · DARES · 4E Content Calendar · SEEDS Pipeline · Niche Clarity · Knowledge Audit. Package what you already know into income you own.",
+          "A Contentpreneur turns what they already know into income they own. The system for professionals and knowledge creators across Africa.",
       },
+      { property: "og:locale", content: "en_ZA" },
     ],
   }),
   component: Landing,
@@ -307,7 +309,16 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 // ── FAQ Data ────────────────────────────────────────────────────────────────
 
+// The canonical definition — reused in the visible FAQ AND the DefinedTerm
+// structured data so search + AI answer engines quote CHKPLT for the word.
+const CONTENTPRENEUR_DEFINITION =
+  "A Contentpreneur is someone who turns what they already know into income they own — packaging their expertise into digital products, courses, and assets they control, instead of chasing views as a creator or trading hours as an employee. The word covers two kinds of person: the employed professional monetising years of expertise, and the self-employed knowledge creator (coach, consultant, podcaster) who finally builds a system to own the income.";
+
 const FAQS = [
+  {
+    q: "What is a Contentpreneur?",
+    a: CONTENTPRENEUR_DEFINITION,
+  },
   {
     q: "What exactly do I get for $97?",
     a: "Six digital workbooks: the PAIDS Framework (your income map), DARES Asset Model (build income that doesn't need you to show up every day), 4E Content Calendar (30 days of strategy pre-built), SEEDS Pipeline Template (your first sales funnel, step by step), Niche Clarity Workbook (lock your niche in one afternoon), and the Knowledge Audit (find the product hiding in your expertise in 2 hours). Plus three bonuses. All instant download.",
@@ -353,6 +364,59 @@ const FAQS = [
     a: "The founder is Christian and the frameworks are rooted in kingdom principles — stewardship, calling, fruitfulness, generational legacy. But the system works for anyone whose expertise was given to them for a purpose beyond the money. If you believe your knowledge is a calling — this is for you.",
   },
 ];
+
+// ── Structured data (SEO / Answer-Engine Optimisation) ───────────────────────
+// Makes CHKPLT the machine-readable authority for the word "Contentpreneur" —
+// DefinedTerm (the definition), Organization (attribution + areaServed Africa),
+// WebSite, and FAQPage (the visible FAQ, incl. "What is a Contentpreneur?").
+const STRUCTURED_DATA = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "DefinedTerm",
+      "@id": "https://chkplt.com/#contentpreneur",
+      name: "Contentpreneur",
+      description: CONTENTPRENEUR_DEFINITION,
+      inDefinedTermSet: {
+        "@type": "DefinedTermSet",
+        name: "The Contentpreneur System",
+        publisher: { "@id": "https://chkplt.com/#org" },
+      },
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://chkplt.com/#org",
+      name: "CHKPLT",
+      legalName: "NOCHILL PTY LTD",
+      url: "https://chkplt.com",
+      description:
+        "The platform that teaches professionals and knowledge creators across Africa to become Contentpreneurs — turning expertise into income they own.",
+      founder: { "@type": "Person", name: "Ndivhuwo Muhanelwa", alternateName: "NoChill" },
+      areaServed: [
+        { "@type": "Country", name: "South Africa" },
+        { "@type": "Continent", name: "Africa" },
+      ],
+      knowsAbout: ["Contentpreneur", "Contentpreneurship", "knowledge business", "digital products"],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://chkplt.com/#website",
+      url: "https://chkplt.com",
+      name: "CHKPLT — Contentpreneur",
+      inLanguage: "en-ZA",
+      publisher: { "@id": "https://chkplt.com/#org" },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://chkplt.com/#faq",
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+  ],
+});
 
 // ── Before/After rows ───────────────────────────────────────────────────────
 
@@ -447,6 +511,9 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-white text-[#0F172A] overflow-x-hidden">
+      {/* Structured data — owns the word "Contentpreneur" for search + AI engines. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
+
       {showModal && (
         <CheckoutModal
           onClose={() => setShowModal(false)}
@@ -500,6 +567,27 @@ function Landing() {
               Save {savings} today
             </span>
           </div>
+        </div>
+      </section>
+
+      {/* ── DEFINITION — anchor the one word the whole funnel is about ────── */}
+      <section className="bg-[var(--bg-surface)] border-b border-[var(--border)]">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-14 text-center">
+          <p className="nx-label mb-4">The one word this is all about</p>
+          <div className="flex items-baseline justify-center gap-3 flex-wrap mb-4">
+            <span className="font-display text-4xl sm:text-5xl font-black text-[var(--foreground)]">
+              Contentpreneur
+            </span>
+            <span className="font-mono text-sm text-[var(--text-dim)] italic">/ noun /</span>
+          </div>
+          <p className="nx-body text-lg max-w-xl mx-auto">
+            Someone who turns what they already know into{" "}
+            <strong className="text-[var(--foreground)]">income they own</strong>.
+          </p>
+          <p className="text-sm text-[var(--text-dim)] max-w-lg mx-auto mt-3">
+            Not a creator chasing views. Not an employee trading hours for a salary. A builder who
+            packages expertise into assets that pay — on a platform they control.
+          </p>
         </div>
       </section>
 

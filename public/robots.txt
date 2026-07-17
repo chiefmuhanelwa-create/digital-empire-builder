@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /account
+Disallow: /admin
+Disallow: /api/
+
+# AI answer engines — allow (we want to own the word "Contentpreneur")
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://chkplt.com/sitemap.xml
