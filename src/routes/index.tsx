@@ -143,9 +143,11 @@ function CheckoutModal({
             Delivered instantly. Start in the next 2 minutes.
           </p>
           <p className="text-[#64748B] text-[11px] mt-1">
-            {useStripe
-              ? "Charged in USD · secure card checkout."
-              : "Shown in USD · charged in Rand (ZAR) at today's live rate."}
+            {country === "ZA"
+              ? "Billed securely in Rand (ZAR)."
+              : useStripe
+                ? "Charged in USD · secure card checkout."
+                : "Shown in USD · charged in Rand (ZAR) at today's live rate."}
           </p>
         </div>
 
@@ -237,7 +239,7 @@ function CheckoutModal({
           <p className="text-[#64748B] text-[11px]">
             Backed by our{" "}
             <strong className="text-banana">
-              7-Day Access Guarantee
+              7-Day Roadmap Guarantee
             </strong>
           </p>
         </div>
@@ -328,6 +330,14 @@ const FAQS = [
     a: "No. That is the biggest lie in the industry. You don't have to quit your job — or blow up the business you already run — to build this. The PAIDS Framework maps income streams that work in the margins of your existing schedule, whether that's a salaried job or your own thing. It was built in 4-hour windows between night shifts at an air traffic control centre. You build first. You quit — if you ever want to — later.",
   },
   {
+    q: "What if my employer has a moonlighting or outside-work policy?",
+    a: "You build quietly, and you build an asset you own — not a competitor to your employer. Nothing in this kit requires you to expose your identity, use company time, or compete with your day job. You package your own knowledge into your own products, on your own platform, on your own hours. You stay compliant, and you decide if and when anything ever becomes public. Many people build the whole foundation before they tell a single colleague.",
+  },
+  {
+    q: "Do I need technical skills to build this?",
+    a: "No. The kit is frameworks and fill-in-the-blank workbooks — if you can write a document, you can complete them. You are not coding anything. The technical side (payments, delivery, the member area) is what the CHKPLT platform handles for you. Your job is the thinking; the platform is the plumbing.",
+  },
+  {
     q: "Who is this for?",
     a: "Contentpreneurs — people who turn what they know into income they own. That's two kinds of person. One: the professional still employed — a teacher, healthcare worker, academic, or specialist paid less than their expertise is worth. Two: the knowledge creator — a coach, consultant, podcaster, or creator who already has the knowledge (and often the audience) but no system to own the income. If your knowledge is deeper than what you're being paid for it, this is for you.",
   },
@@ -353,7 +363,7 @@ const FAQS = [
   },
   {
     q: "What if it doesn't work for me?",
-    a: "If you have a technical issue accessing anything you paid for, email support within 7 days and I'll repair access or refund the order — see the full refund policy for details.",
+    a: "Do the work and judge it on results. Complete the Niche Clarity Workbook and the Knowledge Audit, and if you don't have a defined asset roadmap within 7 days, email us your completed work for a full refund. (If you ever have a technical issue accessing what you paid for, we'll fix or refund that too.) See the full refund policy for details.",
   },
   {
     q: "What are the 7 stages of the Contentpreneur system?",
@@ -479,13 +489,23 @@ function Landing() {
   });
 
   const country = useCountry();
+  const useStripe = shouldUseStripe(country);
   const priceCents = product?.price_cents ?? 9700;
   const currency = product?.currency ?? "USD";
-  // Headline price: always USD ($97 via USD_DISPLAY), charged in ZAR at checkout.
+  // Headline price: SA sees native ZAR, everyone else USD ($97). See formatPrice.
   const displayPrice = formatPrice(priceCents, currency, false, PRODUCT_SLUG, country);
-  // Value anchors tie to the value stack below: $820 value − $97 = $723 saved.
-  const comparePrice = "$820";
-  const savings = "$723";
+  // Value anchors ($820 value − $97 = $723 saved) rendered in the buyer's currency
+  // so a SA buyer never sees a $ next to an R.
+  const money = (usd: number) => formatPrice(usd * 100, "USD", false, undefined, country);
+  const comparePrice = money(820);
+  const savings = money(723);
+  // Charge-currency note that matches the real rail (avoids "shown in USD" for SA).
+  const chargeNote =
+    country === "ZA"
+      ? "Instant download · billed in Rand (ZAR) · 7-day guarantee"
+      : useStripe
+        ? "Instant download · charged in USD · 7-day guarantee"
+        : "Instant download · billed in ZAR at today's rate · 7-day guarantee";
 
   const RECEIPTS = ["Capitec", "Standard Bank", "Netflix", "Suzuki", "SA Tourism", "Showmax", "ABSA"];
 
@@ -497,16 +517,16 @@ function Landing() {
   ];
 
   const VALUE_STACK: [string, string][] = [
-    ["Niche Clarity Workbook", "$97"],
-    ["Knowledge Audit", "$97"],
-    ["PAIDS Framework (income map)", "$97"],
-    ["DARES Asset Model", "$97"],
-    ["4E Content Calendar", "$97"],
-    ["SEEDS Pipeline Template", "$97"],
-    ["MS×TS×SS Foundation Assessment", "$97"],
-    ["BONUS: Contentpreneur Cheat Sheet", "$47"],
-    ["BONUS: 90-Day First Income Planner", "$47"],
-    ["BONUS: 30-Day Accountability Tracker", "$47"],
+    ["Niche Clarity Workbook", money(97)],
+    ["Knowledge Audit", money(97)],
+    ["PAIDS Framework (income map)", money(97)],
+    ["DARES Asset Model", money(97)],
+    ["4E Content Calendar", money(97)],
+    ["SEEDS Pipeline Template", money(97)],
+    ["MS×TS×SS Foundation Assessment", money(97)],
+    ["BONUS: Contentpreneur Cheat Sheet", money(47)],
+    ["BONUS: 90-Day First Income Planner", money(47)],
+    ["BONUS: 30-Day Accountability Tracker", money(47)],
   ];
 
   return (
@@ -557,7 +577,7 @@ function Landing() {
           <CtaButton
             onClick={open}
             label={`Get Instant Access — ${displayPrice}`}
-            sub="Instant download · 7-day access guarantee · billed in ZAR at checkout"
+            sub={chargeNote}
             size="large"
           />
 
@@ -785,7 +805,7 @@ function Landing() {
             </div>
             <div className="flex items-center justify-between mb-1">
               <span className="text-[var(--text-dim)] text-sm">Total value</span>
-              <span className="font-mono text-lg line-through text-[var(--text-subtle)]">$820</span>
+              <span className="font-mono text-lg line-through text-[var(--text-subtle)]">{comparePrice}</span>
             </div>
             <div className="flex items-center justify-between border-t-2 border-[var(--nx-gold)] pt-3 mb-6">
               <span className="font-display text-xl">Your price today</span>
@@ -796,7 +816,7 @@ function Landing() {
               label={`Yes — Get Instant Access for ${displayPrice}`}
             />
             <p className="text-center text-xs text-[var(--text-subtle)] mt-3">
-              Instant download · billed in ZAR at checkout · 7-day access guarantee
+              {chargeNote}
             </p>
           </div>
         </div>
@@ -848,11 +868,12 @@ function Landing() {
       <section className="bg-[var(--bg-surface)] border-y border-[var(--border)]">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-14 text-center">
           <p className="nx-label mb-3">A real guarantee, not a marketing line</p>
-          <h2 className="mb-4">7-day access guarantee.</h2>
+          <h2 className="mb-4">The 7-Day Roadmap Guarantee.</h2>
           <p className="nx-body max-w-xl mx-auto">
-            If you have a technical issue accessing the Foundation Kit, email support within 7 days
-            and I'll personally make sure it's repaired or refunded. See the full refund policy for
-            exactly what's covered.
+            Do the work. Complete the Niche Clarity Workbook and the Knowledge Audit. If you don't
+            walk away with a defined asset roadmap within 7 days, email us your completed work and
+            we'll refund every cent — no argument. That's how confident I am the frameworks deliver.
+            See the full refund policy for exactly how it works.
           </p>
         </div>
       </section>
@@ -872,6 +893,10 @@ function Landing() {
       {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
       <section className="bg-[#0F172A]">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <p className="text-slate-400 text-sm max-w-lg mx-auto mb-5">
+            Every year your expertise stays locked in your head is another year you trade your
+            limited hours for someone else's balance sheet.
+          </p>
           <h2 className="text-white mb-4">Do it for your children. Leave them a story.</h2>
           <p className="text-slate-300 max-w-lg mx-auto mb-8">
             You were given this knowledge for a purpose bigger than the money. Every year you sit on
@@ -881,9 +906,30 @@ function Landing() {
           <CtaButton
             onClick={open}
             label={`Get the Foundation Kit — ${displayPrice}`}
-            sub="Instant access · 7-day access guarantee"
+            sub="Instant access · 7-Day Roadmap Guarantee"
             size="large"
           />
+
+          {/* P.S. — the second-most-read block on the page, for scrollers. */}
+          <div className="mt-12 text-left border-t border-white/10 pt-8 max-w-xl mx-auto">
+            <p className="text-slate-300 leading-relaxed">
+              <strong className="text-[#FCD34D]">P.S.</strong> — Let's be straight. You can keep
+              trading your limited hours for a salary, leaving years of expertise trapped in your
+              head. Or you put down <strong className="text-white">{displayPrice}</strong> today, take
+              the 7 frameworks, and spend one weekend building an asset you actually own. Complete the
+              first two workbooks — if you don't have a clear roadmap in 7 days, show us your work and
+              get every cent back. The risk is entirely mine. The only thing you can lose is another
+              year.
+            </p>
+            <div className="mt-5">
+              <button
+                onClick={open}
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--nx-gold)] px-6 py-3 text-sm font-bold text-[#0F172A] hover:bg-[var(--nx-gold-deep)] transition-colors"
+              >
+                Secure the Foundation Kit — {displayPrice}
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 

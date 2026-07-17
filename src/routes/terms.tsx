@@ -86,7 +86,11 @@ function TermsPage() {
         <p>
           The platform is provided “as is.” We make no guarantee of specific
           income, audience growth, or business results. Outcomes depend on
-          your effort, market conditions, and execution.
+          your effort, market conditions, and execution. Our Foundation Kit
+          “7-Day Roadmap Guarantee” is a satisfaction-based refund term (you
+          complete the workbooks and receive a defined roadmap, or your money
+          back) — it is not a promise of income, and its full conditions are
+          set out in the <a href="/refund-policy" className="text-banana">Refund Policy</a>.
         </p>
 
         <h2>8. Limitation of liability</h2>

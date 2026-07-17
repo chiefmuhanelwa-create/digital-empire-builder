@@ -64,15 +64,25 @@ export const USD_DISPLAY: Record<string, number> = {
   "personal-brand-30-days": 4900,         // $49 video course (charged R899)
 };
 
-// Country param kept for signature compatibility; display is now USD for everyone.
+// Display: South African buyers see the real ZAR they'll be charged (no exchange-
+// rate math next to local social proof); everyone else sees the clean USD price.
 export function formatPrice(
   cents: number,
   currency: string,
   isFree?: boolean,
   slug?: string,
-  _country?: string | null,
+  country?: string | null,
 ) {
   if (isFree || cents === 0) return "Free";
+
+  // ── South Africa: render native ZAR ──────────────────────────────────────
+  if (country === "ZA") {
+    // ZAR-native product: `cents` IS the Paystack charge (fx-synced to the USD price).
+    // USD-native product: convert to ZAR for display.
+    const zarCents =
+      currency === "ZAR" ? cents : Math.round((cents / 100) * ZAR_PER_USD) * 100;
+    return `R${(zarCents / 100).toLocaleString("en-ZA", { maximumFractionDigits: 0 })}`;
+  }
 
   // Resolve a USD-cents value: explicit marketing override → native USD → convert ZAR.
   let usdCents: number | null = null;

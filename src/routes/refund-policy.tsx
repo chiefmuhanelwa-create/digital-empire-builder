@@ -33,12 +33,26 @@ function RefundPage() {
           Refund Policy
         </h1>
 
-        <h2>Digital downloads and workbooks</h2>
+        <h2>Foundation Kit — the 7-Day Roadmap Guarantee</h2>
         <p>
-          Because our workbooks, ebooks, and template packs are delivered
-          instantly and cannot be returned, all sales are final once the
-          download link has been issued. If you experience a technical issue
-          accessing a file you paid for, email{" "}
+          We stand behind the Foundation Kit on results, not just access.
+          Complete the <strong>Niche Clarity Workbook</strong> and the{" "}
+          <strong>Knowledge Audit</strong>, and if you do not walk away with a
+          defined asset roadmap within 7 days of purchase, email{" "}
+          <a href="mailto:support@chkplt.com" className="text-banana">
+            support@chkplt.com
+          </a>{" "}
+          with your completed work and we will refund 100% of your order. The
+          completed work is required so we can see you gave the frameworks a
+          genuine attempt — this protects the guarantee for everyone.
+        </p>
+
+        <h2>Other digital downloads and workbooks</h2>
+        <p>
+          Other workbooks, ebooks, and template packs are delivered instantly
+          and cannot be returned, so those sales are final once the download
+          link has been issued. If you experience a technical issue accessing
+          any file you paid for, email{" "}
           <a href="mailto:support@chkplt.com" className="text-banana">
             support@chkplt.com
           </a>{" "}
