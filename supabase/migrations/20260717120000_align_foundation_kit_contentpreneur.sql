@@ -28,11 +28,11 @@ SET target_audience =
 WHERE slug IN ('called-expert-foundation-kit', 'called-expert-starter-bundle');
 
 -- Also normalise any leftover "Called Expert" inside module / lesson titles that
--- surface in the LMS and admin curriculum builder.
-UPDATE public.lms_modules
+-- surface in the LMS and admin curriculum builder. (Tables are modules/lessons.)
+UPDATE public.modules
 SET title = REPLACE(title, 'Called Expert', 'Contentpreneur')
 WHERE title ILIKE '%Called Expert%';
 
-UPDATE public.lms_lessons
+UPDATE public.lessons
 SET title = REPLACE(title, 'Called Expert', 'Contentpreneur')
 WHERE title ILIKE '%Called Expert%';

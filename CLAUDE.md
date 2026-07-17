@@ -248,9 +248,9 @@ components.json             shadcn/ui config
 | `order_items` | Line items per order |
 | `payments` | Payment events (provider_reference, status, gateway_response) |
 | `product_grants` | LMS access (user_id + product_id = access unlocked) |
-| `lms_modules` | Course modules (title, sort_order) |
-| `lms_lessons` | Lesson content (HTML, sort_order) |
-| `lms_lesson_progress` | Completion tracking (completed_at) |
+| `modules` | Course modules (title, sort_order) |
+| `lessons` | Lesson content (HTML, sort_order) |
+| `lesson_progress` | Completion tracking (completed_at) |
 | `client_stewardship_applications` | 23-point diagnostic responses |
 | `email_send_log` | Transactional email audit trail |
 | `email_send_state` | Email rate limit + queue config (singleton) |
