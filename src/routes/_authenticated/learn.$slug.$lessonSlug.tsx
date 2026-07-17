@@ -75,7 +75,20 @@ function LessonPage() {
           <p className="mt-4 text-muted-foreground">{data.lesson.summary}</p>
         )}
 
-        {data.locked ? (
+        {data.locked && data.dripLocked ? (
+          <div className="mt-12 border border-banana/30 bg-banana/5 p-10 text-center">
+            <Lock className="mx-auto size-8 text-banana" />
+            <h2 className="mt-4 font-display text-2xl">This lesson unlocks in Week {data.unlockWeek}.</h2>
+            <p className="mt-2 text-muted-foreground">
+              You're enrolled — this module opens on{" "}
+              {new Date(data.unlocksAt).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })}{" "}
+              so the cohort moves through the programme together, one stage at a time.
+            </p>
+            <Button asChild variant="outline" className="mt-6">
+              <Link to="/learn/$slug" params={{ slug }}>Back to curriculum</Link>
+            </Button>
+          </div>
+        ) : data.locked ? (
           <div className="mt-12 border border-banana/30 bg-banana/5 p-10 text-center">
             <Lock className="mx-auto size-8 text-banana" />
             <h2 className="mt-4 font-display text-2xl">This lesson is locked.</h2>

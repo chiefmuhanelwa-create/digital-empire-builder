@@ -63,7 +63,7 @@ function LearnIndex() {
             </div>
             <h2 className="font-display text-2xl">No courses yet.</h2>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-              When you purchase a product or enrol in the Called Expert Accelerator, it unlocks here.
+              When you purchase a product or enrol in the Contentpreneur Accelerator, it unlocks here.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild className="cta-glow">

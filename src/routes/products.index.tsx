@@ -10,7 +10,7 @@ export const Route = createFileRoute("/products/")({
   head: () => ({
     meta: [
       { title: "Products — Christ Kingdom Platform" },
-      { name: "description", content: "Workbooks, courses, and the Called Expert Accelerator. Pick your level." },
+      { name: "description", content: "Workbooks, courses, and the Contentpreneur Accelerator. Pick your level." },
       { property: "og:title", content: "Products — Christ Kingdom Platform" },
       { property: "og:description", content: "Every tool. Every framework. Every system." },
     ],
@@ -65,14 +65,14 @@ function Catalog() {
           <em className="text-banana not-italic">Every framework. Every system.</em>
         </h1>
         <p className="mt-8 max-w-xl text-lg text-muted-foreground">
-          Workbooks, courses, and the Called Expert Accelerator. Pick your level.
+          Workbooks, courses, and the Contentpreneur Accelerator. Pick your level.
         </p>
 
         {/* Entry offer spotlight */}
         <div className="mt-12 border-2 border-banana/40 bg-banana/5 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-banana">Start here</div>
-            <h2 className="mt-1 font-display text-2xl sm:text-3xl text-foreground">Called Expert Foundation Kit</h2>
+            <h2 className="mt-1 font-display text-2xl sm:text-3xl text-foreground">Contentpreneur Foundation Kit</h2>
             <p className="mt-2 text-sm text-muted-foreground max-w-md leading-relaxed">
               Frameworks, templates, content calendar. The complete starting system — $97, instant access.
             </p>

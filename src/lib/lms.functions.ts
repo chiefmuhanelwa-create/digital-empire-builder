@@ -12,6 +12,13 @@ async function assertAdmin(supabase: any, userId: string) {
   if (!data) throw new Error("Admin role required");
 }
 
+// Drip-delivery: cohort week N starts N-1 weeks after the purchase grant.
+// Module `unlock_week` <= current week means it's visible.
+function currentCohortWeek(grantedAt: string): number {
+  const elapsedMs = Date.now() - new Date(grantedAt).getTime();
+  return Math.floor(elapsedMs / (7 * 24 * 60 * 60 * 1000)) + 1;
+}
+
 // ───────────────────────────── Learner reads ─────────────────────────────
 
 export const getMyCourses = createServerFn({ method: "GET" })
@@ -111,7 +118,7 @@ export const getLessonBody = createServerFn({ method: "POST" })
     // 2. Resolve lesson within that product
     const { data: lesson, error: le } = await supabaseAdmin
       .from("lessons")
-      .select("id,slug,title,summary,body_md,video_url,duration_minutes,is_preview,sort_order,module_id,modules:module_id(id,title,product_id,sort_order)")
+      .select("id,slug,title,summary,body_md,video_url,duration_minutes,is_preview,sort_order,module_id,modules:module_id(id,title,product_id,sort_order,unlock_week)")
       .eq("slug", data.lessonSlug)
       .maybeSingle();
     if (le) throw new Error(le.message);
@@ -120,25 +127,21 @@ export const getLessonBody = createServerFn({ method: "POST" })
     }
 
     // 3. Access gate — preview OR a grant OR admin (owner QA).
-    let hasAccess = lesson.is_preview === true;
-    if (!hasAccess) {
-      const { data: grant } = await supabaseAdmin
-        .from("product_grants")
-        .select("id")
-        .eq("product_id", product.id)
-        .eq("user_id", userId)
-        .is("revoked_at", null)
-        .maybeSingle();
-      hasAccess = !!grant;
-    }
-    if (!hasAccess) {
-      const { data: isAdmin } = await supabaseAdmin.rpc("has_role", { _user_id: userId, _role: "admin" });
-      hasAccess = isAdmin === true;
-    }
+    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", { _user_id: userId, _role: "admin" });
+    const { data: grant } = await supabaseAdmin
+      .from("product_grants")
+      .select("id, granted_at")
+      .eq("product_id", product.id)
+      .eq("user_id", userId)
+      .is("revoked_at", null)
+      .maybeSingle();
+
+    const hasAccess = lesson.is_preview === true || !!grant || isAdmin === true;
 
     if (!hasAccess) {
       return {
         locked: true as const,
+        dripLocked: false as const,
         product: { slug: product.slug, title: product.title },
         lesson: {
           id: lesson.id,
@@ -151,8 +154,35 @@ export const getLessonBody = createServerFn({ method: "POST" })
       };
     }
 
+    // 4. Drip gate — a real grant (not preview, not admin QA) still has to wait
+    // for its module's unlock week. Admins and preview lessons always bypass.
+    const unlockWeek = (lesson.modules as any)?.unlock_week ?? 1;
+    if (grant && !isAdmin && !lesson.is_preview && unlockWeek > 1) {
+      const week = currentCohortWeek(grant.granted_at);
+      if (unlockWeek > week) {
+        const unlocksAt = new Date(grant.granted_at);
+        unlocksAt.setDate(unlocksAt.getDate() + (unlockWeek - 1) * 7);
+        return {
+          locked: true as const,
+          dripLocked: true as const,
+          unlocksAt: unlocksAt.toISOString(),
+          unlockWeek,
+          product: { slug: product.slug, title: product.title },
+          lesson: {
+            id: lesson.id,
+            slug: lesson.slug,
+            title: lesson.title,
+            summary: lesson.summary,
+            is_preview: false,
+            duration_minutes: lesson.duration_minutes,
+          },
+        };
+      }
+    }
+
     return {
       locked: false as const,
+      dripLocked: false as const,
       product: { slug: product.slug, title: product.title },
       lesson: {
         id: lesson.id,
@@ -198,7 +228,7 @@ export const adminGetCurriculum = createServerFn({ method: "POST" })
 
     const { data: modules } = await supabaseAdmin
       .from("modules")
-      .select("id,title,summary,sort_order, lessons:lessons(id,slug,title,is_preview,sort_order,duration_minutes)")
+      .select("id,title,summary,sort_order,unlock_week, lessons:lessons(id,slug,title,is_preview,sort_order,duration_minutes)")
       .eq("product_id", product.id)
       .order("sort_order", { ascending: true });
 
@@ -243,6 +273,7 @@ export const adminUpdateModule = createServerFn({ method: "POST" })
       title: z.string().min(1).max(200).optional(),
       summary: z.string().max(2000).optional(),
       sort_order: z.number().int().min(0).optional(),
+      unlock_week: z.number().int().min(1).max(52).optional(),
     }).parse(input),
   )
   .handler(async ({ data, context }) => {

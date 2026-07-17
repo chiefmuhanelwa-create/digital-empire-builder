@@ -9,7 +9,7 @@ import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Join the Called Expert Accelerator — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Join the Contentpreneur Accelerator — CHKPLT" }] }),
   component: SignupPage,
 });
 
@@ -57,7 +57,7 @@ function SignupPage() {
               Join the <em className="text-banana not-italic">Kingdom.</em>
             </h1>
             <p className="mt-2 text-sm text-muted-foreground text-center">
-              Called Expert Accelerator PRO · Kingdom Business Programme
+              Contentpreneur Accelerator PRO · Kingdom Business Programme
             </p>
 
             <Button

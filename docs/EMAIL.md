@@ -51,11 +51,11 @@
 | Order Receipt | `order-receipt.tsx` | Payment confirmed | `{name}`, `{product}`, `{amount}`, `{download_link}` |
 
 ### Branding for All Transactional Emails
-- Background: `#f0f0f0` (wrapper grey)
-- Card: `#fffbea` (cream)
-- Accent: `#C9A84C` (Heritage Gold — map to `--banana` CSS var)
-- Text: `#111111` (Tool Black)
-- Font: Arial/system-sans (React-Email limitation — no Google Fonts)
+**Updated 2026-07-11 — the site shipped a "Modern Professional" slate + amber theme; the old Heritage Gold spec below is retired (still backed up in `src/styles.heritage.bak.css` if ever needed).**
+- Background: `#0F172A` (slate-900, matches `src/styles.css` foreground token) or `#F8FAFC` (slate-50) for light-mode cards
+- Accent: `#F59E0B` (amber-500 — maps to the `--banana` CSS var, `src/styles.css:89,109`)
+- Text: `#0F172A` (slate-900) on light backgrounds, `#F8FAFC` on dark
+- Font: Montserrat for headings (React-Email pulls this in; body defaults to Arial/system-sans — no Lato anywhere in the live codebase, confirmed by repo-wide search)
 - Footer: `chkplt.com | @nochill_god`
 
 ---
@@ -81,10 +81,12 @@
 | Knowledge Audit | `MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT` | Downloaded Knowledge Audit |
 | Buyers | `MAILERLITE_GROUP_ID_BUYERS` | All paying customers (any product) |
 
-### ICP 1 Upgrade Trigger (Critical Automation)
+### Contentpreneur Buyer-Lane Trigger (Critical Automation)
 
-Any reply or engagement that includes these words → tag `called-expert-potential` → route to Called Expert upgrade sequence:
-- "salary," "job," "employer," "expertise," "qualification," "teaching," "knowledge," "professional," "years of experience," "nurse," "doctor," "teacher," "accountant," "lecturer," "engineer"
+Any reply or engagement that includes these words → tag `contentpreneur-potential` → route to the Accelerator upgrade sequence:
+- **Lane A (Called Expert) signals:** "salary," "job," "employer," "qualification," "teaching," "professional," "years of experience," "nurse," "doctor," "teacher," "accountant," "lecturer," "engineer"
+- **Lane B (Knowledge Creator) signals:** "clients," "coaching," "podcast," "audience," "brand deals," "consulting," "my own thing," "self-employed," "course," "community"
+- **Shared signals:** "expertise," "knowledge," "own the income," "package," "system"
 
 ---
 
@@ -144,24 +146,24 @@ Any reply or engagement that includes these words → tag `called-expert-potenti
 **Purpose:** First product offer with proof-first framing
 **Lead:** What the sequence has been building toward
 **CTA options:**
-- ICP 2: Niche Clarity Workbook (R199) or Creator Starter Bundle
-- ICP 1: Called Expert Blueprint (free) or Starter Kit (R997)
+- Traffic tier (aspiring creator): Niche Clarity Workbook (R199) or Creator Starter Bundle
+- Buyer lanes (Called Expert / Knowledge Creator): Contentpreneur Blueprint (free) or Foundation Kit
 - Discount code: time-limited (48-hour expiry)
 **Tone:** Celebration, not pressure. "This is for the ones who are serious."
 
 ---
 
-## ICP 1 Upgrade Sequence (After Day 13)
+## Contentpreneur Upgrade Sequence (After Day 13)
 
-For subscribers tagged `called-expert-potential`:
+For subscribers tagged `contentpreneur-potential`. Subject angles adapt per lane (A = Called Expert, B = Knowledge Creator); the product ladder is shared:
 
-| Email | Day | Subject angle | Product |
-|-------|-----|--------------|---------|
-| A | 15 | "Your salary is SARS's number, not yours" | Called Expert Blueprint (free) |
-| B | 18 | Matthew 20 — "You're not too late" | 11th Hour Playbook (free) |
-| C | 21 | "The shift worker who built R600K between night shifts" | 4-Hour Window System (free) |
-| D | 25 | "What 20 years of expertise + zero packaging looks like" | Starter Kit (R997) |
-| E | 30 | "6 spots. 20 weeks. R18,000." | Called Expert Accelerator PRO |
+| Email | Day | Lane A angle | Lane B angle | Product |
+|-------|-----|--------------|--------------|---------|
+| A | 15 | "Your salary is SARS's number, not yours" | "Your brand deals aren't an asset — they're a payday" | Contentpreneur Blueprint (free) |
+| B | 18 | Matthew 20 — "You're not too late" | Matthew 20 — "You're not too late" | 11th Hour Playbook (free) |
+| C | 21 | "The shift worker who built R600K between night shifts" | "R600K built while the algorithm kept changing the rules" | 4-Hour Window System (free) |
+| D | 25 | "20 years of expertise + zero packaging" | "A full audience + zero owned income" | Foundation Kit |
+| E | 30 | "6 spots. 20 weeks. R18,000." | "6 spots. 20 weeks. R18,000." | Contentpreneur Accelerator PRO |
 
 ---
 

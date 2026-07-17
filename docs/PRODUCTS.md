@@ -4,9 +4,13 @@
 
 ---
 
+## Audience mapping (Contentpreneur umbrella)
+
+> The buyer identity is **Contentpreneur** — someone who turns what they know into income they own. The `ICP` tags in the tables below map to it: **ICP 1 = Buyer Lane A (Called Expert — professional/specialist still employed)**; **ICP 2 = the aspiring-creator traffic tier that grows into a buyer lane**. Buyer **Lane B (Knowledge Creator — coach/podcaster/consultant with expertise + income)** is served by the same paid ladder as Lane A with lane-specific copy. See `CLAUDE.md` → "Target Audience — the Contentpreneur Umbrella" for the full definition.
+
 ## Product Architecture — The 153 Framework
 
-153 products across 6 Called Expert sub-segments. Built in 3 phases:
+153 products across the Contentpreneur sub-segments. Built in 3 phases:
 - **Genesis (now):** 5 free lead magnets + 5 paid products (MVP)
 - **Exodus (Month 4–6):** 30+ products across all 6 sub-segment tracks
 - **Leviticus (Month 7–12):** Full 153 product ecosystem complete
@@ -36,7 +40,7 @@
 
 | Product | Slug | Price ZAR | Price USD | Garden | Delivery | ICP | Status |
 |---------|------|-----------|-----------|--------|----------|-----|--------|
-| Called Expert Accelerator PRO (90-day) | `contentpreneur-90day-cohort` | R18,000 PIF / R6,500×3 | TBD | etz_pri | LMS + coaching | ICP 1 | ⚠️ Published (0 curriculum) |
+| Called Expert Accelerator PRO (90-day) | `contentpreneur-90day-cohort` | R18,000 PIF / R6,500×3 | TBD | etz_pri | LMS + coaching | ICP 1 | ✅ Published (32 lessons / 7 modules seeded) |
 | VIP Tier | `contentpreneur-vip-tier` | R45,000 | TBD | etz_pri | LMS + 1:1 | ICP 1 | ⚠️ Published (0 curriculum) |
 
 ---
@@ -150,7 +154,9 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 - **DB slug:** `possess-masterclass`
 
 ### PAID-005: Called Expert Accelerator PRO — R18,000 PIF / R6,500×3 (Flagship)
-- **Description:** Full transformation. 20 weeks. 7-stage system (already in DB as `contentpreneur-90day-cohort`).
+- **Description:** Full transformation. **12 weeks** (compressed from the original 20-week draft —
+  see "Structure History" in `docs/CURRICULUM.md`). 7-stage system, Torah-arc labeled
+  (Genesis→Deuteronomy), already in DB as `contentpreneur-90day-cohort`.
 - **Includes:**
   - 1:1 onboarding (30 min with Ndivhuwo)
   - Weekly group coaching calls
@@ -161,9 +167,10 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 - **Revenue math:** 6 students × R18,000 = R108,000 per cohort
 - **ICP:** ICP 1
 - **Garden:** `etz_pri`
-- **requires_application:** true (23-point diagnostic)
+- **requires_application:** true (native `/apply` diagnostic)
 - **DB slug:** `contentpreneur-90day-cohort` (already exists)
-- **BLOCKER:** 0 curriculum built — must add modules/lessons before selling
+- **Curriculum status:** ✅ 32 lessons / 7 modules seeded — see `docs/CURRICULUM.md`. Remaining gap:
+  LMS drip-delivery (week-gating) not yet built — see `docs/COVENANT-ENGINE.md` §8.3.
 
 ---
 
@@ -186,7 +193,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 ## Adding a New Product (Checklist)
 
 - [ ] Outline: title, ICP, transformation promise (A → B in X days), NOCHILL framework backbone
-- [ ] Design: Canva — Heritage Gold `#C9A84C`, Charcoal `#1C1C1C`, Cream `#FAF7F0`, Montserrat + Lato, footer `chkplt.com | @nochill_god`
+- [ ] Design: Canva — Amber `#F59E0B`, Slate `#0F172A`, white/slate-50 canvas, Montserrat headings (updated 2026-07-11 to match the live "Modern Professional" theme in `src/styles.css` — the old Heritage Gold spec is retired, backed up in `src/styles.heritage.bak.css`), footer `chkplt.com | @nochill_god`
 - [ ] DB: `/admin/products` → upsert (slug, title, tagline, garden, price_cents, is_free, requires_application)
 - [ ] Storage: Upload PDF to Supabase Storage → bucket `product-downloads` → name: `{slug}.pdf`
 - [ ] DB: Update `download_path` = `/product-downloads/{slug}.pdf`

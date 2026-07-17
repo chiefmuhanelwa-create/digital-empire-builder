@@ -149,6 +149,22 @@ function CurriculumAdmin() {
                     }}
                     className="flex-1 bg-transparent font-display text-xl outline-none focus:text-banana"
                   />
+                  <label className="flex items-center gap-1.5 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+                    Unlocks wk
+                    <input
+                      type="number"
+                      min={1}
+                      max={52}
+                      defaultValue={m.unlock_week ?? 1}
+                      onBlur={(e) => {
+                        const n = Number(e.target.value);
+                        if (n && n !== (m.unlock_week ?? 1)) {
+                          updateMod({ data: { id: m.id, unlock_week: n } }).then(invalidate);
+                        }
+                      }}
+                      className="w-12 rounded border border-border bg-transparent px-1 py-0.5 text-center text-foreground outline-none focus:border-banana"
+                    />
+                  </label>
                   <span className="font-mono text-xs text-muted-foreground">{m.lessons.length} lessons</span>
                   <button
                     onClick={() => confirm(`Delete module "${m.title}"?`) && delModMut.mutate(m.id)}

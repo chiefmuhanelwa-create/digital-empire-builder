@@ -6,7 +6,7 @@ import { TOOLS } from "@/lib/tools";
 export const Route = createFileRoute("/tools")({
   head: () => ({
     meta: [
-      { title: "Free Tools for Called Experts | CHKPLT" },
+      { title: "Free Tools for Contentpreneurs | CHKPLT" },
       {
         name: "description",
         content:
@@ -60,8 +60,9 @@ function ToolsIndex() {
           <p className="nx-label mb-2">Ready for the system?</p>
           <h2 className="text-2xl sm:text-3xl mb-3">Tools are the start. The Kit is the system.</h2>
           <p className="nx-body max-w-2xl mb-6">
-            The Called Expert Foundation Kit turns these one-off wins into a repeatable way to
-            package and sell your expertise — built for professionals who can't quit first.
+            The Contentpreneur Foundation Kit turns these one-off wins into a repeatable way to
+            package and sell your expertise — built for professionals and knowledge creators who
+            want income they own.
           </p>
           <Link
             to="/products/$slug"

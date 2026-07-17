@@ -178,7 +178,7 @@ function Dashboard() {
         <Link to="/dashboard/inner-circle" className="flex items-center gap-4 rounded-2xl border border-[var(--nx-gold)]/40 bg-[var(--bg-surface)] p-5 group">
           <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)]"><Users className="size-5" /></span>
           <div className="flex-1 min-w-0">
-            <div className="font-display text-lg group-hover:text-[var(--nx-gold-text)] transition-colors">The Inner Circle · $39/mo</div>
+            <div className="font-display text-lg group-hover:text-[var(--nx-gold-text)] transition-colors">The Inner Circle · $29/mo</div>
             <p className="text-sm text-[var(--text-dim)]">Monthly coaching + a community that keeps you executing your plan. Cancel anytime.</p>
           </div>
           <ArrowRight className="size-5 text-[var(--text-subtle)] group-hover:text-[var(--nx-gold-text)] shrink-0" />

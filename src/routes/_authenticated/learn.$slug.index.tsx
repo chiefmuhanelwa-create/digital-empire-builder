@@ -40,14 +40,14 @@ function CoursePage() {
 
       const { data: modules, error: me } = await supabase
         .from("modules")
-        .select("id,title,summary,sort_order, lessons:lessons(id,slug,title,is_preview,sort_order,duration_minutes)")
+        .select("id,title,summary,sort_order,unlock_week, lessons:lessons(id,slug,title,is_preview,sort_order,duration_minutes)")
         .eq("product_id", product.id)
         .order("sort_order", { ascending: true });
       if (me) throw me;
 
       const { data: grantRows } = await supabase
         .from("product_grants")
-        .select("id")
+        .select("id, granted_at")
         .eq("product_id", product.id)
         .limit(1);
       const grant = (grantRows ?? [])[0] ?? null;
@@ -60,11 +60,18 @@ function CoursePage() {
         isAdmin = !!data;
       }
 
+      // Drip-delivery: cohort week N unlocks N-1 weeks after the purchase grant.
+      // Admins bypass entirely (QA needs to see every module immediately).
+      const currentWeek = grant
+        ? Math.floor((Date.now() - new Date(grant.granted_at).getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1
+        : 0;
+
       return {
         product,
         modules: (modules ?? []).map((m: any) => ({
           ...m,
           lessons: (m.lessons ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order),
+          dripLocked: !isAdmin && !!grant && (m.unlock_week ?? 1) > currentWeek,
         })),
         hasAccess: !!grant || isAdmin,
       };
@@ -123,15 +130,22 @@ function CoursePage() {
           {data.modules.map((m: any, i: number) => (
             <section key={m.id} className="border border-border">
               <header className="border-b border-border p-5 bg-muted/20">
-                <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">
-                  Module {String(i + 1).padStart(2, "0")}
+                <div className="flex items-center justify-between gap-3">
+                  <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">
+                    Module {String(i + 1).padStart(2, "0")}
+                  </div>
+                  {m.dripLocked && (
+                    <div className="flex items-center gap-1.5 font-mono text-[10px] tracking-[0.15em] uppercase text-muted-foreground">
+                      <Lock className="size-3" /> Unlocks Week {m.unlock_week}
+                    </div>
+                  )}
                 </div>
                 <h2 className="mt-2 font-display text-2xl">{m.title}</h2>
                 {m.summary && <p className="mt-2 text-sm text-muted-foreground">{m.summary}</p>}
               </header>
               <ul>
                 {(m.lessons ?? []).map((l: any, idx: number) => {
-                  const locked = !data.hasAccess && !l.is_preview;
+                  const locked = (!data.hasAccess || m.dripLocked) && !l.is_preview;
                   return (
                     <li key={l.id} className="border-b border-border last:border-b-0">
                       <Link

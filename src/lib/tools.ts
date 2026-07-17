@@ -1,15 +1,27 @@
 // Single source of truth for the free interactive tools. Rendered by both the
 // public /tools index and the member /dashboard/tools page so the list never drifts.
-import { Calculator, Zap, IdCard, Receipt, Package, type LucideIcon } from "lucide-react";
+import { Calculator, Zap, IdCard, Receipt, Package, Compass, type LucideIcon } from "lucide-react";
 
 export type Tool = {
   name: string;
-  path: "/rate-card" | "/hook-generator" | "/media-kit" | "/sars-calculator" | "/offer-builder";
+  path:
+    | "/rate-card"
+    | "/hook-generator"
+    | "/media-kit"
+    | "/sars-calculator"
+    | "/offer-builder"
+    | "/align-accelerate-excel";
   blurb: string;
   icon: LucideIcon;
 };
 
 export const TOOLS: Tool[] = [
+  {
+    name: "Align · Accelerate · Excel",
+    path: "/align-accelerate-excel",
+    blurb: "Find your phase in 90 seconds — then get the free 7-Day Alignment Sprint.",
+    icon: Compass,
+  },
   {
     name: "Rate Card Calculator",
     path: "/rate-card",

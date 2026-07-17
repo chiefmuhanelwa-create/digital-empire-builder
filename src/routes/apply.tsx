@@ -22,11 +22,11 @@ import type { RecommendationResult } from "@/utils/evaluator";
 export const Route = createFileRoute("/apply")({
   head: () => ({
     meta: [
-      { title: "Apply — 90-Day Called Expert Accelerator PRO | CHKPLT" },
+      { title: "Apply — 90-Day Contentpreneur Accelerator PRO | CHKPLT" },
       {
         name: "description",
         content:
-          "Apply for the 90-Day Called Expert Accelerator PRO. 4 minutes. We review within 24 hours.",
+          "Apply for the 90-Day Contentpreneur Accelerator PRO. 4 minutes. We review within 24 hours.",
       },
     ],
   }),
@@ -272,7 +272,7 @@ function ApplyPage() {
             Application
           </div>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-[#0F172A] leading-[1.05] tracking-tight uppercase mb-4">
-            90-Day Called Expert
+            90-Day Contentpreneur
             <br /><span className="text-banana">Accelerator PRO</span>
           </h1>
           <p className="text-[#777] text-base leading-relaxed max-w-md mx-auto">
@@ -447,7 +447,7 @@ function ApplyPage() {
                 {/* ── STEP 2: Expertise & Income ──────────────────────── */}
                 {step === 1 && (
                   <>
-                    <FieldRow label="What is your approximate monthly income from your professional work? (salary, freelance, consulting, business — combined)">
+                    <FieldRow label="What do you currently earn per month? (salary, clients, deals, sales — all combined)">
                       <Select
                         value={fields.income_range}
                         onValueChange={(v) => set("income_range", v)}
@@ -473,7 +473,7 @@ function ApplyPage() {
                           <SelectValue placeholder="Number of income sources" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="1">Just 1 (salary or single business)</SelectItem>
+                          <SelectItem value="1">Just 1 source</SelectItem>
                           <SelectItem value="2">2 sources</SelectItem>
                           <SelectItem value="3">3 sources</SelectItem>
                           <SelectItem value="4">4 sources</SelectItem>
@@ -571,7 +571,7 @@ function ApplyPage() {
                 {/* ── STEP 4: Readiness & Mindset ─────────────────────── */}
                 {step === 3 && (
                   <>
-                    <FieldRow label="If your current job or income continued as normal, could you dedicate 5–7 hours per week to building this alongside it?">
+                    <FieldRow label="If your current income continued as normal, could you dedicate 5–7 hours per week to building this alongside it?">
                       <YesNo
                         value={fields.can_commit_hours}
                         onChange={(v) => set("can_commit_hours", v)}

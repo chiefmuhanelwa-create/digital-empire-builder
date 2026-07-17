@@ -26,7 +26,7 @@ const FIELD_META: { key: keyof Fields; label: string; hint: string; ph: string }
   { key: "who", label: "WHO · the one person you serve", hint: "Not “everyone.” The narrower, the stronger. Name them like you'd name a friend.", ph: "who you serve" },
   { key: "before", label: "FROM · where they're stuck now", hint: "The painful before-state, in their words.", ph: "their stuck point" },
   { key: "after", label: "TO · the outcome you get them", hint: "The after-state. Make it specific and desirable.", ph: "the outcome" },
-  { key: "edge", label: "USING · your unfair advantage", hint: "The expertise or lived experience only you bring. This is what your salary doesn't reflect.", ph: "your edge" },
+  { key: "edge", label: "USING · your unfair advantage", hint: "The expertise or lived experience only you bring. This is what you're not being paid what it's worth for.", ph: "your edge" },
 ];
 
 function NicheClarityBuilder() {

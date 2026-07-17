@@ -17,7 +17,7 @@ const CALL_INFO = "Live group coaching — first Tuesday of each month, 19:00 SA
 const CALL_URL = "";               // e.g. Zoom/Meet link
 
 const BENEFITS = [
-  { Icon: MessagesSquare, t: "Private community", s: "Ask, share wins, get unstuck with other Called Experts." },
+  { Icon: MessagesSquare, t: "Private community", s: "Ask, share wins, get unstuck with other Contentpreneurs." },
   { Icon: CalendarClock, t: "Monthly group coaching", s: CALL_INFO },
   { Icon: Vault, t: "The monthly drop", s: "A new template, teardown or playbook every month." },
 ];

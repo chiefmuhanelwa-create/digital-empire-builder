@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Align · Accelerate · Excel — The Framework</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --charcoal: #1C1C1C;
+      --gold: #C9A84C;
+      --gold-deep: #A8862F;
+      --paper: #FAF7F0;
+      --ink: #2B2B2B;
+      --line: #E6DFD0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Lato', sans-serif; background: #EDE9E1; color: var(--ink); }
+
+    .bar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      background: var(--charcoal); padding: 16px;
+    }
+    .bar span { color: rgba(255,255,255,0.45); font-size: 13px; }
+    .btn {
+      background: var(--gold); color: var(--charcoal); border: none; cursor: pointer;
+      font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+      letter-spacing: 0.12em; text-transform: uppercase; padding: 11px 26px; border-radius: 4px;
+    }
+    .btn:hover { opacity: 0.9; }
+
+    #doc { max-width: 794px; margin: 0 auto; }
+    .page {
+      width: 794px; min-height: 1123px; position: relative; overflow: hidden;
+      page-break-after: always; break-after: page;
+    }
+    .page + .page { margin-top: 20px; }
+
+    /* COVER */
+    .cover { background: var(--charcoal); color: #fff; padding: 80px 72px; min-height: 1123px;
+      display: flex; flex-direction: column; }
+    .eyebrow { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.3em; text-transform: uppercase; color: rgba(201,168,76,0.7); }
+    .cover h1 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 56px;
+      line-height: 1.05; letter-spacing: 0.02em; text-transform: uppercase; color: var(--gold);
+      margin-top: 28px; }
+    .cover .sub { font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.7);
+      max-width: 520px; margin-top: 26px; }
+    .cover .seq { display: flex; gap: 10px; align-items: center; margin-top: 44px; }
+    .pill { border: 1px solid rgba(201,168,76,0.45); color: var(--gold);
+      font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+      letter-spacing: 0.1em; padding: 9px 18px; border-radius: 5px; text-transform: uppercase; }
+    .arr { color: var(--gold); opacity: 0.5; font-size: 16px; }
+    .cover .verse { font-style: italic; font-size: 14px; line-height: 1.7;
+      color: rgba(255,255,255,0.55); max-width: 480px; margin-top: 44px;
+      border-left: 2px solid var(--gold); padding-left: 18px; }
+    .cover .by { margin-top: auto; font-family: 'Montserrat', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); }
+    .cover .by small { display: block; font-weight: 400; letter-spacing: 0; text-transform: none;
+      font-family: 'Lato'; color: rgba(255,255,255,0.3); margin-top: 8px; font-size: 12px; }
+
+    /* CONTENT */
+    .content { background: var(--paper); padding: 64px 72px; min-height: 1123px; }
+    .rh { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 9px;
+      letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-deep);
+      border-bottom: 1.5px solid var(--gold); padding-bottom: 10px; margin-bottom: 40px; }
+
+    h2.section { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 30px;
+      color: var(--charcoal); text-transform: uppercase; letter-spacing: 0.02em; }
+    .lead { font-size: 14px; line-height: 1.7; color: var(--ink); margin-top: 14px; max-width: 580px; }
+
+    .map { width: 100%; border-collapse: collapse; margin-top: 36px; }
+    .map th { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--charcoal);
+      padding: 14px 16px; text-align: left; }
+    .map td { font-size: 13px; line-height: 1.55; padding: 16px; border: 1px solid var(--line);
+      background: #fff; vertical-align: top; }
+    .map td strong { font-family: 'Montserrat', sans-serif; color: var(--gold-deep); }
+
+    .rule { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--gold);
+      padding: 20px 24px; margin-top: 32px; }
+    .rule p { font-size: 14px; line-height: 1.65; }
+    .rule .k { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 11px;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 6px; }
+
+    /* PHASE BLOCK */
+    .phase-tag { display: inline-flex; align-items: center; gap: 12px; }
+    .phase-num { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 14px;
+      color: #fff; background: var(--gold); width: 34px; height: 34px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center; }
+    .phase-be { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-deep); }
+    .verse-line { font-style: italic; font-size: 13px; color: var(--gold-deep); margin-top: 12px; }
+
+    .label { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 11px;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--charcoal);
+      margin-top: 26px; margin-bottom: 10px; }
+    .body { font-size: 13.5px; line-height: 1.7; color: var(--ink); }
+    ul.ticks { list-style: none; margin-top: 4px; }
+    ul.ticks li { position: relative; padding-left: 22px; font-size: 13.5px; line-height: 1.6;
+      margin-bottom: 8px; }
+    ul.ticks li::before { content: ""; position: absolute; left: 0; top: 8px; width: 8px; height: 8px;
+      background: var(--gold); border-radius: 2px; }
+
+    .example { background: #fff; border: 1px solid var(--line); border-radius: 6px;
+      padding: 20px 24px; margin-top: 10px; }
+    .example .k { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 8px; }
+    .example p { font-size: 13.5px; line-height: 1.7; }
+
+    .move { background: var(--charcoal); color: #fff; border-radius: 6px; padding: 18px 24px;
+      margin-top: 22px; }
+    .move .k { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .move p { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+
+    .foot { position: absolute; bottom: 36px; left: 72px; right: 72px;
+      display: flex; justify-content: space-between; font-size: 10px; color: #9a937f;
+      font-family: 'Montserrat', sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
+      border-top: 1px solid var(--line); padding-top: 12px; }
+
+    .closing { background: var(--charcoal); color: #fff; padding: 80px 72px; min-height: 1123px;
+      display: flex; flex-direction: column; justify-content: center; }
+    .closing h2 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 38px;
+      color: var(--gold); text-transform: uppercase; line-height: 1.1; }
+    .closing p { font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.7);
+      max-width: 520px; margin-top: 24px; }
+    .closing .steps { margin-top: 36px; }
+    .closing .steps div { font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.85);
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .closing .steps strong { color: var(--gold); font-family: 'Montserrat', sans-serif; }
+    .closing .sign { margin-top: 44px; font-family: 'Montserrat', sans-serif; font-weight: 700;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+
+    /* Screen-only: make the A4 doc fluid on phones/tablets. Print keeps 794px A4. */
+    @media screen and (max-width: 840px) {
+      body { background: var(--charcoal); }
+      #doc { max-width: 100%; }
+      .page { width: 100%; min-height: auto; page-break-after: auto; }
+      .page + .page { margin-top: 0; border-top: 6px solid var(--gold); }
+      .cover, .closing { padding: 48px 26px; min-height: auto; }
+      .content { padding: 40px 24px; min-height: auto; }
+      .cover h1 { font-size: 40px; }
+      .cover .sub { font-size: 15px; }
+      .cover .verse { font-size: 12px; }
+      h2.section { font-size: 24px; }
+      .closing h2 { font-size: 26px; }
+      .map th, .map td { font-size: 11.5px; padding: 10px 12px; }
+      .foot { position: static; left: auto; right: auto; bottom: auto; margin-top: 28px; }
+    }
+
+    @media print {
+      body { background: none; }
+      .bar { display: none; }
+      .page + .page { margin-top: 0; border-top: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bar">
+    <span>The Framework · Align · Accelerate · Excel</span>
+    <button class="btn" onclick="window.print()">Download PDF</button>
+  </div>
+
+  <div id="doc">
+
+    <!-- COVER -->
+    <section class="page cover">
+      <div class="eyebrow">The Structural Framework</div>
+      <h1>Align<br />Accelerate<br />Excel</h1>
+      <p class="sub">The God-given sequence for building a life and a business that lasts —
+        drawn from Genesis 1:28 and Joshua 1:8. Be, then Do, then Have.</p>
+      <div class="seq">
+        <span class="pill">Align</span><span class="arr">&rarr;</span>
+        <span class="pill">Accelerate</span><span class="arr">&rarr;</span>
+        <span class="pill">Excel</span>
+      </div>
+      <div class="verse">
+        "In the beginning God created the heaven and the earth." — Genesis 1:1<br /><br />
+        "Be fruitful, and multiply… and have dominion." — Genesis 1:28<br /><br />
+        "Meditate therein day and night… then thou shalt make thy way prosperous,
+        and then thou shalt have good success." — Joshua 1:8
+      </div>
+      <div class="by">
+        Ndivhuwo Muhanelwa &middot; Mr NoChill
+        <small>Aligned 2026 · Excel • Accelerate · Ephesians 5:16</small>
+      </div>
+    </section>
+
+    <!-- THE MAP -->
+    <section class="page content">
+      <div class="rh">Align · Accelerate · Excel — The Map</div>
+      <h2 class="section">One verse. The whole map.</h2>
+      <p class="lead">Most people stay stuck because they try to <strong>HAVE</strong> before they
+        <strong>DO</strong>, and <strong>DO</strong> before they settle who they <strong>BE</strong>.
+        God wrote the order into creation itself. Follow the sequence and everything downstream
+        gets easier.</p>
+
+      <table class="map">
+        <thead>
+          <tr><th style="width:22%">Phase</th><th style="width:20%">Posture (Gen 1:1)</th><th>Genesis 1:28</th><th>Joshua 1:8</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1 · ALIGN</strong></td>
+            <td>Identity<br /><strong>BE</strong><br /><span style="color:var(--gold-deep);font-style:italic;">Time</span></td>
+            <td>"Be fruitful"</td>
+            <td>"Meditate day &amp; night"</td>
+          </tr>
+          <tr>
+            <td><strong>2 · ACCELERATE</strong></td>
+            <td>Momentum<br /><strong>DO</strong><br /><span style="color:var(--gold-deep);font-style:italic;">Space</span></td>
+            <td>"Multiply &amp; subdue"</td>
+            <td>"Make your way prosperous"</td>
+          </tr>
+          <tr>
+            <td><strong>3 · EXCEL</strong></td>
+            <td>Mastery<br /><strong>HAVE</strong><br /><span style="color:var(--gold-deep);font-style:italic;">Matter</span></td>
+            <td>"Have dominion"</td>
+            <td>"Have good success"</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rule">
+        <p class="k">The pattern in creation</p>
+        <p>Genesis 1:1 — <em>In the beginning (TIME) God created the heaven (SPACE) and the earth
+          (MATTER).</em> Time is invisible, and it came first. In the same way, who you
+          <strong>BE</strong> — your alignment — is invisible, and it must come before what you
+          <strong>DO</strong> (Space) and what you <strong>HAVE</strong> (Matter). God began with the
+          unseen. So must you.</p>
+      </div>
+
+      <div class="rule">
+        <p class="k">The one rule</p>
+        <p>The sequence is not optional. You cannot accelerate a car that is facing the wrong wall.
+          First you <strong>Align</strong>. Then you <strong>Accelerate</strong>. Then you
+          <strong>Excel</strong>. Skip a step and you build speed in the wrong direction.</p>
+      </div>
+
+      <div class="rule" style="border-left-color: var(--charcoal);">
+        <p class="k">How to use this guide</p>
+        <p>Read the phase you scored lowest on first. Do the "Your move this week" at the bottom of
+          that page. Don't rush ahead — master one phase, then climb to the next.</p>
+      </div>
+
+      <div class="foot"><span>contentcreatorhub.online · @nochill_god</span><span>The Framework — 02</span></div>
+    </section>
+
+    <!-- PHASE 1: ALIGN -->
+    <section class="page content">
+      <div class="rh">Phase 1 of 3 — The Identity Phase</div>
+      <div class="phase-tag"><span class="phase-num">1</span><span class="phase-be">Align &middot; Identity &middot; BE &middot; Time</span></div>
+      <h2 class="section" style="margin-top:16px;">Align</h2>
+      <p class="verse-line">"Be fruitful…" (Genesis 1:28) · "Meditate therein day and night…" (Joshua 1:8)</p>
+      <p class="verse-line" style="font-style:italic;">Time — the invisible, created first.</p>
+
+      <p class="label">The principle</p>
+      <p class="body">Internal alignment must come before external fruit. Alignment happens in the dark —
+        in private, before anyone claps. You settle who you are, what you carry, and the habits that
+        match the future you say you want.</p>
+
+      <p class="label">What it looks like</p>
+      <ul class="ticks">
+        <li>You can say in one sentence what you want to be known for.</li>
+        <li>You have a daily habit you do <em>before</em> you touch your phone.</li>
+        <li>You see yourself as a steward and an owner — not just an employee.</li>
+        <li>Your faith is your operating system, not a slogan.</li>
+      </ul>
+
+      <div class="example">
+        <p class="k">Example — Mr NoChill</p>
+        <p>In 2013 I was sleeping on the bathroom floor of the University of Pretoria with R47 in my
+          account. In 2014 I bought a R6,000 phone with night-shift money and started creating content
+          every single day — for free, for nobody. No office. No audience. I was stabilising my roots
+          in private. Like Mary said before the miracle: <em>"Let it be unto me according to your
+          word."</em> Agreement comes before the manifestation.</p>
+      </div>
+
+      <div class="move">
+        <p class="k">Your move this week</p>
+        <p>Write one sentence: what do you want to be known for? Then set one 30-minute habit you do
+          before the world wakes up — prayer, study, or creating. Alignment starts there.</p>
+      </div>
+
+      <div class="foot"><span>contentcreatorhub.online · @nochill_god</span><span>The Framework — 03</span></div>
+    </section>
+
+    <!-- PHASE 2: ACCELERATE -->
+    <section class="page content">
+      <div class="rh">Phase 2 of 3 — The Momentum Phase</div>
+      <div class="phase-tag"><span class="phase-num">2</span><span class="phase-be">Accelerate &middot; Momentum &middot; DO &middot; Space</span></div>
+      <h2 class="section" style="margin-top:16px;">Accelerate</h2>
+      <p class="verse-line">"Multiply &amp; subdue…" (Genesis 1:28) · "Make your way prosperous…" (Joshua 1:8)</p>
+      <p class="verse-line" style="font-style:italic;">Space — the arena where you move and multiply.</p>
+
+      <p class="label">The principle</p>
+      <p class="body">When your alignment is right, God removes the friction. This is the phase of
+        action — but the assignment is not to <em>add</em>, it is to <em>multiply</em>. You stop
+        being busy and start building momentum. Acceleration is not for the talented; it is for the
+        positioned.</p>
+
+      <p class="label">What it looks like</p>
+      <ul class="ticks">
+        <li>You create and publish consistently — your work is in the world, not your head.</li>
+        <li>You build more than one income stream from your expertise.</li>
+        <li>You own a channel — an email or WhatsApp list no algorithm can take.</li>
+        <li>You treat every small opportunity as if it were worth R100,000.</li>
+      </ul>
+
+      <div class="example">
+        <p class="k">Example — Mr NoChill</p>
+        <p>My first ever brand deal, in 2017, was R350 for one post. People laughed. But I had been
+          faithful in the dark for years — so when the door opened, I was standing in front of it. In
+          March 2019, one affiliate link earned R23,000 in a single day. In September 2025 I wrote a
+          full book in 30 days — 30 minutes every morning at 05:00, before the noise. That is Joseph:
+          prison to palace, because he stayed excellent <em>in</em> the prison. Position is what gets
+          you paid.</p>
+      </div>
+
+      <div class="move">
+        <p class="k">Your move this week</p>
+        <p>Pick one thing in your head and put it in the world — a post, a checklist, a guide. Then
+          start one owned list (email or WhatsApp). Multiply, don't just add.</p>
+      </div>
+
+      <div class="foot"><span>contentcreatorhub.online · @nochill_god</span><span>The Framework — 04</span></div>
+    </section>
+
+    <!-- PHASE 3: EXCEL -->
+    <section class="page content">
+      <div class="rh">Phase 3 of 3 — The Mastery Phase</div>
+      <div class="phase-tag"><span class="phase-num">3</span><span class="phase-be">Excel &middot; Mastery &middot; HAVE &middot; Matter</span></div>
+      <h2 class="section" style="margin-top:16px;">Excel</h2>
+      <p class="verse-line">"Have dominion…" (Genesis 1:28) · "Have good success…" (Joshua 1:8)</p>
+      <p class="verse-line" style="font-style:italic;">Matter — the tangible dominion you leave behind.</p>
+
+      <p class="label">The principle</p>
+      <p class="body">To excel is not to be slightly better — it is to surpass. This is the realm of
+        dominion, where you move from participant to ruler of your field. But dominion demands
+        governance: ownership, accountability, and a hand back to those behind you.</p>
+
+      <p class="label">What it looks like</p>
+      <ul class="ticks">
+        <li>Your work is so excellent your industry cannot ignore you — people come to you.</li>
+        <li>You are fully accountable — tax-compliant and managing your house, not just your talent.</li>
+        <li>You are building an asset your children or community can inherit.</li>
+        <li>You are lifting others as you rise.</li>
+      </ul>
+
+      <div class="example">
+        <p class="k">Example — Mr NoChill</p>
+        <p>Daniel operated with an excellent spirit — ten times better than an entire empire (Daniel 6).
+          That is the standard. But I learned the governance lesson the hard way: a SARS bill of just
+          over R200,000, because I had managed my talent and not my house. True leaders don't run — I
+          faced it and paid it. And when Instagram suspended my account of 780,000 followers overnight,
+          my income survived, because I had built on ground I owned. <em>Umuntu ngumuntu ngabantu</em> —
+          a person is a person through others. Build what outlives you.</p>
+      </div>
+
+      <div class="move">
+        <p class="k">Your move this week</p>
+        <p>Put your house in order: get one financial or compliance task done. Then name one way you
+          will lift someone coming behind you this month.</p>
+      </div>
+
+      <div class="foot"><span>contentcreatorhub.online · @nochill_god</span><span>The Framework — 05</span></div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="page closing">
+      <h2>Get in position.<br />Take your dominion.</h2>
+      <p>You are not stuck. You are out of position. The phone in your pocket is not a device to
+        watch other people's destiny — it is a business, a ministry, and your way out of hiding.
+        Redeem the time.</p>
+      <div class="steps">
+        <div><strong>ALIGN</strong> — your identity and your habits, in the dark, where nobody claps.</div>
+        <div><strong>ACCELERATE</strong> — your obedience; move the moment God says move.</div>
+        <div><strong>EXCEL</strong> — take full responsibility for your gift, your house, and the ones behind you.</div>
+      </div>
+      <p style="margin-top:32px; font-style:italic; color:rgba(255,255,255,0.55);">
+        "Redeeming the time, because the days are evil." — Ephesians 5:16</p>
+      <div class="sign">Ndivhuwo Muhanelwa · Mr NoChill · contentcreatorhub.online · @nochill_god</div>
+    </section>
+
+  </div>
+</body>
+</html>

@@ -72,7 +72,7 @@ function KnowledgeAudit() {
           <div className="nx-hero-orb mt-6">
             <div className="flex items-center gap-3">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)]"><Sparkles className="h-5 w-5" /></span>
-              <p className="nx-label">The Knowledge Audit · For the called expert</p>
+              <p className="nx-label">The Knowledge Audit · For the Contentpreneur</p>
             </div>
             <h1 className="mt-3">You're sitting on expertise you can't see.</h1>
             <p className="nx-body mt-3">

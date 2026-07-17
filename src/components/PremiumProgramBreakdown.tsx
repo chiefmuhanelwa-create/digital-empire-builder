@@ -9,98 +9,86 @@ type Phase = {
 
 const PRO_COHORT_PHASES: Phase[] = [
   {
-    label: "Phase 1",
-    title: "The Launchpad Foundation",
+    label: "Genesis",
+    title: "Foundation — Identity Before Output",
     weeks: "Weeks 1–2",
     items: [
       {
-        title: "Live Profile Optimization Blueprint",
-        body: "Direct overhaul of your Instagram, TikTok and YouTube channels for high-ticket customer conversion.",
+        title: "The 3Cs Mindset Assessment",
+        body: "Score your Create/Collaborate/Contribute orientation before you touch a single piece of content.",
       },
       {
-        title: "Authority Studio Setup",
-        body: "Personalized recording kit recommendations tailored to your exact budget — from $30 starter setups to premium gear environments.",
+        title: "Breaking the Paid-Less-Than-You're-Worth Trap",
+        body: "Name the belief that's actually keeping your expertise stuck earning a fraction of what it's worth.",
       },
       {
-        title: "Private 1:1 Strategy Session (30 min)",
-        body: "Dedicated baseline alignment call to lock in your niche positioning, define your Ideal Customer Profile and map out custom 90-day execution goals.",
+        title: "The 7 Core Contentpreneur Skills",
+        body: "Self-assess where you're already strong and where the real gaps are — MS×TS×SS: any zero multiplies to zero.",
       },
       {
-        title: "Offer Design Workshop",
-        body: "Deep-dive group session where we build and price your first highly monetizable digital product or service framework.",
+        title: "Essential Tools Setup",
+        body: "Your platform, your payment link, your email capture — live before Week 3, not someday.",
       },
     ],
   },
   {
-    label: "Phase 2",
-    title: "The Viral Content Engine",
+    label: "Exodus → Leviticus",
+    title: "Self-Awareness & Content Strategy",
     weeks: "Weeks 3–6",
     items: [
       {
-        title: "The Replicable Ideation System",
-        body: "Your own dashboard template with 50+ proven content matrices built for educational authority growth.",
+        title: "The Called Expert SWOT + 4Ps Framework",
+        body: "Passion, Pain, Purpose, Profit — mapped and compressed into one niche statement, tested on 2 real people in your audience.",
       },
       {
-        title: "Scripting Framework & AI Prompts",
-        body: "10 plug-and-play script structures (hooks, story arcs, aggressive CTAs) plus optimized Claude/ChatGPT engineering prompts.",
+        title: "The Called Expert Content Ratio (4E, Adjusted)",
+        body: "Educate 50 / Entertain 25 / Encourage 15 / Earn 10 — a mix tuned for buyers, not just an audience, because your buyer is deciding whether to trust you with money.",
       },
       {
-        title: "Recording Camera Confidence",
-        body: "Mindset and presence training to transition your screen style from entertainment to high-authority teaching.",
-      },
-      {
-        title: "Editor Hiring & Standards SOPs",
-        body: "Replicable SOPs to self-edit in CapCut or hire local video editors for $30–$110/month.",
-      },
-      {
-        title: "The Sunday Batch-Shooting System",
-        body: "The exact framework to map, script and shoot 10–15 premium pieces of vertical video in a single afternoon.",
+        title: "The 30-Day Content Calendar",
+        body: "Built with your real ratios, not a generic template — filled in during the session, not left for later.",
       },
     ],
   },
   {
-    label: "Phase 3",
-    title: "The Automated Conversion Machine",
-    weeks: "Weeks 7–10",
+    label: "Numbers",
+    title: "Platform Strategy & Systems",
+    weeks: "Weeks 7–9",
     items: [
       {
-        title: "Link-In-Bio Funnel Infrastructure",
-        body: "Complete build-out of a high-converting single landing page highlighting your core transformation promise.",
+        title: "Choosing Your Canaan — The One-Platform Rule",
+        body: "One primary platform, fully optimised, before any content-mechanics lessons apply. Mediocre on five platforms loses to excellent on one.",
       },
       {
-        title: "Advanced DM Automation Environment",
-        body: "ManyChat / ChatDaddy comment-to-DM triggers that capture student emails on autopilot.",
+        title: "The Hook–Story–Lesson–Framework–CTA Formula",
+        body: "Plus the R×A×C×U^B hook formula and the 4 Scripting Principles — the same system used to write every piece of copy on this site.",
       },
       {
-        title: "Lead Magnet 'Creator Kit'",
-        body: "Step-by-step engineering of your first high-leverage free resource, checklist or training block.",
-      },
-      {
-        title: "Email Welcome Nurture Sequence",
-        body: "A clean, automated 5-email welcome funnel to nurture new subscribers automatically.",
+        title: "DARES Self-Audit + Your First Digital Product",
+        body: "Score your product idea, then build it inside a 72-hour protocol — not a someday project.",
       },
     ],
   },
   {
-    label: "Phase 4",
-    title: "Scale, Sustain & Mastermind",
-    weeks: "Weeks 11–12+",
+    label: "Deuteronomy",
+    title: "Owned Tribes & Monetisation",
+    weeks: "Weeks 10–12",
     items: [
       {
-        title: "Weekly Live Group Masterminds",
-        body: "Hot-seat reviews of your uploaded videos, analytics and hook optimization.",
+        title: "The River–Fish–Tank Model",
+        body: "Move an audience from rented platforms into a tank you own — then convert the tank into a 3Cs tribe of 100+ members.",
       },
       {
-        title: "Monthly Content Care Packages",
-        body: "Fresh trending formats, layout styles, script templates and viral growth analyses delivered monthly.",
+        title: "The SEEDS Conversion Sequence",
+        body: "Signal → Engagement → Education → Decision → Success — the exact pipeline that moves a stranger to a buyer, ethically.",
       },
       {
-        title: "Private Platform Workspace Access",
-        body: "24/7 accountability network and direct comms inside our secure client community hub.",
+        title: "The PAIDS Monetisation Engine",
+        body: "5 income streams, the product ladder, the affiliate stack, and the 25% SARS reserve rule — so no single stream exceeds half your revenue.",
       },
       {
-        title: "The Performance Dashboard Asset",
-        body: "Unified tracking sheet for profiles, link clicks, leads generated and gross sales revenue.",
+        title: "Graduation — The Called Expert Covenant",
+        body: "R10K/month demonstrable, 3+ PAIDS streams active, SARS reserve operational. This is the checkpoint, not a certificate for showing up.",
       },
     ],
   },
@@ -197,11 +185,11 @@ export function ProCohortBreakdown() {
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Capacity</dt>
-          <dd className="mt-2 text-sm">15–20 members per cohort. Elite accountability.</dd>
+          <dd className="mt-2 text-sm">15–20 members per cohort. Real accountability, not a course dump.</dd>
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Built for</dt>
-          <dd className="mt-2 text-sm">Creators moving from entertainment to education, ready to build real systems.</dd>
+          <dd className="mt-2 text-sm">You — a Contentpreneur (a Called Expert still employed, or a Knowledge Creator with expertise but no system) ready to build the system your expertise deserves.</dd>
         </div>
       </dl>
 
@@ -228,7 +216,7 @@ export function VipTierBreakdown() {
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Capacity</dt>
-          <dd className="mt-2 text-sm">5 elite creators per cohort quarter.</dd>
+          <dd className="mt-2 text-sm">5 Contentpreneurs per cohort quarter.</dd>
         </div>
       </dl>
 

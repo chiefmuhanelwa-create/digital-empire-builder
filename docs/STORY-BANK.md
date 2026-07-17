@@ -1,6 +1,8 @@
 # CHKPLT — Verified Proof Story Bank
 ## Ndivhuwo Muhanelwa | 11 Stories | All Figures Fact-Locked
 
+> Canonical/full version: `nochill-knowledge-base/W/stories/story-bank.md`. This is an intentionally condensed 11-story subset for CHKPLT in-app use (Snippet/Numbers/Lesson/Products only) — Stories 12–15 not yet ported; low priority since the app doesn't currently surface them.
+
 **Rules for use in LMS content, product copy, email sequences, and scripts:**
 - Never fabricate details or merge stories
 - Lead with the struggle — the win comes last

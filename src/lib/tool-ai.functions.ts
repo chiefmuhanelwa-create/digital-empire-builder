@@ -20,7 +20,7 @@ async function assertKitAccess(userId: string) {
   throw new Error("AI coaching is part of the Foundation Kit.");
 }
 
-const VOICE = `You are NoChill (Ndivhuwo Muhanelwa) coaching a Called Expert (32–50, real expertise, wants to monetise their knowledge without quitting their job). Voice: direct, raw, SA real-talk, big-brother-with-a-system — never a guru. Short declarative sentences. Confrontation is care. No AI slop, no hype adjectives, no "In this..." preambles. SA English. Faith only if natural, never the lead. HARD RULE: coach from THEIR words; never invent numbers, results or testimonials for them. Prices in USD.`;
+const VOICE = `You are NoChill (Ndivhuwo Muhanelwa) coaching a Contentpreneur — someone who turns what they know into income they own. They're either a Called Expert (professional/specialist paid less than their expertise is worth) or a Knowledge Creator (coach/podcaster/creator with real expertise but no system to own the income). Voice: direct, raw, SA real-talk, big-brother-with-a-system — never a guru. Short declarative sentences. Confrontation is care. No AI slop, no hype adjectives, no "In this..." preambles. SA English. Faith only if natural, never the lead. HARD RULE: coach from THEIR words; never invent numbers, results or testimonials for them. Prices in USD.`;
 
 // Per-tool context so the coaching is specific to the step.
 const TOOL_CONTEXT: Record<string, string> = {
@@ -72,7 +72,7 @@ export const buildClarityPlan = createServerFn({ method: "POST" })
       system: VOICE,
       messages: [{
         role: "user",
-        content: `This Called Expert has worked through the 7-step Clarity System. Here are their saved answers from each tool (some may be blank — work with what's there, don't fabricate):\n\n${data.answers}\n\nWrite their personalised CLARITY PLAN — the one-page plan they walk away with. Use these sections with short, specific, in-their-words content:\n1. YOUR LANE — their one-line niche.\n2. WHAT YOU SELL FIRST — the single offer to build (from their knowledge/DARES idea), with a USD price suggestion.\n3. YOUR CONTENT — the 1–2 content angles to run (from 4E).\n4. YOUR PIPELINE — the first opt-in + how a stranger becomes a buyer (from SEEDS).\n5. YOUR NEXT 7 DAYS — 3 concrete commands, in order.\nKeep it tight (under 400 words), direct, NoChill voice. Plain text with the numbered section headers in CAPS. No preamble.`,
+        content: `This Contentpreneur has worked through the 7-step Clarity System. Here are their saved answers from each tool (some may be blank — work with what's there, don't fabricate):\n\n${data.answers}\n\nWrite their personalised CLARITY PLAN — the one-page plan they walk away with. Use these sections with short, specific, in-their-words content:\n1. YOUR LANE — their one-line niche.\n2. WHAT YOU SELL FIRST — the single offer to build (from their knowledge/DARES idea), with a USD price suggestion.\n3. YOUR CONTENT — the 1–2 content angles to run (from 4E).\n4. YOUR PIPELINE — the first opt-in + how a stranger becomes a buyer (from SEEDS).\n5. YOUR NEXT 7 DAYS — 3 concrete commands, in order.\nKeep it tight (under 400 words), direct, NoChill voice. Plain text with the numbered section headers in CAPS. No preamble.`,
       }],
     });
     const block = msg.content.find((b) => b.type === "text");

@@ -5,7 +5,7 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Christ Kingdom Platform" },
-      { name: "description", content: "CHKPLT is the owned platform, curriculum, and business infrastructure for Called Experts — professionals, teachers, healthcare workers, and specialists ready to monetise what they know." },
+      { name: "description", content: "CHKPLT is the owned platform, curriculum, and business infrastructure for Contentpreneurs — professionals and knowledge creators ready to turn what they know into income they own." },
       { property: "og:title", content: "About CHKPLT — The knowledge economy rewards the brave." },
       { property: "og:description", content: "Built by someone who went from sleeping in university bathrooms to building a knowledge empire. The system is real. The receipts exist." },
     ],
@@ -45,28 +45,28 @@ function About() {
           <em className="text-banana not-italic">rewards the brave.</em>
         </h1>
         <p className="mt-8 text-lg text-[#555] leading-relaxed">
-          CHKPLT is the owned platform, curriculum, and business infrastructure for Called Experts — professionals, teachers, healthcare workers, faith leaders, and specialists ready to monetise what they know through social media, content, and digital technology.
+          CHKPLT is the owned platform, curriculum, and business infrastructure for Contentpreneurs — professionals and knowledge creators ready to turn what they know into income they own through social media, content, and digital technology.
         </p>
       </section>
 
-      {/* WHAT IS A CALLED EXPERT */}
+      {/* WHAT IS A CONTENTPRENEUR */}
       <section className="border-t border-[#E2E8F0]">
         <div className="mx-auto max-w-3xl px-5 sm:px-6 py-14 sm:py-20">
-          <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">Who is a Called Expert?</div>
+          <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">Who is a Contentpreneur?</div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl md:text-5xl tracking-tight">
             You were not just trained.{" "}
             <em className="text-banana not-italic">You were called.</em>
           </h2>
           <div className="mt-8 bg-white border border-[#F59E0B]/30 px-6 sm:px-8 py-6 space-y-4">
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
-              A <strong className="text-[#0F172A]">Called Expert</strong> is a professional, teacher, specialist, or healthcare worker who was not just trained in their field — they were{" "}
+              A <strong className="text-[#0F172A]">Contentpreneur</strong> turns what they know into income they own. That's two kinds of person. The <strong className="text-[#0F172A]">Called Expert</strong> — a professional, teacher, specialist, or healthcare worker still employed and paid less than their expertise is worth. And the <strong className="text-[#0F172A]">Knowledge Creator</strong> — a coach, consultant, podcaster, or creator who already has the knowledge, and often the audience, but no system to own the income. Both were not just trained in their field — they were{" "}
               <em className="text-banana not-italic font-semibold">called</em> to it. Their knowledge is not just a skill. It is a stewardship.
             </p>
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
               Proverbs 13:22 says <em>"the wealth of the sinner is laid up for the just."</em> That includes the wealth of knowledge. If you have been sitting on expertise that could change lives — and you haven't deployed it — this is the platform that changes that.
             </p>
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
-              You don't need to quit your job first. You don't need a massive audience. You need a system. And that's exactly what CHKPLT delivers.
+              You don't need to quit anything first. You don't need a massive audience. You need a system. And that's exactly what CHKPLT delivers.
             </p>
           </div>
           <blockquote className="mt-8 border-l-4 border-[#F59E0B] pl-5 italic text-[#555] text-base sm:text-lg leading-relaxed">
@@ -86,10 +86,10 @@ function About() {
             </h2>
             <div className="mt-6 space-y-4 text-[#555] leading-relaxed">
               <p>
-                Someone started with a phone, a social media account, and no strategy — and built it into income across digital platforms, brand campaigns, affiliate income, and online products.
+                I started with a phone, a social media account, and no strategy — and built it into income across digital platforms, brand campaigns, affiliate income, and online products. I still work my day job while I do it.
               </p>
               <p>
-                They also watched 780,000 Instagram followers disappear overnight. Watched annual income disabled in a single email. Watched one algorithm change take a record month to almost nothing in 60 days.
+                I've also watched 780,000 followers disappear overnight. Watched annual income disabled in a single email. Watched one algorithm change take a record month to almost nothing in 60 days.
               </p>
               <p>
                 Every time a platform took back what felt like progress, the lesson was the same:{" "}
@@ -182,7 +182,7 @@ function About() {
         <div className="mx-auto max-w-4xl px-5 sm:px-6 py-12 sm:py-16 text-center">
           <div className="font-display text-3xl sm:text-4xl tracking-tight text-banana">CHKPLT</div>
           <div className="mt-3 font-mono text-[10px] tracking-[0.25em] uppercase text-[#666]">
-            Christ Kingdom Platform · Built for Called Experts · Grounded in Faith · Anchored in Africa
+            Christ Kingdom Platform · Built for Contentpreneurs · Grounded in Faith · Anchored in Africa
           </div>
           <p className="mt-4 text-[#555] text-sm max-w-lg mx-auto">
             "Be fruitful. That means produce." — Genesis 1:28 applied to your expertise.

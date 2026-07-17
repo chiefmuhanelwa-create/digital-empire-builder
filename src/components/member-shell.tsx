@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { useIsAdmin } from "@/lib/use-is-admin";
-import { LayoutDashboard, GraduationCap, User, ShieldCheck, LogOut } from "lucide-react";
+import { LayoutDashboard, GraduationCap, User, ShieldCheck, LogOut, MessageCircle } from "lucide-react";
 
 // Secured member-portal chrome. Deliberately NOT the marketing header — no public
 // links, no "Get the Kit" CTA. The member area is a separate, signed-in space.
@@ -80,6 +80,32 @@ export function SiteFooter() {
           <span className="text-slate-600">© {new Date().getFullYear()} NOCHILL PTY LTD</span>
         </div>
       </div>
+      <SupportChatButton />
     </footer>
+  );
+}
+
+// Click-to-chat support panel (docs/COVENANT-ENGINE.md §8.3). Renders nothing
+// unless VITE_WHATSAPP_SUPPORT_NUMBER is set — safe to ship before the owner
+// has configured a number. Fixed position, so mounting it here still floats
+// correctly over the whole page regardless of footer scroll position.
+function SupportChatButton() {
+  const number = import.meta.env.VITE_WHATSAPP_SUPPORT_NUMBER as string | undefined;
+  if (!number) return null;
+
+  const message = encodeURIComponent("Hey — I need help with my CHKPLT account.");
+  const href = `https://wa.me/${number}?text=${message}`;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with support on WhatsApp"
+      className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-transform hover:scale-105"
+    >
+      <MessageCircle className="size-5" />
+      <span className="hidden sm:inline">Chat with us</span>
+    </a>
   );
 }

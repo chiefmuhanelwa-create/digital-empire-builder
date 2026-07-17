@@ -50,28 +50,31 @@ transactional email for end-users — the DNS re-verification above is still req
 
 ---
 
-### BLOCKER-002: Premium Programmes Have Zero Curriculum
-**What's broken:** `contentpreneur-90day-cohort` (R18,000) and `contentpreneur-vip-tier` (R45,000) are `status: published` and visible in the catalog — but have 0 modules, 0 lessons in the LMS.
+### BLOCKER-002: Premium Programme Curriculum
+**UPDATE 2026-07-09:** RESOLVED for `contentpreneur-90day-cohort`. Migration
+`20260615120000_seed_curriculum.sql` seeded 7 modules / 30 lessons, and
+`20260709120000_restructure_curriculum_covenant_engine.sql` restructured it into the
+adopted 12-week, 5-Book Torah-arc structure (32 lessons total — see `docs/CURRICULUM.md`
+for the full map and `docs/COVENANT-ENGINE.md` for the source blueprint). Both migrations
+still need to be applied against the **live** Supabase project if not already run
+(`supabase db push`).
 
-**Impact:** A buyer purchases R18,000 programme → payment processes → `product_grants` row created → they visit `/learn/contentpreneur-90day-cohort` → empty page. This is a covenant breach.
+`contentpreneur-vip-tier` (R45,000) is still **0 modules, 0 lessons** — not addressed by
+either migration. Decide: build a VIP-specific curriculum, or gate it to `draft` until built.
 
-**Fix (Option A — Build Curriculum):**
-1. Open `/admin/curriculum/contentpreneur-90day-cohort` in admin panel
-2. Add modules for the 7-stage transformation:
-   - Module 1: MS×TS×SS (Weeks 1–3)
-   - Module 2: SWOT Audit (Weeks 4–6)
-   - Module 3: 4Es Content Engine (Weeks 7–10)
-   - Module 4: Social Media + Community (Weeks 11–14)
-   - Module 5: DARES (Weeks 15–17)
-   - Module 6: PAIDS (Weeks 18–20)
+_Original (now-obsolete) framing kept for history below:_
+
+**What was broken:** `contentpreneur-90day-cohort` (R18,000) and `contentpreneur-vip-tier` (R45,000) were `status: published` and visible in the catalog — but had 0 modules, 0 lessons in the LMS.
+
+**Remaining fix for VIP tier (Option A — Build Curriculum):**
+1. Open `/admin/curriculum/contentpreneur-vip-tier` in admin panel
+2. Add modules — consider reusing the Accelerator PRO structure plus VIP-only 1:1 content
 3. Add at minimum 1 lesson per module before opening applications
 
 **Fix (Option B — Temporary Gating):**
-1. Set `contentpreneur-90day-cohort` status to `draft` (unpublish) in admin
-2. Only accept applications via `/apply` — manually qualify + onboard until curriculum is built
-3. Communicate onboarding directly (no automated LMS access)
+1. Set `contentpreneur-vip-tier` status to `draft` (unpublish) in admin until curriculum exists
 
-**Status:** ❌ Not fixed
+**Status:** ✅ Resolved for Accelerator PRO — deploy migrations to prod · ❌ Still open for VIP tier
 
 ---
 

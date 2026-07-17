@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>From Hiding to Position — Talk Deck (Mr NoChill)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --charcoal: #1C1C1C;
+      --ink2: #161616;
+      --gold: #C9A84C;
+      --gold-bright: #E4C66A;
+      --muted: rgba(255,255,255,0.62);
+      --line: rgba(255,255,255,0.12);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Lato', sans-serif; background: var(--charcoal); color: #fff;
+      overflow: hidden; overscroll-behavior: none;
+    }
+
+    /* Stage */
+    .deck { position: fixed; inset: 0; }
+    .slide {
+      position: absolute; inset: 0; display: none;
+      flex-direction: column; justify-content: center;
+      padding: clamp(24px, 6vw, 96px);
+      padding-bottom: clamp(64px, 10vh, 120px);
+    }
+    .slide.active { display: flex; animation: fade 0.35s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .kicker {
+      font-family: 'Montserrat', sans-serif; font-weight: 700;
+      font-size: clamp(10px, 2.2vw, 14px); letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: clamp(14px, 2.5vh, 26px);
+    }
+    h1 {
+      font-family: 'Montserrat', sans-serif; font-weight: 900; line-height: 1.04;
+      letter-spacing: 0.01em; font-size: clamp(30px, 7vw, 72px);
+    }
+    h1 .gold { color: var(--gold); }
+    .sub {
+      font-size: clamp(16px, 3vw, 28px); color: var(--muted); line-height: 1.5;
+      margin-top: clamp(14px, 2.5vh, 28px); max-width: 22ch;
+    }
+    h2 {
+      font-family: 'Montserrat', sans-serif; font-weight: 800; line-height: 1.08;
+      font-size: clamp(26px, 6vw, 60px);
+    }
+    ul { list-style: none; margin-top: clamp(18px, 3vh, 36px); }
+    li {
+      position: relative; padding-left: 1.4em; line-height: 1.45;
+      font-size: clamp(16px, 3.1vw, 30px); margin-bottom: clamp(10px, 1.8vh, 20px);
+      color: rgba(255,255,255,0.9);
+    }
+    li::before { content: ""; position: absolute; left: 0; top: 0.55em;
+      width: 0.5em; height: 0.5em; background: var(--gold); border-radius: 2px; }
+    li b { color: #fff; font-weight: 700; }
+    .big-num { color: var(--gold); font-weight: 800; }
+    .verse {
+      font-style: italic; color: var(--muted); font-size: clamp(14px, 2.6vw, 24px);
+      line-height: 1.55; margin-top: clamp(16px, 3vh, 32px);
+      border-left: 2px solid var(--gold); padding-left: clamp(12px, 2vw, 20px); max-width: 34ch;
+    }
+    .seq { display: flex; flex-wrap: wrap; gap: clamp(8px,1.6vw,14px); align-items: center;
+      margin-top: clamp(18px,3vh,34px); }
+    .pill { border: 1px solid rgba(201,168,76,0.5); color: var(--gold);
+      font-family: 'Montserrat', sans-serif; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; font-size: clamp(12px,2.4vw,20px);
+      padding: clamp(7px,1.4vw,12px) clamp(12px,2.4vw,22px); border-radius: 6px; }
+    .pill small { display:block; font-weight:400; letter-spacing:0; text-transform:none;
+      font-family:'Lato'; color: var(--muted); font-size: 0.6em; margin-top: 3px; }
+    .arrow { color: var(--gold); opacity: 0.5; font-size: clamp(14px,2.6vw,22px); }
+
+    .qr-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(20px,4vw,48px);
+      margin-top: clamp(20px,3vh,36px); }
+    .qr-wrap img { width: clamp(160px, 30vw, 260px); height: auto;
+      background: #fff; padding: 14px; border-radius: 12px; }
+    .qr-url { font-family:'Montserrat',sans-serif; font-weight:800; color: var(--gold);
+      font-size: clamp(16px,3vw,30px); letter-spacing: 0.01em; word-break: break-word; }
+    .qr-url small { display:block; font-family:'Lato'; font-weight:400; color: var(--muted);
+      font-size: 0.55em; letter-spacing:0; margin-top: 8px; }
+
+    /* Chrome: progress, counter, controls, notes */
+    .progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--gold);
+      width: 0; transition: width 0.3s ease; z-index: 30; }
+    .hud { position: fixed; top: clamp(12px,2vh,20px); right: clamp(14px,3vw,28px);
+      display: flex; gap: 10px; align-items: center; z-index: 30; }
+    .hud .count { font-family:'Montserrat',sans-serif; font-weight:700; font-size: 12px;
+      color: var(--muted); letter-spacing: 0.1em; }
+    .btn { background: rgba(255,255,255,0.08); border: 1px solid var(--line); color: #fff;
+      font-family:'Montserrat',sans-serif; font-weight:700; font-size: 11px; letter-spacing:0.08em;
+      text-transform: uppercase; padding: 7px 12px; border-radius: 6px; cursor: pointer; }
+    .btn:hover { background: rgba(201,168,76,0.18); border-color: var(--gold); color: var(--gold); }
+
+    .nav { position: fixed; bottom: clamp(14px,2.5vh,24px); left: 0; right: 0;
+      display: flex; justify-content: center; gap: 14px; z-index: 30; pointer-events: none; }
+    .nav .btn { pointer-events: auto; padding: 10px 18px; font-size: 12px; }
+
+    .timing { position: fixed; bottom: clamp(14px,2.5vh,24px); left: clamp(14px,3vw,28px);
+      font-family:'Montserrat',sans-serif; font-weight:700; font-size: 11px; letter-spacing:0.1em;
+      color: var(--muted); z-index: 30; }
+
+    .notes { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      background: #0c0c0c; border-top: 2px solid var(--gold);
+      padding: clamp(14px,2vh,20px) clamp(16px,3vw,28px) clamp(18px,3vh,26px);
+      transform: translateY(110%); transition: transform 0.3s ease;
+      max-height: 42vh; overflow-y: auto; }
+    .notes.show { transform: none; }
+    .notes .nk { font-family:'Montserrat',sans-serif; font-weight:800; font-size: 10px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .notes .nt { font-size: clamp(14px,2vw,18px); line-height: 1.6; color: rgba(255,255,255,0.88); }
+    .notes .nt em { color: var(--gold-bright); font-style: normal; font-weight: 700; }
+
+    .hint { position: fixed; bottom: clamp(50px,8vh,70px); left: 0; right: 0; text-align: center;
+      font-size: 11px; color: rgba(255,255,255,0.3); z-index: 20; }
+    @media (max-width: 640px) { .hint { display: none; } .nav .btn { padding: 9px 14px; } }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="hud">
+    <span class="count" id="count">1 / 10</span>
+    <button class="btn" id="notesBtn">Notes</button>
+  </div>
+  <div class="timing" id="timing">0:00</div>
+
+  <div class="deck" id="deck">
+
+    <!-- 0 — TITLE -->
+    <section class="slide active" data-time="" data-note="Walk to centre. 3 seconds of silence before you speak. Let them settle. <em>Do not rush.</em>">
+      <div class="kicker">Aligned 2026 · Excel • Accelerate · Ephesians 5:16</div>
+      <h1>From Hiding<br />to <span class="gold">Position</span></h1>
+      <div class="sub">Ndivhuwo Muhanelwa — Mr NoChill</div>
+    </section>
+
+    <!-- 1 — THE FLOOR -->
+    <section class="slide" data-time="0:00" data-note="R47. Bathroom floor, UP, 2013. Mother Florah, R400/month. Today R600k+ in a year — Capitec, Netflix, SA Tourism. <em>This is NOT a story about going viral.</em>">
+      <div class="kicker">2013 · The Floor</div>
+      <h2>R47. A bathroom floor. No degree.</h2>
+      <ul>
+        <li>University of Pretoria, 2013 — sleeping on the floor.</li>
+        <li>My mother, Florah — R400 a month.</li>
+        <li>Today: <span class="big-num">R600,000+</span> in a single year.</li>
+        <li><b>This is not a story about going viral.</b></li>
+      </ul>
+    </section>
+
+    <!-- 2 — THE QUESTION -->
+    <section class="slide" data-time="1:45" data-note="The wrong question: 'why am I not winning?' The real one: <em>'Am I even in position to win?'</em> Land the anchor line slowly — say it twice.">
+      <div class="kicker">The real question</div>
+      <h2>Not "why am I not winning?"</h2>
+      <div class="sub" style="max-width:30ch;">but — "<span style="color:var(--gold)">am I even in position to win?</span>"</div>
+      <ul><li><b>You're not stuck. You're out of position.</b></li></ul>
+    </section>
+
+    <!-- 3 — THE MAP -->
+    <section class="slide" data-time="2:30" data-note="The whole map in one verse. Gen 1:28 = BE → DO → HAVE. And Gen 1:1 proves it: <em>In the beginning (Time) God created the Heaven (Space) and the Earth (Matter).</em> The unseen comes first. You can't accelerate a car facing the wrong wall.">
+      <div class="kicker">The Map · Genesis 1:28 + Genesis 1:1</div>
+      <h2>BE → DO → HAVE</h2>
+      <div class="seq">
+        <span class="pill">Align<small>Be · Time</small></span><span class="arrow">&rarr;</span>
+        <span class="pill">Accelerate<small>Do · Space</small></span><span class="arrow">&rarr;</span>
+        <span class="pill">Excel<small>Have · Matter</small></span>
+      </div>
+      <div class="verse">"In the beginning (Time) God created the Heaven (Space) and the Earth (Matter)." — Genesis 1:1</div>
+    </section>
+
+    <!-- 4 — ALIGN -->
+    <section class="slide" data-time="3:30" data-note="Alignment happens in the dark — before anybody claps. R6,000 phone, 2014, night-shift money. Created content every day, for free, for nobody. Joshua 1:8: meditate FIRST, then prosper. Mary: agreement before the miracle.">
+      <div class="kicker">Phase 1 · ALIGN — Be · Time</div>
+      <h2>Alignment happens in the dark.</h2>
+      <ul>
+        <li>2014: a <span class="big-num">R6,000</span> phone, night-shift money.</li>
+        <li>Content <b>every day — for free, for nobody.</b></li>
+        <li>Joshua 1:8 — meditate first, <em>then</em> your way prospers.</li>
+        <li>Roots in private before weight in public.</li>
+      </ul>
+    </section>
+
+    <!-- 5 — ACCELERATE -->
+    <section class="slide" data-time="5:15" data-note="When alignment is right, God removes the friction. Multiply, don't add. First deal R350 (2017). One link, one day: R23,000 (Mar 2019). Book in 30 days at 05:00 (Sep 2025). Joseph: prison to palace. <em>Position gets you paid.</em>">
+      <div class="kicker">Phase 2 · ACCELERATE — Do · Space</div>
+      <h2>Multiply. Don't just add.</h2>
+      <ul>
+        <li>First deal, 2017: <span class="big-num">R350</span>. People laughed.</li>
+        <li>One link, one day, 2019: <span class="big-num">R23,000</span>.</li>
+        <li>A book in <b>30 days — 30 min at 05:00.</b></li>
+        <li><b>Position gets you paid</b>, not talent.</li>
+      </ul>
+    </section>
+
+    <!-- 6 — EXCEL -->
+    <section class="slide" data-time="7:30" data-note="Excel = surpass, not slightly better. Daniel's excellent spirit — 10x the empire (Daniel 6). Dominion = ownership. Platform dependency is poverty; ownership is freedom. 780k followers gone overnight — income survived because I owned the ground.">
+      <div class="kicker">Phase 3 · EXCEL — Have · Matter</div>
+      <h2>Surpass. Take dominion.</h2>
+      <ul>
+        <li>Daniel — an <b>excellent spirit, 10× the empire.</b></li>
+        <li><b>Platform dependency is poverty. Ownership is freedom.</b></li>
+        <li><span class="big-num">780,000</span> followers — gone overnight.</li>
+        <li>My income survived. I owned the ground.</li>
+      </ul>
+    </section>
+
+    <!-- 7 — THE WALL -->
+    <section class="slide" data-time="9:00" data-note="Reality check — no highlight reel. SARS, just over R200,000. I managed my talent, not my house. True dominion = governance. I faced it, paid it. Ubuntu — Umuntu ngumuntu ngabantu. Your success is owed to those behind you.">
+      <div class="kicker">The Wall</div>
+      <h2>Dominion demands governance.</h2>
+      <ul>
+        <li>A SARS bill — <span class="big-num">just over R200,000.</span></li>
+        <li>I managed my talent — not my house.</li>
+        <li>A real leader doesn't run. I faced it. I paid it.</li>
+        <li><b>Umuntu ngumuntu ngabantu</b> — I am because we are.</li>
+      </ul>
+    </section>
+
+    <!-- 8 — THE CHARGE -->
+    <section class="slide" data-time="10:45" data-note="Land the plane ON them. Most are not stuck — out of position. Three beats on your fingers. Then: 'Get off the floor. Get in position. Take your dominion.' Pause. Hold.">
+      <div class="kicker">The Charge</div>
+      <h2>Get in position.</h2>
+      <ul>
+        <li><b>ALIGN</b> your habits — in the dark, where no one claps.</li>
+        <li><b>ACCELERATE</b> your obedience — move when God says move.</li>
+        <li><b>EXCEL</b> — own your gift, your house, the ones behind you.</li>
+      </ul>
+      <div class="verse">"Redeeming the time, because the days are evil." — Ephesians 5:16</div>
+    </section>
+
+    <!-- 9 — GIVEAWAY -->
+    <section class="slide" data-time="12:00" data-note="The gift. Free. Scan to find your phase + get the 7-day sprint + the full framework. 'Don't wait till you get home and the moment's gone.' Then close.">
+      <div class="kicker">Your free gift</div>
+      <h2>Find your phase.</h2>
+      <div class="qr-wrap">
+        <img src="/qr-quiz.svg" alt="Scan for the free assessment" />
+        <div class="qr-url">chkplt.com/align-accelerate-excel
+          <small>Free 12-question assessment · the 7-day sprint · the full framework. No cost.</small>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="nav">
+    <button class="btn" id="prev">&larr; Prev</button>
+    <button class="btn" id="next">Next &rarr;</button>
+  </div>
+  <div class="hint">Tap right / left · arrow keys · swipe · press N for notes · F for fullscreen</div>
+
+  <div class="notes" id="notes">
+    <div class="nk">Speaker cue</div>
+    <div class="nt" id="noteText"></div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const total = slides.length;
+    let i = 0;
+    const countEl = document.getElementById('count');
+    const progressEl = document.getElementById('progress');
+    const noteText = document.getElementById('noteText');
+    const notes = document.getElementById('notes');
+    const timingEl = document.getElementById('timing');
+
+    function render() {
+      slides.forEach((s, n) => s.classList.toggle('active', n === i));
+      countEl.textContent = (i + 1) + ' / ' + total;
+      progressEl.style.width = ((i + 1) / total * 100) + '%';
+      const note = slides[i].getAttribute('data-note') || '';
+      noteText.innerHTML = note;
+      const t = slides[i].getAttribute('data-time');
+      timingEl.textContent = t ? ('cue ' + t) : '';
+    }
+    function go(n) { i = Math.max(0, Math.min(total - 1, n)); render(); }
+    function next() { go(i + 1); }
+    function prev() { go(i - 1); }
+
+    document.getElementById('next').addEventListener('click', (e) => { e.stopPropagation(); next(); });
+    document.getElementById('prev').addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+    document.getElementById('notesBtn').addEventListener('click', (e) => { e.stopPropagation(); notes.classList.toggle('show'); });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+      else if (e.key.toLowerCase() === 'n') { notes.classList.toggle('show'); }
+      else if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      } else if (e.key === 'Home') { go(0); }
+      else if (e.key === 'End') { go(total - 1); }
+    });
+
+    // Tap zones (ignore taps on controls / links)
+    document.getElementById('deck').addEventListener('click', (e) => {
+      if (e.target.closest('a, button')) return;
+      (e.clientX > window.innerWidth / 2) ? next() : prev();
+    });
+
+    // Swipe
+    let x0 = null;
+    document.addEventListener('touchstart', (e) => { x0 = e.changedTouches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 45) (dx < 0 ? next() : prev());
+      x0 = null;
+    }, { passive: true });
+
+    render();
+  </script>
+</body>
+</html>

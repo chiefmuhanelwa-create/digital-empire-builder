@@ -33,16 +33,25 @@
 
 ---
 
-## STEP 1: Identify The Called Expert
+## STEP 1: Identify The Contentpreneur (2 Buyer Lanes)
 
 ### 60-Second ICP Profile
+The buyer is a **Contentpreneur** — someone who turns what they know into income they own. Two lanes qualify; money + expertise is the filter for both.
+
+**Lane A — Called Expert (still employed):**
 - Age: 32–50
 - Background: Corporate professional, specialist, academic, healthcare, ministry leader, teacher
 - Credentials: Degree / MBA / certification / 10+ years domain expertise
-- Faith: Actively practising Christian
-- Content: Started but inconsistent, unmonetised, or without strategy
 - Job income: R30,000–R200,000+/month from employment or practice
 - Core pain: Has expertise and calling — lacks the content business SYSTEM to monetise it
+
+**Lane B — Knowledge Creator (self-employed / already earning):**
+- Coach, consultant, podcaster, creator, or founder with real expertise and often an audience
+- Already earns (clients, deals, sales) but has no system to OWN and scale the income
+- Core pain: brand-deal / algorithm dependency; content that builds attention but not an owned asset
+
+**Both lanes:**
+- Faith: Actively practising Christian
 - Desire: Legacy business, generational impact, nations served
 - WTP: R9,000–R45,000 (investment mindset, not expense mindset)
 - Green lights: Shows up prepared, has researched you, asks specific questions, has existing assets
@@ -214,6 +223,11 @@ Qualify for the programme. Brief description: "I run a 90-day intensive for [the
 Reflect their gap back in their own words. Calculate opportunity cost out loud:
 "You said you've been doing this for 3 years without income from it. At R5,000/month — the starting point for monetised experts — that's R180,000 you didn't earn. What would that have changed?"
 
+**Sector-specific version (use their actual numbers, not a template):** "You have 15 years of senior banking and wealth expertise. If we organise that knowledge into just one R1,500 masterclass delivered monthly to a small community of 20 professionals, that's R30,000 a month. Over a year, that's R360,000 in unleveraged asset value you're actively leaving on the table. How much longer are you going to leave that vault closed?" — swap in their real sector, their real credential count, and a believable monthly price for their audience.
+
+### The Commitment Lock (bridge from Insight to Offer — 2 minutes)
+Before revealing the programme, get an unprompted "yes" to the underlying premise: "Before I show you how the engine works under the hood, let me ask you — if I can map out a system that safely builds this parallel assignment behind your current job, in 4–7 hours a week, are you ready to invest the resources to build it?" If they hesitate, that's real information — stay in Insight Sharing longer. Do not present the offer until you get a clean yes.
+
 ### Framework Insight to Teach (Choose ONE — max 10 minutes)
 - **PAIDS:** If problem is "I don't know how to monetise"
 - **MS×TS×SS:** If problem is mindset or confidence
@@ -229,19 +243,24 @@ Reflect their gap back in their own words. Calculate opportunity cost out loud:
 ### Programme Tiers
 | Tier | Price | Format | Duration |
 |------|-------|--------|----------|
-| Called Expert Accelerator PRO | **R18,000 PIF / R6,500×3** | 90-day cohort (max 10 people) | 3 months |
-| Called Expert Accelerator VIP | **R25,000** | 1:1 coaching | 12 weeks |
+| Called Expert Accelerator PRO | **R18,000 PIF / R6,500×3** | Cohort (max 10 people) | **12 weeks** (see `docs/CURRICULUM.md`) |
+| Called Expert Accelerator VIP | ⚠️ price conflict — see note | 1:1 coaching | 12 weeks |
+
+> ⚠️ **VIP price discrepancy, not yet resolved:** this row says R25,000; `docs/PRODUCTS.md` and `contentpreneur-vip-tier` in the DB say R45,000. Confirm the real number before quoting VIP on a call.
 
 ### Transformation Statement (lead with this)
-"What we build together in 90 days: a content business running alongside your current income — without quitting first. By Week 20, you'll have 3+ income streams active, your first digital product live, and R10K/month demonstrable from your expertise."
+"What we build together in 12 weeks: a content business running alongside your current income — without quitting first. By Week 12, you'll have 3+ income streams active, your first digital product live, and R10K/month demonstrable from your expertise."
 
 ### Value Anchor (before the price)
 "If you walk away with one paid speaking engagement at R15,000 — that's near break-even. One workshop at R1,500 with 20 people: R30,000. One brand deal using your credentials: R10,000–R50,000. The investment pays for itself with one activation."
 
-### The Golden Rule
-**After presenting the price — STOP TALKING.**
+### Price Delivery Script
+"The investment for our complete 12-week Accelerator PRO implementation room is R18,000. You can also choose our flexible instalment option of R6,500 across 3 months. To put this in perspective, your newly engineered media kit alone will let you break even with a single paid speaking engagement at R15,000 — or one workshop launch with 20 people."
 
-The first person to speak after the price loses leverage. Wait. If you must break the silence: "What questions do you have?"
+### The Golden Rule
+**After presenting the price — STOP TALKING. Literally mute your microphone if you have to.**
+
+The first person to speak after the price loses leverage. Hold the silence — count to yourself if the quiet feels unbearable. If you must break it: "What questions do you have?"
 
 ---
 

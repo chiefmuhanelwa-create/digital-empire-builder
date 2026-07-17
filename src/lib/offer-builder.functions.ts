@@ -78,13 +78,13 @@ HARD RULES:
 
 function icpProfile(icp: "called_expert" | "content_creator"): string {
   if (icp === "called_expert") {
-    return `AUDIENCE — ICP 1, the Called Expert: a 32–50 professional, specialist, or academic with unexploited expertise who wants to monetise their knowledge. Language that lands: "your knowledge is worth more than your salary." They buy transformation and authority, not entertainment.
+    return `AUDIENCE — the Called Expert (a Contentpreneur lane): a 32–50 professional, specialist, or academic with unexploited expertise who wants to monetise their knowledge. Language that lands: "your knowledge is worth more than you're being paid for it." They buy transformation and authority, not entertainment.
 PRICING BAND: premium. Suggest a high-ticket range — typically $97 entry up to $300–$4,000 for cohorts/services. Justify with outcome value, not effort.
 ANGLE: position the offer as a system/programme that converts their expertise into income and authority.`;
   }
-  return `AUDIENCE — ICP 2, the Content Creator: 18–35, aspiring, Instagram/TikTok/Facebook-first, posting daily but not earning. Language that lands: "you're posting every day and still broke." They want a clear, affordable first win.
-PRICING BAND: accessible. Suggest a low-ticket range — typically $5–$49, occasionally up to ~$99 for a bundle. Make it a no-brainer first purchase.
-ANGLE: position the offer as the simple, do-this-first asset that turns attention into their first income.`;
+  return `AUDIENCE — the Knowledge Creator (a Contentpreneur lane): a coach, consultant, podcaster, or creator who already has real expertise and often an audience, and already earns something, but has no system to package and own the income. Language that lands: "you have the knowledge and the audience — you just don't own the income yet." They want to turn what they know into an asset they own.
+PRICING BAND: accessible-to-mid. Suggest a range — typically $17–$97 for a first asset, up to ~$297 for a bundle or mini-programme. Make the first purchase a no-brainer while respecting that they already invest in their growth.
+ANGLE: position the offer as the do-this-first asset that packages their expertise into owned income — not just more content.`;
 }
 
 const offerInputSchema = z.object({
@@ -118,7 +118,7 @@ export const buildOffer = createServerFn({ method: "POST" })
 
     const userPrompt = `Build a complete, sellable offer from this. Stay in NoChill's voice the whole way.
 
-WHO THEY SERVE: ${data.icp === "called_expert" ? "Called Expert (ICP 1)" : "Content Creator (ICP 2)"}
+WHO THEY SERVE: ${data.icp === "called_expert" ? "Called Expert (Contentpreneur lane)" : "Knowledge Creator (Contentpreneur lane)"}
 ${icpProfile(data.icp)}
 
 THEIR INPUTS:

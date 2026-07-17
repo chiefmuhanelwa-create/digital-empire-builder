@@ -37,7 +37,7 @@ export const GARDENS: Record<Garden, {
   },
 };
 
-export const GARDEN_ORDER: Garden[] = ["esev", "etz_pri", "devarim"];
+export const GARDEN_ORDER: Garden[] = ["deshe", "esev", "etz_pri", "devarim"];
 
 // The funnel DISPLAYS one currency globally: USD. Everything is still CHARGED in
 // ZAR (Paystack can't bill USD) — buyers see "billed in ZAR at checkout".

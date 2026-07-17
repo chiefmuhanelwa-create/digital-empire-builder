@@ -41,26 +41,33 @@ Right side = CHKPLT, email list, Called Expert cohort, digital products.
 - **GitHub:** https://github.com/chiefmuhanelwa-create/digital-empire-builder
 - **Existing setup guide:** `ACTIVATE.md` (do not overwrite or duplicate)
 
-### Target Audience — ICP 1 is Primary Revenue Engine
+### Target Audience — the Contentpreneur Umbrella (2 Buyer Lanes)
 
-**ICP 1 — Called Expert (⚡ PRIMARY REVENUE ENGINE)**
+**The brand identity NOCHILL owns is "Contentpreneur":** someone who turns what they know into income they own. It is the umbrella. Under it sit two BUYER lanes — both have money + expertise, both are the revenue engine. Lead copy with money + expertise so it filters for buyers; never with "salary"-only language (it excludes the self-employed earner).
+
+**Lane A — The Called Expert (professional/specialist still employed)**
 - Profile: 32–50, SA professional/specialist/academic/healthcare/teacher — has unexploited expertise, wants to monetise knowledge WITHOUT quitting their job
 - Revenue math: 6–10 cohort sales × R9,997–R18,000 = R100K/month
 - Primary proof hook: "I still work at ATNS. I built R600K+ in 4-hour shift windows. You don't have to quit first — build first."
-- Buying trigger: Salary trap + the quit-first lie + the wrong mountain (Deut 1:6)
-- Language: "your knowledge is worth more than your salary" | "you don't need another qualification" | "you don't have to quit first"
-- 6 sub-segments: Shift Worker (primary) · Corporate Trapped (largest) · Teacher/Lecturer · Healthcare Worker · Faith Professional · Freelancer at Capacity
-- Shadow fears: Wrong Path Terror (#6) · Imposter Syndrome (#3) · Generational Poverty (#4) · Spiritual Crisis (#8)
-- Matthew 20 message: The Called Expert at 42+ is the 11th hour worker — gets the same denarius FASTER (20 years of expertise already built)
+- Buying trigger: paid-less-than-you're-worth trap + the quit-first lie + the wrong mountain (Deut 1:6)
+- Language: "your knowledge is worth more than you're being paid for it" | "you don't need another qualification" | "you don't have to quit first"
+- Sub-segments: Shift Worker · Corporate Trapped (largest) · Teacher/Lecturer · Healthcare Worker · Faith Professional · Freelancer at Capacity
+- Matthew 20 message: the 42+ Called Expert is the 11th-hour worker — gets the same denarius FASTER (20 years of expertise already built)
 - WTP: R5,000–R75,000
 
-**ICP 2 — Content Creator Inspirer (🔄 TRAFFIC ENGINE)**
-- Profile: 18–35, aspiring creator, posting daily but not earning
-- Role: Builds audience + email list that upgrades to ICP 1 over 12 months
-- Low-ticket: R250–R1,500
-- Language: "you're posting every day and still broke"
+**Lane B — The Knowledge Creator (coach/consultant/podcaster/creator with expertise)**
+- Profile: self-employed or already-earning coach, consultant, podcaster, creator, or founder who already has the knowledge — and often the audience — but no system to package and OWN the income
+- Buying trigger: "you have the knowledge and the audience, you just don't own the income yet" — tired of brand-deal dependency, wants an owned asset
+- Language: "turn what you know into income you own" | "you already know enough to be paid for it — you just don't own the system"
+- WTP: R500 first asset → R5,000+ programmes. Money still qualifies — they already invest in their growth
+- Distinct from the broke-aspiring creator below: Lane B has expertise AND earns
 
-Always lock onto ONE ICP before writing any content or copy. Never mix them in the same output. Default to ICP 1 when topic could serve either.
+**Traffic Engine (NOT a buyer) — the aspiring content creator**
+- Profile: 18–35, posting daily but not earning, no capital, nothing yet to package
+- Role: top-of-funnel volume + email list that grows INTO Lane A or Lane B over 12 months
+- Low-ticket only: R250–R1,500. Never insult them in copy — filter with money + expertise language, never by attacking "creators"
+
+**Rule:** The brand identity is always Contentpreneur. Within a single piece, address ONE lane (A or B) so the message stays sharp — but never insult the other, and never re-narrow the whole platform to "salaried Called Expert only." Default to whichever lane the topic serves; when it serves both, speak to the umbrella (money + expertise), not to a salary.
 
 ### Tone & Voice (Non-Negotiable)
 

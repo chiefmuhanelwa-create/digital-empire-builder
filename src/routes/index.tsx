@@ -29,17 +29,17 @@ const TESTIMONIAL_SHOTS: string[] = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Called Expert Foundation Kit — Turn Your Expertise Into Income Without Quitting Your Job" },
+      { title: "Contentpreneur Foundation Kit — Your Knowledge Is Worth More Than You're Being Paid For It" },
       {
         name: "description",
         content:
-          "The 7-framework system for professionals, teachers, and specialists ready to earn from their knowledge — without quitting your job. Instant access.",
+          "The 7-framework system that turns real expertise into income you own — for professionals and knowledge creators alike, built in 4-hour windows around the life you already have.",
       },
-      { property: "og:title", content: "Called Expert Foundation Kit — $97" },
+      { property: "og:title", content: "Contentpreneur Foundation Kit — $97" },
       {
         property: "og:description",
         content:
-          "PAIDS · DARES · 4E Content Calendar · SEEDS Pipeline · Niche Clarity · Knowledge Audit. Package and sell what you already know — without quitting first.",
+          "PAIDS · DARES · 4E Content Calendar · SEEDS Pipeline · Niche Clarity · Knowledge Audit. Package what you already know into income you own.",
       },
     ],
   }),
@@ -117,7 +117,7 @@ function CheckoutModal({
         {/* Header */}
         <div className="bg-white px-5 sm:px-6 pt-4 pb-5 text-center border-b border-[#E2E8F0]">
           <h3 className="font-display text-lg sm:text-xl text-[#0F172A] leading-snug">
-            Called Expert Foundation Kit
+            Contentpreneur Foundation Kit
           </h3>
           <div className="mt-3">
             <div className="flex items-center justify-center gap-3 mb-1">
@@ -231,7 +231,7 @@ function CheckoutModal({
           <p className="text-[#64748B] text-[11px]">
             Backed by our{" "}
             <strong className="text-banana">
-              100% 30-Day Money-Back Guarantee
+              7-Day Access Guarantee
             </strong>
           </p>
         </div>
@@ -314,7 +314,7 @@ const FAQS = [
   },
   {
     q: "Who is this for?",
-    a: "Professionals, teachers, healthcare workers, academics, corporate employees, and freelancers who have spent years building expertise — and who have never been paid what that expertise is actually worth. If your knowledge is deeper than your salary, this is for you.",
+    a: "Contentpreneurs — people who turn what they know into income they own. That's two kinds of person. One: the Called Expert — a professional, teacher, healthcare worker, academic, or specialist still employed and paid less than their expertise is worth. Two: the Knowledge Creator — a coach, consultant, podcaster, or creator who already has the knowledge (and often the audience) but no system to own the income. If your knowledge is deeper than what you're being paid for it, this is for you.",
   },
   {
     q: "Do I need a large following for this to work?",
@@ -338,15 +338,15 @@ const FAQS = [
   },
   {
     q: "What if it doesn't work for me?",
-    a: "If you work through the Foundation Kit and don't feel like you have a clear system for your first income stream, I will refund every cent. No questions asked. 30 days. The risk is entirely mine.",
+    a: "If you have a technical issue accessing anything you paid for, email support within 7 days and I'll repair access or refund the order — see the full refund policy for details.",
   },
   {
-    q: "What are the 7 stages of the Called Expert system?",
-    a: "Stage 1: Foundation (MS×TS×SS — Mindset × Toolset × Skillset). Stage 2: Self-Awareness (SWOT Analysis). Stage 3: Content Strategy (4Es — Educate, Entertain, Encourage, Earn). Stage 4: Audience Building (Social Media). Stage 5: Community (3Cs — Create, Collaborate, Contribute). Stage 6: Business Model (DARES — Digital, Automated, Recurring, Evergreen, Scalable). Stage 7: Revenue System (PAIDS — Products, Ads & Affiliates, Information, Deals, Services). The Foundation Kit gives you the core frameworks from Stages 1, 3, 5, and 7 so you can start immediately. The 90-Day Accelerator PRO takes you through all 7 in sequence with live coaching and direct access.",
+    q: "What are the 7 stages of the Contentpreneur system?",
+    a: "Stage 1: Foundation (MS×TS×SS — Mindset × Toolset × Skillset). Stage 2: Self-Awareness (SWOT Analysis + the 4Ps — Passion, Pain, Purpose, Profit). Stage 3: Content Strategy (4Es — Educate, Entertain, Encourage, Earn). Stage 4: Platform Strategy (pick one platform, stop being mediocre on five). Stage 5: Systems & DARES (Digital, Automated, Recurring, Evergreen, Scalable). Stage 6: Owned Tribes (the River-Fish-Tank model + 3Cs community — Create, Collaborate, Contribute). Stage 7: Revenue System (PAIDS — Products, Ads & Affiliates, Information, Deals, Services). The Foundation Kit gives you the core frameworks from Stages 1, 3, and 7 so you can start immediately. The Accelerator PRO takes you through all 7 in sequence, over 12 weeks, with live coaching and direct access.",
   },
   {
     q: "Is CHKPLT a Christian platform?",
-    a: "The founder is Christian and the frameworks are rooted in kingdom principles — stewardship, calling, fruitfulness, generational legacy. But the system works for anyone whose expertise was given to them for a purpose beyond a salary. If you believe your knowledge is a calling — this is for you.",
+    a: "The founder is Christian and the frameworks are rooted in kingdom principles — stewardship, calling, fruitfulness, generational legacy. But the system works for anyone whose expertise was given to them for a purpose beyond the money. If you believe your knowledge is a calling — this is for you.",
   },
 ];
 
@@ -358,7 +358,7 @@ const BEFORE_AFTER: [string, string][] = [
     "A 30-day content calendar with the exact ratio that converts",
   ],
   [
-    "Expertise that your salary doesn't reflect",
+    "Expertise you're not being paid what it's worth for",
     "A clear income map across 5 revenue streams built from what you know",
   ],
   [
@@ -367,7 +367,7 @@ const BEFORE_AFTER: [string, string][] = [
   ],
   [
     "Watching others earn from knowledge less deep than yours",
-    "Understanding exactly how professionals like you build income",
+    "Understanding exactly how people who already know their stuff build income",
   ],
   [
     "Random courses that gave inspiration but no system",
@@ -436,7 +436,7 @@ function Landing() {
     ["4E Content Calendar", "$97"],
     ["SEEDS Pipeline Template", "$97"],
     ["MS×TS×SS Foundation Assessment", "$97"],
-    ["BONUS: Called Expert Cheat Sheet", "$47"],
+    ["BONUS: Contentpreneur Cheat Sheet", "$47"],
     ["BONUS: 90-Day First Income Planner", "$47"],
     ["BONUS: 30-Day Accountability Tracker", "$47"],
   ];
@@ -471,21 +471,22 @@ function Landing() {
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="nx-hero-orb border-b border-[var(--border)]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-14 pb-16 sm:pt-20 sm:pb-20 text-center">
-          <p className="nx-label mb-4">Called Expert Foundation Kit</p>
+          <p className="nx-label mb-4">Contentpreneur Foundation Kit</p>
           <h1 className="mb-5">
-            Your knowledge is worth more than your salary.{" "}
-            <strong>You don't have to quit first.</strong>
+            Your knowledge is worth more than you're being paid for it.{" "}
+            <strong>You just don't own the system yet.</strong>
           </h1>
           <p className="nx-body max-w-xl mx-auto mb-8">
-            The 7-framework system that turns years of professional expertise into income you own —
-            built for people who still have a job. No following required. Built in 4-hour windows
-            between shifts.
+            Whether you earn a salary or run your own thing, you've built real expertise — and you're
+            leaving money on the table because you don't own the system. This is the 7-framework
+            system that turns what you already know into income you own — no following required, built
+            in 4-hour windows around the life you already have.
           </p>
 
           <CtaButton
             onClick={open}
             label={`Get Instant Access — ${displayPrice}`}
-            sub="Instant download · 30-day money-back guarantee · billed in ZAR at checkout"
+            sub="Instant download · 7-day access guarantee · billed in ZAR at checkout"
             size="large"
           />
 
@@ -502,7 +503,7 @@ function Landing() {
       <section className="bg-[#0F172A]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
           <p className="text-center text-xs font-bold tracking-[0.2em] uppercase text-[#FCD34D] mb-5">
-            Built on real receipts — not theory
+            Real brands. Real invoices. Not theory.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mb-8">
             {RECEIPTS.map((r) => (
@@ -644,15 +645,15 @@ function Landing() {
           <h2 className="mb-6">This isn't a side hustle. It's your parallel assignment.</h2>
           <div className="nx-body space-y-4">
             <p>
-              You've spent 10, 15, 20 years building real expertise. A profession. A specialty. A
-              calling. And the market still pays you a salary that has nothing to do with what you
-              actually know.
+              10 years. 15. 20. That's how long you've been building real expertise — a profession, a
+              specialty, a calling. And the market still pays you a fraction of what you actually
+              know.
             </p>
             <p>
               You don't need another qualification. You don't need to quit and gamble your family's
               security on a leap. You need a <strong className="text-[var(--foreground)]">system</strong> to
-              package what you already carry — and the time-respecting way to build it in the margins
-              of the job you still have.
+              package what you already carry — built in the margins of the life you already have, not on
+              top of the hours you don't.
             </p>
             <p>
               Build first. Quit later — if you ever want to. Your expertise was never meant to die
@@ -703,7 +704,7 @@ function Landing() {
               label={`Yes — Get Instant Access for ${displayPrice}`}
             />
             <p className="text-center text-xs text-[var(--text-subtle)] mt-3">
-              Instant download · billed in ZAR at checkout · 30-day money-back guarantee
+              Instant download · billed in ZAR at checkout · 7-day access guarantee
             </p>
           </div>
         </div>
@@ -754,11 +755,12 @@ function Landing() {
       {/* ── GUARANTEE ────────────────────────────────────────────────────── */}
       <section className="bg-[var(--bg-surface)] border-y border-[var(--border)]">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-14 text-center">
-          <p className="nx-label mb-3">The risk is entirely mine</p>
-          <h2 className="mb-4">30-day money-back guarantee.</h2>
+          <p className="nx-label mb-3">A real guarantee, not a marketing line</p>
+          <h2 className="mb-4">7-day access guarantee.</h2>
           <p className="nx-body max-w-xl mx-auto">
-            Work through the Foundation Kit. If you don't walk away with a clear system for your first
-            income stream, email me and I'll refund every cent. No questions. No forms. 30 days.
+            If you have a technical issue accessing the Foundation Kit, email support within 7 days
+            and I'll personally make sure it's repaired or refunded. See the full refund policy for
+            exactly what's covered.
           </p>
         </div>
       </section>
@@ -780,13 +782,14 @@ function Landing() {
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-16 text-center">
           <h2 className="text-white mb-4">Do it for your children. Leave them a story.</h2>
           <p className="text-slate-300 max-w-lg mx-auto mb-8">
-            You were given this knowledge for a purpose bigger than a salary. The Foundation Kit is
-            where you start turning it into something you own.
+            You were given this knowledge for a purpose bigger than the money. Every year you sit on
+            it is a year your kids inherit less. The Foundation Kit is where you start turning it
+            into something you own.
           </p>
           <CtaButton
             onClick={open}
             label={`Get the Foundation Kit — ${displayPrice}`}
-            sub="Instant access · 30-day money-back guarantee"
+            sub="Instant access · 7-day access guarantee"
             size="large"
           />
         </div>

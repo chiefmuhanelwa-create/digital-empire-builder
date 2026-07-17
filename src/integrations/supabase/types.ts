@@ -335,6 +335,7 @@ export type Database = {
           sort_order: number
           summary: string | null
           title: string
+          unlock_week: number
           updated_at: string
         }
         Insert: {
@@ -344,6 +345,7 @@ export type Database = {
           sort_order?: number
           summary?: string | null
           title: string
+          unlock_week?: number
           updated_at?: string
         }
         Update: {
@@ -353,6 +355,7 @@ export type Database = {
           sort_order?: number
           summary?: string | null
           title?: string
+          unlock_week?: number
           updated_at?: string
         }
         Relationships: [

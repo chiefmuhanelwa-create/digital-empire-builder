@@ -16,9 +16,9 @@ function qualifiedHtml(name: string): string {
   return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#0F172A;color:#F8FAFC;padding:40px 32px;">
 <p style="color:#F59E0B;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Christ's Kingdom Platform</p>
 <h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">You're qualified, ${name}.</h1>
-<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">Your stewardship audit passed. Your metrics validate entry into the 20-Week Called Expert Accelerator.</p>
-<p style="font-size:16px;line-height:1.6;margin:0 0 32px;">One step left: book your 20-minute strategy call so we can confirm the right cohort start date for you.</p>
-<a href="https://${ROOT_DOMAIN}/apply" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Book Your Strategy Call</a>
+<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">Your stewardship audit passed. Your metrics validate entry into the 90-Day Contentpreneur Accelerator PRO.</p>
+<p style="font-size:16px;line-height:1.6;margin:0 0 32px;">One step left: create your account and we'll confirm your cohort start date.</p>
+<a href="https://${ROOT_DOMAIN}/signup" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Create Your Account</a>
 <p style="font-size:13px;color:#94A3B8;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
 <p style="font-size:11px;color:#64748B;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
 </div>`;
@@ -69,7 +69,7 @@ async function sendApplicationEmail(
     : "Your CHKPLT diagnostic results";
 
   const text = isQualified
-    ? `You're qualified. Book your strategy call at https://${ROOT_DOMAIN}/apply`
+    ? `You're qualified. Create your account at https://${ROOT_DOMAIN}/signup`
     : `Your results: ${recommendation.focusPillars}. Resources at https://${ROOT_DOMAIN}/products`;
 
   await supabaseAdmin.rpc("enqueue_email", {
