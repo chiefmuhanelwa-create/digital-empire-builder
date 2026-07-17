@@ -62,6 +62,7 @@ export const USD_DISPLAY: Record<string, number> = {
   "creator-swipe-vault": 1700,            // $17 order bump (charged R290)
   "asset-accelerator": 19700,             // $197 1-click upsell (charged R3,600)
   "personal-brand-30-days": 4900,         // $49 video course (charged R899)
+  "hook-science": 14700,                  // $147 flagship (Stage 4b — draft until content ships)
 };
 
 // Display: South African buyers see the real ZAR they'll be charged (no exchange-

@@ -21,7 +21,9 @@ VALUES (
   'Most experts are ignored not because their knowledge is weak, but because their first line is. Hook Science is the one skill that decides whether anyone reads the rest — and it is the thing the market already knows NoChill for. You will learn the R×A×C×U^B hook formula to engineer a scroll-stopping opener on demand, the HSLFCTA script (Hook → Story → Lesson → Framework → CTA) that sells without selling, and the 4 Scripting Principles that carry a viewer all the way to the call to action. Then you apply it in seconds with the Hook Generator. This is Stage 4 of the Contentpreneur system, pulled out and taught properly.',
   '["The R×A×C×U^B Hook Formula — engineer a scroll-stopping first line on demand","HSLFCTA — the Hook → Story → Lesson → Framework → CTA script that sells without selling","The 4 Scripting Principles that hold attention all the way to the CTA","Swipe templates + the Hook Generator app to apply it in seconds"]'::jsonb,
   'esev',
-  14700, 'ZAR', 'draft',
+  -- ZAR charge ≈ $147 @ ~16.58; the daily sync-fx cron rewrites this to track the
+  -- fixed USD price once 'hook-science' is added to USD_DISPLAY (gardens.ts).
+  243700, 'ZAR', 'draft',
   'Video course + Hook Generator app',
   'Contentpreneurs who can package their expertise but get scrolled past on the first line.',
   25, false, false
