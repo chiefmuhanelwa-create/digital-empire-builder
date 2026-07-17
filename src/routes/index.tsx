@@ -759,6 +759,45 @@ function Landing() {
         </div>
       </section>
 
+      {/* ── THE 7-STAGE SYSTEM — what you're actually buying into ─────────── */}
+      <section className="bg-[var(--bg-surface)] border-b border-[var(--border)]">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
+          <p className="nx-label mb-3">The system you're buying into</p>
+          <h2 className="mb-4">The 7-Stage Contentpreneur System</h2>
+          <p className="nx-body max-w-xl mb-10">
+            One sequence, in order — each stage produces a real deliverable, not a lesson you forget.
+            The <strong className="text-[var(--foreground)]">Foundation Kit starts you through Stages
+            1–3</strong> and hands you the frameworks for the rest. The Accelerator walks you through
+            all seven, live.
+          </p>
+          <div className="space-y-3">
+            {[
+              ["1", "Foundation", "Get honest about what you're actually ready to sell.", "You walk out with a readiness score + your toolkit installed."],
+              ["2", "Self-Awareness", "Compress your expertise into one clear niche.", "You walk out with a one-sentence niche statement."],
+              ["3", "Content Strategy", "Know exactly what to post, in the right mix.", "You walk out with a 30-day content calendar."],
+              ["4", "Platform & Scripting", "One platform, optimised — with hooks that stop the scroll.", "You walk out with an optimised profile + a repeatable script."],
+              ["5", "Systems & DARES", "Build something to sell, and automate the capture.", "You walk out with 1 live digital product + auto-capture."],
+              ["6", "Owned Tribes", "Move followers off rented platforms onto a list you own.", "You walk out with an owned list + a converting funnel."],
+              ["7", "PAIDS Engine", "Turn one income stream into several — safely.", "You walk out with 3+ income streams + a SARS reserve."],
+            ].map(([n, name, what, outcome]) => (
+              <div key={n} className="nx-card !p-5 flex gap-4 items-start">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--nx-gold)] font-display font-black text-[#0F172A]">
+                  {n}
+                </div>
+                <div>
+                  <div className="font-display text-lg text-[var(--foreground)] leading-tight">
+                    Stage {n} · {name}
+                  </div>
+                  <p className="text-sm text-[var(--text-dim)] mt-1 leading-relaxed">
+                    {what} <span className="text-[var(--foreground)] font-medium">{outcome}</span>
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── HOW IT ACTUALLY GETS YOU BUYERS (the distribution machine) ────── */}
       <section className="bg-white border-b border-[var(--border)]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
