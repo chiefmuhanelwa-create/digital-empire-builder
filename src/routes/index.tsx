@@ -310,7 +310,7 @@ const FAQS = [
   },
   {
     q: "Do I need to quit my job first?",
-    a: "No. That is the biggest lie in the industry. This system was built specifically for people who are currently employed. The PAIDS Framework maps income streams that work in the margins of your existing schedule. It was built in 4-hour windows between night shifts at an air traffic control centre. You build first. You quit — if you want to — later.",
+    a: "No. That is the biggest lie in the industry. You don't have to quit your job — or blow up the business you already run — to build this. The PAIDS Framework maps income streams that work in the margins of your existing schedule, whether that's a salaried job or your own thing. It was built in 4-hour windows between night shifts at an air traffic control centre. You build first. You quit — if you ever want to — later.",
   },
   {
     q: "Who is this for?",
@@ -663,7 +663,7 @@ function Landing() {
 
           <div className="mt-10 grid gap-3 sm:grid-cols-3">
             {[
-              ["Time poverty", "Built in 4-hour windows between night shifts — not 20 hours a week you don't have."],
+              ["Time poverty", "Built in 4-hour windows around a full life — the same way he built it between night shifts. Not 20 hours a week you don't have."],
               ["No following needed", "Your first income stream comes from packaging, not from going viral."],
               ["Own the asset", "Build on land you own — not a platform that can suspend you overnight."],
             ].map(([t, d]) => (
