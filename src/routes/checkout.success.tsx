@@ -15,7 +15,7 @@ import { Check, Download } from "lucide-react";
 
 
 export const Route = createFileRoute("/checkout/success")({
-  head: () => ({ meta: [{ title: "Order received — Christ Kingdom Platform" }] }),
+  head: () => ({ meta: [{ title: "Order received — CHKPLT" }] }),
   validateSearch: (s: Record<string, unknown>) => ({
     reference: (s.reference as string) || (s.trxref as string) || "",
   }),

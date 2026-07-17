@@ -17,7 +17,7 @@ import {
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/contacts")({
-  head: () => ({ meta: [{ title: "Contacts — Christ Kingdom Platform Admin" }] }),
+  head: () => ({ meta: [{ title: "Contacts — CHKPLT Admin" }] }),
   beforeLoad: async () => {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) throw redirect({ to: "/login" });

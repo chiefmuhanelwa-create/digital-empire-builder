@@ -322,7 +322,7 @@ const FAQS = [
     a: CONTENTPRENEUR_DEFINITION,
   },
   {
-    q: "What exactly do I get for $97?",
+    q: "What exactly do I get in the kit?",
     a: "Six digital workbooks: the PAIDS Framework (your income map), DARES Asset Model (build income that doesn't need you to show up every day), 4E Content Calendar (30 days of strategy pre-built), SEEDS Pipeline Template (your first sales funnel, step by step), Niche Clarity Workbook (lock your niche in one afternoon), and the Knowledge Audit (find the product hiding in your expertise in 2 hours). Plus three bonuses. All instant download.",
   },
   {
@@ -511,13 +511,6 @@ function Landing() {
         ? "Instant download · charged in USD · 7-day guarantee"
         : "Instant download · billed in ZAR at today's rate · 7-day guarantee";
 
-  const STATS = [
-    ["R600,000+", "in a single year"],
-    ["2 books", "published while employed"],
-    ["10 awards", "SAMA 30 & 31 judge"],
-    ["50+ brands", "23 agencies · 3M+ reach"],
-  ];
-
   const VALUE_STACK: [string, string][] = [
     ["Niche Clarity Workbook", money(97)],
     ["Knowledge Audit", money(97)],
@@ -610,23 +603,6 @@ function Landing() {
             Not a creator chasing views. Not an employee trading hours for a salary. A builder who
             packages expertise into assets that pay — on a platform they control.
           </p>
-        </div>
-      </section>
-
-      {/* ── PROOF STATS — credibility above the fold ─────────────────────── */}
-      <section className="bg-[#0F172A]">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
-          <p className="text-center text-xs font-bold tracking-[0.2em] uppercase text-[#FCD34D] mb-5">
-            Built on real receipts — not theory.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 rounded-xl overflow-hidden">
-            {STATS.map(([big, small]) => (
-              <div key={big} className="bg-[#0F172A] p-4 text-center">
-                <div className="font-display text-2xl sm:text-3xl text-[#FCD34D]">{big}</div>
-                <div className="text-xs text-slate-400 mt-1">{small}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

@@ -20,7 +20,7 @@ import { Trash2, Plus, ChevronDown, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/curriculum/$productSlug")({
-  head: ({ params }) => ({ meta: [{ title: `Curriculum: ${params.productSlug} — Christ Kingdom Platform` }] }),
+  head: ({ params }) => ({ meta: [{ title: `Curriculum: ${params.productSlug} — CHKPLT` }] }),
   beforeLoad: async () => {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) throw redirect({ to: "/login" });

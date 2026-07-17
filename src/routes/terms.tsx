@@ -8,7 +8,7 @@ export const Route = createFileRoute("/terms")({
       {
         name: "description",
         content:
-          "The terms governing your use of the Christ Kingdom Platform (CHKPLT), our digital products, cohorts, and learning portal.",
+          "The terms governing your use of CHKPLT, our digital products, cohorts, and learning portal.",
       },
       { property: "og:title", content: "Terms of Service — CHKPLT" },
       {
@@ -35,7 +35,7 @@ function TermsPage() {
 
         <h2>1. Who we are</h2>
         <p>
-          The Christ Kingdom Platform (“CHKPLT”, “we”, “us”) is operated from the
+          CHKPLT (“we”, “us”) is operated from the
           Republic of South Africa and provides digital products, downloadable
           assets, online courses, cohorts, and mentorship programs to creators
           and entrepreneurs worldwide.

@@ -336,7 +336,7 @@ function ApplyPage() {
                   className="inline-flex items-center justify-center gap-2 bg-[#F59E0B] text-[#0F172A] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#D97706] transition-colors w-full max-w-xs"
                   style={GOLD_GLOW}
                 >
-                  Get the Foundation Kit — $97
+                  Get the Foundation Kit
                   <ArrowRight className="size-4" />
                 </Link>
                 <p className="mt-4 text-sm">

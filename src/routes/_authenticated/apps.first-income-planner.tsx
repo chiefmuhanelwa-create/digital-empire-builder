@@ -93,7 +93,7 @@ function Locked() {
         <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
         <h2 className="mt-4 text-2xl">This bonus is in the Foundation Kit.</h2>
         <p className="nx-body max-w-md mx-auto mt-2">Get the kit to unlock the 90-Day First Income Planner and the full Clarity System.</p>
-        <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit — $97</a>
+        <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit</a>
       </div>
     </main>
   );

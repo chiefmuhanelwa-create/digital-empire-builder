@@ -36,8 +36,8 @@ export const Route = createFileRoute("/products/$slug")({
   },
   head: ({ params, loaderData }) => {
     const p = loaderData;
-    const title = p ? `${p.title} — Christ Kingdom Platform` : `${params.slug} — Christ Kingdom Platform`;
-    const description = (p?.description?.slice(0, 200)) ?? p?.tagline ?? "Tools for Kingdom Contentpreneurs.";
+    const title = p ? `${p.title} — CHKPLT` : `${params.slug} — CHKPLT`;
+    const description = (p?.description?.slice(0, 200)) ?? p?.tagline ?? "Tools for Contentpreneurs.";
     const image = p?.cover_image_url ?? undefined;
     const url = `/products/${params.slug}`;
     const meta: Array<Record<string, string>> = [

@@ -7,7 +7,7 @@ import { Lock, PlayCircle } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/")({
   head: ({ params }) => ({
-    meta: [{ title: `${params.slug} — Christ Kingdom Platform` }],
+    meta: [{ title: `${params.slug} — CHKPLT` }],
   }),
   component: CoursePage,
   errorComponent: ({ error, reset }) => {

@@ -84,7 +84,7 @@ function Locked() {
         <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
         <h2 className="mt-4 text-2xl">This is Step 5 of the Clarity System.</h2>
         <p className="nx-body max-w-md mx-auto mt-2">Get the Foundation Kit to unlock the SEEDS Pipeline and the full 7-step system.</p>
-        <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit — $97</a>
+        <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit</a>
       </div>
     </main>
   );

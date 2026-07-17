@@ -8,7 +8,7 @@ import { Lock, Check } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/$lessonSlug")({
   head: ({ params }) => ({
-    meta: [{ title: `${params.lessonSlug} — Christ Kingdom Platform` }],
+    meta: [{ title: `${params.lessonSlug} — CHKPLT` }],
   }),
   component: LessonPage,
   errorComponent: ({ error, reset }) => {

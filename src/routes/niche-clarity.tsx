@@ -23,7 +23,7 @@ const SLUG = "niche-clarity-workbook";
 export const Route = createFileRoute("/niche-clarity")({
   head: () => ({
     meta: [
-      { title: "Niche Clarity Workbook — $16 — Christ Kingdom Platform" },
+      { title: "Niche Clarity Workbook — $16 — CHKPLT" },
       {
         name: "description",
         content:

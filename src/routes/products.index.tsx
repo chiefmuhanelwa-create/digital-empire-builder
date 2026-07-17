@@ -9,9 +9,9 @@ import { ArrowUpRight } from "lucide-react";
 export const Route = createFileRoute("/products/")({
   head: () => ({
     meta: [
-      { title: "Products — Christ Kingdom Platform" },
+      { title: "Products — CHKPLT" },
       { name: "description", content: "Workbooks, courses, and the Contentpreneur Accelerator. Pick your level." },
-      { property: "og:title", content: "Products — Christ Kingdom Platform" },
+      { property: "og:title", content: "Products — CHKPLT" },
       { property: "og:description", content: "Every tool. Every framework. Every system." },
     ],
   }),
@@ -74,12 +74,12 @@ function Catalog() {
             <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-banana">Start here</div>
             <h2 className="mt-1 font-display text-2xl sm:text-3xl text-foreground">Contentpreneur Foundation Kit</h2>
             <p className="mt-2 text-sm text-muted-foreground max-w-md leading-relaxed">
-              Frameworks, templates, content calendar. The complete starting system — $97, instant access.
+              Frameworks, templates, content calendar. The complete starting system — instant access.
             </p>
           </div>
           <Button asChild className="cta-glow shrink-0 h-11 px-6 font-bold text-sm">
             <Link to="/products/$slug" params={{ slug: "called-expert-foundation-kit" }}>
-              Get the Kit — $97 →
+              Get the Kit →
             </Link>
           </Button>
         </div>

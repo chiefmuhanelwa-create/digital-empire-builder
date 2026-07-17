@@ -4,7 +4,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Christ Kingdom Platform" },
+      { title: "About — CHKPLT" },
       { name: "description", content: "CHKPLT is the owned platform, curriculum, and business infrastructure for Contentpreneurs — professionals and knowledge creators ready to turn what they know into income they own." },
       { property: "og:title", content: "About CHKPLT — The knowledge economy rewards the brave." },
       { property: "og:description", content: "Built by someone who went from sleeping in university bathrooms to building a knowledge empire. The system is real. The receipts exist." },
@@ -182,7 +182,7 @@ function About() {
         <div className="mx-auto max-w-4xl px-5 sm:px-6 py-12 sm:py-16 text-center">
           <div className="font-display text-3xl sm:text-4xl tracking-tight text-banana">CHKPLT</div>
           <div className="mt-3 font-mono text-[10px] tracking-[0.25em] uppercase text-[#666]">
-            Christ Kingdom Platform · Built for Contentpreneurs · Grounded in Faith · Anchored in Africa
+            CHKPLT · Built for Contentpreneurs · Grounded in Faith · Anchored in Africa
           </div>
           <p className="mt-4 text-[#555] text-sm max-w-lg mx-auto">
             "Be fruitful. That means produce." — Genesis 1:28 applied to your expertise.

@@ -68,7 +68,7 @@ export function SiteHeader() {
                 href="/?buy=1"
                 className="inline-flex items-center gap-1 rounded-full bg-[var(--nx-gold)] px-5 py-2.5 text-[14px] font-bold text-[#0F172A] shadow-sm hover:bg-[var(--nx-gold-deep)] hover:-translate-y-px transition-all"
               >
-                Get the Kit — $97
+                Get the Kit
               </a>
             </>
           )}
@@ -87,7 +87,7 @@ export function SiteFooter() {
             CHKPLT
           </div>
           <p className="mt-3 text-sm text-slate-400 leading-relaxed">
-            Christ's Kingdom Platform. Build on land you own.
+            Build on land you own.
           </p>
         </div>
 

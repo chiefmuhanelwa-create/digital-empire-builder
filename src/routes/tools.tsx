@@ -69,7 +69,7 @@ function ToolsIndex() {
             params={{ slug: "called-expert-foundation-kit" }}
             className="cta-glow inline-block"
           >
-            See the Foundation Kit — $97
+            See the Foundation Kit
           </Link>
         </div>
       </main>

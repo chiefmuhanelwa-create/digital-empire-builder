@@ -211,7 +211,7 @@ function Locked({ title, body }: { title: string; body: string }) {
           <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
           <h2 className="mt-4 text-2xl">{title}</h2>
           <p className="nx-body max-w-md mx-auto mt-2">{body}</p>
-          <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit — $97</a>
+          <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
       </main>
     </Shell>

@@ -66,7 +66,7 @@ function RightSideDiagnostic() {
           <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
           <h2 className="mt-4 text-2xl">The Right Side Diagnostic is in the Foundation Kit.</h2>
           <p className="nx-body max-w-md mx-auto mt-2">See how exposed your business is to a platform ban — and how to move onto owned ground. Get the kit to unlock it.</p>
-          <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit — $97</a>
+          <a href="/?buy=1" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
       </main>
     </Shell>

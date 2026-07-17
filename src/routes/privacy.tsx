@@ -14,7 +14,7 @@ export const Route = createFileRoute("/privacy")({
       {
         property: "og:description",
         content:
-          "POPIA- and GDPR-aligned privacy practices for the Christ Kingdom Platform.",
+          "POPIA- and GDPR-aligned privacy practices for the CHKPLT.",
       },
     ],
   }),
