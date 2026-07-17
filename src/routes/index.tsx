@@ -511,8 +511,6 @@ function Landing() {
         ? "Instant download · charged in USD · 7-day guarantee"
         : "Instant download · billed in ZAR at today's rate · 7-day guarantee";
 
-  const RECEIPTS = ["Capitec", "Standard Bank", "Netflix", "Suzuki", "SA Tourism", "Showmax", "ABSA"];
-
   const STATS = [
     ["R600,000+", "in a single year"],
     ["2 books", "published while employed"],
@@ -615,19 +613,12 @@ function Landing() {
         </div>
       </section>
 
-      {/* ── RECEIPTS — credibility above the fold ────────────────────────── */}
+      {/* ── PROOF STATS — credibility above the fold ─────────────────────── */}
       <section className="bg-[#0F172A]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
           <p className="text-center text-xs font-bold tracking-[0.2em] uppercase text-[#FCD34D] mb-5">
-            Real brands. Real invoices. Not theory.
+            Built on real receipts — not theory.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mb-8">
-            {RECEIPTS.map((r) => (
-              <span key={r} className="font-display text-lg sm:text-xl font-bold text-slate-200/90">
-                {r}
-              </span>
-            ))}
-          </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/10 rounded-xl overflow-hidden">
             {STATS.map(([big, small]) => (
               <div key={big} className="bg-[#0F172A] p-4 text-center">
