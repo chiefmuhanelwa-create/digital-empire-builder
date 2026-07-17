@@ -1,9 +1,20 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import Stripe from "stripe";
 import { getRequestHost, getRequestIP } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { assertTurnstile } from "./turnstile.server";
 import { reportError } from "./error-logger";
+import { USD_DISPLAY, ZAR_PER_USD } from "./gardens";
+
+// Resolve the USD-cents charge for the international (Stripe) rail. Mirrors the
+// display logic in gardens.ts formatPrice so the amount charged == the price shown:
+// explicit marketing override → native USD → ZAR converted to whole dollars.
+function resolveUsdCents(slug: string, priceCents: number, currency: string): number {
+  if (USD_DISPLAY[slug] != null) return USD_DISPLAY[slug];
+  if (currency === "USD") return priceCents;
+  return Math.max(100, Math.round(priceCents / ZAR_PER_USD / 100) * 100);
+}
 
 // Paystack expects the smallest currency unit (kobo for NGN, cents for ZAR).
 // Our price_cents is already in cents, so we pass it as-is.
@@ -203,6 +214,210 @@ export const initializeCheckout = createServerFn({ method: "POST" })
       authorizationUrl: initJson.data.authorization_url as string,
       reference: ref,
     };
+  });
+
+// ── International rail: Stripe Checkout (USD) ──────────────────────────────
+// Mirror of initializeCheckout for non-African buyers. Charges the clean USD
+// price (Stripe can bill USD; Paystack can't). On payment the stripe-webhook
+// fulfills via the SAME fulfillPaidOrder() path as Paystack. Returns the hosted
+// Checkout URL as `authorizationUrl` so the client redirect code is identical.
+export const initializeStripeCheckout = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({
+        productSlug: z.string().min(1).max(120),
+        email: z.string().email().max(255),
+        fullName: z.string().min(1).max(120).optional(),
+        phone: z.string().max(40).optional(),
+        turnstileToken: z.string().max(2048).optional(),
+        utmSource: z.string().max(120).optional(),
+        utmMedium: z.string().max(120).optional(),
+        utmCampaign: z.string().max(120).optional(),
+        bumpSlugs: z.array(z.string().min(1).max(120)).max(3).optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    try {
+      await assertTurnstile(data.turnstileToken, getRequestIP({ xForwardedFor: true }) ?? undefined);
+    } catch (err) {
+      await reportError(err, { endpoint: "initializeStripeCheckout:turnstile", meta: { email: data.email } });
+      throw err;
+    }
+    const secret = process.env.STRIPE_SECRET_KEY;
+    if (!secret) throw new Error("Stripe is not configured yet.");
+
+    const { data: product, error: pErr } = await supabaseAdmin
+      .from("products")
+      .select("id,slug,title,price_cents,currency,status,garden,is_free,requires_application")
+      .eq("slug", data.productSlug)
+      .maybeSingle();
+    if (pErr) throw new Error(pErr.message);
+    if (!product) throw new Error("Product not found");
+    if (product.status !== "published") throw new Error("Product not available");
+    if (product.is_free || product.price_cents <= 0) {
+      throw new Error("Free products do not require checkout");
+    }
+
+    if (product.requires_application) {
+      const { data: appRow, error: aErr } = await supabaseAdmin
+        .from("client_stewardship_applications")
+        .select("determined_routing_status")
+        .ilike("email", data.email)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (aErr) throw new Error(aErr.message);
+      if (appRow?.determined_routing_status !== "QUALIFIED_FOR_CORE_PROGRAM") {
+        throw new Error(
+          "This program requires a qualified application. Complete the diagnostic at /apply first.",
+        );
+      }
+    }
+
+    // Bumps → USD. Same rules as Paystack (published, paid) but currency-agnostic
+    // since everything is converted to USD for the Stripe rail.
+    const bumpSlugs = (data.bumpSlugs ?? []).filter((s) => s && s !== data.productSlug);
+    let bumps: { id: string; slug: string; title: string; usd_cents: number }[] = [];
+    if (bumpSlugs.length) {
+      const { data: bumpRows } = await supabaseAdmin
+        .from("products")
+        .select("id,slug,title,price_cents,currency,status,is_free")
+        .in("slug", bumpSlugs);
+      bumps = (bumpRows ?? [])
+        .filter((b) => b.status === "published" && !b.is_free && b.price_cents > 0)
+        .map((b) => ({
+          id: b.id,
+          slug: b.slug,
+          title: b.title,
+          usd_cents: resolveUsdCents(b.slug, b.price_cents, b.currency),
+        }));
+    }
+
+    const productUsd = resolveUsdCents(product.slug, product.price_cents, product.currency);
+    const bumpTotal = bumps.reduce((sum, b) => sum + b.usd_cents, 0);
+    const orderTotal = productUsd + bumpTotal;
+
+    const { data: order, error: oErr } = await supabaseAdmin
+      .from("orders")
+      .insert({
+        email: data.email.toLowerCase(),
+        customer_name: data.fullName ?? null,
+        customer_phone: data.phone ?? null,
+        currency: "USD",
+        subtotal_cents: orderTotal,
+        total_cents: orderTotal,
+        provider: "stripe",
+        status: "pending",
+        metadata: {
+          product_slug: product.slug,
+          garden: product.garden,
+          bump_slugs: bumps.map((b) => b.slug),
+          utm: {
+            source: data.utmSource ?? null,
+            medium: data.utmMedium ?? null,
+            campaign: data.utmCampaign ?? null,
+          },
+        },
+      })
+      .select("id")
+      .single();
+    if (oErr) throw new Error(oErr.message);
+
+    const { error: iErr } = await supabaseAdmin.from("order_items").insert([
+      {
+        order_id: order.id,
+        product_id: product.id,
+        product_title: product.title,
+        unit_price_cents: productUsd,
+        quantity: 1,
+        line_total_cents: productUsd,
+      },
+      ...bumps.map((b) => ({
+        order_id: order.id,
+        product_id: b.id,
+        product_title: b.title,
+        unit_price_cents: b.usd_cents,
+        quantity: 1,
+        line_total_cents: b.usd_cents,
+      })),
+    ]);
+    if (iErr) throw new Error(iErr.message);
+
+    // Pre-payment lead capture (same as Paystack path).
+    const nameParts = (data.fullName ?? "").trim().split(/\s+/);
+    void supabaseAdmin.from("subscribers").upsert(
+      {
+        email: data.email.toLowerCase(),
+        first_name: nameParts[0] || null,
+        last_name: nameParts.slice(1).join(" ") || null,
+        phone: data.phone ?? null,
+        source: data.utmSource ? `utm:${data.utmSource}` : "checkout_intent",
+      },
+      { onConflict: "email" },
+    );
+
+    const host = getRequestHost();
+    const protocol = host.includes("localhost") ? "http" : "https";
+    const stripe = new Stripe(secret, { httpClient: Stripe.createFetchHttpClient() });
+
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [
+      {
+        price_data: {
+          currency: "usd",
+          unit_amount: productUsd,
+          product_data: { name: product.title },
+        },
+        quantity: 1,
+      },
+      ...bumps.map((b) => ({
+        price_data: {
+          currency: "usd" as const,
+          unit_amount: b.usd_cents,
+          product_data: { name: b.title },
+        },
+        quantity: 1,
+      })),
+    ];
+
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        customer_email: data.email,
+        line_items: lineItems,
+        // {CHECKOUT_SESSION_ID} → the success page reads ?reference and verifyCheckout
+        // resolves the order by provider_reference == session id.
+        success_url: `${protocol}://${host}/checkout/success?reference={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${protocol}://${host}/`,
+        metadata: {
+          order_id: order.id,
+          product_slug: product.slug,
+          garden: product.garden ?? "",
+        },
+      });
+    } catch (err) {
+      await supabaseAdmin
+        .from("orders")
+        .update({ status: "failed", metadata: { error: String(err) } })
+        .eq("id", order.id);
+      throw new Error("Stripe checkout initialization failed");
+    }
+
+    await supabaseAdmin.from("orders").update({ provider_reference: session.id }).eq("id", order.id);
+    await supabaseAdmin.from("payments").insert({
+      order_id: order.id,
+      provider: "stripe",
+      provider_reference: session.id,
+      event_type: "initialize",
+      status: "initialized",
+      amount_cents: orderTotal,
+      currency: "USD",
+      raw_payload: { session_id: session.id },
+    });
+
+    if (!session.url) throw new Error("Stripe did not return a checkout URL");
+    return { authorizationUrl: session.url, reference: session.id };
   });
 
 export const verifyCheckout = createServerFn({ method: "POST" })

@@ -5,13 +5,13 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { TurnstileGate } from "@/components/TurnstileGate";
-import { initializeCheckout } from "@/lib/checkout.functions";
+import { initializeCheckout, initializeStripeCheckout } from "@/lib/checkout.functions";
 import { getUtm } from "@/lib/utm";
 import { trackLead } from "@/lib/track";
 import { formatPrice } from "@/lib/gardens";
 import { supabase } from "@/integrations/supabase/client";
 import { X, ArrowRight } from "lucide-react";
-import { useCountry } from "@/lib/currency";
+import { useCountry, shouldUseStripe } from "@/lib/currency";
 
 const PRODUCT_SLUG = "called-expert-foundation-kit";
 const INTRO_VIDEO_ID = ""; // Paste YouTube video ID here
@@ -68,8 +68,10 @@ function CheckoutModal({
   const bumpPrice = formatPrice(29000, "ZAR", false, "creator-swipe-vault", country);
 
   const initFn = useServerFn(initializeCheckout);
+  const stripeFn = useServerFn(initializeStripeCheckout);
+  const useStripe = shouldUseStripe(country);
   const mut = useMutation({
-    mutationFn: initFn,
+    mutationFn: (args: Parameters<typeof initFn>[0]) => (useStripe ? stripeFn(args) : initFn(args)),
     onSuccess: (res) => {
       window.location.href = res.authorizationUrl;
     },
@@ -139,7 +141,9 @@ function CheckoutModal({
             Delivered instantly. Start in the next 2 minutes.
           </p>
           <p className="text-[#64748B] text-[11px] mt-1">
-            Shown in USD · charged in Rand (ZAR) at today's live rate.
+            {useStripe
+              ? "Charged in USD · secure card checkout."
+              : "Shown in USD · charged in Rand (ZAR) at today's live rate."}
           </p>
         </div>
 

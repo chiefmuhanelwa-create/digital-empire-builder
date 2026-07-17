@@ -39,6 +39,7 @@ import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as ProductsGardenGardenRouteImport } from './routes/products.garden.$garden'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
@@ -216,6 +217,11 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
 const ProductsGardenGardenRoute = ProductsGardenGardenRouteImport.update({
   id: '/products/garden/$garden',
   path: '/products/garden/$garden',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaystackWebhookRoute =
@@ -427,6 +433,7 @@ export interface FileRoutesByFullPath {
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -482,6 +489,7 @@ export interface FileRoutesByTo {
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
@@ -543,6 +551,7 @@ export interface FileRoutesById {
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/products/garden/$garden': typeof ProductsGardenGardenRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -604,6 +613,7 @@ export interface FileRouteTypes {
     | '/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
+    | '/api/public/stripe-webhook'
     | '/products/garden/$garden'
     | '/admin/'
     | '/dashboard/'
@@ -659,6 +669,7 @@ export interface FileRouteTypes {
     | '/dashboard/inner-circle'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
+    | '/api/public/stripe-webhook'
     | '/products/garden/$garden'
     | '/admin'
     | '/dashboard'
@@ -719,6 +730,7 @@ export interface FileRouteTypes {
     | '/_authenticated/learn/$slug'
     | '/api/cron/sync-fx'
     | '/api/public/paystack-webhook'
+    | '/api/public/stripe-webhook'
     | '/products/garden/$garden'
     | '/_authenticated/admin/'
     | '/_authenticated/dashboard/'
@@ -758,6 +770,7 @@ export interface RootRouteChildren {
   ProductsIndexRoute: typeof ProductsIndexRoute
   ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ProductsGardenGardenRoute: typeof ProductsGardenGardenRoute
   ApiEmailAuthPreviewRoute: typeof ApiEmailAuthPreviewRoute
   ApiEmailAuthWebhookRoute: typeof ApiEmailAuthWebhookRoute
@@ -974,6 +987,13 @@ declare module '@tanstack/react-router' {
       path: '/products/garden/$garden'
       fullPath: '/products/garden/$garden'
       preLoaderRoute: typeof ProductsGardenGardenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/paystack-webhook': {
@@ -1323,6 +1343,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIndexRoute: ProductsIndexRoute,
   ApiCronSyncFxRoute: ApiCronSyncFxRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ProductsGardenGardenRoute: ProductsGardenGardenRoute,
   ApiEmailAuthPreviewRoute: ApiEmailAuthPreviewRoute,
   ApiEmailAuthWebhookRoute: ApiEmailAuthWebhookRoute,

@@ -19,3 +19,13 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
 export function useCountry(): string | null {
   return useContext(CountryContext);
 }
+
+// Countries Paystack can bill (ZAR/African rail). Everyone else → Stripe (USD).
+export const PAYSTACK_COUNTRIES = new Set(["ZA", "NG", "GH", "KE", "CI", "EG", "RW"]);
+
+// Route the buyer to the right rail. Unknown country → Paystack (home market),
+// which still shows USD and bills ZAR. Only send to Stripe when we KNOW the
+// buyer is outside the Paystack region.
+export function shouldUseStripe(country: string | null): boolean {
+  return !!country && !PAYSTACK_COUNTRIES.has(country);
+}

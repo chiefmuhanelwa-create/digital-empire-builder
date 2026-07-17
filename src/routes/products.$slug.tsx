@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
-import { initializeCheckout, initializeSubscription } from "@/lib/checkout.functions";
+import { initializeCheckout, initializeStripeCheckout, initializeSubscription } from "@/lib/checkout.functions";
 
 const SUBSCRIPTION_SLUGS = ["called-expert-inner-circle"];
 import { getUtm } from "@/lib/utm";
 import { trackLead } from "@/lib/track";
-import { useCountry } from "@/lib/currency";
+import { useCountry, shouldUseStripe } from "@/lib/currency";
 import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
@@ -232,7 +232,9 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   const isSubscription = SUBSCRIPTION_SLUGS.includes(product.slug);
   const priceText = isSubscription ? `${priceLabel}/mo` : priceLabel;
   const initCheckout = useServerFn(initializeCheckout);
+  const initStripe = useServerFn(initializeStripeCheckout);
   const initSub = useServerFn(initializeSubscription);
+  const useStripe = shouldUseStripe(useCountry());
   const [email, setEmail] = useState<string>(user?.email ?? "");
   const [fullName, setFullName] = useState<string>(
     (user?.user_metadata?.full_name as string) ?? "",
@@ -241,7 +243,9 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   const [tsToken, setTsToken] = useState<string | null>(null);
 
   const mut = useMutation({
-    mutationFn: isSubscription ? initSub : initCheckout,
+    // Subscriptions stay on Paystack (plan-based). One-off purchases route by
+    // region: African buyers → Paystack (ZAR), everyone else → Stripe (USD).
+    mutationFn: isSubscription ? initSub : useStripe ? initStripe : initCheckout,
     onSuccess: (res: any) => {
       window.location.href = res.authorizationUrl;
     },
@@ -266,7 +270,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
 
   return (
     <div className="mt-12 border border-border p-6">
-      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · ZAR</div>
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · {useStripe && !isSubscription ? "USD" : "ZAR"}</div>
       <h3 className="mt-2 font-display text-2xl">{isSubscription ? "Join" : "Buy"} {product.title}</h3>
       {Array.isArray(product.benefits) && product.benefits.length > 0 && (
         <div className="mt-4 rounded-md bg-banana/5 border border-banana/20 p-4">
