@@ -343,7 +343,11 @@ const FAQS = [
   },
   {
     q: "Do I need a large following for this to work?",
-    a: "No. Your first income stream from your expertise does not require a large audience. It requires the right packaging, the right positioning, and the right pipeline — all of which the Foundation Kit gives you. The system works from a standing start of zero followers.",
+    a: "No — and you can start from zero followers. Your first sales don't come from a big audience; they come from packaging your expertise for the right few and running them through a pipeline (the SEEDS system in the kit). Here's the honest part: you're not building a following, but you are publishing a little — a few pieces of expertise-based content a week on ONE platform, repurposed, with automation (ManyChat + your email list) doing the capture and the selling for you. That's the opposite of dancing on TikTok every day. Small, sharp, and mostly automated — not viral and exhausting.",
+  },
+  {
+    q: "Do I have to post every day or become an influencer to get buyers?",
+    a: "No. This is the part most people get wrong. You are not building a media channel — you're building a machine. The realistic cadence is a few expertise-based posts a week on ONE platform (not five), each one repurposed into several pieces so a single idea does a week's work. From there the system runs itself: the 4E Content Calendar tells you exactly what to post, ManyChat captures the interested ones into your owned email list, and the SEEDS pipeline sells to that list on autopilot. You spend your 4-hour windows on expertise, not on chasing an algorithm. The content attracts; the automation converts.",
   },
   {
     q: "How fast can I see results?",
@@ -570,8 +574,8 @@ function Landing() {
           <p className="nx-body max-w-xl mx-auto mb-8">
             Whether you earn a salary or run your own thing, you've built real expertise — and you're
             leaving money on the table because you don't own the system. This is the 7-framework
-            system that turns what you already know into income you own — no following required, built
-            in 4-hour windows around the life you already have.
+            system that turns what you already know into income you own — no big following, no going
+            viral, built in 4-hour windows around the life you already have.
           </p>
 
           <CtaButton
@@ -776,7 +780,7 @@ function Landing() {
           <div className="mt-10 grid gap-3 sm:grid-cols-3">
             {[
               ["Time poverty", "Built in 4-hour windows around a full life — the same way he built it between night shifts. Not 20 hours a week you don't have."],
-              ["No following needed", "Your first income stream comes from packaging, not from going viral."],
+              ["No going viral", "Your income comes from packaging expertise for the right few — not from a huge audience or a viral hit."],
               ["Own the asset", "Build on land you own — not a platform that can suspend you overnight."],
             ].map(([t, d]) => (
               <div key={t} className="nx-card !p-5">
@@ -785,6 +789,37 @@ function Landing() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT ACTUALLY GETS YOU BUYERS (the distribution machine) ────── */}
+      <section className="bg-white border-b border-[var(--border)]">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
+          <p className="nx-label mb-3">Where the buyers actually come from</p>
+          <h2 className="mb-4">You build the asset. The machine gets the buyers.</h2>
+          <p className="nx-body max-w-xl mb-10">
+            The mistake everyone makes is thinking you need a big audience to sell. You don't — you
+            need a small, mostly-automated machine. The Foundation Kit builds all three parts, so
+            "getting buyers" isn't left to hope:
+          </p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              ["1", "Attract", "A few expertise posts a week on ONE platform — the 4E Content Calendar tells you exactly what to say. One idea, repurposed. No daily grind, no five platforms, no dancing."],
+              ["2", "Capture", "ManyChat + your email list pull the interested ones off the rented platform onto land you own. It runs 24/7 without you in the room."],
+              ["3", "Sell", "The SEEDS pipeline turns that owned list into buyers on autopilot — the same funnel selling while you sleep or clock into your shift."],
+            ].map(([n, t, d]) => (
+              <div key={n} className="nx-card !p-5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--nx-gold)] font-display font-black text-[#0F172A] mb-3">
+                  {n}
+                </div>
+                <div className="font-display text-lg text-[var(--foreground)]">{t}</div>
+                <p className="text-sm text-[var(--text-dim)] mt-1 leading-relaxed">{d}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-[var(--text-dim)] mt-8 max-w-xl">
+            That's the whole point. Your 4-hour windows go into your <strong className="text-[var(--foreground)]">expertise</strong> — the machine does the chasing, the capturing, and the selling.
+          </p>
         </div>
       </section>
 
