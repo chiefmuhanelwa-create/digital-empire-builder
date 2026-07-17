@@ -37,11 +37,11 @@ const PRO_COHORT_PHASES: Phase[] = [
     weeks: "Weeks 3–6",
     items: [
       {
-        title: "The Called Expert SWOT + 4Ps Framework",
+        title: "The Contentpreneur SWOT + 4Ps Framework",
         body: "Passion, Pain, Purpose, Profit — mapped and compressed into one niche statement, tested on 2 real people in your audience.",
       },
       {
-        title: "The Called Expert Content Ratio (4E, Adjusted)",
+        title: "The Contentpreneur Content Ratio (4E, Adjusted)",
         body: "Educate 50 / Entertain 25 / Encourage 15 / Earn 10 — a mix tuned for buyers, not just an audience, because your buyer is deciding whether to trust you with money.",
       },
       {
@@ -87,7 +87,7 @@ const PRO_COHORT_PHASES: Phase[] = [
         body: "5 income streams, the product ladder, the affiliate stack, and the 25% SARS reserve rule — so no single stream exceeds half your revenue.",
       },
       {
-        title: "Graduation — The Called Expert Covenant",
+        title: "Graduation — The Contentpreneur Covenant",
         body: "R10K/month demonstrable, 3+ PAIDS streams active, SARS reserve operational. This is the checkpoint, not a certificate for showing up.",
       },
     ],
@@ -189,7 +189,7 @@ export function ProCohortBreakdown() {
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Built for</dt>
-          <dd className="mt-2 text-sm">You — a Contentpreneur (a Called Expert still employed, or a Knowledge Creator with expertise but no system) ready to build the system your expertise deserves.</dd>
+          <dd className="mt-2 text-sm">You — a Contentpreneur (a professional still employed, or a self-employed creator with expertise but no system) ready to build the system your expertise deserves.</dd>
         </div>
       </dl>
 

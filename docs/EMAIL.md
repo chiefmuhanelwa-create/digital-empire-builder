@@ -73,8 +73,8 @@
 
 | Group | Env Var | Who |
 |-------|---------|-----|
-| Called Expert Prospects | `MAILERLITE_GROUP_ID_CALLED_EXPERT` | ICP 1 leads, tagged from content or /apply |
-| Free Blueprint Subscribers | `MAILERLITE_GROUP_ID_FREE_BLUEPRINT` | Downloaded Called Expert Blueprint |
+| Contentpreneur Prospects | `MAILERLITE_GROUP_ID_CALLED_EXPERT` | ICP 1 leads, tagged from content or /apply |
+| Free Blueprint Subscribers | `MAILERLITE_GROUP_ID_FREE_BLUEPRINT` | Downloaded Contentpreneur Blueprint |
 | 11th Hour Playbook | `MAILERLITE_GROUP_ID_FREE_11TH_HOUR` | Downloaded 11th Hour Playbook |
 | Right Side Assessment | `MAILERLITE_GROUP_ID_FREE_RIGHT_SIDE` | Completed Right Side Assessment |
 | 4-Hour Window | `MAILERLITE_GROUP_ID_FREE_4HR_WINDOW` | Downloaded 4-Hour Window System |
@@ -84,7 +84,7 @@
 ### Contentpreneur Buyer-Lane Trigger (Critical Automation)
 
 Any reply or engagement that includes these words → tag `contentpreneur-potential` → route to the Accelerator upgrade sequence:
-- **Lane A (Called Expert) signals:** "salary," "job," "employer," "qualification," "teaching," "professional," "years of experience," "nurse," "doctor," "teacher," "accountant," "lecturer," "engineer"
+- **Lane A (Contentpreneur) signals:** "salary," "job," "employer," "qualification," "teaching," "professional," "years of experience," "nurse," "doctor," "teacher," "accountant," "lecturer," "engineer"
 - **Lane B (Knowledge Creator) signals:** "clients," "coaching," "podcast," "audience," "brand deals," "consulting," "my own thing," "self-employed," "course," "community"
 - **Shared signals:** "expertise," "knowledge," "own the income," "package," "system"
 
@@ -147,7 +147,7 @@ Any reply or engagement that includes these words → tag `contentpreneur-potent
 **Lead:** What the sequence has been building toward
 **CTA options:**
 - Traffic tier (aspiring creator): Niche Clarity Workbook (R199) or Creator Starter Bundle
-- Buyer lanes (Called Expert / Knowledge Creator): Contentpreneur Blueprint (free) or Foundation Kit
+- Buyer lanes (Contentpreneur / Knowledge Creator): Contentpreneur Blueprint (free) or Foundation Kit
 - Discount code: time-limited (48-hour expiry)
 **Tone:** Celebration, not pressure. "This is for the ones who are serious."
 
@@ -155,7 +155,7 @@ Any reply or engagement that includes these words → tag `contentpreneur-potent
 
 ## Contentpreneur Upgrade Sequence (After Day 13)
 
-For subscribers tagged `contentpreneur-potential`. Subject angles adapt per lane (A = Called Expert, B = Knowledge Creator); the product ladder is shared:
+For subscribers tagged `contentpreneur-potential`. Subject angles adapt per lane (A = Contentpreneur, B = Knowledge Creator); the product ladder is shared:
 
 | Email | Day | Lane A angle | Lane B angle | Product |
 |-------|-----|--------------|--------------|---------|

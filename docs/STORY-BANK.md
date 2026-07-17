@@ -45,7 +45,7 @@
 > Your starting point doesn't determine your destination. The bathroom floor taught me more about building than any university could.
 
 ### Products This Story Sells
-- Contentpreneur Book | Called Expert Accelerator PRO | PAIDS Starter Course
+- Contentpreneur Book | Contentpreneur Accelerator PRO | PAIDS Starter Course
 
 ---
 
@@ -161,7 +161,7 @@
 > Your calling doesn't come with a traditional job description. Walk the path before you expect people to understand the map.
 
 ### Products This Story Sells
-- Contentpreneur Book | Called Expert Accelerator PRO
+- Contentpreneur Book | Contentpreneur Accelerator PRO
 
 ---
 
@@ -185,7 +185,7 @@
 > Brands buy engagement and relevance, not vanity metrics. Know your value before they call — you only get one chance to price it right.
 
 ### Products This Story Sells
-- Brand Deal Bible | Pitch Masterclass | Rate Card Generator | Called Expert Accelerator PRO
+- Brand Deal Bible | Pitch Masterclass | Rate Card Generator | Contentpreneur Accelerator PRO
 
 ---
 
@@ -252,7 +252,7 @@
 > Rising alone is empty. Rising together is legacy. Ubuntu is not a philosophy — it is a monetisation strategy for the African creator economy.
 
 ### Products This Story Sells
-- Called Expert Accelerator PRO | PAIDS Pro Course | CHKPLT Community
+- Contentpreneur Accelerator PRO | PAIDS Pro Course | CHKPLT Community
 
 ---
 
@@ -300,7 +300,7 @@ In 2019 I joined two SA affiliate networks — AdMarula and OfferForge. OfferFor
 | Passive income / affiliates | 11 (AdMarula R23K) |
 | Platform betrayal / diversification | 04 (780K) · 11 (AdSense) |
 | DARES in action | 11 (income survived AdSense kill) · 08 (system → R50K) |
-| Called Expert positioning | 07 (Netflix) · 09 (Samsung) · 10 (Ubuntu) |
+| Contentpreneur positioning | 07 (Netflix) · 09 (Samsung) · 10 (Ubuntu) |
 
 ---
 

@@ -34,9 +34,9 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 
 ### WF-002: Cohort Intake & Transformation Delivery
 
-**What:** Move a Called Expert from application → qualification → onboarding → 20-week transformation → graduation.
+**What:** Move a Contentpreneur from application → qualification → onboarding → 20-week transformation → graduation.
 
-**Why:** The Called Expert Accelerator PRO (R18,000 PIF / R6,500×3) is the primary revenue engine. 6 students × R18,000 = R108,000 per cohort. This workflow is the covenant between CHKPLT and the student.
+**Why:** The Contentpreneur Accelerator PRO (R18,000 PIF / R6,500×3) is the primary revenue engine. 6 students × R18,000 = R108,000 per cohort. This workflow is the covenant between CHKPLT and the student.
 
 **How:**
 1. **Application** — Student submits 23-point diagnostic at `/apply`
@@ -47,13 +47,13 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 6. **Onboarding email** — Lovable Cloud sends order receipt → MailerLite fires cohort welcome sequence
 7. **Week 1–20 delivery** — 7-stage transformation system via LMS:
    - Week 1-3: MS×TS×SS (Mindset × Toolset × Skillset)
-   - Week 4-6: SWOT (called expert audit)
+   - Week 4-6: SWOT (Contentpreneur audit)
    - Week 7-10: 4Es Content Engine (Educate/Entertain/Encourage/Earn)
    - Week 11-14: Social Media + Community (3Cs: Create/Collaborate/Contribute)
    - Week 15-17: DARES (Digital/Automated/Recurring/Evergreen/Scalable)
    - Week 18-20: PAIDS (Products/Ads+Affiliates/Information/Deals/Services)
 8. **Progress tracking** — `lms_lesson_progress` table. Student dashboard at `/dashboard`
-9. **Graduation** — Certificate + Called Expert Completion status in DB + CHKPLT community access
+9. **Graduation** — Certificate + Contentpreneur Completion status in DB + CHKPLT community access
 
 **Non-negotiable:** No cohort launches without a transformation promise backed by receipts (proof stories S001–S020).
 
@@ -98,7 +98,7 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 | 6 | 11 | What brands actually want | Media kit template |
 | 7 | 13 | Product offer (soft sell — proof first) | Free product or R997 offer |
 
-**ICP 1 upgrade trigger:** Any reply mentioning "job," "salary," "expertise," "qualification," "teaching," "knowledge," or "professional" → tag `called-expert-potential` → route to Called Expert Blueprint sequence.
+**ICP 1 upgrade trigger:** Any reply mentioning "job," "salary," "expertise," "qualification," "teaching," "knowledge," or "professional" → tag `called-expert-potential` → route to Contentpreneur Blueprint sequence.
 
 **MailerLite rules:**
 - Reply-to: chiefmuhanelwa@gmail.com
@@ -153,14 +153,14 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 
 **What:** Score a prospect's business readiness via the 23-point diagnostic and route them to the right programme.
 
-**Why:** The Called Expert Accelerator PRO is not for everyone. The `/apply` flow protects the cohort quality (which protects the transformation promise) and filters out people who are not ready for R18,000 investment.
+**Why:** The Contentpreneur Accelerator PRO is not for everyone. The `/apply` flow protects the cohort quality (which protects the transformation promise) and filters out people who are not ready for R18,000 investment.
 
 **How:**
 1. Prospect lands on `/apply` (usually from ICP 1 content or direct link)
 2. Turnstile CAPTCHA validates (no bots)
 3. 23-question form: followers, engagement, income, income streams, product status, email list, community, email open rate, automations, niche clarity, SWOT history, 4E primary pillar, abundance mindset, building horizon
 4. `evaluator.ts` scores and returns `determined_routing_status`
-5. `QUALIFIED_FOR_CORE_PROGRAM` → unlock checkout for Called Expert Accelerator PRO
+5. `QUALIFIED_FOR_CORE_PROGRAM` → unlock checkout for Contentpreneur Accelerator PRO
 6. Other statuses → route to starter products (R997 or R1,997)
 7. All applications stored in `client_stewardship_applications` for admin review
 8. Admin reviews at `/admin/contacts` — can manually override routing status
@@ -173,7 +173,7 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 
 **What:** Handle purchases for both SA/Africa (ZAR via Paystack) and international (USD/GBP/EUR via Stripe).
 
-**Why:** Ndivhuwo's audience is no longer only SA. The Called Expert framework applies globally. Any expert with knowledge and a phone is a potential student — wherever they are.
+**Why:** Ndivhuwo's audience is no longer only SA. The Contentpreneur framework applies globally. Any expert with knowledge and a phone is a potential student — wherever they are.
 
 **How — Paystack (ZAR, Africa):**
 1. Client calls `initializeCheckout()` with product slug + Turnstile token

@@ -78,7 +78,7 @@ HARD RULES:
 
 function icpProfile(icp: "called_expert" | "content_creator"): string {
   if (icp === "called_expert") {
-    return `AUDIENCE — the Called Expert (a Contentpreneur lane): a 32–50 professional, specialist, or academic with unexploited expertise who wants to monetise their knowledge. Language that lands: "your knowledge is worth more than you're being paid for it." They buy transformation and authority, not entertainment.
+    return `AUDIENCE — the employed professional (a Contentpreneur): a 32–50 professional, specialist, or academic with unexploited expertise who wants to monetise their knowledge. Language that lands: "your knowledge is worth more than you're being paid for it." They buy transformation and authority, not entertainment.
 PRICING BAND: premium. Suggest a high-ticket range — typically $97 entry up to $300–$4,000 for cohorts/services. Justify with outcome value, not effort.
 ANGLE: position the offer as a system/programme that converts their expertise into income and authority.`;
   }
@@ -118,7 +118,7 @@ export const buildOffer = createServerFn({ method: "POST" })
 
     const userPrompt = `Build a complete, sellable offer from this. Stay in NoChill's voice the whole way.
 
-WHO THEY SERVE: ${data.icp === "called_expert" ? "Called Expert (Contentpreneur lane)" : "Knowledge Creator (Contentpreneur lane)"}
+WHO THEY SERVE: ${data.icp === "called_expert" ? "Employed professional (Contentpreneur)" : "Knowledge Creator (Contentpreneur)"}
 ${icpProfile(data.icp)}
 
 THEIR INPUTS:
@@ -169,7 +169,7 @@ Build the offer: name it, write the one-line promise (headline), the exact who-i
         if (error) console.error("[offer-builder] lead insert failed", error);
       });
 
-    // 4. MailerLite — ICP 1 → Called Expert nurture, ICP 2 → free-knowledge nurture.
+    // 4. MailerLite — ICP 1 → professional/buyer nurture, ICP 2 → free-knowledge nurture.
     const nameParts = data.name.trim().split(/\s+/);
     void addToMailerLiteGroup(
       data.email,

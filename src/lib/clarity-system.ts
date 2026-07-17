@@ -99,7 +99,7 @@ export const CLARITY_TOTAL = CLARITY_STEPS.length;
 export const CLARITY_BONUSES: ClarityTool[] = [
   { name: "30-Day Consistency Blueprint", route: "/apps/consistency-blueprint", pdf: "30-day-tracker" },
   { name: "90-Day First Income Planner", route: "/apps/first-income-planner", pdf: "90-day-planner" },
-  { name: "Called Expert Cheat Sheet", pdf: "cheat-sheet" },
+  { name: "Contentpreneur Cheat Sheet", pdf: "cheat-sheet" },
 ];
 
 // localStorage progress

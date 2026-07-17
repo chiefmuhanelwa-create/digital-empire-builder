@@ -173,7 +173,7 @@ export const submitApplication = createServerFn({ method: "POST" })
         (err) => console.error("[apply] sendApplicationEmail failed", err),
       );
 
-      // Sync applicant to MailerLite — qualified → Called Expert group, else → Knowledge Audit nurture.
+      // Sync applicant to MailerLite — qualified → Contentpreneur buyer group, else → Knowledge Audit nurture.
       const nameParts = data.full_name.trim().split(/\s+/);
       void addToMailerLiteGroup(
         data.email,

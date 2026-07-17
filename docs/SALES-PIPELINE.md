@@ -1,7 +1,7 @@
-# CHKPLT — Called Expert Sales Pipeline SOP
+# CHKPLT — Contentpreneur Sales Pipeline SOP
 ## 12-Step Acquisition: Stranger → Enrolled Student
 
-**Programme:** The Called Expert Accelerator PRO (R18,000 PIF / R6,500×3)
+**Programme:** The Contentpreneur Accelerator PRO (R18,000 PIF / R6,500×3)
 **Owner:** Ndivhuwo Muhanelwa
 **Document:** Internal SOP — do not publish publicly
 
@@ -13,7 +13,7 @@
 
 | Step | Action | Who | Timing | SEEDS Stage |
 |------|--------|-----|--------|-------------|
-| 1 | Identify & attract The Called Expert | Ndivhuwo / Content | Ongoing | Signal |
+| 1 | Identify & attract The Contentpreneur | Ndivhuwo / Content | Ongoing | Signal |
 | 2 | Optimise profile to convert visitors | Ndivhuwo / Content | One-time + quarterly | Before Signal |
 | 3 | Publish content with keyword CTA | Ndivhuwo / Content | 3×/week minimum | Signal |
 | 4 | Keyword trigger activates ManyChat DM | ManyChat (automated) | Instant on comment | Engagement |
@@ -38,7 +38,7 @@
 ### 60-Second ICP Profile
 The buyer is a **Contentpreneur** — someone who turns what they know into income they own. Two lanes qualify; money + expertise is the filter for both.
 
-**Lane A — Called Expert (still employed):**
+**Lane A — Contentpreneur (still employed):**
 - Age: 32–50
 - Background: Corporate professional, specialist, academic, healthcare, ministry leader, teacher
 - Credentials: Degree / MBA / certification / 10+ years domain expertise
@@ -61,7 +61,7 @@ The buyer is a **Contentpreneur** — someone who turns what they know into inco
 - Instagram: faith-business spaces, professionals posting about their work
 - Facebook: church networks, alumni, professional associations
 - Events: speaker at or attendee of conferences in their sector
-- Referrals: alumni of Called Expert Accelerator PRO who refer peers
+- Referrals: alumni of Contentpreneur Accelerator PRO who refer peers
 
 ### The 6 Sub-Segments
 1. **Shift Worker** (primary proof — ATNS/NOCHILL story is this)
@@ -109,7 +109,7 @@ Before any marketing, every platform profile must have:
 | Keyword | What It Unlocks | Use On |
 |---------|----------------|--------|
 | GUIDE | Free Expertise-to-Income Starter Guide (PDF) | Framework posts |
-| START | Free 7-Day Called Expert Challenge (email series) | Transformation story posts |
+| START | Free 7-Day Contentpreneur Challenge (email series) | Transformation story posts |
 | PAIDS | Free PAIDS Income Map (PDF) | Income stream posts |
 | MEDIA | Free Media Kit + Rate Card Template | Brand deal/speaking posts |
 | SYSTEM | Free Content Architecture Template (Notion) | Systems/DARES posts |
@@ -149,11 +149,11 @@ Qualify for the programme. Brief description: "I run a 90-day intensive for [the
 | 2 | 2 | Teach ONE complete framework (PAIDS / 4Es / MS×TS×SS) fully | Reply with discovery |
 | 3 | 4 | Share one real personal story mirroring their situation | None — just serve |
 | 4 | 6 | Share specific transformation: client result with real numbers | None — let proof speak |
-| 5 | 8 | Invite to Called Expert Programme | Reply READY for details |
+| 5 | 8 | Invite to Contentpreneur Programme | Reply READY for details |
 
 **⚠️ Never skip Email 3 (story email).** It has the highest open rate and reply rate. Vulnerability converts better than polish.
 
-**ICP 1 upgrade trigger:** Any reply mentioning "job", "salary", "expertise", "qualification", "teaching", "knowledge", or "professional" → tag `called-expert-potential` → route to Called Expert Blueprint sequence.
+**ICP 1 upgrade trigger:** Any reply mentioning "job", "salary", "expertise", "qualification", "teaching", "knowledge", or "professional" → tag `called-expert-potential` → route to Contentpreneur Blueprint sequence.
 
 **MailerLite rules:**
 - Reply-to: chiefmuhanelwa@gmail.com
@@ -180,7 +180,7 @@ Qualify for the programme. Brief description: "I run a 90-day intensive for [the
 - **One-word answers:** Low commitment — send one follow-up question to test
 - **"Yes" to investment readiness:** Hot lead — book within 24 hours
 - **Prior bad coaching experience:** Must address directly on the call (don't avoid it)
-- **Has existing assets (book, framework, speaking history):** Perfect Called Expert fit
+- **Has existing assets (book, framework, speaking history):** Perfect Contentpreneur fit
 
 ---
 
@@ -243,8 +243,8 @@ Before revealing the programme, get an unprompted "yes" to the underlying premis
 ### Programme Tiers
 | Tier | Price | Format | Duration |
 |------|-------|--------|----------|
-| Called Expert Accelerator PRO | **R18,000 PIF / R6,500×3** | Cohort (max 10 people) | **12 weeks** (see `docs/CURRICULUM.md`) |
-| Called Expert Accelerator VIP | ⚠️ price conflict — see note | 1:1 coaching | 12 weeks |
+| Contentpreneur Accelerator PRO | **R18,000 PIF / R6,500×3** | Cohort (max 10 people) | **12 weeks** (see `docs/CURRICULUM.md`) |
+| Contentpreneur Accelerator VIP | ⚠️ price conflict — see note | 1:1 coaching | 12 weeks |
 
 > ⚠️ **VIP price discrepancy, not yet resolved:** this row says R25,000; `docs/PRODUCTS.md` and `contentpreneur-vip-tier` in the DB say R45,000. Confirm the real number before quoting VIP on a call.
 

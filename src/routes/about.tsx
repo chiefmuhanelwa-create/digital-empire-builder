@@ -59,7 +59,7 @@ function About() {
           </h2>
           <div className="mt-8 bg-white border border-[#F59E0B]/30 px-6 sm:px-8 py-6 space-y-4">
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
-              A <strong className="text-[#0F172A]">Contentpreneur</strong> turns what they know into income they own. That's two kinds of person. The <strong className="text-[#0F172A]">Called Expert</strong> — a professional, teacher, specialist, or healthcare worker still employed and paid less than their expertise is worth. And the <strong className="text-[#0F172A]">Knowledge Creator</strong> — a coach, consultant, podcaster, or creator who already has the knowledge, and often the audience, but no system to own the income. Both were not just trained in their field — they were{" "}
+              A <strong className="text-[#0F172A]">Contentpreneur</strong> turns what they know into income they own. That's two kinds of person. The <strong className="text-[#0F172A]">employed professional</strong> — a teacher, specialist, or healthcare worker still employed and paid less than their expertise is worth. And the <strong className="text-[#0F172A]">knowledge creator</strong> — a coach, consultant, podcaster, or creator who already has the knowledge, and often the audience, but no system to own the income. Both were not just trained in their field — they were{" "}
               <em className="text-banana not-italic font-semibold">called</em> to it. Their knowledge is not just a skill. It is a stewardship.
             </p>
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">

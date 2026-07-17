@@ -27,7 +27,7 @@ export const GARDENS: Record<Garden, {
     name: "Coaching & Accelerator",
     tagline: "Rungs 6–7 — Accelerator, coaching & done-with-you.",
     description:
-      "The 90-Day Called Expert Accelerator PRO, live cohorts, 1-on-1 mentorship and done-with-you facilitation for Called Experts ready to go full-time.",
+      "The 90-Day Contentpreneur Accelerator PRO, live cohorts, 1-on-1 mentorship and done-with-you facilitation for Contentpreneurs ready to go full-time.",
   },
   devarim: {
     slug: "devarim",

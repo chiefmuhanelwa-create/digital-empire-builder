@@ -36,7 +36,7 @@ Your audience splits into three tiers under the **Contentpreneur** umbrella. To 
 
 1. **Reach Tier: The DNA Starter (Digital Native Aspiring | Age 18–35):** Your **Top-of-Funnel REACH market**, NOT a core buyer. Passion and phones but no capital and nothing yet to package. They consume short-form content, fill your email list, and buy low-ticket books and templates — then grow INTO a buyer lane over 12 months. The volume layer. Never insulted in copy.
 
-2. **Buyer Lane A: The Called Expert (The Unathi-Type | Age 32–50):** Credentialed professionals (teachers, senior corporate managers, financial advisors, medical specialists) earning R30,000–R200,000+/month, still employed. Time-poor, faith-rooted, sitting on unpublished intellectual property. They buy architecture, strategy, and systems that protect their energy and dignity — not hype.
+2. **Buyer Lane A: The Contentpreneur (The Unathi-Type | Age 32–50):** Credentialed professionals (teachers, senior corporate managers, financial advisors, medical specialists) earning R30,000–R200,000+/month, still employed. Time-poor, faith-rooted, sitting on unpublished intellectual property. They buy architecture, strategy, and systems that protect their energy and dignity — not hype.
 
 3. **Buyer Lane B: The Knowledge Creator (coach / consultant / podcaster / creator):** Self-employed or already-earning, already has the knowledge and often the audience, but no system to OWN the income. Tired of brand-deal dependency; wants an asset they own. Also a core buyer — money still qualifies (they already invest in their growth). Distinct from the Reach Tier: Lane B has expertise AND earns.
 
@@ -94,7 +94,7 @@ Your intellectual property is organized sequentially. The thematic narrative fol
 
 To maximize conversions and maintain elite direct-response standards, your offers are divided into two clear, high-converting packages.
 
-### 3.1 Front-End Tier: The Called Expert Foundation Kit
+### 3.1 Front-End Tier: The Contentpreneur Foundation Kit
 
 - **Price Line:** $97 / R1,800.
 - **Delivery Engine:** Completely self-paced, instantly delivered digital curriculum hosted inside your primary landing system.
@@ -137,7 +137,7 @@ This is a responsive frontend interactive questionnaire web app designed to repl
   2. *Step 2: Mindset Equation:* Prompts a multiple-choice question testing their abundance orientation: *Which statement describes you?* Options map to Scarcity, Mixed, or **3Cs Abundance Mode**.
   3. *Step 3: Toolset & Skillset Scoring:* Features interactive sliders (1–10) tracking content capability and checkboxes selecting their current software exposure (CapCut, Canva, Email Automation, AI assistants).
 - **The Dynamic Engine Output:** The web app runs an automated background script evaluating the input against your core formulas (MS×SS×TS = Digital Asset). It dynamically compiles a personalized **Contentpreneur Strategy Document (PDF)** featuring their exact capability score, identifying their weakest link, and pre-populating a custom 4-hour weekly scheduling template based on their industry.
-- **The Hook to Purchase:** To unlock the specialized video setup walk-throughs and the actual plug-and-play Notion templates corresponding to their custom PDF score, the results screen displays a prominent, direct call-to-action button to purchase the **$97 Called Expert Foundation Kit**.
+- **The Hook to Purchase:** To unlock the specialized video setup walk-throughs and the actual plug-and-play Notion templates corresponding to their custom PDF score, the results screen displays a prominent, direct call-to-action button to purchase the **$97 Contentpreneur Foundation Kit**.
 
 ## SECTION 5: The CHKPLT Funnel Copywriting & Complete Pipeline
 
@@ -172,7 +172,7 @@ The comment instantly triggers the background conversation layer, running 24/7 w
   *"Perfect! Your system link has been sent to [Email]. Quick question while I have you: Are you currently making income from your specialized knowledge outside your job, or is that something you are actively trying to establish?"*
 
 - **Message 3 (Fired based on interaction or 24 hours later):**
-  *"I hear you. I was in that exact position—sitting on major expertise but missing the structural engine under the hood. I am launching applications for our next closed group cohort called The Called Expert Accelerator. We help you launch your live digital asset in 90 days. Would it be okay if I dropped the application link here to see if you fit our core profile?"*
+  *"I hear you. I was in that exact position—sitting on major expertise but missing the structural engine under the hood. I am launching applications for our next closed group cohort called The Contentpreneur Accelerator. We help you launch your live digital asset in 90 days. Would it be okay if I dropped the application link here to see if you fit our core profile?"*
 
 ### 5.3 Step 3: The 5-Day Automated Email Nurture Sequence
 
@@ -202,7 +202,7 @@ The email address captured by ManyChat is pushed into MailerLite/ConvertKit, tri
 - **Copywriting Structure:** The proof offering. You showcase screenshots and case study data of an African corporate manager (an elite Unathi-type profile) who successfully mapped her industry curriculum, deployed an automated lead funnel, and secured her first R25,000 paid advisory engagement using her digital asset base.
 - **CTA:** *"Review what is possible when you stop guessing and install a system."*
 
-#### Email 5 (Day 8) — "The Called Expert Cohort — Is This Your Season?"
+#### Email 5 (Day 8) — "The Contentpreneur Cohort — Is This Your Season?"
 
 - **Copywriting Structure:** The direct application invitation. You outline your anti-sell parameters: *"This is not for beginners, this is not for people looking for viral tricks, and this is not for anyone wanting to separate their faith from their business strategy. This is an elite implementation room for seasoned professionals ready to install an architecture."*
 - **CTA:** Direct hyperlink to the CHKPLT `/apply` diagnostic (superseding the Tally form referenced below).

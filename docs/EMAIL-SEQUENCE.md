@@ -111,7 +111,7 @@ None of this required her to quit her job first. It ran alongside it.
 
 ## Email 5 (Day 8) — "Is this your season?"
 
-**Subject:** The Called Expert Accelerator — applications open
+**Subject:** The Contentpreneur Accelerator — applications open
 **Preview text:** Not for everyone. Read the next line before you click.
 
 [First Name],
@@ -120,7 +120,7 @@ This one's a direct invitation, so I'll be direct back.
 
 This is not for beginners looking for a side-hustle trick. It's not for anyone chasing a viral moment. And it's not for anyone who wants to separate their faith from their business strategy — that's not how I operate, and it's not how this room operates either.
 
-This is an implementation room for seasoned professionals — people with real expertise already built — who are ready to install the architecture around it: **The Called Expert Accelerator PRO.** 12 weeks. R18,000 once, or R6,500 × 3 if cash flow needs the flex.
+This is an implementation room for seasoned professionals — people with real expertise already built — who are ready to install the architecture around it: **The Contentpreneur Accelerator PRO.** 12 weeks. R18,000 once, or R6,500 × 3 if cash flow needs the flex.
 
 If any part of the last 4 emails made you think "that's me" — the application takes 10 minutes: **[APPLY LINK → /apply]**
 
@@ -135,5 +135,5 @@ If it's not your season, no hard feelings — reply and let me know, and I'll ke
 - [ ] Create one Automation triggered by "subscriber added to group" for each lead-magnet group (`MAILERLITE_GROUP_ID_FREE_*` in `.env.example`)
 - [ ] Load these 5 emails in order with delays: Day 0 (instant), Day 2, Day 4, Day 6, Day 8
 - [ ] Set sender name "Ndivhuwo Muhanelwa · NOCHILL", reply-to `chiefmuhanelwa@gmail.com`
-- [ ] Tag any reply containing "job", "salary", "expertise", "qualification", "teaching", or "professional" → `called-expert-potential` (per `docs/SALES-PIPELINE.md` STEP 6) → route to the Called Expert Blueprint sequence
+- [ ] Tag any reply containing "job", "salary", "expertise", "qualification", "teaching", or "professional" → `called-expert-potential` (per `docs/SALES-PIPELINE.md` STEP 6) → route to the Contentpreneur Blueprint sequence
 - [ ] Test the full sequence on a personal test email before turning it on for real subscribers

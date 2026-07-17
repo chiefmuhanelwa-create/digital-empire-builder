@@ -3,7 +3,7 @@
 
 > *"Unless the Lord builds the house, the builders labour in vain."* — Psalm 127:1
 
-**Programme:** Called Expert Accelerator PRO (R18,000 PIF / R6,500×3)
+**Programme:** Contentpreneur Accelerator PRO (R18,000 PIF / R6,500×3)
 **Duration:** **12 weeks** (compressed from the original 20-week draft — see "Structure History" below)
 **Delivery:** `/admin/curriculum/$productSlug` → LMS at `/learn/$slug`
 **Slug:** `contentpreneur-90day-cohort`
@@ -68,7 +68,7 @@ MS × TS × SS = Digital Asset — multiplication, not addition. Any zero = zero
 
 | # | Lesson | Slug |
 |---|--------|------|
-| 1 | The Called Expert SWOT | `swot-called-expert` |
+| 1 | The Contentpreneur SWOT | `swot-called-expert` |
 | 2 | The 3 Strategic Priorities | `swot-3-strategic-priorities` |
 | 3 | **NEW:** The 4Ps Framework (Passion/Pain/Purpose/Profit) | `swot-4ps-framework` |
 | 4 | Niche Statement Formula *(moved from Stage 3)* | `content-niche-statement` |
@@ -88,7 +88,7 @@ the overlap into one sentence — *"I help [person] achieve [outcome] through [m
 | # | Lesson | Slug |
 |---|--------|------|
 | 1 | The 4E Ratios (Educate 35 / Entertain 30 / Encourage 20 / Earn 15) | `content-4e-ratios` |
-| 2 | Called Expert Content Ratio (4E Adjusted: 50/25/15/10) | `content-called-expert-ratio` |
+| 2 | Contentpreneur Content Ratio (4E Adjusted: 50/25/15/10) | `content-called-expert-ratio` |
 | 3 | The 30-Day Content Calendar | `content-30day-calendar` |
 
 **Checkpoint:** 30-day calendar built with 4E ratios.
@@ -166,7 +166,7 @@ stream exceeds 40–50% of total revenue.
 | 3 | The Affiliate Income Stack (SA-Specific) | `paids-affiliate-stack-sa` |
 | 4 | The Product Ladder: Price Ascension | `paids-product-ladder` |
 | 5 | The 25% SARS Reserve Rule | `paids-sars-25-percent-rule` |
-| 6 | Graduation — The Called Expert Covenant *(now Week 12, not Week 20)* | `paids-graduation-covenant` |
+| 6 | Graduation — The Contentpreneur Covenant *(now Week 12, not Week 20)* | `paids-graduation-covenant` |
 
 **Programme Checkpoint:** 3+ PAIDS streams active · R10K/month demonstrable · SARS reserve
 operational · graduation review call booked.
@@ -205,8 +205,8 @@ Stages 2–6 in order — now compressed to roughly one stage per week, not one 
 
 | Product | Slug | Status |
 |---------|------|--------|
-| Called Expert Accelerator PRO | `contentpreneur-90day-cohort` | 32 lessons across 7 modules — see migrations above |
-| Called Expert VIP | `contentpreneur-vip-tier` | published — 0 lessons, not yet curriculum-built |
+| Contentpreneur Accelerator PRO | `contentpreneur-90day-cohort` | 32 lessons across 7 modules — see migrations above |
+| Contentpreneur VIP | `contentpreneur-vip-tier` | published — 0 lessons, not yet curriculum-built |
 
 Go to `/admin/curriculum/contentpreneur-90day-cohort` to review or extend.
 

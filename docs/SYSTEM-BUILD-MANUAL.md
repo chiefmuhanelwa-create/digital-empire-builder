@@ -164,4 +164,4 @@ Learning path: Supabase basics → TanStack Start server fns → one Paystack te
 
 ---
 
-*This manual is the asset. Keep it current as the system evolves — every new build = a new line in `Learnings.md` and (if teachable) a tagged entry in the Called Expert Curriculum KB.*
+*This manual is the asset. Keep it current as the system evolves — every new build = a new line in `Learnings.md` and (if teachable) a tagged entry in the Contentpreneur Curriculum KB.*

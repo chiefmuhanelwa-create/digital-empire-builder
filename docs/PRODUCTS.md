@@ -6,7 +6,7 @@
 
 ## Audience mapping (Contentpreneur umbrella)
 
-> The buyer identity is **Contentpreneur** — someone who turns what they know into income they own. The `ICP` tags in the tables below map to it: **ICP 1 = Buyer Lane A (Called Expert — professional/specialist still employed)**; **ICP 2 = the aspiring-creator traffic tier that grows into a buyer lane**. Buyer **Lane B (Knowledge Creator — coach/podcaster/consultant with expertise + income)** is served by the same paid ladder as Lane A with lane-specific copy. See `CLAUDE.md` → "Target Audience — the Contentpreneur Umbrella" for the full definition.
+> The buyer identity is **Contentpreneur** — someone who turns what they know into income they own. The `ICP` tags in the tables below map to it: **ICP 1 = Buyer Lane A (Contentpreneur — professional/specialist still employed)**; **ICP 2 = the aspiring-creator traffic tier that grows into a buyer lane**. Buyer **Lane B (Knowledge Creator — coach/podcaster/consultant with expertise + income)** is served by the same paid ladder as Lane A with lane-specific copy. See `CLAUDE.md` → "Target Audience — the Contentpreneur Umbrella" for the full definition.
 
 ## Product Architecture — The 153 Framework
 
@@ -40,7 +40,7 @@
 
 | Product | Slug | Price ZAR | Price USD | Garden | Delivery | ICP | Status |
 |---------|------|-----------|-----------|--------|----------|-----|--------|
-| Called Expert Accelerator PRO (90-day) | `contentpreneur-90day-cohort` | R18,000 PIF / R6,500×3 | TBD | etz_pri | LMS + coaching | ICP 1 | ✅ Published (32 lessons / 7 modules seeded) |
+| Contentpreneur Accelerator PRO (90-day) | `contentpreneur-90day-cohort` | R18,000 PIF / R6,500×3 | TBD | etz_pri | LMS + coaching | ICP 1 | ✅ Published (32 lessons / 7 modules seeded) |
 | VIP Tier | `contentpreneur-vip-tier` | R45,000 | TBD | etz_pri | LMS + 1:1 | ICP 1 | ⚠️ Published (0 curriculum) |
 
 ---
@@ -49,10 +49,10 @@
 
 These need to be created in the DB and designed in Canva. Use `/admin/products` to add them.
 
-### FREE-001: The Called Expert Blueprint
+### FREE-001: The Contentpreneur Blueprint
 - **Description:** POSSESS Framework PDF — 7-step system for monetising expertise without quitting your job
 - **Pages:** 12 pages. Heritage Gold design.
-- **ICP:** ICP 1 (Called Expert)
+- **ICP:** ICP 1 (Contentpreneur)
 - **Garden:** `deshe`
 - **is_free:** true
 - **Lead capture:** Name + email + "What profession are you currently in?"
@@ -62,7 +62,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 - **DB slug:** `called-expert-blueprint`
 
 ### FREE-002: The 11th Hour Playbook
-- **Description:** 8-page guide for the Called Expert at 40–50. "You're not too late. You're the 11th hour worker. Here's what you do in the next 30 days." Matthew 20 decoded.
+- **Description:** 8-page guide for the Contentpreneur at 40–50. "You're not too late. You're the 11th hour worker. Here's what you do in the next 30 days." Matthew 20 decoded.
 - **ICP:** ICP 1
 - **Garden:** `deshe`
 - **is_free:** true
@@ -105,10 +105,10 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 
 ## The First 5 Paid Products (Upsells — Genesis Phase)
 
-### PAID-001: The Called Expert Starter Kit — R997
+### PAID-001: The Contentpreneur Starter Kit — R997
 - **Description:** Everything needed to launch as a monetised expert in 30 days.
 - **Includes:** Expertise packaging workbook + Content strategy guide (5 posts/week) + POSSESS framework deep-dive + LinkedIn profile optimisation guide
-- **Who it's for:** Just downloaded Called Expert Blueprint. Ready to start. Needs the full map.
+- **Who it's for:** Just downloaded Contentpreneur Blueprint. Ready to start. Needs the full map.
 - **ICP:** ICP 1
 - **Garden:** `esev`
 - **MailerLite trigger:** `called-expert-blueprint` tag → Day 7 upsell email
@@ -128,7 +128,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 - **Description:** 6 recorded sessions: extract expertise → package → sell.
 - **Sessions:**
   1. What do you actually know? (Knowledge Audit walkthrough)
-  2. Who is your 11th hour worker (your specific Called Expert sub-segment)
+  2. Who is your 11th hour worker (your specific Contentpreneur sub-segment)
   3. POSSESS framework full application
   4. Your first digital product (expertise → PDF in 90 minutes)
   5. Your first cohort (product → programme)
@@ -143,7 +143,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 - **Weeks:**
   1. P — Perceive stagnation (Deut 1:6 — what mountain have you been at too long?)
   2. O — Outline territory (what land is assigned to you?)
-  3. S₁ — Step in and launch (first piece of content as Called Expert)
+  3. S₁ — Step in and launch (first piece of content as Contentpreneur)
   4. S₂ — Systematise (4-hour window system for your schedule)
   5. E — Escalate (when to outsource, when to hire)
   6. S₃ — Scale (from one cohort to recurring revenue)
@@ -153,7 +153,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 - **requires_application:** true
 - **DB slug:** `possess-masterclass`
 
-### PAID-005: Called Expert Accelerator PRO — R18,000 PIF / R6,500×3 (Flagship)
+### PAID-005: Contentpreneur Accelerator PRO — R18,000 PIF / R6,500×3 (Flagship)
 - **Description:** Full transformation. **12 weeks** (compressed from the original 20-week draft —
   see "Structure History" in `docs/CURRICULUM.md`). 7-stage system, Torah-arc labeled
   (Genesis→Deuteronomy), already in DB as `contentpreneur-90day-cohort`.
@@ -163,7 +163,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
   - Accountability partners (3Cs paired groups)
   - WhatsApp accountability group
   - Lifetime CHKPLT LMS access
-  - Certificate of Called Expert Completion
+  - Certificate of Contentpreneur Completion
 - **Revenue math:** 6 students × R18,000 = R108,000 per cohort
 - **ICP:** ICP 1
 - **Garden:** `etz_pri`
@@ -185,7 +185,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 | Healthcare Worker Track | 21 | Consultation to product, midnight-Google-question products |
 | Faith Professional Track | 21 | Kingdom business, message monetisation, ministry sustainability |
 | Freelancer at Capacity Track | 21 | Productised service, knowledge cloning, time leverage |
-| Flagship (Cohort/Mastermind) | 3 | Called Expert Accelerator PRO, Mastermind, 1:1 Intensive |
+| Flagship (Cohort/Mastermind) | 3 | Contentpreneur Accelerator PRO, Mastermind, 1:1 Intensive |
 | **TOTAL** | **154 → 153** | |
 
 ---

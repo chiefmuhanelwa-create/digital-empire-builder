@@ -47,7 +47,7 @@ All routes live in `src/routes/`. The file name = the URL path.
 | Route | File | Purpose |
 |-------|------|---------|
 | `/` | `index.tsx` | Landing page — John 21 story, mission, 7-stage transformation |
-| `/apply` | `apply.tsx` | 23-point Called Expert qualification diagnostic |
+| `/apply` | `apply.tsx` | 23-point Contentpreneur qualification diagnostic |
 | `/login` | `login.tsx` | Magic-link + password login |
 | `/signup` | `signup.tsx` | Account creation |
 | `/products` | `products.index.tsx` | Published product catalog |

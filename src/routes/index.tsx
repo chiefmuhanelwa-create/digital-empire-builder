@@ -318,7 +318,7 @@ const FAQS = [
   },
   {
     q: "Who is this for?",
-    a: "Contentpreneurs — people who turn what they know into income they own. That's two kinds of person. One: the Called Expert — a professional, teacher, healthcare worker, academic, or specialist still employed and paid less than their expertise is worth. Two: the Knowledge Creator — a coach, consultant, podcaster, or creator who already has the knowledge (and often the audience) but no system to own the income. If your knowledge is deeper than what you're being paid for it, this is for you.",
+    a: "Contentpreneurs — people who turn what they know into income they own. That's two kinds of person. One: the professional still employed — a teacher, healthcare worker, academic, or specialist paid less than their expertise is worth. Two: the knowledge creator — a coach, consultant, podcaster, or creator who already has the knowledge (and often the audience) but no system to own the income. If your knowledge is deeper than what you're being paid for it, this is for you.",
   },
   {
     q: "Do I need a large following for this to work?",

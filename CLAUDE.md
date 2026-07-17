@@ -7,7 +7,7 @@ Read this file AND `Learnings.md` before every task. These two files are your op
 ## ⚡ MANDATORY END-OF-SESSION RULE — NON-NEGOTIABLE
 
 After every work session — without being asked — extract ALL teachable content to:
-1. `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md` — any framework, SOP, lesson, or practical step a Called Expert needs to do this themselves. 6-tag format: Stage · MS/TS/SS · Framework · Lesson · Steps(SOP) · Proof.
+1. `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md` — any framework, SOP, lesson, or practical step a Contentpreneur needs to do this themselves. 6-tag format: Stage · MS/TS/SS · Framework · Lesson · Steps(SOP) · Proof.
 2. Project `Learnings.md` — raw technical receipts (what broke, what worked).
 3. Memory system — new preferences, feedback, project facts.
 
@@ -22,18 +22,18 @@ After every work session — without being asked — extract ALL teachable conte
 - **Company:** NOCHILL PTY LTD (Reg: 2016/507839/07) — "No Chill in Mzansi Co."
 - **Owner:** Ndivhuwo Muhanelwa — alias "NoChill" | chiefmuhanelwa@gmail.com | info@nochill.co.za
 - **Three operating brands:**
-  - **Contentpreneur** — personal brand identity and Called Expert coaching brand (CHKPLT)
+  - **Contentpreneur** — personal brand identity and Contentpreneur coaching brand (CHKPLT)
   - **Content Creators Hub** — digital product store at contentcreatorhub.online (Shopify, ZAR)
   - **CHKPLT** — this platform. High-ticket coaching + LMS + digital products. Paystack + Stripe.
 - **#1 goal:** R100K/month from digital products alone — ecosystem fully live, running without active selling
-- **Business stage:** Active — Called Expert Programme at R18K/client. Platform built, not yet fully live.
+- **Business stage:** Active — Contentpreneur Programme at R18K/client. Platform built, not yet fully live.
 
 ### This Project — What CHKPLT Is
 
 CHKPLT = Christ's Kingdom Platform. It is the **John 21 "right side"** owned platform.
 
 Left side = rented platforms (Instagram suspended 780K followers, AdSense disabled R180K/year, TikTok/Facebook algorithm dependency).
-Right side = CHKPLT, email list, Called Expert cohort, digital products.
+Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 
 **This is NOT the content generator.** The content system (`~/Desktop/VS code/full-content-system`) generates content FOR this platform. CHKPLT is where the products are delivered.
 
@@ -45,14 +45,14 @@ Right side = CHKPLT, email list, Called Expert cohort, digital products.
 
 **The brand identity NOCHILL owns is "Contentpreneur":** someone who turns what they know into income they own. It is the umbrella. Under it sit two BUYER lanes — both have money + expertise, both are the revenue engine. Lead copy with money + expertise so it filters for buyers; never with "salary"-only language (it excludes the self-employed earner).
 
-**Lane A — The Called Expert (professional/specialist still employed)**
+**Lane A — The Employed Professional (still in a job/practice)**
 - Profile: 32–50, SA professional/specialist/academic/healthcare/teacher — has unexploited expertise, wants to monetise knowledge WITHOUT quitting their job
 - Revenue math: 6–10 cohort sales × R9,997–R18,000 = R100K/month
 - Primary proof hook: "I still work at ATNS. I built R600K+ in 4-hour shift windows. You don't have to quit first — build first."
 - Buying trigger: paid-less-than-you're-worth trap + the quit-first lie + the wrong mountain (Deut 1:6)
 - Language: "your knowledge is worth more than you're being paid for it" | "you don't need another qualification" | "you don't have to quit first"
 - Sub-segments: Shift Worker · Corporate Trapped (largest) · Teacher/Lecturer · Healthcare Worker · Faith Professional · Freelancer at Capacity
-- Matthew 20 message: the 42+ Called Expert is the 11th-hour worker — gets the same denarius FASTER (20 years of expertise already built)
+- Matthew 20 message: the 42+ professional is the 11th-hour worker — gets the same denarius FASTER (20 years of expertise already built)
 - WTP: R5,000–R75,000
 
 **Lane B — The Knowledge Creator (coach/consultant/podcaster/creator with expertise)**
@@ -67,7 +67,7 @@ Right side = CHKPLT, email list, Called Expert cohort, digital products.
 - Role: top-of-funnel volume + email list that grows INTO Lane A or Lane B over 12 months
 - Low-ticket only: R250–R1,500. Never insult them in copy — filter with money + expertise language, never by attacking "creators"
 
-**Rule:** The brand identity is always Contentpreneur. Within a single piece, address ONE lane (A or B) so the message stays sharp — but never insult the other, and never re-narrow the whole platform to "salaried Called Expert only." Default to whichever lane the topic serves; when it serves both, speak to the umbrella (money + expertise), not to a salary.
+**Rule:** The brand identity is always Contentpreneur. Within a single piece, address ONE lane (A or B) so the message stays sharp — but never insult the other, and never re-narrow the whole platform to "salaried professional only." Default to whichever lane the topic serves; when it serves both, speak to the umbrella (money + expertise), not to a salary.
 
 ### Tone & Voice (Non-Negotiable)
 
@@ -111,7 +111,7 @@ Right side = CHKPLT, email list, Called Expert cohort, digital products.
 | SARS professional fees (Thome-Lee Wright) | R30,000 |
 | Instagram suspended (August 2025) | ~780K followers |
 | Total cross-platform followers (peak) | 3M+ (Facebook 1M+ · Instagram ~800K · TikTok + YouTube) |
-| Called Expert Programme | R18,000 PIF / R6,500×3 |
+| Contentpreneur Programme | R18,000 PIF / R6,500×3 |
 | Total confirmed brand campaigns | 18+ brands · 23 agencies · 50+ deals |
 
 **Never use:** R285,000 (unverified SARS figure) · R207,869 (slightly wrong) · fabricated follower counts · round estimates
@@ -176,7 +176,7 @@ bunx tsc --noEmit    # Type-check only — run BEFORE and AFTER every code chang
 ```
 Public routes:
   /                         Landing page (John 21 story, transformation, proof)
-  /apply                    23-point Called Expert qualification diagnostic
+  /apply                    23-point Contentpreneur qualification diagnostic
   /login, /signup           Magic-link + password auth
   /products                 Catalog (published products only)
   /products/$slug           Single product detail
@@ -209,7 +209,7 @@ Webhooks (no auth — HMAC-validated):
 ```
 docs/CURRICULUM.md          LMS curriculum blueprint — 30 lessons, 7 stages (resolves BLOCKER-002)
 docs/STORY-BANK.md          11 verified proof stories with figures, platform scripts, product mapping
-docs/SALES-PIPELINE.md      12-step Called Expert sales SOP with discovery call scripts
+docs/SALES-PIPELINE.md      12-step Contentpreneur sales SOP with discovery call scripts
 docs/BLOCKERS.md            Current launch blockers in priority order
 docs/PAYMENTS.md            Dual-rail Paystack + Stripe implementation plan
 docs/PRODUCTS.md            Product catalog and build status
@@ -323,9 +323,9 @@ See `docs/BLOCKERS.md` for full detail and fix instructions.
 
 ---
 
-## Teachable Knowledge Capture (Called Expert Accelerator)
-We're building NOCHILL to TEACH Called Experts (ICP 1) how to do it. Capture in two layers, every session:
+## Teachable Knowledge Capture (Contentpreneur Accelerator)
+We're building NOCHILL to TEACH Contentpreneurs (ICP 1) how to do it. Capture in two layers, every session:
 - **Raw receipt → `Learnings.md`** in this folder (what broke / what worked).
-- **Teachable asset → the MASTER Called Expert Curriculum:** `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md`. Tag each: Stage (7-Stage) · MS/TS/SS · Framework (4E/SEEDS/PAIDS/DARES/3Cs/POSSESS) · Lesson · Steps (SOP) · Proof.
-- Rule: if a Called Expert would need it to do this themselves → it's a teachable asset (Curriculum), not just a receipt (Learnings).
+- **Teachable asset → the MASTER Contentpreneur Curriculum:** `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md`. Tag each: Stage (7-Stage) · MS/TS/SS · Framework (4E/SEEDS/PAIDS/DARES/3Cs/POSSESS) · Lesson · Steps (SOP) · Proof.
+- Rule: if a Contentpreneur would need it to do this themselves → it's a teachable asset (Curriculum), not just a receipt (Learnings).
 - Also enforced in global `~/.claude/CLAUDE.md`.

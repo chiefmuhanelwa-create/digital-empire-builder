@@ -98,7 +98,7 @@ function MediaKitPage() {
                 <div><label className={LABEL}>Name</label><Input className={FLD} value={k.name} onChange={(e) => set("name", e.target.value)} placeholder="Ndivhuwo Muhanelwa" /></div>
                 <div><label className={LABEL}>@handle</label><Input className={FLD} value={k.handle} onChange={(e) => set("handle", e.target.value)} placeholder="@nochill_god" /></div>
               </Two>
-              <div><label className={LABEL}>Tagline</label><Input className={FLD} value={k.tagline} onChange={(e) => set("tagline", e.target.value)} placeholder="Helping called experts monetise their knowledge" /></div>
+              <div><label className={LABEL}>Tagline</label><Input className={FLD} value={k.tagline} onChange={(e) => set("tagline", e.target.value)} placeholder="Helping professionals turn their expertise into income" /></div>
               <div><label className={LABEL}>Bio</label><textarea className={TA} value={k.bio} onChange={(e) => set("bio", e.target.value)} placeholder="Tell brands who you are, who you serve, and why your audience trusts you." /></div>
               <Two>
                 <div><label className={LABEL}>Location</label><Input className={FLD} value={k.location} onChange={(e) => set("location", e.target.value)} placeholder="Johannesburg, SA" /></div>

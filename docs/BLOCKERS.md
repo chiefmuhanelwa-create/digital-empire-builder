@@ -109,7 +109,7 @@ _Original (now-obsolete) framing kept for history below:_
 ### BLOCKER-005: Stripe Integration Not Built
 **What's broken:** International buyers (non-ZAR) cannot pay. Only Paystack (ZAR) is implemented.
 
-**Impact:** Any international Called Expert who finds CHKPLT and wants to pay in USD/GBP/EUR cannot complete a purchase. Global market is locked out.
+**Impact:** Any international Contentpreneur who finds CHKPLT and wants to pay in USD/GBP/EUR cannot complete a purchase. Global market is locked out.
 
 **Fix:** See `docs/PAYMENTS.md` → "Stripe (International — NOT YET BUILT)" section for full implementation plan.
 
@@ -217,7 +217,7 @@ Required before starting:
 ### BLOCKER-008: Video Hosting Not Configured
 **What's broken:** LMS lessons have no video delivery mechanism. Supabase Storage handles PDFs but is not designed for video streaming (large files, no adaptive bitrate, no resumable playback).
 
-**Impact:** Called Expert Accelerator PRO (R18,000) is a 20-week LMS programme — the curriculum requires video lessons. Without video hosting, LMS content is text-only, breaking the transformation promise.
+**Impact:** Contentpreneur Accelerator PRO (R18,000) is a 20-week LMS programme — the curriculum requires video lessons. Without video hosting, LMS content is text-only, breaking the transformation promise.
 
 **Fix — Use Cloudflare Stream (recommended, already on Cloudflare Workers):**
 1. Enable Cloudflare Stream on your Cloudflare account (dash.cloudflare.com → Stream)

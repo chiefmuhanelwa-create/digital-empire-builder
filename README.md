@@ -2,7 +2,7 @@
 
 **Christ's Kingdom Platform** — the owned, high-ticket coaching + digital-products platform for
 **NOCHILL PTY LTD**. This is the "John 21 right side": the platform NOCHILL owns outright (vs. rented
-social platforms), where the Called Expert Accelerator, digital products, and the email list live.
+social platforms), where the Contentpreneur Accelerator, digital products, and the email list live.
 
 - **Production:** https://chkplt.com
 - **Owner:** Ndivhuwo Muhanelwa ("NoChill") · chiefmuhanelwa@gmail.com
@@ -40,7 +40,7 @@ bunx wrangler deploy -c dist/server/wrangler.json   # deploy the built worker to
 
 ## What's inside `src/routes/`
 
-- **Public:** `/` landing · `/apply` (Called Expert diagnostic) · `/products` catalog · `/products/$slug` · `/login` `/signup` `/reset-password` · legal pages
+- **Public:** `/` landing · `/apply` (Contentpreneur diagnostic) · `/products` catalog · `/products/$slug` · `/login` `/signup` `/reset-password` · legal pages
 - **Free interactive tools (DARES-native, client-side):**
   `/rate-card` (SA CPM rate calculator) · `/hook-generator` (R×A×C×U^B) ·
   `/media-kit` (one-pager builder) · `/sars-calculator` (25% tax reserve) · `/offer-builder` (AI) · `/niche-clarity`

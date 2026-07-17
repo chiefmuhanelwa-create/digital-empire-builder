@@ -155,7 +155,7 @@ function OfferBuilderPage() {
                   <Field label="Who do you serve?" hint="This sets the whole offer — pricing, tone, positioning.">
                     <div className="grid gap-3">
                       {([
-                        { val: "called_expert" as const, t: "A Called Expert (professional / specialist)", d: "You have real expertise — a skill, a field, a track record — and you want to monetise your knowledge. (Higher-ticket.)" },
+                        { val: "called_expert" as const, t: "A professional / specialist", d: "You have real expertise — a skill, a field, a track record — and you want to monetise your knowledge. (Higher-ticket.)" },
                         { val: "content_creator" as const, t: "A Knowledge Creator (coach / podcaster / creator)", d: "You already have the knowledge and often an audience — you just don't own the income yet. (Accessible-to-mid ticket.)" },
                       ]).map((o) => (
                         <button
