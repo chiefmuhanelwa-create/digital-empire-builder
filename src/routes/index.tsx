@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A Contentpreneur turns what they already know into income they own. CHKPLT is the 7-framework system that packages your expertise into digital products and income — for professionals and knowledge creators across Africa.",
+          "A Contentpreneur turns what they already know into income they own. CHKPLT is the step-by-step system that turns what you know into digital products and income — for anyone with knowledge, experience, or a voice worth paying for, across Africa.",
       },
       { name: "keywords", content: "Contentpreneur, contentpreneurship, knowledge business, digital products, monetise expertise, South Africa, Africa" },
       { property: "og:title", content: "Contentpreneur — Turn What You Know Into Income You Own" },
@@ -323,7 +323,7 @@ const FAQS = [
   },
   {
     q: "What exactly do I get in the kit?",
-    a: "Six digital workbooks: the PAIDS Framework (your income map), DARES Asset Model (build income that doesn't need you to show up every day), 4E Content Calendar (30 days of strategy pre-built), SEEDS Pipeline Template (your first sales funnel, step by step), Niche Clarity Workbook (lock your niche in one afternoon), and the Knowledge Audit (find the product hiding in your expertise in 2 hours). Plus three bonuses. All instant download.",
+    a: "Seven guided tools that each hand you a finished result — not lessons you forget: a 2-minute readiness scorecard, find the product hiding in your head, lock your niche in one afternoon, your 30-day content plan, turn strangers into buyers (your first funnel), build an asset that sells while you sleep, and your 5-stream income map. Plus three bonuses and AI coaching on every step. You finish with a personalised plan you can act on the same day — all instant access. (Under the hood these run on the PAIDS, DARES, 4E and SEEDS frameworks — but you just follow the steps.)",
   },
   {
     q: "Do I need to quit my job first?",
@@ -511,17 +511,18 @@ function Landing() {
         ? "Instant download · charged in USD · 7-day guarantee"
         : "Instant download · billed in ZAR at today's rate · 7-day guarantee";
 
+  // Named in the buyer's words (outcome first); the framework is the engine underneath.
   const VALUE_STACK: [string, string][] = [
-    ["Niche Clarity Workbook", money(97)],
-    ["Knowledge Audit", money(97)],
-    ["PAIDS Framework (income map)", money(97)],
-    ["DARES Asset Model", money(97)],
-    ["4E Content Calendar", money(97)],
-    ["SEEDS Pipeline Template", money(97)],
-    ["MS×TS×SS Foundation Assessment", money(97)],
-    ["BONUS: Contentpreneur Cheat Sheet", money(47)],
-    ["BONUS: 90-Day First Income Planner", money(47)],
-    ["BONUS: 30-Day Accountability Tracker", money(47)],
+    ["Are You Ready? — 2-minute scorecard", money(97)],
+    ["Find the Product Hiding in Your Head", money(97)],
+    ["Lock Your Niche in One Afternoon", money(97)],
+    ["Your 30-Day Content Plan", money(97)],
+    ["Turn Strangers Into Buyers — your first funnel", money(97)],
+    ["Build an Asset That Sells While You Sleep", money(97)],
+    ["Your 5-Stream Income Map", money(97)],
+    ["BONUS: The One-Page Cheat Sheet", money(47)],
+    ["BONUS: 90-Day First-Income Planner", money(47)],
+    ["BONUS: 30-Day Consistency Tracker", money(47)],
   ];
 
   return (
@@ -563,10 +564,10 @@ function Landing() {
             <strong>You just don't own the system yet.</strong>
           </h1>
           <p className="nx-body max-w-xl mx-auto mb-8">
-            Whether you earn a salary or run your own thing, you've built real expertise — and you're
-            leaving money on the table because you don't own the system. This is the 7-framework
-            system that turns what you already know into income you own — no big following, no going
-            viral, built in 4-hour windows around the life you already have.
+            Whether you earn a salary or run your own thing, you've built real knowledge and
+            experience — and you're leaving money on the table because you don't own the system. This
+            is the complete, step-by-step system that turns what you already know into income you own
+            — no big following, no going viral, built in 4-hour windows around the life you already have.
           </p>
 
           <CtaButton

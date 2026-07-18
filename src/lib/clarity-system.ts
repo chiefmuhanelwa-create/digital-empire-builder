@@ -28,7 +28,7 @@ export const CLARITY_STEPS: ClarityStep[] = [
       { title: "What Is a Personal Brand", uid: "ca330ea012d14097fc9cb8ab1697d9de", minutes: 2 },
       { title: "A Blueprint to Build a Personal Brand", uid: "4d90f9660f247ed6ed3cc599ef3d4734", minutes: 3 },
     ],
-    tools: [{ name: "MS×TS×SS Assessment", route: "/apps/ms-ts-ss", pdf: "ms-ts-ss" }],
+    tools: [{ name: "Readiness Scorecard", route: "/apps/ms-ts-ss", pdf: "ms-ts-ss" }],
     nextAction: "Score yourself, then lift your weakest multiplier first — it unlocks the rest.",
   },
   {
@@ -38,8 +38,8 @@ export const CLARITY_STEPS: ClarityStep[] = [
     question: "What do you sell, and to exactly whom?",
     videos: [{ title: "SWOT Analysis", uid: "a3bac11978760d450455c11ff87b0f4c", minutes: 10 }],
     tools: [
-      { name: "Knowledge Audit", route: "/apps/knowledge-audit", pdf: "knowledge-audit" },
-      { name: "Niche Clarity Builder", route: "/apps/niche-clarity-builder", pdf: "niche-clarity" },
+      { name: "Find Your Product", route: "/apps/knowledge-audit", pdf: "knowledge-audit" },
+      { name: "Lock Your Niche", route: "/apps/niche-clarity-builder", pdf: "niche-clarity" },
     ],
     nextAction: "Find the product hiding in your expertise, then write your niche in ONE sentence.",
   },
@@ -49,7 +49,7 @@ export const CLARITY_STEPS: ClarityStep[] = [
     title: "Your Content Engine",
     question: "What do you post so it builds trust AND sells?",
     videos: [{ title: "The 3Es Content Idea Formula", uid: "be7c0cacf69a45f3ce0f009d8727d9db", minutes: 7 }],
-    tools: [{ name: "4E Content Calendar", route: "/apps/4e-content-calendar", pdf: "4e-content-calendar" }],
+    tools: [{ name: "Your 30-Day Content Plan", route: "/apps/4e-content-calendar", pdf: "4e-content-calendar" }],
     nextAction: "Build your 30-day 3:3:3:1 plan — then post Day 1 today.",
   },
   {
@@ -58,7 +58,7 @@ export const CLARITY_STEPS: ClarityStep[] = [
     title: "Reach on Owned Ground",
     question: "Are you building on land you own, or renting?",
     videos: [{ title: "Understand Social Media Platforms", uid: "52defacab8f34d65dda448db03184065", minutes: 7 }],
-    tools: [{ name: "The Right Side Diagnostic", route: "/apps/right-side-diagnostic" }],
+    tools: [{ name: "Owned vs Rented Check", route: "/apps/right-side-diagnostic" }],
     nextAction: "Move ONE red (rented) area onto owned ground — start an email list this week.",
   },
   {
@@ -70,7 +70,7 @@ export const CLARITY_STEPS: ClarityStep[] = [
       { title: "The 3Cs Framework", uid: "3950690229221fa11723fb58f1b17323", minutes: 5 },
       { title: "Community Building", uid: "564d616cc63e8b0c830e1cb80fd4d4b3", minutes: 5 },
     ],
-    tools: [{ name: "SEEDS Pipeline", route: "/apps/seeds-pipeline", pdf: "seeds-pipeline" }],
+    tools: [{ name: "Turn Strangers Into Buyers", route: "/apps/seeds-pipeline", pdf: "seeds-pipeline" }],
     nextAction: "Map your Signal→Success pipeline, then set up your first free opt-in.",
   },
   {
@@ -79,7 +79,7 @@ export const CLARITY_STEPS: ClarityStep[] = [
     title: "Build the Asset",
     question: "What asset earns while you sleep?",
     videos: [{ title: "Formula to Create an Online Asset", uid: "bbe9a96b6c9d5169321e1612df7c6489", minutes: 4 }],
-    tools: [{ name: "DARES Asset Model", route: "/apps/dares-asset-model", pdf: "dares-asset-model" }],
+    tools: [{ name: "Your Sell-While-You-Sleep Asset", route: "/apps/dares-asset-model", pdf: "dares-asset-model" }],
     nextAction: "Score your idea on DARES, then pick ONE asset to build first.",
   },
   {
@@ -88,7 +88,7 @@ export const CLARITY_STEPS: ClarityStep[] = [
     title: "Monetise — 5 Streams",
     question: "Where does the money actually come from?",
     videos: [{ title: "PAIDS Framework", uid: "5f33ab865a811446ca8a5368fdd4449c", minutes: 5 }],
-    tools: [{ name: "PAIDS Income Auditor", route: "/apps/paids-auditor", pdf: "paids" }],
+    tools: [{ name: "Your 5-Stream Income Map", route: "/apps/paids-auditor", pdf: "paids" }],
     nextAction: "Map your 5 streams, then build the ONE the auditor says to build next.",
   },
 ];
@@ -99,7 +99,7 @@ export const CLARITY_TOTAL = CLARITY_STEPS.length;
 export const CLARITY_BONUSES: ClarityTool[] = [
   { name: "30-Day Consistency Blueprint", route: "/apps/consistency-blueprint", pdf: "30-day-tracker" },
   { name: "90-Day First Income Planner", route: "/apps/first-income-planner", pdf: "90-day-planner" },
-  { name: "Contentpreneur Cheat Sheet", pdf: "cheat-sheet" },
+  { name: "The One-Page Cheat Sheet", pdf: "cheat-sheet" },
 ];
 
 // localStorage progress

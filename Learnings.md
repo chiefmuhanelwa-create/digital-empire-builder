@@ -4,6 +4,20 @@ The living record of what was discovered, what broke, what was corrected, and wh
 
 ---
 
+## 2026-07-18 — CHKPLT audit against NoChill's operating principles (capture round, no code)
+
+Captured a batch of the owner's field-learnings to the Curriculum KB (see "The Contentpreneur Operating Principles"). Audited the live funnel against the actionable ones — findings for future build tasks:
+
+- **Offer/funnel checklist:** ✅ promise (hero), ✅ guarantee (7-Day Roadmap), ✅ 3 bonuses (value stack), ✅ cost-of-inaction (final CTA + P.S.). ❌ **No scarcity element on the $97 funnel.** Real scarcity exists but is unsurfaced: the Accelerator has genuine seat/cohort limits + start dates (email seq says "6 spots"). Fix = surface honest scarcity (Accelerator seats/dates); for the evergreen $97 Kit use a bonus-expiry or price anchor, NOT a fake countdown.
+- **Pricing:** ladder exists ($16→$97→$147→$197→$297→$29/mo→R18k→R45k) but **no explicit High/Main/Basic 3-tier framing**. Map: Basic=$97 Kit, Main=Accelerator R18k (anchor "most popular"), High=VIP R45k. Price each on replacement-cost + features. No pricing page presents 3 tiers yet.
+- **Scripting framework:** R×A×C×U^B hook engine exists (`src/routes/hook-generator.tsx`, `src/lib/tools.ts`) but does NOT yet encode: controversial/unpopular hook mode, the "don't over-teach" principle (one lesson per post), or **PSL** (Problem→Story→Lesson) as a short-form template. These become Hook Science course content.
+- **ICP roadmap:** the 7 stages are on the homepage now, but framed as a system, NOT as a **before→after transformation** (where the buyer starts vs where they end). Worth a "from X → to Y" reframe on-site.
+- **Working agreement adopted:** **Loops + Goals / goal-first** — restate the goal + success outcome before executing any task. Saved to memory.
+
+Follow-ups the owner will trigger: add scarcity, build the 3-tier pricing page, upgrade scripting + Hook Science (+ waitlist validation), surface the before→after ICP roadmap.
+
+---
+
 ## 2026-07-17 — Stripe rail, live keys, full "Called Expert" → Contentpreneur rebrand
 
 - **Deploy ≠ push.** chkplt.com is a Cloudflare Worker with **no CI/CD** — a `git push` does NOT update the live site. Must run `bun run build && bunx wrangler deploy`. The site was frozen on the PR-#1 build until manually deployed. Same for the rebrand.

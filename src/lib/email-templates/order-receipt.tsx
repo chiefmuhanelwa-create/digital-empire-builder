@@ -86,9 +86,9 @@ export const OrderReceiptEmail = ({
           <Text style={step}><strong>1.</strong> Tap “Open {place}” above — you'll land signed in.</Text>
           {hasKit ? (
             <>
-              <Text style={step}><strong>2.</strong> Start with <strong>Introduction to Personal Branding</strong> (10 short videos).</Text>
-              <Text style={step}><strong>3.</strong> Open the interactive apps — begin with the <strong>Niche Clarity Builder</strong> to lock your lane.</Text>
-              <Text style={step}><strong>4.</strong> Download the fillable workbooks as you go.</Text>
+              <Text style={step}><strong>2.</strong> Start at Step 1 — the <strong>2-minute Readiness Scorecard</strong>.</Text>
+              <Text style={step}><strong>3.</strong> Work through the 7 steps — each hands you a finished result (start with <strong>Lock Your Niche</strong>).</Text>
+              <Text style={step}><strong>4.</strong> Download each result as you go — you'll finish with your personalised plan.</Text>
             </>
           ) : (
             <Text style={step}><strong>2.</strong> Find your purchase under “Your library” and open it.</Text>
