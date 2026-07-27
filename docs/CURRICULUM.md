@@ -3,7 +3,7 @@
 
 > *"Unless the Lord builds the house, the builders labour in vain."* — Psalm 127:1
 
-**Programme:** Contentpreneur Accelerator PRO (R18,000 PIF / R6,500×3)
+**Programme:** Contentpreneur Accelerator PRO — **$499 flat** (was R18,000 PIF / R6,500×3, repriced 2026-07-27, `src/lib/gardens.ts`)
 **Duration:** **12 weeks** (compressed from the original 20-week draft — see "Structure History" below)
 **Delivery:** `/admin/curriculum/$productSlug` → LMS at `/learn/$slug`
 **Slug:** `contentpreneur-90day-cohort`

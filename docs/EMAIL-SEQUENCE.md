@@ -120,7 +120,9 @@ This one's a direct invitation, so I'll be direct back.
 
 This is not for beginners looking for a side-hustle trick. It's not for anyone chasing a viral moment. And it's not for anyone who wants to separate their faith from their business strategy — that's not how I operate, and it's not how this room operates either.
 
-This is an implementation room for seasoned professionals — people with real expertise already built — who are ready to install the architecture around it: **The Contentpreneur Accelerator PRO.** 12 weeks. R18,000 once, or R6,500 × 3 if cash flow needs the flex.
+This is an implementation room for seasoned professionals — people with real expertise already built — who are ready to install the architecture around it: **The Contentpreneur Accelerator PRO.** 12 weeks. $499 once-off.
+
+<!-- PRICE UPDATE, 2026-07-27: was "R18,000 once, or R6,500 × 3" — now a flat $499, src/lib/gardens.ts. This sequence hasn't been re-sent/re-tested at the new price yet. -->
 
 If any part of the last 4 emails made you think "that's me" — the application takes 10 minutes: **[APPLY LINK → /apply]**
 

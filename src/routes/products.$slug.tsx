@@ -10,7 +10,7 @@ import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
 import { initializeCheckout, initializeStripeCheckout, initializeSubscription } from "@/lib/checkout.functions";
 
-const SUBSCRIPTION_SLUGS = ["called-expert-inner-circle"];
+const SUBSCRIPTION_SLUGS = ["called-expert-inner-circle", "contentpreneur-community"];
 import { getUtm } from "@/lib/utm";
 import { trackLead } from "@/lib/track";
 import { useCountry, shouldUseStripe } from "@/lib/currency";

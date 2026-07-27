@@ -323,7 +323,7 @@ function ApplyPage() {
                   The Foundation Kit First.
                 </h2>
                 <p className="text-[#555] text-base leading-relaxed mb-6 max-w-sm mx-auto">
-                  You're not ready for the Accelerator PRO yet — and that's not a failure. It means we caught your gap before you paid $970 for something you'd struggle to execute. Start with the Foundation Kit. Build the base. Apply again in 90 days.
+                  You're not ready for the Accelerator PRO yet — and that's not a failure. It means we caught your gap before you paid $499 for something you'd struggle to execute. Start with the Foundation Kit. Build the base. Apply again in 90 days.
                 </p>
                 {result.focusPillars && (
                   <p className="text-[#777] text-sm mb-6 max-w-xs mx-auto">
@@ -709,7 +709,7 @@ function ApplyPage() {
             <p className="mt-6 text-center text-[#555] text-xs leading-relaxed">
               We review every application within 24 hours. No automated rejection — a real human reads your answers.
               <br />
-              Investment: $970 once-off or $350 × 3 months · billed in ZAR. Application is free and non-binding.
+              Investment: $499 once-off · billed in ZAR. Application is free and non-binding.
             </p>
           </>
         )}

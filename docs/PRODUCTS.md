@@ -2,6 +2,8 @@
 
 > 153 fish. Every product is one fish in the net. The net did not break. — John 21:11
 
+> **Price update, 2026-07-27:** Contentpreneur Accelerator PRO (`contentpreneur-90day-cohort`) is now **$499 flat** — the "R18,000 PIF / R6,500×3" figures below (PAID-005 and its revenue math) are stale and not yet rewritten. Real price lives in `src/lib/gardens.ts`.
+
 ---
 
 ## Audience mapping (Contentpreneur umbrella)

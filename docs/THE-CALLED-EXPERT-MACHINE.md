@@ -71,7 +71,7 @@
 | 2 | **Core products** (PAIDS Workbook, 90-Day System, Tax Guide) | Guide + Notion + webapp | R299–R899 | Auto-delivery + upsell |
 | 3 | **Interactive webapp services** (ICP1 pain-point resolvers — §4) | Web apps (subscription) | R99–R499/mo | Self-serve SaaS (DARES Recurring) |
 | 4 | **Masterclasses / Workshops** (live + evergreen replay) | Video + workbook + app | R497–R1,997 | Sells evergreen; delivers on autopilot |
-| 5 | **Called Expert Accelerator** (done-with-you, CHKPLT) | Cohort + 1:1 + apps | R18,000 PIF / R6,500×3 | Application → call → onboarding all systemised (§5) |
+| 5 | **Contentpreneur Accelerator** (done-with-you, CHKPLT) | Cohort + 1:1 + apps | $499 flat *(was R18,000 PIF/R6,500×3, repriced 2026-07-27)* | Application → call → onboarding all systemised (§5) |
 | 6 | **Done-for-you / Agency** (we build their machine) | Service | R25K+ | Productised service (the §1 ledger IS the SOP) |
 
 **Founder builds rungs 4–6 (video + apps). Rungs 0–3 sell + deliver themselves.**

@@ -163,7 +163,7 @@ For subscribers tagged `contentpreneur-potential`. Subject angles adapt per lane
 | B | 18 | Matthew 20 — "You're not too late" | Matthew 20 — "You're not too late" | 11th Hour Playbook (free) |
 | C | 21 | "The shift worker who built R600K between night shifts" | "R600K built while the algorithm kept changing the rules" | 4-Hour Window System (free) |
 | D | 25 | "20 years of expertise + zero packaging" | "A full audience + zero owned income" | Foundation Kit |
-| E | 30 | "6 spots. 20 weeks. R18,000." | "6 spots. 20 weeks. R18,000." | Contentpreneur Accelerator PRO |
+| E | 30 | "6 spots. 12 weeks. $499." *(was "20 weeks. R18,000" — repriced 2026-07-27)* | "6 spots. 12 weeks. $499." | Contentpreneur Accelerator PRO |
 
 ---
 

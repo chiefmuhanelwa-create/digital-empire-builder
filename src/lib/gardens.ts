@@ -57,12 +57,13 @@ export const USD_DISPLAY: Record<string, number> = {
   "called-expert-starter-bundle": 9700,   // $97  (charged ~R1,800)
   "called-expert-foundations": 29700,     // $297 (charged ~R5,500)
   "called-expert-facilitator": 400000,    // $4,000 (charged R75,000)
-  "called-expert-inner-circle": 2900,     // $29/mo (charged R540/mo)
-  "contentpreneur-90day-cohort": 97000,   // $970 (charged R18,000 — Accelerator PRO)
+  "called-expert-inner-circle": 2900,     // $29/mo (charged R540/mo) — DRIFT: dashboard.inner-circle.tsx:38,78 hardcodes "$39/mo" instead of reading this value. Not resolved here — no source establishes which number is the actual intended price (Paystack plan PLN_4oafnq18t7e36gl's real billing amount isn't visible from code); needs a founder/ops decision, not a guess.
+  "contentpreneur-90day-cohort": 49900,   // $499 flat (charged ~R8,270 @ 16.58) — Contentpreneur Accelerator, was $970/R18,000, reprice 2026-07-27
   "creator-swipe-vault": 1700,            // $17 order bump (charged R290)
   "asset-accelerator": 19700,             // $197 1-click upsell (charged R3,600)
   "personal-brand-30-days": 4900,         // $49 video course (charged R899)
   "hook-science": 14700,                  // $147 flagship (Stage 4b — draft until content ships)
+  "contentpreneur-community": 1900,       // $19/mo (charged ~R315) — draft until a real Paystack plan exists, see docs/RUNBOOK-COMMUNITY-LAUNCH.md
 };
 
 // Display: South African buyers see the real ZAR they'll be charged (no exchange-

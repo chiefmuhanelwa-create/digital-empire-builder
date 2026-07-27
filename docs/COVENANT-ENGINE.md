@@ -10,7 +10,7 @@
 >
 > **What's implemented vs. still reference-only (updated):**
 > - §2 (7-Stage/5-Book curriculum) → ✅ **Adopted** — see `docs/CURRICULUM.md`, migration `20260709120000_restructure_curriculum_covenant_engine.sql`
-> - §3 (two-tier pricing: $97/R1,800 kit · $997/R18,000 Accelerator) → ✅ Already built, see `src/lib/gardens.ts`
+> - §3 (two-tier pricing: $97/R1,800 kit · $499 flat Accelerator, repriced 2026-07-27 — was $997/R18,000) → ✅ Already built, see `src/lib/gardens.ts`
 > - §8.1–8.2 (order bump + one-click upsell) → ✅ Already built, see `src/lib/checkout.functions.ts`
 > - §4 (Kingdom Business Generator wizard) → ✅ Already built as `apps.ms-ts-ss.tsx` + 8 sibling diagnostic apps
 > - §6 (Tally application form) → ✅ Superseded — CHKPLT has an owned native diagnostic at `/apply` instead of renting Tally

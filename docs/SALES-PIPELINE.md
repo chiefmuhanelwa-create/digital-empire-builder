@@ -1,9 +1,11 @@
 # CHKPLT — Contentpreneur Sales Pipeline SOP
 ## 12-Step Acquisition: Stranger → Enrolled Student
 
-**Programme:** The Contentpreneur Accelerator PRO (R18,000 PIF / R6,500×3)
+**Programme:** The Contentpreneur Accelerator PRO — **$499 flat** (was R18,000 PIF / R6,500×3, repriced 2026-07-27, `src/lib/gardens.ts`)
 **Owner:** Ndivhuwo Muhanelwa
 **Document:** Internal SOP — do not publish publicly
+
+> ⚠️ **PRICE UPDATE, 2026-07-27:** the Accelerator is now a flat **$499** — the R18,000/R6,500×3 and "3× installment" language throughout this doc (including the live sales script in Step 12) is stale and must not be read verbatim on a real call until rewritten. Flagged here rather than silently rewritten — a live sales script needs a deliberate pass, not a mechanical find-replace.
 
 ⚠️ **SCRIPT WARNING:** Any script referencing "R285,000 to SARS" is WRONG. Verified figure is **R207,879.20**. Always use R207,879 in all scripts and discovery calls.
 

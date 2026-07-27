@@ -4,6 +4,8 @@
 
 Last reviewed: 2026-06-15
 
+> **Price note, 2026-07-27:** `contentpreneur-90day-cohort` (referenced below as "R18,000") is now **$499 flat**, per `src/lib/gardens.ts`. The R18,000/R45,000 references below are historical bug-report context (identifying which product had 0 modules, etc.) — left as-is since they describe past state, not current pricing.
+
 ---
 
 ## 🔴 BLOCKERS (Nothing Works Until These Are Fixed)
