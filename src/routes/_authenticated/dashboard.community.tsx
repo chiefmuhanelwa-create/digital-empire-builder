@@ -14,9 +14,17 @@ export const Route = createFileRoute("/_authenticated/dashboard/community")({
 // (we don't show links that don't work). Members see "details emailed" until set.
 // Platform decided 2026-07-27: WhatsApp — already "Confirmed active" and the
 // documented preferred channel for this audience (contentpreneur-os/
-// content-tools-stack.md), free, no new tooling. Create a WhatsApp Group or
-// Community, paste its invite link below.
-const COMMUNITY_URL = "";          // paste the WhatsApp group/community invite link here
+// content-tools-stack.md), free, no new tooling.
+//
+// NOTE: the link set below is a WhatsApp CHANNEL, not a Group/Community. A
+// Channel is one-way broadcast — only the admin posts, followers can't reply or
+// talk to each other. That doesn't match this page's own promise below
+// ("ask, share wins, get unstuck with other Contentpreneurs") or the BENEFITS
+// copy — those need two-way chat. If the intent was a broadcast-only
+// announcements feed, this is correct as-is; if members are meant to actually
+// talk to each other, this needs a WhatsApp Group or Community instead, not a
+// Channel. Flagged, not silently "fixed" — this is a product decision.
+const COMMUNITY_URL = "https://whatsapp.com/channel/0029VbCzuiiGE56hMASKs90F";
 const CALL_INFO = "Live group coaching — first [day] of each month";
 const CALL_URL = "";               // e.g. Zoom/Meet link
 
