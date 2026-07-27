@@ -563,13 +563,10 @@ export const chargeUpsell = createServerFn({ method: "POST" })
 // slug -> Paystack plan_code. The page routes these slugs to initializeSubscription.
 export const SUBSCRIPTION_PLANS: Record<string, string> = {
   "called-expert-inner-circle": "PLN_4oafnq18t7e36gl",
-  // PLACEHOLDER — not a real Paystack plan code. The Community product's DB row is
-  // seeded as status:'draft' specifically so this can't be checked out against by
-  // accident before a real $19/mo recurring Plan is created in the Paystack
-  // dashboard and this string is replaced with its real plan_code. See
-  // docs/RUNBOOK-COMMUNITY-LAUNCH.md for the exact steps — this is a founder/ops
-  // action, not something that can be done from code.
-  "contentpreneur-community": "PLN_REPLACE_ME_COMMUNITY_19_USD",
+  // Real Paystack Plan, created 2026-07-27 — see docs/RUNBOOK-COMMUNITY-LAUNCH.md's
+  // Change Log. The product row is still status:'draft' in the DB until the
+  // remaining launch steps (community platform, flip to published) are done.
+  "contentpreneur-community": "PLN_wl68lf4ll6evdnz",
 };
 
 export const initializeSubscription = createServerFn({ method: "POST" })

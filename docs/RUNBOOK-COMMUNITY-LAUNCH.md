@@ -40,3 +40,11 @@ A subscription's actual recurring charge amount is controlled by a **Paystack Pl
 ### 2026-07-27 — Product built, deliberately not launched
 - Built by: Claude Code, per the founder-approved implementation plan (Phase 1B of the "Building the Actual Systems" plan).
 - Blocked on: real Paystack Plan creation (step 1 above) and a community-platform decision (step 3 above) — both require the founder, neither can be done from code.
+
+### 2026-07-27 (later same day) — Real Paystack Plan created
+- Founder created the real Paystack Plan: `PLN_wl68lf4ll6evdnz`. Pasted into `src/lib/checkout.functions.ts`'s `SUBSCRIPTION_PLANS`, replacing the placeholder.
+- **Still remaining before this is actually launched** (nothing else in this list is done yet):
+  - [ ] Step 3: decide what platform hosts the community, set `COMMUNITY_URL`/`CALL_URL` in `dashboard.community.tsx`.
+  - [ ] Step 4: flip the product live — `update products set status = 'published' where slug = 'contentpreneur-community';`
+  - [ ] Step 5: regenerate `routeTree.gen.ts` (run `bun run dev` or the normal build once) so `/dashboard/community` is actually reachable.
+  - [ ] The full Verify checklist above (test subscription end-to-end, confirm Community/Inner Circle statuses don't cross-contaminate, confirm cancellation flips access off).
