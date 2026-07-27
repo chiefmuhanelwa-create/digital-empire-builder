@@ -12,10 +12,11 @@ export const Route = createFileRoute("/_authenticated/dashboard/community")({
 
 // OWNER: set these once your community + monthly call exist. Empty = button hidden
 // (we don't show links that don't work). Members see "details emailed" until set.
-// Same pattern as dashboard.inner-circle.tsx's COMMUNITY_URL/CALL_URL — this is a
-// real open product decision (what platform hosts the community — WhatsApp? Circle?
-// Discord?) that hasn't been made yet, not an engineering gap.
-const COMMUNITY_URL = "";          // e.g. WhatsApp/Circle invite link
+// Platform decided 2026-07-27: WhatsApp — already "Confirmed active" and the
+// documented preferred channel for this audience (contentpreneur-os/
+// content-tools-stack.md), free, no new tooling. Create a WhatsApp Group or
+// Community, paste its invite link below.
+const COMMUNITY_URL = "";          // paste the WhatsApp group/community invite link here
 const CALL_INFO = "Live group coaching — first [day] of each month";
 const CALL_URL = "";               // e.g. Zoom/Meet link
 

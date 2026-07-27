@@ -19,7 +19,7 @@ A subscription's actual recurring charge amount is controlled by a **Paystack Pl
 
 2. **Paste the real plan code into the code.** Open `src/lib/checkout.functions.ts`, find `SUBSCRIPTION_PLANS`, replace `"PLN_REPLACE_ME_COMMUNITY_19_USD"` with the real code from step 1. Deploy this change.
 
-3. **Decide what the community actually is, before anyone can join it.** `COMMUNITY_URL` and `CALL_URL` in `src/routes/_authenticated/dashboard.community.tsx` are both empty strings on purpose — there is no WhatsApp group, Circle space, or Discord server wired up yet (the existing Inner Circle product has the identical gap — "invite emailed to members" is the current fallback for both). This is a product decision, not an engineering task: pick a platform, create the space, then either (a) paste its invite link into `COMMUNITY_URL` so it shows directly on the dashboard, or (b) set up an email automation that sends the invite after successful subscription, and leave `COMMUNITY_URL` blank (the page already handles both cases).
+3. **Platform decided, 2026-07-27: WhatsApp.** Already `✅ Confirmed active` and the documented preferred channel for this audience (`contentpreneur-os/content-tools-stack.md`) — free, no new tooling, no monthly cost (unlike Circle ~$39-99/mo or Skool ~$99/mo). Create a WhatsApp Group or Community, then paste its invite link into `COMMUNITY_URL` in `src/routes/_authenticated/dashboard.community.tsx` (currently still empty — this is the one remaining manual step). The existing Inner Circle product has the identical gap and can reuse the same group once this exists, or get its own — that's a separate small decision, not blocking.
 
 4. **Flip the product live.**
    ```sql
