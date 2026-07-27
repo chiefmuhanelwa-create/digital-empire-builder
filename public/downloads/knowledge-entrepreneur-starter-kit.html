@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Knowledge Entrepreneur Starter Kit — Contentpreneur Africa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --charcoal: #1C1C1C;
+    --toolblack: #111111;
+    --cream: #FAF7F0;
+    --paper: #F8F8F8;
+    --ink: #2B2B2B;
+    --muted: #7A7065;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #E5E5E5; font-family: 'Lato', sans-serif; }
+
+  @page { size: 794px 1123px; margin: 0; }
+  #pdf-content { max-width: 794px; margin: 32px auto 60px; }
+  .pdf-page { width: 794px; height: 1123px; position: relative; overflow: hidden; page-break-before: always; break-before: page; background: var(--paper); }
+  .pdf-page:first-child { page-break-before: auto; break-before: auto; }
+  .pdf-page + .pdf-page { margin-top: 24px; }
+
+  .download-bar { display: flex; align-items: center; justify-content: center; padding: 18px; gap: 16px; background: var(--charcoal); position: sticky; top: 0; z-index: 100; }
+  .download-btn { background: var(--gold); color: var(--charcoal); font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 11px 28px; border: none; border-radius: 4px; cursor: pointer; }
+  .download-btn:hover { opacity: 0.85; }
+  .download-label { color: rgba(255,255,255,0.45); font-size: 13px; }
+
+  /* Cover */
+  .cover-page { background: var(--toolblack); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 64px 64px; text-align: center; }
+  .cover-eyebrow { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(201,168,76,0.65); margin-bottom: 26px; }
+  .cover-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 46px; line-height: 1.05; letter-spacing: 0.01em; color: var(--gold); margin-bottom: 22px; }
+  .cover-subtitle { font-family: 'Lato', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.55; color: #FFFFFF; max-width: 520px; margin-bottom: 30px; }
+  .cover-badge { display: inline-block; border: 1.5px solid rgba(201,168,76,0.55); color: var(--gold); font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 7px 18px; border-radius: 100px; }
+  .cover-divider { width: 56px; height: 2px; background: var(--gold); opacity: 0.4; margin: 20px auto; }
+  .cover-author { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.8); }
+  .cover-tag { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 8px; }
+
+  .rh { padding: 26px 64px 0; text-align: center; }
+  .rh-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); }
+  .gold-rule { width: 100%; height: 2px; background: var(--gold); margin-top: 10px; }
+
+  .ca { padding: 28px 64px 72px; }
+
+  .eyebrow { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .module-n { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(28,28,28,0.4); margin-bottom: 6px; }
+  .heading { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 24px; color: var(--charcoal); line-height: 1.2; margin-bottom: 6px; }
+  .subhead { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .heading-sm { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; color: var(--charcoal); line-height: 1.25; margin-bottom: 9px; }
+  p { font-size: 13px; color: var(--ink); line-height: 1.7; margin-bottom: 11px; }
+
+  .cream-box { background: var(--cream); border-radius: 8px; padding: 15px 18px; margin-bottom: 12px; }
+  .cream-lbl { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: #8A7328; margin-bottom: 8px; }
+  .cream-t { font-size: 12.5px; color: var(--ink); line-height: 1.65; }
+
+  .dark-box { background: var(--charcoal); border-radius: 8px; padding: 15px 18px; margin-bottom: 12px; }
+  .dark-lbl { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .dark-t { font-size: 12.5px; color: rgba(255,255,255,0.82); line-height: 1.65; }
+
+  .tip { background: #FFFCE9; border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 11px 15px; margin-bottom: 12px; }
+  .tip-t { font-size: 12px; color: var(--ink); line-height: 1.6; }
+
+  .li { font-size: 12.5px; color: var(--ink); line-height: 1.65; padding: 3px 0 3px 20px; position: relative; margin-bottom: 4px; }
+  .li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+
+  .toc-row { display: flex; align-items: flex-start; border-bottom: 1px dashed rgba(0,0,0,0.12); padding: 12px 0; }
+  .toc-n { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px; color: var(--gold); width: 30px; flex-shrink: 0; padding-top: 1px; }
+  .toc-b { flex: 1; }
+  .toc-ti { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; color: var(--charcoal); }
+  .toc-d { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Worksheet-specific: fillable lines/boxes */
+  .fill-label { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10.5px; color: var(--charcoal); margin-bottom: 6px; }
+  .fill-line { border-bottom: 1.5px solid rgba(28,28,28,0.28); height: 26px; margin-bottom: 10px; }
+  .fill-box { border: 1.5px solid rgba(28,28,28,0.18); border-radius: 6px; height: 64px; margin-bottom: 12px; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .pn { position: absolute; bottom: 22px; right: 36px; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; color: #A09585; }
+
+  .back-page { background: var(--toolblack); padding: 64px; display: flex; flex-direction: column; justify-content: space-between; height: 1123px; }
+  .bc-lbl { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 13px; }
+  .bc-h { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 30px; color: #fff; line-height: 1.15; margin-bottom: 16px; }
+  .bc-t { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 440px; margin-bottom: 26px; }
+  .bc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 26px; }
+  .bc-card { background: rgba(255,255,255,0.06); border-radius: 6px; padding: 13px 15px; border: 1px solid rgba(255,255,255,0.08); }
+  .bc-tag { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 5px; }
+  .bc-name { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .bc-desc { font-size: 10px; color: rgba(255,255,255,0.4); }
+  .bc-cta-btn { display: inline-block; background: var(--gold); color: var(--charcoal); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; padding: 11px 26px; border-radius: 4px; text-decoration: none; margin-bottom: 24px; }
+  .bc-social { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 18px; display: flex; align-items: center; justify-content: space-between; }
+  .bc-handle { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: var(--gold); }
+  .bc-site { font-size: 11px; color: rgba(255,255,255,0.35); }
+</style>
+</head>
+<body>
+
+<div class="download-bar">
+  <span class="download-label">Contentpreneur Africa — Starter Kit</span>
+  <button class="download-btn" onclick="window.print()">Download PDF</button>
+</div>
+
+<div id="pdf-content">
+
+  <!-- COVER -->
+  <div class="pdf-page cover-page">
+    <div>
+      <div class="cover-eyebrow">Contentpreneur Africa · Free Starter Kit</div>
+      <div class="cover-title">TURN WHAT YOU<br>KNOW INTO INCOME<br>YOU OWN</div>
+      <div class="cover-subtitle">The Knowledge Entrepreneur Starter Kit — 7 short worksheets to take you from "I have valuable knowledge but no idea what to do with it" to a clear next step.</div>
+      <div class="cover-badge">7 Modules · Free · No Login Required</div>
+    </div>
+    <div>
+      <div class="cover-divider"></div>
+      <div class="cover-author">NOCHILL PTY LTD</div>
+      <div class="cover-tag">contentpreneur.africa</div>
+    </div>
+  </div>
+
+  <!-- HOW TO USE + TOC -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="eyebrow">Before You Start</div>
+      <div class="heading">How To Use This Kit</div>
+      <p>This is not a motivational PDF. It is 7 short worksheets, each one mapped to a specific question — work through them in order, in your own time. There are no live sessions and nothing to wait for. Most people finish this in one sitting.</p>
+      <div class="tip"><div class="tip-t"><strong>The goal of this kit is clarity, not completeness.</strong> It stops at "I know what to do next" — it does not try to teach you everything. That's what the Foundation Kit and the Accelerator are for.</div></div>
+
+      <div class="heading-sm" style="margin-top:22px;">What's Inside</div>
+      <div class="toc-row"><div class="toc-n">01</div><div class="toc-b"><div class="toc-ti">The Knowledge Audit</div><div class="toc-d">Identify your monetizable knowledge</div></div></div>
+      <div class="toc-row"><div class="toc-n">02</div><div class="toc-b"><div class="toc-ti">The Knowledge Entrepreneur Scorecard</div><div class="toc-d">Where you actually stand across 5 axes</div></div></div>
+      <div class="toc-row"><div class="toc-n">03</div><div class="toc-b"><div class="toc-ti">The Positioning Blueprint</div><div class="toc-d">Who you help, what you help with, and why they should listen</div></div></div>
+      <div class="toc-row"><div class="toc-n">04</div><div class="toc-b"><div class="toc-ti">Your First Content Engine</div><div class="toc-d">Know what to talk about, in the right ratio</div></div></div>
+      <div class="toc-row"><div class="toc-n">05</div><div class="toc-b"><div class="toc-ti">The River → Fish → Tank Framework</div><div class="toc-d">Stop building only on rented platforms</div></div></div>
+      <div class="toc-row"><div class="toc-n">06</div><div class="toc-b"><div class="toc-ti">Your First Offer</div><div class="toc-d">Create your first paid asset</div></div></div>
+      <div class="toc-row"><div class="toc-n">07</div><div class="toc-b"><div class="toc-ti">The PAIDS Map</div><div class="toc-d">Your future income roadmap, in 5 streams</div></div></div>
+    </div>
+    <div class="pn">2</div>
+  </div>
+
+  <!-- MODULE 1 — KNOWLEDGE AUDIT -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="module-n">Module 01</div>
+      <div class="eyebrow">"What Do You Know?"</div>
+      <div class="heading">The Knowledge Audit</div>
+      <p class="subhead">You already have what people need. This page finds it.</p>
+      <p>Most people underestimate their own expertise because it feels ordinary to them — it took years to build, so it doesn't feel special. It's rarely ordinary to the person who doesn't have it yet.</p>
+
+      <div class="fill-label">What have you done for 3+ years — professionally, or through direct lived experience — that other people regularly ask you about?</div>
+      <div class="fill-box"></div>
+
+      <div class="fill-label">What's a mistake you made (and recovered from) that someone one step behind you is about to make?</div>
+      <div class="fill-box"></div>
+
+      <div class="fill-grid">
+        <div>
+          <div class="fill-label">One skill people pay for, that you do without thinking:</div>
+          <div class="fill-line"></div>
+        </div>
+        <div>
+          <div class="fill-label">One question you get asked most often:</div>
+          <div class="fill-line"></div>
+        </div>
+      </div>
+      <div class="tip"><div class="tip-t">Look back at what you just wrote. Circle the one answer that made you think "well, obviously" — that reaction is usually the strongest signal. What's obvious to you is rarely obvious to everyone else.</div></div>
+    </div>
+    <div class="pn">3</div>
+  </div>
+
+  <!-- MODULE 2 — SCORECARD -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="module-n">Module 02</div>
+      <div class="eyebrow">"Where Are You Now?"</div>
+      <div class="heading">The Knowledge Entrepreneur Scorecard</div>
+      <p class="subhead">Score yourself honestly across the 5 axes below, 0–10.</p>
+
+      <div class="cream-box">
+        <div class="cream-lbl">Score each axis, 0 (not started) to 10 (fully built)</div>
+        <div class="li"><strong>Audience</strong> — do you have people who actually pay attention when you speak? ___ / 10</div>
+        <div class="li"><strong>Authority</strong> — would a stranger believe you're credible in your area within 30 seconds? ___ / 10</div>
+        <div class="li"><strong>Offer</strong> — do you have something specific someone could pay you for today? ___ / 10</div>
+        <div class="li"><strong>Systems</strong> — could this run for a week without you actively managing it? ___ / 10</div>
+        <div class="li"><strong>Finance</strong> — do you know exactly what you'd charge, and why? ___ / 10</div>
+      </div>
+
+      <div class="fill-label">Your lowest score above is your real starting point — not the one that feels most urgent. What's your lowest-scoring axis?</div>
+      <div class="fill-line"></div>
+
+      <div class="tip"><div class="tip-t">This score isn't a grade — it's a map. Whichever axis is lowest is where the next real step lives, not wherever feels most exciting to work on.</div></div>
+    </div>
+    <div class="pn">4</div>
+  </div>
+
+  <!-- MODULE 3 — POSITIONING -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="module-n">Module 03</div>
+      <div class="eyebrow">Called Expert Method — P&sup3;</div>
+      <div class="heading">The Positioning Blueprint</div>
+      <p class="subhead">Three questions. One sentence at the end.</p>
+
+      <div class="fill-label">Who do you help? (be specific — not "creators," but "nurses," "small accounting firm owners," "youth pastors")</div>
+      <div class="fill-line"></div>
+
+      <div class="fill-label">What do you help them do? (the outcome, not the method)</div>
+      <div class="fill-line"></div>
+
+      <div class="fill-label">Why should they listen to you, specifically — not someone else?</div>
+      <div class="fill-line"></div>
+
+      <div class="dark-box">
+        <div class="dark-lbl">Now combine your three answers into one sentence</div>
+        <div class="dark-t">"I help ______________________ achieve ______________________ through ______________________."</div>
+      </div>
+      <div class="cream-box"><div class="cream-lbl">Example</div><div class="cream-t">"I help nurses turn clinical knowledge into income-producing digital assets."</div></div>
+    </div>
+    <div class="pn">5</div>
+  </div>
+
+  <!-- MODULE 4 — CONTENT ENGINE -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="module-n">Module 04</div>
+      <div class="eyebrow">The 4E Framework</div>
+      <div class="heading">Your First Content Engine</div>
+      <p class="subhead">Every piece of content does one of four jobs. Most people only ever do one of them.</p>
+
+      <div class="cream-box">
+        <div class="cream-lbl">The 4 content jobs</div>
+        <div class="li"><strong>Educate</strong> — teach something real. Your frameworks, your process, your point of view.</div>
+        <div class="li"><strong>Entertain</strong> — humanize you. Behind the scenes, stories, personality.</div>
+        <div class="li"><strong>Encourage</strong> — proof it works. Wins, transformations, testimonials — yours or your audience's.</div>
+        <div class="li"><strong>Earn</strong> — a direct, specific, respectful ask.</div>
+      </div>
+
+      <div class="fill-label">Write one content idea for each — just a topic, not a full script:</div>
+      <div class="fill-grid">
+        <div><div class="fill-label" style="color:var(--muted);font-weight:400;">Educate:</div><div class="fill-line"></div></div>
+        <div><div class="fill-label" style="color:var(--muted);font-weight:400;">Entertain:</div><div class="fill-line"></div></div>
+        <div><div class="fill-label" style="color:var(--muted);font-weight:400;">Encourage:</div><div class="fill-line"></div></div>
+        <div><div class="fill-label" style="color:var(--muted);font-weight:400;">Earn:</div><div class="fill-line"></div></div>
+      </div>
+      <div class="tip"><div class="tip-t">You just built the seed of a content calendar. The Foundation Kit turns this into a full 30-day plan, pre-built to the right ratio.</div></div>
+    </div>
+    <div class="pn">6</div>
+  </div>
+
+  <!-- MODULE 5 — RIVER FISH TANK -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="module-n">Module 05</div>
+      <div class="eyebrow">Audience Ownership</div>
+      <div class="heading">The River → Fish → Tank Framework</div>
+      <p class="subhead">Followers you don't own can disappear overnight. This page starts the move to what you do own.</p>
+
+      <div class="cream-box">
+        <div class="cream-lbl">The three parts</div>
+        <div class="li"><strong>River</strong> — the rented platform (Instagram, TikTok, Facebook). People flow past. You don't own the water.</div>
+        <div class="li"><strong>Fish</strong> — the people who stop and pay attention. Still not yours until they leave the river.</div>
+        <div class="li"><strong>Tank</strong> — your owned list (email, WhatsApp community). This is the only place a platform can't touch.</div>
+      </div>
+
+      <div class="fill-label">Which platform is your "river" right now?</div>
+      <div class="fill-line"></div>
+
+      <div class="fill-label">What's one specific, useful thing you could offer in exchange for an email address this week? (your first lead magnet — one sentence is enough for now)</div>
+      <div class="fill-box"></div>
+    </div>
+    <div class="pn">7</div>
+  </div>
+
+  <!-- MODULE 6 — FIRST OFFER -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="module-n">Module 06</div>
+      <div class="eyebrow">Product From Knowledge</div>
+      <div class="heading">Your First Offer</div>
+      <p class="subhead">Not a business plan. One specific thing, priced, that someone could buy from you this month.</p>
+
+      <div class="fill-label">What format fits what you know best? (circle or write one)</div>
+      <div class="cream-t" style="margin-bottom:12px;">Guide &nbsp;·&nbsp; Workshop &nbsp;·&nbsp; Template &nbsp;·&nbsp; Short Course &nbsp;·&nbsp; 1:1 Consulting Call</div>
+
+      <div class="fill-label">In one sentence, what does it help someone do?</div>
+      <div class="fill-line"></div>
+
+      <div class="fill-grid">
+        <div><div class="fill-label">What would you charge?</div><div class="fill-line"></div></div>
+        <div><div class="fill-label">Who's the first person you'd tell about it?</div><div class="fill-line"></div></div>
+      </div>
+      <div class="tip"><div class="tip-t">This doesn't need to be perfect or finished. It needs to exist. A rough version sold once teaches you more than a perfect version planned for months.</div></div>
+    </div>
+    <div class="pn">8</div>
+  </div>
+
+  <!-- MODULE 7 — PAIDS -->
+  <div class="pdf-page">
+    <div class="rh"><div class="rh-text">The Knowledge Entrepreneur Starter Kit</div><div class="gold-rule"></div></div>
+    <div class="ca">
+      <div class="module-n">Module 07</div>
+      <div class="eyebrow">PAIDS</div>
+      <div class="heading">The PAIDS Map</div>
+      <p class="subhead">Five income streams, one framework. You don't need all five today — just know they exist.</p>
+
+      <div class="cream-box">
+        <div class="li"><strong>P</strong>roducts — things you make once, sell repeatedly</div>
+        <div class="li"><strong>A</strong>ds & Affiliates — earning from other people's products/attention</div>
+        <div class="li"><strong>I</strong>nformation — what you teach, packaged</div>
+        <div class="li"><strong>D</strong>eals — brand partnerships and sponsorships</div>
+        <div class="li"><strong>S</strong>ervices — your time and skill, sold directly</div>
+      </div>
+
+      <div class="fill-label">Which one stream are you already closest to? Which one excites you most for later?</div>
+      <div class="fill-grid">
+        <div><div class="fill-label" style="color:var(--muted);font-weight:400;">Closest today:</div><div class="fill-line"></div></div>
+        <div><div class="fill-label" style="color:var(--muted);font-weight:400;">Next to build:</div><div class="fill-line"></div></div>
+      </div>
+      <div class="tip"><div class="tip-t">You've now been through all 7 modules. Turn the page for what happens next.</div></div>
+    </div>
+    <div class="pn">9</div>
+  </div>
+
+  <!-- WHAT'S NEXT / BACK PAGE -->
+  <div class="pdf-page back-page">
+    <div>
+      <div class="bc-lbl">What's Next</div>
+      <div class="bc-h">You Have Clarity. Now Build The System.</div>
+      <div class="bc-t">This kit stops at "I know what to do." The next two steps take you from knowing to actually having it built.</div>
+      <div class="bc-grid">
+        <div class="bc-card">
+          <div class="bc-tag">Step 2 · $97</div>
+          <div class="bc-name">The Foundation Kit</div>
+          <div class="bc-desc">7-step interactive Clarity System, 9 tools, 10 PDFs — everything from this kit, gone deep.</div>
+        </div>
+        <div class="bc-card">
+          <div class="bc-tag">Step 3 · $499</div>
+          <div class="bc-name">Contentpreneur Accelerator</div>
+          <div class="bc-desc">The full 7-phase system — audience, offer, sales, assets, Creator Finance.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <a href="https://contentpreneur.africa/foundation" class="bc-cta-btn">Get The Foundation Kit →</a>
+      <div class="bc-social">
+        <div class="bc-handle">@nochill_god</div>
+        <div class="bc-site">contentpreneur.africa</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // On-screen "Download PDF" convenience only — the real, print-quality render is
+  // produced by product-lab/products/scripts/build_pdf.py (Playwright), same as
+  // every other NOCHILL product PDF. This button is a fallback for anyone previewing
+  // the page directly in a browser.
+</script>
+</body>
+</html>

@@ -6,7 +6,19 @@
   "main": "src/server.ts",
   "workers_dev": false,
   "routes": [
-    { "pattern": "chkplt.com/*", "zone_name": "chkplt.com" }
+    { "pattern": "chkplt.com/*", "zone_name": "chkplt.com" },
+    // Phase 2A, 2026-07-28: Starter Kit/Foundation Kit/Accelerator moved fully
+    // onto contentpreneur.africa (chkplt.com removed from that customer
+    // journey entirely, per founder instruction). These are path-specific, not
+    // a catch-all — contentpreneur.africa's own Next.js site (a separate
+    // Worker) still owns the homepage/about via its own "contentpreneur.africa/*"
+    // route; Cloudflare resolves the more specific pattern below to THIS Worker
+    // for these 4 paths only. /apply is included because the Accelerator's CTA
+    // links to it — without this route it would 404 under this domain.
+    { "pattern": "contentpreneur.africa/starterkit*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/foundation*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/accelerator*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/apply*", "zone_name": "contentpreneur.africa" }
   ],
   "triggers": {
     // "10 4 * * *" daily → reconcile ZAR charges to the live USD→ZAR rate.

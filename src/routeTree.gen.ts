@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as StarterkitRouteImport } from './routes/starterkit'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SarsCalculatorRouteImport } from './routes/sars-calculator'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -22,9 +23,11 @@ import { Route as NicheClarityRouteImport } from './routes/niche-clarity'
 import { Route as MediaKitRouteImport } from './routes/media-kit'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HookGeneratorRouteImport } from './routes/hook-generator'
+import { Route as FoundationRouteImport } from './routes/foundation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AlignAccelerateExcelRouteImport } from './routes/align-accelerate-excel'
+import { Route as AcceleratorRouteImport } from './routes/accelerator'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -45,6 +48,7 @@ import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedDashboardInnerCircleRouteImport } from './routes/_authenticated/dashboard.inner-circle'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
+import { Route as AuthenticatedDashboardCommunityRouteImport } from './routes/_authenticated/dashboard.community'
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
@@ -77,6 +81,11 @@ const ToolsRoute = ToolsRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StarterkitRoute = StarterkitRouteImport.update({
+  id: '/starterkit',
+  path: '/starterkit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -134,6 +143,11 @@ const HookGeneratorRoute = HookGeneratorRouteImport.update({
   path: '/hook-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FoundationRoute = FoundationRouteImport.update({
+  id: '/foundation',
+  path: '/foundation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -147,6 +161,11 @@ const ApplyRoute = ApplyRouteImport.update({
 const AlignAccelerateExcelRoute = AlignAccelerateExcelRouteImport.update({
   id: '/align-accelerate-excel',
   path: '/align-accelerate-excel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcceleratorRoute = AcceleratorRouteImport.update({
+  id: '/accelerator',
+  path: '/accelerator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -250,6 +269,12 @@ const AuthenticatedDashboardFoundationKitRoute =
   AuthenticatedDashboardFoundationKitRouteImport.update({
     id: '/foundation-kit',
     path: '/foundation-kit',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardCommunityRoute =
+  AuthenticatedDashboardCommunityRouteImport.update({
+    id: '/community',
+    path: '/community',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const AuthenticatedAppsSeedsPipelineRoute =
@@ -390,9 +415,11 @@ const AuthenticatedAdminCurriculumProductSlugRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accelerator': typeof AcceleratorRoute
   '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
+  '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
   '/media-kit': typeof MediaKitRoute
@@ -404,6 +431,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
   '/signup': typeof SignupRoute
+  '/starterkit': typeof StarterkitRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -428,6 +456,7 @@ export interface FileRoutesByFullPath {
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
+  '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -450,9 +479,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accelerator': typeof AcceleratorRoute
   '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
+  '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
   '/media-kit': typeof MediaKitRoute
@@ -464,6 +495,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
   '/signup': typeof SignupRoute
+  '/starterkit': typeof StarterkitRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -485,6 +517,7 @@ export interface FileRoutesByTo {
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
+  '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
@@ -508,9 +541,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/accelerator': typeof AcceleratorRoute
   '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
   '/contact': typeof ContactRoute
+  '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
   '/media-kit': typeof MediaKitRoute
@@ -522,6 +557,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
   '/signup': typeof SignupRoute
+  '/starterkit': typeof StarterkitRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -546,6 +582,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
+  '/_authenticated/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/_authenticated/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
@@ -570,9 +607,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/accelerator'
     | '/align-accelerate-excel'
     | '/apply'
     | '/contact'
+    | '/foundation'
     | '/hook-generator'
     | '/login'
     | '/media-kit'
@@ -584,6 +623,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sars-calculator'
     | '/signup'
+    | '/starterkit'
     | '/terms'
     | '/tools'
     | '/account'
@@ -608,6 +648,7 @@ export interface FileRouteTypes {
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
     | '/apps/seeds-pipeline'
+    | '/dashboard/community'
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
     | '/learn/$slug'
@@ -630,9 +671,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/accelerator'
     | '/align-accelerate-excel'
     | '/apply'
     | '/contact'
+    | '/foundation'
     | '/hook-generator'
     | '/login'
     | '/media-kit'
@@ -644,6 +687,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sars-calculator'
     | '/signup'
+    | '/starterkit'
     | '/terms'
     | '/tools'
     | '/account'
@@ -665,6 +709,7 @@ export interface FileRouteTypes {
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
     | '/apps/seeds-pipeline'
+    | '/dashboard/community'
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
     | '/api/cron/sync-fx'
@@ -687,9 +732,11 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/accelerator'
     | '/align-accelerate-excel'
     | '/apply'
     | '/contact'
+    | '/foundation'
     | '/hook-generator'
     | '/login'
     | '/media-kit'
@@ -701,6 +748,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sars-calculator'
     | '/signup'
+    | '/starterkit'
     | '/terms'
     | '/tools'
     | '/_authenticated/account'
@@ -725,6 +773,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/apps/right-side-diagnostic'
     | '/_authenticated/apps/seeds-pipeline'
+    | '/_authenticated/dashboard/community'
     | '/_authenticated/dashboard/foundation-kit'
     | '/_authenticated/dashboard/inner-circle'
     | '/_authenticated/learn/$slug'
@@ -749,9 +798,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AcceleratorRoute: typeof AcceleratorRoute
   AlignAccelerateExcelRoute: typeof AlignAccelerateExcelRoute
   ApplyRoute: typeof ApplyRoute
   ContactRoute: typeof ContactRoute
+  FoundationRoute: typeof FoundationRoute
   HookGeneratorRoute: typeof HookGeneratorRoute
   LoginRoute: typeof LoginRoute
   MediaKitRoute: typeof MediaKitRoute
@@ -763,6 +814,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SarsCalculatorRoute: typeof SarsCalculatorRoute
   SignupRoute: typeof SignupRoute
+  StarterkitRoute: typeof StarterkitRoute
   TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
@@ -791,6 +843,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/starterkit': {
+      id: '/starterkit'
+      path: '/starterkit'
+      fullPath: '/starterkit'
+      preLoaderRoute: typeof StarterkitRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -870,6 +929,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HookGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/foundation': {
+      id: '/foundation'
+      path: '/foundation'
+      fullPath: '/foundation'
+      preLoaderRoute: typeof FoundationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -889,6 +955,13 @@ declare module '@tanstack/react-router' {
       path: '/align-accelerate-excel'
       fullPath: '/align-accelerate-excel'
       preLoaderRoute: typeof AlignAccelerateExcelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accelerator': {
+      id: '/accelerator'
+      path: '/accelerator'
+      fullPath: '/accelerator'
+      preLoaderRoute: typeof AcceleratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1029,6 +1102,13 @@ declare module '@tanstack/react-router' {
       path: '/foundation-kit'
       fullPath: '/dashboard/foundation-kit'
       preLoaderRoute: typeof AuthenticatedDashboardFoundationKitRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/community': {
+      id: '/_authenticated/dashboard/community'
+      path: '/community'
+      fullPath: '/dashboard/community'
+      preLoaderRoute: typeof AuthenticatedDashboardCommunityRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/_authenticated/apps/seeds-pipeline': {
@@ -1220,6 +1300,7 @@ const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardCommunityRoute: typeof AuthenticatedDashboardCommunityRoute
   AuthenticatedDashboardFoundationKitRoute: typeof AuthenticatedDashboardFoundationKitRoute
   AuthenticatedDashboardInnerCircleRoute: typeof AuthenticatedDashboardInnerCircleRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
@@ -1229,6 +1310,7 @@ interface AuthenticatedDashboardRouteChildren {
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardCommunityRoute: AuthenticatedDashboardCommunityRoute,
     AuthenticatedDashboardFoundationKitRoute:
       AuthenticatedDashboardFoundationKitRoute,
     AuthenticatedDashboardInnerCircleRoute:
@@ -1322,9 +1404,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  AcceleratorRoute: AcceleratorRoute,
   AlignAccelerateExcelRoute: AlignAccelerateExcelRoute,
   ApplyRoute: ApplyRoute,
   ContactRoute: ContactRoute,
+  FoundationRoute: FoundationRoute,
   HookGeneratorRoute: HookGeneratorRoute,
   LoginRoute: LoginRoute,
   MediaKitRoute: MediaKitRoute,
@@ -1336,6 +1420,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SarsCalculatorRoute: SarsCalculatorRoute,
   SignupRoute: SignupRoute,
+  StarterkitRoute: StarterkitRoute,
   TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
