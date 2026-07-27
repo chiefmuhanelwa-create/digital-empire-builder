@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/contentpreneur-header";
 import { ProCohortBreakdown } from "@/components/PremiumProgramBreakdown";
 
 // Full standalone sales page for the Contentpreneur Accelerator, reachable at
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/accelerator")({
 function AcceleratorPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SiteHeader />
+      <ContentpreneurHeader />
 
       <section className="mx-auto max-w-2xl px-6 pt-20 pb-16 text-center">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">The Flagship · $499</div>
@@ -88,7 +88,7 @@ function AcceleratorPage() {
         </div>
       </section>
 
-      <SiteFooter />
+      <ContentpreneurFooter />
     </div>
   );
 }

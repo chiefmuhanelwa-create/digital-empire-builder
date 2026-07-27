@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/contentpreneur-header";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +51,7 @@ function FoundationPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SiteHeader />
+      <ContentpreneurHeader />
 
       <section className="mx-auto max-w-2xl px-6 pt-20 pb-16 text-center">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Step 2 of 3 · {priceLabel}</div>
@@ -120,7 +120,7 @@ function FoundationPage() {
         </div>
       </section>
 
-      <SiteFooter />
+      <ContentpreneurFooter />
     </div>
   );
 }

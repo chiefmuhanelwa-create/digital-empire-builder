@@ -18,7 +18,17 @@
     { "pattern": "contentpreneur.africa/starterkit*", "zone_name": "contentpreneur.africa" },
     { "pattern": "contentpreneur.africa/foundation*", "zone_name": "contentpreneur.africa" },
     { "pattern": "contentpreneur.africa/accelerator*", "zone_name": "contentpreneur.africa" },
-    { "pattern": "contentpreneur.africa/apply*", "zone_name": "contentpreneur.africa" }
+    { "pattern": "contentpreneur.africa/apply*", "zone_name": "contentpreneur.africa" },
+    // Bug found 2026-07-28 (live, via a real screenshot): the 4 page routes
+    // above load fine, but their CSS/JS bundles are requested from bare
+    // "/assets/*" and "/downloads/*" paths — those don't match any pattern
+    // above, so they fell through to the Next.js site's "contentpreneur.africa/*"
+    // catch-all instead, which 404'd them (confirmed via response headers:
+    // x-nextjs-cache/x-opennext). Result: completely unstyled pages. This app's
+    // own static asset convention is "/assets/*" (Vite), which doesn't collide
+    // with the Next.js site's "/_next/static/*" convention, so this is safe to add.
+    { "pattern": "contentpreneur.africa/assets/*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/downloads/*", "zone_name": "contentpreneur.africa" }
   ],
   "triggers": {
     // "10 4 * * *" daily → reconcile ZAR charges to the live USD→ZAR rate.

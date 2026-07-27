@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/contentpreneur-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { claimStarterKit } from "@/lib/starterkit.functions";
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/starterkit")({
 function StarterKitPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SiteHeader />
+      <ContentpreneurHeader />
 
       <section className="mx-auto max-w-2xl px-6 pt-20 pb-16 text-center">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
@@ -81,7 +81,7 @@ function StarterKitPage() {
         </div>
       </section>
 
-      <SiteFooter />
+      <ContentpreneurFooter />
     </div>
   );
 }
