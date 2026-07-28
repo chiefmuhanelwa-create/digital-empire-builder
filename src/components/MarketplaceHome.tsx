@@ -4,26 +4,44 @@ import { ProfileHero } from "@/components/ProfileHero";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/gardens";
 import { useCountry } from "@/lib/currency";
+import type { Tables } from "@/integrations/supabase/types";
+
+export const MARKETPLACE_QUERY_KEY = ["products", "catalog-all"];
+
+// Plain query (no auth/context needed) — safe to call from a route `loader`
+// for real SSR content, and reused client-side as the queryFn below so the
+// cache shape matches exactly.
+export async function fetchMarketplaceProducts() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("status", "published")
+    .eq("show_in_marketplace", true)
+    .order("sort_order", { ascending: true });
+  if (error) throw error;
+  return data;
+}
 
 // The actual marketplace grid, shared by "/" and "/products" — CHKPLT is now a
 // digital products marketplace (2026-07-28), replacing the old Foundation-Kit-
 // only landing page that used to live at "/". Design replicates the real,
 // live Shopify storefront (contentcreatorhub.online), fetched and parsed
 // directly — not a guess.
-export function MarketplaceHome() {
+//
+// `initialProducts` comes from the route's `loader` (real SSR fetch) so the
+// grid paints in the initial HTML response instead of waiting for JS to
+// hydrate and then fire a client-side fetch — this was the single biggest
+// contributor to "takes seconds to show products" on a cold load.
+export function MarketplaceHome({
+  initialProducts,
+}: {
+  initialProducts?: Tables<"products">[];
+}) {
   const country = useCountry();
   const { data: products, isLoading } = useQuery({
-    queryKey: ["products", "catalog-all"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("status", "published")
-        .eq("show_in_marketplace", true)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return data;
-    },
+    queryKey: MARKETPLACE_QUERY_KEY,
+    queryFn: fetchMarketplaceProducts,
+    initialData: initialProducts,
   });
 
   return (

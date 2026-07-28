@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
-import { MarketplaceHome } from "@/components/MarketplaceHome";
+import { MarketplaceHome, fetchMarketplaceProducts } from "@/components/MarketplaceHome";
 
 // Rebuilt 2026-07-28: CHKPLT's homepage is now the digital products
 // marketplace (replicating the real, live Shopify storefront design), not
@@ -40,6 +40,7 @@ const STRUCTURED_DATA = JSON.stringify({
 });
 
 export const Route = createFileRoute("/")({
+  loader: () => fetchMarketplaceProducts(),
   head: () => ({
     meta: [
       { title: "CHKPLT — Digital Products for African Creators" },
@@ -60,11 +61,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
+  const products = Route.useLoaderData();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
       <SiteHeader />
-      <MarketplaceHome />
+      <MarketplaceHome initialProducts={products} />
       <SiteFooter />
     </div>
   );

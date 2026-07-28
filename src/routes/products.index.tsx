@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
-import { MarketplaceHome } from "@/components/MarketplaceHome";
+import { MarketplaceHome, fetchMarketplaceProducts } from "@/components/MarketplaceHome";
 
 export const Route = createFileRoute("/products/")({
+  loader: () => fetchMarketplaceProducts(),
   head: () => ({
     meta: [
       { title: "Products — CHKPLT" },
@@ -24,10 +25,11 @@ export const Route = createFileRoute("/products/")({
 });
 
 function Catalog() {
+  const products = Route.useLoaderData();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
-      <MarketplaceHome />
+      <MarketplaceHome initialProducts={products} />
       <SiteFooter />
     </div>
   );
