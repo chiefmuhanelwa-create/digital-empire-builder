@@ -100,6 +100,7 @@ export const CLARITY_BONUSES: ClarityTool[] = [
   { name: "30-Day Consistency Blueprint", route: "/apps/consistency-blueprint", pdf: "30-day-tracker" },
   { name: "90-Day First Income Planner", route: "/apps/first-income-planner", pdf: "90-day-planner" },
   { name: "The One-Page Cheat Sheet", pdf: "cheat-sheet" },
+  { name: "Income Tracker — every rand, mapped to PAIDS", route: "/apps/income-tracker" },
 ];
 
 // localStorage progress

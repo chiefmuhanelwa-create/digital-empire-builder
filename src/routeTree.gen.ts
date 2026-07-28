@@ -54,6 +54,7 @@ import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_aut
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
 import { Route as AuthenticatedAppsMsTsSsRouteImport } from './routes/_authenticated/apps.ms-ts-ss'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
+import { Route as AuthenticatedAppsIncomeTrackerRouteImport } from './routes/_authenticated/apps.income-tracker'
 import { Route as AuthenticatedAppsFirstIncomePlannerRouteImport } from './routes/_authenticated/apps.first-income-planner'
 import { Route as AuthenticatedAppsDaresAssetModelRouteImport } from './routes/_authenticated/apps.dares-asset-model'
 import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
@@ -306,6 +307,12 @@ const AuthenticatedAppsKnowledgeAuditRoute =
     path: '/apps/knowledge-audit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsIncomeTrackerRoute =
+  AuthenticatedAppsIncomeTrackerRouteImport.update({
+    id: '/apps/income-tracker',
+    path: '/apps/income-tracker',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsFirstIncomePlannerRoute =
   AuthenticatedAppsFirstIncomePlannerRouteImport.update({
     id: '/apps/first-income-planner',
@@ -444,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
+  '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -504,6 +512,7 @@ export interface FileRoutesByTo {
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
+  '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -568,6 +577,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/_authenticated/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/_authenticated/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
+  '/_authenticated/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/_authenticated/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -633,6 +643,7 @@ export interface FileRouteTypes {
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
     | '/apps/first-income-planner'
+    | '/apps/income-tracker'
     | '/apps/knowledge-audit'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
@@ -693,6 +704,7 @@ export interface FileRouteTypes {
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
     | '/apps/first-income-planner'
+    | '/apps/income-tracker'
     | '/apps/knowledge-audit'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
@@ -756,6 +768,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/consistency-blueprint'
     | '/_authenticated/apps/dares-asset-model'
     | '/_authenticated/apps/first-income-planner'
+    | '/_authenticated/apps/income-tracker'
     | '/_authenticated/apps/knowledge-audit'
     | '/_authenticated/apps/ms-ts-ss'
     | '/_authenticated/apps/niche-clarity-builder'
@@ -1133,6 +1146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsKnowledgeAuditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/income-tracker': {
+      id: '/_authenticated/apps/income-tracker'
+      path: '/apps/income-tracker'
+      fullPath: '/apps/income-tracker'
+      preLoaderRoute: typeof AuthenticatedAppsIncomeTrackerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/first-income-planner': {
       id: '/_authenticated/apps/first-income-planner'
       path: '/apps/first-income-planner'
@@ -1346,6 +1366,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
   AuthenticatedAppsDaresAssetModelRoute: typeof AuthenticatedAppsDaresAssetModelRoute
   AuthenticatedAppsFirstIncomePlannerRoute: typeof AuthenticatedAppsFirstIncomePlannerRoute
+  AuthenticatedAppsIncomeTrackerRoute: typeof AuthenticatedAppsIncomeTrackerRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
   AuthenticatedAppsMsTsSsRoute: typeof AuthenticatedAppsMsTsSsRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
@@ -1366,6 +1387,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsDaresAssetModelRoute: AuthenticatedAppsDaresAssetModelRoute,
   AuthenticatedAppsFirstIncomePlannerRoute:
     AuthenticatedAppsFirstIncomePlannerRoute,
+  AuthenticatedAppsIncomeTrackerRoute: AuthenticatedAppsIncomeTrackerRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
   AuthenticatedAppsMsTsSsRoute: AuthenticatedAppsMsTsSsRoute,
   AuthenticatedAppsNicheClarityBuilderRoute:
