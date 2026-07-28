@@ -748,6 +748,7 @@ export type Database = {
           requires_application: boolean
           scripture_root: string | null
           seed_to_product_id: string | null
+          show_in_marketplace: boolean
           slug: string
           sort_order: number
           status: Database["public"]["Enums"]["product_status"]
@@ -774,6 +775,7 @@ export type Database = {
           requires_application?: boolean
           scripture_root?: string | null
           seed_to_product_id?: string | null
+          show_in_marketplace?: boolean
           slug: string
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]
@@ -800,6 +802,7 @@ export type Database = {
           requires_application?: boolean
           scripture_root?: string | null
           seed_to_product_id?: string | null
+          show_in_marketplace?: boolean
           slug?: string
           sort_order?: number
           status?: Database["public"]["Enums"]["product_status"]

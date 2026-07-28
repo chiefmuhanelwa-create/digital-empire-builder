@@ -19,6 +19,7 @@ export function MarketplaceHome() {
         .from("products")
         .select("*")
         .eq("status", "published")
+        .eq("show_in_marketplace", true)
         .order("sort_order", { ascending: true });
       if (error) throw error;
       return data;
