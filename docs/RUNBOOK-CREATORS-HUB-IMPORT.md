@@ -45,3 +45,15 @@ Also worth knowing: **`niche-clarity-workbook.pdf` already exists in the `produc
 - Migration: `supabase/migrations/20260728120000_import_creators_hub_catalog.sql`.
 - Verified live via direct REST query: 14 new rows published and buyable, 9 correctly invisible to anonymous queries (still draft), the price fix confirmed on `30-day-content-calendar`.
 - 2 potential overlaps flagged above, not resolved — needs the founder, not a guess.
+
+### 2026-07-28 (later same day) — reconciled against the real live Shopify site + visual redesign
+- Shopify came back up mid-session (was billing-locked, HTTP 402, earlier) — fetched `contentcreatorhub.online` directly and parsed its actual product grid, not the older planning docs.
+- Fixed a real price mismatch (`monetise-your-expertise` R299→R399) and 2 real gaps where a PDF existed in Storage but no product row did at all (`niche-clarity-workbook`, `paids-framework-workbook` — the former is a live bug fix: `/niche-clarity`'s sales page has been querying a nonexistent product this whole time). Migration: `20260728140000_reconcile_live_shopify_catalog.sql`.
+- Added 3 products found live with no source file anywhere accessible to this session (Imposter Syndrome Fix, Your First Brand Deal Script, SARS & Creator Income) as `draft` with no `download_path` — cannot be published until a real file is sourced, not invented.
+- Flagged, not resolved: "Content Creator Starter System" (Shopify, R299) vs. the already-live "creator-starter-system" (R49) look like different products despite the similar name — added as a separate draft row.
+- Founder decision: `30-day-content-calendar` stays at R149 even though live Shopify shows R99 — Shopify treated as the stale one here.
+- Added `compare_at_price_cents` column (migration `20260728150000`) and populated it only for the 5 products where a real "was Rxxx" price was directly observed on the live site.
+- Generated real cover images for all 25 imported/fixed products from each PDF's actual page 1 (PyMuPDF), uploaded to `product-covers`, migration `20260728160000`.
+- Rebuilt `/products` as a flat image grid + a new `ProfileHero` component, replicating the real live site's actual HTML/CSS (colors, card structure, bio card, social icons) — not a guess from a 2026-05-01 planning doc.
+- Found and fixed, incidentally: `modules.unlock_week` (LMS drip-delivery) never actually existed on the live DB despite its migration showing "applied" — a real gap in this session's earlier migration-history repair. Re-applied via migration `20260728170000`, backfill verified correct.
+- All verified live: full build + `tsc` clean, `/products` returns 200, the real profile photo and all 25 cover images resolve with correct content-type.
