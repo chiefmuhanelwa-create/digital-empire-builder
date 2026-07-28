@@ -1,10 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { ArrowRight, FileText, Printer, Instagram, Sparkles } from "lucide-react";
+import { ArrowRight, FileText, Printer, Instagram, Sparkles, Mail } from "lucide-react";
+import { toast } from "sonner";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { emailMediaKit } from "@/lib/media-kit.functions";
 
 export const Route = createFileRoute("/media-kit")({
   head: () => ({
@@ -62,6 +66,14 @@ const TA =
 
 function MediaKitPage() {
   const [k, setK] = useState<Kit>(INITIAL);
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  const sendFn = useServerFn(emailMediaKit);
+  const sendMut = useMutation({
+    mutationFn: sendFn,
+    onSuccess: () => setSent(true),
+    onError: (e: Error) => toast.error(e.message),
+  });
   const set = <K extends keyof Kit>(key: K, v: Kit[K]) => setK((s) => ({ ...s, [key]: v }));
   const setArr = <T extends Platform | Pillar | Rate>(
     key: "platforms" | "pillars" | "rates",
@@ -164,6 +176,58 @@ function MediaKitPage() {
             >
               <Printer className="size-4 mr-2" /> Save as PDF
             </Button>
+
+            <div className="border border-[#e8e0d4] rounded-2xl bg-white p-5">
+              {sent ? (
+                <p className="text-sm text-[#0F172A] text-center">
+                  Sent to {recipientEmail} — check your inbox (or spam).
+                </p>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-banana mb-3">
+                    <Mail className="size-3.5" /> Email me this kit
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Input
+                      className={FLD + " flex-1"}
+                      type="email"
+                      value={recipientEmail}
+                      onChange={(e) => setRecipientEmail(e.target.value)}
+                      placeholder="you@example.com"
+                    />
+                    <Button
+                      type="button"
+                      disabled={sendMut.isPending}
+                      onClick={() => {
+                        if (!recipientEmail) {
+                          toast.error("Enter your email.");
+                          return;
+                        }
+                        sendMut.mutate({
+                          data: {
+                            recipientEmail,
+                            fullName: k.name || undefined,
+                            name: k.name,
+                            handle: k.handle,
+                            tagline: k.tagline,
+                            bio: k.bio,
+                            platforms: k.platforms,
+                            pillars: k.pillars,
+                            rates: k.rates,
+                            statLines: k.stats.split("\n").map((s) => s.replace(/^[•\-\s]+/, "").trim()),
+                            contactEmail: k.email,
+                            booking: k.booking,
+                          },
+                        });
+                      }}
+                      className="sm:w-auto bg-[#0F172A] text-white hover:bg-[#1E293B] font-semibold"
+                    >
+                      {sendMut.isPending ? "Sending…" : "Send"}
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           {/* LIVE PREVIEW (the deliverable) */}

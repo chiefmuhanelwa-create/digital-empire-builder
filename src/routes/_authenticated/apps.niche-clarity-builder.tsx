@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { AiCoach } from "@/components/ai-coach";
+import { getNicheClarityProgress, saveNicheClarityProgress } from "@/lib/niche-clarity.functions";
 import { Lock, Copy, Check, Target, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
@@ -33,18 +36,33 @@ function NicheClarityBuilder() {
   const { access, loading } = useKitAccess();
   const [f, setF] = useState<Fields>(EMPTY);
   const [copied, setCopied] = useState(false);
+  const getFn = useServerFn(getNicheClarityProgress);
+  const saveFn = useServerFn(saveNicheClarityProgress);
+  const saveMut = useMutation({ mutationFn: saveFn });
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // localStorage renders instantly on load; the server copy (if any and newer
+  // in intent) then reconciles once it resolves, so a returning user on a
+  // different device still gets their real progress back.
   useEffect(() => {
     try {
       const r = JSON.parse(localStorage.getItem(KEY) || "null");
       if (r && typeof r === "object") setF({ ...EMPTY, ...r });
     } catch { /* ignore */ }
-  }, []);
+    if (!access) return;
+    getFn()
+      .then((res) => {
+        if (res.fields && typeof res.fields === "object") setF({ ...EMPTY, ...(res.fields as Partial<Fields>) });
+      })
+      .catch(() => { /* offline/first-use — localStorage/empty state is fine */ });
+  }, [access]);
 
   const set = (k: keyof Fields, v: string) => {
     const next = { ...f, [k]: v };
     setF(next);
     try { localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* ignore */ }
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => saveMut.mutate({ data: next }), 800);
   };
 
   const calc = useMemo(() => {

@@ -480,6 +480,24 @@ export type Database = {
           },
         ]
       }
+      niche_clarity_progress: {
+        Row: {
+          fields: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          fields?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          fields?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       offer_builder_leads: {
         Row: {
           audience: string
