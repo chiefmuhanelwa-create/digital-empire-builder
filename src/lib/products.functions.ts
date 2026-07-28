@@ -25,6 +25,7 @@ const ProductInput = z.object({
   download_path: z.string().max(500).nullable().optional(),
   status: STATUS.default("draft"),
   sort_order: z.number().int().min(0).max(10000).default(0),
+  show_in_marketplace: z.boolean().default(true),
 });
 
 async function ensureAdmin(userId: string) {
@@ -109,6 +110,7 @@ export const adminUpsertProduct = createServerFn({ method: "POST" })
       download_path: data.download_path ?? null,
       status: data.status,
       sort_order: data.sort_order,
+      show_in_marketplace: data.show_in_marketplace,
     };
     if (data.id) {
       const { error } = await supabaseAdmin
@@ -140,6 +142,24 @@ export const adminToggleStatus = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin
       .from("products")
       .update({ status: data.status })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminToggleMarketplaceVisibility = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({
+      id: z.string().uuid(),
+      show_in_marketplace: z.boolean(),
+    }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await ensureAdmin(context.userId);
+    const { error } = await supabaseAdmin
+      .from("products")
+      .update({ show_in_marketplace: data.show_in_marketplace })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };

@@ -11,6 +11,7 @@ import {
   adminListProducts,
   adminUpsertProduct,
   adminToggleStatus,
+  adminToggleMarketplaceVisibility,
   adminDeleteProduct,
   adminProductStats,
 } from "@/lib/products.functions";
@@ -52,6 +53,7 @@ type Product = {
   download_path: string | null;
   status: "draft" | "published" | "archived";
   sort_order: number;
+  show_in_marketplace: boolean;
 };
 
 function emptyProduct(): Product {
@@ -74,6 +76,7 @@ function emptyProduct(): Product {
     download_path: "",
     status: "draft",
     sort_order: 0,
+    show_in_marketplace: true,
   };
 }
 
@@ -99,6 +102,7 @@ function AdminProducts() {
   const listFn = useServerFn(adminListProducts);
   const upsertFn = useServerFn(adminUpsertProduct);
   const statusFn = useServerFn(adminToggleStatus);
+  const visibilityFn = useServerFn(adminToggleMarketplaceVisibility);
   const deleteFn = useServerFn(adminDeleteProduct);
   const statsFn = useServerFn(adminProductStats);
 
@@ -108,19 +112,35 @@ function AdminProducts() {
   const mailerlite = stats.data?.mailerlite;
   const [editing, setEditing] = useState<Product | null>(null);
   const [search, setSearch] = useState("");
+  // Defaults to "Live" — same scope as the storefront — so the list isn't
+  // cluttered with drafts and hidden flagship products by default. "All"
+  // reveals everything for editing; nothing is ever deleted by this filter.
+  const [view, setView] = useState<"live" | "all">("live");
 
   const products = (list.data?.products ?? []) as Product[];
+  const isLive = (p: Product) => p.status === "published" && p.show_in_marketplace;
   const filtered = useMemo(
     () =>
-      products.filter((p) =>
-        !search
-          ? true
-          : `${p.title} ${p.slug} ${p.tagline ?? ""}`
-              .toLowerCase()
-              .includes(search.toLowerCase()),
-      ),
-    [products, search],
+      products
+        .filter((p) => (view === "live" ? isLive(p) : true))
+        .filter((p) =>
+          !search
+            ? true
+            : `${p.title} ${p.slug} ${p.tagline ?? ""}`
+                .toLowerCase()
+                .includes(search.toLowerCase()),
+        ),
+    [products, search, view],
   );
+  const liveCount = products.filter(isLive).length;
+
+  const visibilityMut = useMutation({
+    mutationFn: visibilityFn,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-products"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   const statusMut = useMutation({
     mutationFn: statusFn,
@@ -182,7 +202,25 @@ function AdminProducts() {
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="inline-flex rounded-md border border-border overflow-hidden">
+            <button
+              onClick={() => setView("live")}
+              className={`px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] transition-colors ${
+                view === "live" ? "bg-banana text-banana-foreground" : "text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              Live ({liveCount})
+            </button>
+            <button
+              onClick={() => setView("all")}
+              className={`px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] border-l border-border transition-colors ${
+                view === "all" ? "bg-banana text-banana-foreground" : "text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              All ({products.length})
+            </button>
+          </div>
           <Input
             placeholder="Search products…"
             value={search}
@@ -191,8 +229,8 @@ function AdminProducts() {
           />
         </div>
 
-        <div className="mt-8 border border-border overflow-x-auto">
-          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground min-w-[760px]">
+        <div className="mt-6 border border-border overflow-x-auto">
+          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground min-w-[820px]">
             <div className="col-span-3">Title</div>
             <div className="col-span-1">Garden</div>
             <div className="col-span-2 text-right">Price</div>
@@ -255,11 +293,29 @@ function AdminProducts() {
                   <option value="published">Published</option>
                   <option value="archived">Archived</option>
                 </select>
-                {p.status === "published" && (
-                  <Badge variant="outline" className="ml-2 text-[10px] border-banana/40 text-banana">
-                    LIVE
-                  </Badge>
-                )}
+                {isLive(p) ? (
+                  <button
+                    title="Live on the marketplace grid — click to hide it there (stays published, still purchasable via direct link)"
+                    onClick={() =>
+                      visibilityMut.mutate({ data: { id: p.id, show_in_marketplace: false } })
+                    }
+                    className="ml-2"
+                  >
+                    <Badge variant="outline" className="text-[10px] border-banana/40 text-banana hover:bg-banana/10">
+                      LIVE
+                    </Badge>
+                  </button>
+                ) : p.status === "published" ? (
+                  <button
+                    title="Published, but hidden from the general marketplace grid — click to show it there too"
+                    onClick={() =>
+                      visibilityMut.mutate({ data: { id: p.id, show_in_marketplace: true } })
+                    }
+                    className="ml-2 rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground hover:border-banana/40 hover:text-banana"
+                  >
+                    Hidden — show
+                  </button>
+                ) : null}
               </div>
               <div className="col-span-2 flex justify-end gap-2">
                 <Link
@@ -417,6 +473,7 @@ function EditDrawer({
         download_path: p.download_path?.trim() || null,
         status: p.status,
         sort_order: Number(p.sort_order) || 0,
+        show_in_marketplace: !!p.show_in_marketplace,
       },
     });
   }
@@ -537,6 +594,14 @@ function EditDrawer({
                   onChange={(e) => set("requires_application", e.target.checked)}
                 />
                 By application
+              </label>
+              <label className="flex items-center gap-2 text-sm mt-2">
+                <input
+                  type="checkbox"
+                  checked={p.show_in_marketplace}
+                  onChange={(e) => set("show_in_marketplace", e.target.checked)}
+                />
+                Show in marketplace grid
               </label>
             </Field>
           </div>
