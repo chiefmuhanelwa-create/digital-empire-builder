@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { ArrowRight, Calculator, Sparkles, RotateCcw } from "lucide-react";
+import { ArrowRight, Calculator, Sparkles, RotateCcw, Mail } from "lucide-react";
+import { toast } from "sonner";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
+import { emailRateCard } from "@/lib/rate-card.functions";
 
 export const Route = createFileRoute("/rate-card")({
   head: () => ({
@@ -382,6 +386,8 @@ function RateResult({ R, inp, onReset }: { R: ReturnType<typeof compute>; inp: I
         </button>
       </div>
 
+      <EmailRateCard R={R} inp={inp} />
+
       <div className="mt-8 text-center border border-[#e8e0d4] rounded-2xl p-6 bg-white">
         <h3 className="font-display text-xl uppercase">Now go close the deal</h3>
         <p className="text-[#555] text-sm mt-2 max-w-md mx-auto">
@@ -403,6 +409,86 @@ function RateResult({ R, inp, onReset }: { R: ReturnType<typeof compute>; inp: I
           </Link>
         </div>
       </div>
+    </div>
+  );
+}
+
+// The lead-magnet moment: the calculator itself stays free/instant/no-signup
+// ("nothing leaves your browser"), but emailing the result is the one place
+// this tool asks for an email — same gate every migrated tool uses.
+function EmailRateCard({ R, inp }: { R: ReturnType<typeof compute>; inp: Inputs }) {
+  const sendFn = useServerFn(emailRateCard);
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const mut = useMutation({
+    mutationFn: sendFn,
+    onSuccess: () => setSent(true),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  if (sent) {
+    return (
+      <div className="mt-6 border border-banana/40 bg-banana/5 rounded-2xl p-5 text-center text-sm text-[#0F172A]">
+        Sent to {email} — check your inbox (or spam).
+      </div>
+    );
+  }
+
+  const breakdown = [
+    { label: `Tier — ${R.tier.label}`, value: `×${R.tier.mult.toFixed(2)}` },
+    { label: `Engagement rate — ${R.er.toFixed(2)}%`, value: R.cpeTier.label },
+    { label: "Platform mix avg", value: `×${R.cpm_mult.toFixed(2)}` },
+    { label: `Deliverable — ${R.ct.label}`, value: `×${R.ct.mult.toFixed(2)}` },
+  ];
+
+  return (
+    <div className="mt-6 border border-[#e8e0d4] rounded-2xl p-5 sm:p-6 bg-white">
+      <div className="flex items-center gap-2 font-display text-sm uppercase">
+        <Mail className="size-4 text-banana" /> Email me this rate card
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <input
+          className={NUM}
+          placeholder="Your name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+        />
+        <input
+          className={NUM}
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <Button
+        type="button"
+        disabled={mut.isPending}
+        onClick={() => {
+          if (!email) {
+            toast.error("Enter your email.");
+            return;
+          }
+          mut.mutate({
+            data: {
+              email,
+              fullName: fullName || undefined,
+              niche: inp.niche,
+              total: fmtZAR(R.total),
+              low: fmtZAR(R.low),
+              high: fmtZAR(R.high),
+              deliverable: CONTENT_TYPE[inp.contentType].label,
+              breakdown,
+              marketNote: R.nicheCPM.note,
+            },
+          });
+        }}
+        className="mt-4 w-full bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto disabled:opacity-40"
+      >
+        {mut.isPending ? "Sending…" : "Send it to me — free"}
+      </Button>
     </div>
   );
 }
