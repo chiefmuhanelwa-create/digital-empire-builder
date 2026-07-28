@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
-import { Button } from "@/components/ui/button";
+import { ProfileHero } from "@/components/ProfileHero";
 import { supabase } from "@/integrations/supabase/client";
-import { GARDENS, GARDEN_ORDER, type Garden } from "@/lib/gardens";
-import { ArrowUpRight } from "lucide-react";
+import { formatPrice } from "@/lib/gardens";
+import { useCountry } from "@/lib/currency";
 
 export const Route = createFileRoute("/products/")({
   head: () => ({
@@ -25,98 +25,108 @@ export const Route = createFileRoute("/products/")({
       </div>
     </div>
   ),
-  notFoundComponent: () => (
-    <div className="min-h-screen bg-background text-foreground p-8">
-      <SiteHeader />
-      <div className="mx-auto max-w-3xl py-32 text-center">
-        <h1 className="font-display text-4xl">Not found.</h1>
-        <Link to="/" className="mt-6 inline-block text-banana">← Home</Link>
-      </div>
-    </div>
-  ),
 });
 
+// Rebuilt 2026-07-28 to replicate the real, live Shopify storefront
+// (contentcreatorhub.online) — fetched and parsed directly, not guessed.
+// Flat product grid (not the old garden-category tile selector) with real
+// cover images, "was Rxxx" compare-at pricing where known, and the same
+// ProfileHero/card visual language as the live site's own "cp-shop" section.
 function Catalog() {
-  const { data: counts } = useQuery({
-    queryKey: ["product-counts-by-garden"],
+  const country = useCountry();
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products", "catalog-all"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("garden")
-        .eq("status", "published");
+        .select("*")
+        .eq("status", "published")
+        .order("sort_order", { ascending: true });
       if (error) throw error;
-      const tally: Record<string, number> = {};
-      for (const row of data ?? []) {
-        if (row.garden) tally[row.garden] = (tally[row.garden] ?? 0) + 1;
-      }
-      return tally;
+      return data;
     },
   });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
-      <section className="mx-auto max-w-6xl px-6 pt-24 pb-16">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-          Products
-        </div>
-        <h1 className="mt-4 font-display text-4xl sm:text-5xl md:text-7xl leading-[1.05] max-w-3xl">
-          Every tool.{" "}
-          <em className="text-banana not-italic">Every framework. Every system.</em>
-        </h1>
-        <p className="mt-8 max-w-xl text-lg text-muted-foreground">
-          Workbooks, courses, and the Contentpreneur Accelerator. Pick your level.
-        </p>
+      <ProfileHero />
 
-        {/* Entry offer spotlight */}
-        <div className="mt-12 border-2 border-banana/40 bg-banana/5 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-banana">Start here</div>
-            <h2 className="mt-1 font-display text-2xl sm:text-3xl text-foreground">Contentpreneur Foundation Kit</h2>
-            <p className="mt-2 text-sm text-muted-foreground max-w-md leading-relaxed">
-              Frameworks, templates, content calendar. The complete starting system — instant access.
-            </p>
-          </div>
-          <Button asChild className="cta-glow shrink-0 h-11 px-6 font-bold text-sm">
-            <Link to="/products/$slug" params={{ slug: "called-expert-foundation-kit" }}>
-              Get the Kit →
-            </Link>
-          </Button>
-        </div>
+      <section style={{ backgroundColor: "#f5f5f5" }} className="pb-10">
+        <span className="block px-4 pt-5 pb-2 font-mono text-[11px] font-bold uppercase tracking-[1px] text-[#000] sm:px-8 md:px-10">
+          Shop
+        </span>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {GARDEN_ORDER.map((g: Garden) => {
-            const meta = GARDENS[g];
-            const count = counts?.[g] ?? 0;
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-3 sm:px-8 md:grid-cols-4 md:px-10">
+          {isLoading &&
+            Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="h-[280px] animate-pulse rounded-[10px] bg-white" />
+            ))}
+
+          {products?.map((p) => {
+            const priceLabel = formatPrice(p.price_cents, p.currency, p.is_free, p.slug, country);
+            const compareLabel =
+              p.compare_at_price_cents != null
+                ? formatPrice(p.compare_at_price_cents, p.currency, false, undefined, country)
+                : null;
             return (
               <Link
-                key={g}
-                to="/products/garden/$garden"
-                params={{ garden: g }}
-                className="nx-card group flex min-h-[260px] flex-col justify-between !p-8"
+                key={p.id}
+                to="/products/$slug"
+                params={{ slug: p.slug }}
+                className="flex flex-col overflow-hidden rounded-[10px] bg-white"
               >
-                <div>
-                  <div className="flex items-baseline justify-between">
-                    <div>
-                      <h2 className="font-display text-3xl sm:text-4xl text-foreground group-hover:text-banana transition-colors">
-                        {meta.name}
-                      </h2>
+                <div className="aspect-square w-full overflow-hidden bg-[#f0f0f0]">
+                  {p.cover_image_url ? (
+                    <img
+                      src={p.cover_image_url}
+                      alt={p.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">
+                      No image
                     </div>
-                    <ArrowUpRight className="size-6 text-muted-foreground group-hover:text-banana transition-colors" />
-                  </div>
-                  <p className="mt-6 text-base text-muted-foreground leading-relaxed">
-                    {meta.description}
-                  </p>
+                  )}
                 </div>
-                <div className="mt-8 flex items-center justify-end font-mono text-xs">
-                  <span className="nx-status-live">
-                    <span className="nx-live-dot" aria-hidden />
-                    {count} {count === 1 ? "item" : "items"}
+                <div className="flex flex-1 flex-col p-3">
+                  <p
+                    className="mb-1.5 flex-1 text-xs font-medium leading-snug text-[#000]"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {p.title}
+                  </p>
+                  <div className="mb-2.5 mt-auto flex flex-wrap items-baseline gap-1">
+                    <span className="text-[13px] font-semibold text-[#000]">{priceLabel}</span>
+                    {compareLabel && (
+                      <span className="text-[11px] text-[#999] line-through">{compareLabel}</span>
+                    )}
+                    {p.requires_application && (
+                      <span className="text-[10px] text-[#999]">/ application</span>
+                    )}
+                  </div>
+                  <span
+                    className="flex h-11 w-full shrink-0 items-center justify-center rounded-[6px] text-[11px] font-semibold uppercase tracking-[0.3px] text-white transition-colors"
+                    style={{ backgroundColor: "sienna" }}
+                  >
+                    View Details
                   </span>
                 </div>
               </Link>
             );
           })}
+
+          {products && products.length === 0 && (
+            <div className="col-span-full rounded-[10px] bg-white p-12 text-center text-[#999]">
+              No products published yet.
+            </div>
+          )}
         </div>
       </section>
       <SiteFooter />

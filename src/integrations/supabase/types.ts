@@ -12,8 +12,57 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
+      agent_events: {
+        Row: {
+          created_at: string
+          department: string
+          event_type: string
+          id: string
+          payload: Json | null
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          event_type: string
+          id?: string
+          payload?: Json | null
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          event_type?: string
+          id?: string
+          payload?: Json | null
+        }
+        Relationships: []
+      }
       audit_ledgers: {
         Row: {
           created_at: string
@@ -113,6 +162,33 @@ export type Database = {
           posts_consistently_4x?: boolean
           raw_answers?: Json | null
           vulnerability_phase_tag?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          subject?: string | null
         }
         Relationships: []
       }
@@ -368,6 +444,48 @@ export type Database = {
           },
         ]
       }
+      offer_builder_leads: {
+        Row: {
+          audience: string
+          created_at: string
+          email: string
+          experience_level: string
+          expertise: string
+          generated_offer: Json
+          icp: string
+          id: string
+          name: string
+          proof: string | null
+          transformation: string
+        }
+        Insert: {
+          audience: string
+          created_at?: string
+          email: string
+          experience_level: string
+          expertise: string
+          generated_offer: Json
+          icp: string
+          id?: string
+          name: string
+          proof?: string | null
+          transformation: string
+        }
+        Update: {
+          audience?: string
+          created_at?: string
+          email?: string
+          experience_level?: string
+          expertise?: string
+          generated_offer?: Json
+          icp?: string
+          id?: string
+          name?: string
+          proof?: string | null
+          transformation?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -429,6 +547,7 @@ export type Database = {
           provider_reference: string | null
           status: Database["public"]["Enums"]["order_status"]
           subtotal_cents: number
+          tax_reserve_cents: number | null
           total_cents: number
           updated_at: string
           user_id: string | null
@@ -445,6 +564,7 @@ export type Database = {
           provider_reference?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_cents?: number
+          tax_reserve_cents?: number | null
           total_cents?: number
           updated_at?: string
           user_id?: string | null
@@ -461,9 +581,46 @@ export type Database = {
           provider_reference?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           subtotal_cents?: number
+          tax_reserve_cents?: number | null
           total_cents?: number
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      payment_authorizations: {
+        Row: {
+          authorization_code: string
+          bank: string | null
+          card_type: string | null
+          created_at: string
+          email: string
+          id: string
+          last4: string | null
+          reusable: boolean
+          updated_at: string
+        }
+        Insert: {
+          authorization_code: string
+          bank?: string | null
+          card_type?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          last4?: string | null
+          reusable?: boolean
+          updated_at?: string
+        }
+        Update: {
+          authorization_code?: string
+          bank?: string | null
+          card_type?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          last4?: string | null
+          reusable?: boolean
+          updated_at?: string
         }
         Relationships: []
       }
@@ -576,6 +733,7 @@ export type Database = {
         Row: {
           benefits: Json | null
           cohort_capacity: number | null
+          compare_at_price_cents: number | null
           cover_image_url: string | null
           created_at: string
           currency: string
@@ -601,6 +759,7 @@ export type Database = {
         Insert: {
           benefits?: Json | null
           cohort_capacity?: number | null
+          compare_at_price_cents?: number | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
@@ -626,6 +785,7 @@ export type Database = {
         Update: {
           benefits?: Json | null
           cohort_capacity?: number | null
+          compare_at_price_cents?: number | null
           cover_image_url?: string | null
           created_at?: string
           currency?: string
@@ -769,6 +929,45 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          customer_code: string | null
+          email: string
+          id: string
+          plan_code: string
+          status: string
+          subscription_code: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          customer_code?: string | null
+          email: string
+          id?: string
+          plan_code: string
+          status?: string
+          subscription_code?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          customer_code?: string | null
+          email?: string
+          id?: string
+          plan_code?: string
+          status?: string
+          subscription_code?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string
@@ -853,10 +1052,17 @@ export type Database = {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
       }
+      dept_attract_agent: { Args: never; Returns: undefined }
+      dept_deliver_agent: { Args: never; Returns: undefined }
+      dept_drip_agent: { Args: never; Returns: undefined }
+      dept_recover_agent: { Args: never; Returns: undefined }
+      dept_retain_agent: { Args: never; Returns: undefined }
+      dept_revenue_agent: { Args: never; Returns: undefined }
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      has_active_subscription: { Args: { _email: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1019,6 +1225,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       app_role: ["admin", "student"],
