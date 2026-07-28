@@ -6,7 +6,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
+import { formatPrice } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
 import { initializeCheckout, initializeStripeCheckout, initializeSubscription } from "@/lib/checkout.functions";
 
@@ -90,7 +90,6 @@ function ProductDetail() {
   const country = useCountry();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
-  const gardenMeta = product.garden ? GARDENS[product.garden as Garden] : null;
   const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country);
   // Plain one-off purchase (not free, not application-gated) is the only path
   // that opens the popup checkout — free products link straight to signup,
@@ -101,15 +100,9 @@ function ProductDetail() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <article className="mx-auto max-w-3xl px-6 pt-24 pb-16">
-        {gardenMeta && (
-          <Link
-            to="/products/garden/$garden"
-            params={{ garden: gardenMeta.slug }}
-            className="font-mono text-xs text-muted-foreground hover:text-banana"
-          >
-            ← {gardenMeta.name}
-          </Link>
-        )}
+        <Link to="/products" className="font-mono text-xs text-muted-foreground hover:text-banana">
+          ← All products
+        </Link>
         <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">
           {product.tagline}
         </div>
