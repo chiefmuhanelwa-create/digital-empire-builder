@@ -3,6 +3,9 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { MarketplaceHome, fetchMarketplaceProducts } from "@/components/MarketplaceHome";
 
 export const Route = createFileRoute("/products/")({
+  validateSearch: (s: Record<string, unknown>): { q?: string } => ({
+    q: typeof s.q === "string" && s.q ? s.q : undefined,
+  }),
   loader: () => fetchMarketplaceProducts(),
   head: () => ({
     meta: [
@@ -26,10 +29,11 @@ export const Route = createFileRoute("/products/")({
 
 function Catalog() {
   const products = Route.useLoaderData();
+  const { q } = Route.useSearch();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
-      <MarketplaceHome initialProducts={products} />
+      <MarketplaceHome initialProducts={products} initialSearch={q ?? ""} />
       <SiteFooter />
     </div>
   );

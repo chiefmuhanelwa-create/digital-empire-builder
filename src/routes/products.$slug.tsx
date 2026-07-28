@@ -33,10 +33,27 @@ export const Route = createFileRoute("/products/$slug")({
       throw error;
     }
     if (!data) throw notFound();
-    return data;
+
+    // Related products: same garden first, backfilled with other live items —
+    // fetched server-side alongside the product itself so "you might also
+    // like" is in the initial HTML, not a second client-side round trip.
+    const { data: related } = await supabase
+      .from("products")
+      .select("slug,title,price_cents,currency,is_free,cover_image_url,garden")
+      .eq("status", "published")
+      .eq("show_in_marketplace", true)
+      .neq("slug", params.slug)
+      .order("sort_order", { ascending: true })
+      .limit(12);
+
+    const sameGarden = (related ?? []).filter((r) => r.garden === data.garden);
+    const rest = (related ?? []).filter((r) => r.garden !== data.garden);
+    const relatedProducts = [...sameGarden, ...rest].slice(0, 4);
+
+    return { product: data, relatedProducts };
   },
   head: ({ params, loaderData }) => {
-    const p = loaderData;
+    const p = loaderData?.product;
     const title = p ? `${p.title} — CHKPLT` : `${params.slug} — CHKPLT`;
     const description = (p?.description?.slice(0, 200)) ?? p?.tagline ?? "Tools for Contentpreneurs.";
     const image = p?.cover_image_url ?? undefined;
@@ -86,7 +103,7 @@ export const Route = createFileRoute("/products/$slug")({
 function ProductDetail() {
   // Product comes from the route loader (which throws notFound() when missing),
   // so it is always present here — no conditional hooks, no SSR throw.
-  const product = Route.useLoaderData();
+  const { product, relatedProducts } = Route.useLoaderData();
   const country = useCountry();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
@@ -246,6 +263,50 @@ function ProductDetail() {
           </div>
         )}
       </article>
+
+      {relatedProducts.length > 0 && (
+        <section className="border-t border-border py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              You might also like
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {relatedProducts.map((r) => (
+                <Link
+                  key={r.slug}
+                  to="/products/$slug"
+                  params={{ slug: r.slug }}
+                  className="group flex flex-col overflow-hidden rounded-lg border border-border bg-background"
+                >
+                  <div className="aspect-square w-full overflow-hidden bg-muted">
+                    {r.cover_image_url ? (
+                      <img
+                        src={r.cover_image_url}
+                        alt={r.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
+                        No image
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <p className="line-clamp-2 text-xs font-medium leading-snug text-foreground group-hover:text-banana">
+                      {r.title}
+                    </p>
+                    <p className="mt-1.5 text-xs font-semibold text-muted-foreground">
+                      {formatPrice(r.price_cents, r.currency, r.is_free, r.slug, country)}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <SiteFooter />
     </div>
   );

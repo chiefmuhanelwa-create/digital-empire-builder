@@ -1,11 +1,36 @@
-import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Search } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 
 const navLink =
   "text-[15px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-1 py-1";
 const navActive = { className: "text-[var(--foreground)] font-semibold" };
+
+function HeaderSearch() {
+  const navigate = useNavigate();
+  const [term, setTerm] = useState("");
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        navigate({ to: "/products", search: { q: term } });
+      }}
+      className="relative hidden sm:block"
+    >
+      <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-[var(--text-dim)]" />
+      <input
+        type="search"
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
+        placeholder="Search products…"
+        className="h-9 w-40 rounded-full border border-[var(--border)] bg-white pl-8 pr-3 text-xs text-[var(--foreground)] outline-none transition-[width] focus:w-56 focus:border-[var(--nx-gold)]"
+      />
+    </form>
+  );
+}
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
@@ -44,17 +69,22 @@ export function SiteHeader() {
             )}
           </nav>
         ) : (
-          <div className="flex-1" />
+          <div className="flex flex-1 justify-center">
+            <HeaderSearch />
+          </div>
         )}
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {user ? (
-            <button
-              onClick={() => signOut()}
-              className="rounded-full border-2 border-[var(--border-mid)] text-[14px] font-semibold text-[var(--text-dim)] hover:border-[var(--border-hover)] hover:text-[var(--foreground)] transition-colors px-4 py-2 cursor-pointer"
-            >
-              Sign out
-            </button>
+            <>
+              <HeaderSearch />
+              <button
+                onClick={() => signOut()}
+                className="rounded-full border-2 border-[var(--border-mid)] text-[14px] font-semibold text-[var(--text-dim)] hover:border-[var(--border-hover)] hover:text-[var(--foreground)] transition-colors px-4 py-2 cursor-pointer"
+              >
+                Sign out
+              </button>
+            </>
           ) : (
             <>
               <Link
