@@ -12,11 +12,12 @@ import {
   adminUpsertProduct,
   adminToggleStatus,
   adminDeleteProduct,
+  adminProductStats,
 } from "@/lib/products.functions";
 
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, BookOpen } from "lucide-react";
+import { Pencil, Trash2, Plus, BookOpen, Mail, CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/products")({
   head: () => ({ meta: [{ title: "Products — Admin" }] }),
@@ -99,8 +100,12 @@ function AdminProducts() {
   const upsertFn = useServerFn(adminUpsertProduct);
   const statusFn = useServerFn(adminToggleStatus);
   const deleteFn = useServerFn(adminDeleteProduct);
+  const statsFn = useServerFn(adminProductStats);
 
   const list = useQuery({ queryKey: ["admin-products"], queryFn: () => listFn() });
+  const stats = useQuery({ queryKey: ["admin-product-stats"], queryFn: () => statsFn() });
+  const salesByProduct = stats.data?.stats ?? {};
+  const mailerlite = stats.data?.mailerlite;
   const [editing, setEditing] = useState<Product | null>(null);
   const [search, setSearch] = useState("");
 
@@ -150,6 +155,33 @@ function AdminProducts() {
           </Button>
         </div>
 
+        {mailerlite && (
+          <div className="mt-6 flex flex-wrap items-center gap-3 border border-border bg-muted/20 px-4 py-3">
+            <Mail className="size-4 text-muted-foreground shrink-0" />
+            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+              MailerLite
+            </span>
+            {mailerlite.apiKeyConfigured ? (
+              <span className="inline-flex items-center gap-1 text-xs text-emerald-600">
+                <CheckCircle2 className="size-3.5" /> API connected
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-xs text-destructive">
+                <XCircle className="size-3.5" /> Not connected — set MAILERLITE_API_KEY
+              </span>
+            )}
+            <span className="text-muted-foreground/40">·</span>
+            <span className="inline-flex items-center gap-1 text-xs">
+              {mailerlite.groups.buyers ? (
+                <CheckCircle2 className="size-3.5 text-emerald-600" />
+              ) : (
+                <XCircle className="size-3.5 text-destructive" />
+              )}
+              Every buyer synced to the Buyers list on purchase
+            </span>
+          </div>
+        )}
+
         <div className="mt-8">
           <Input
             placeholder="Search products…"
@@ -160,22 +192,25 @@ function AdminProducts() {
         </div>
 
         <div className="mt-8 border border-border overflow-x-auto">
-          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground min-w-[680px]">
-            <div className="col-span-4">Title</div>
-            <div className="col-span-2">Garden</div>
+          <div className="grid grid-cols-12 gap-2 border-b border-border bg-muted/30 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground min-w-[760px]">
+            <div className="col-span-3">Title</div>
+            <div className="col-span-1">Garden</div>
             <div className="col-span-2 text-right">Price</div>
+            <div className="col-span-2 text-right">Sales</div>
             <div className="col-span-2">Status</div>
             <div className="col-span-2 text-right">Actions</div>
           </div>
           {list.isLoading && (
             <div className="px-4 py-12 text-center text-sm text-muted-foreground">Loading…</div>
           )}
-          {filtered.map((p) => (
+          {filtered.map((p) => {
+            const sale = salesByProduct[p.id];
+            return (
             <div
               key={p.id}
-              className="grid grid-cols-12 gap-2 border-b border-border/60 px-4 py-3 text-sm items-center min-w-[680px]"
+              className="grid grid-cols-12 gap-2 border-b border-border/60 px-4 py-3 text-sm items-center min-w-[760px]"
             >
-              <div className="col-span-4">
+              <div className="col-span-3">
                 <Link
                   to="/products/$slug"
                   params={{ slug: p.slug }}
@@ -185,13 +220,25 @@ function AdminProducts() {
                 </Link>
                 <div className="font-mono text-[10px] text-muted-foreground">{p.slug}</div>
               </div>
-              <div className="col-span-2 text-muted-foreground">
+              <div className="col-span-1 text-muted-foreground">
                 {p.garden ? GARDENS[p.garden]?.name ?? p.garden : "—"}
               </div>
               <div className="col-span-2 text-right font-mono">
                 <div>{formatPrice(p.price_cents, p.currency, p.is_free, p.slug)}</div>
                 {!p.is_free && p.currency === "ZAR" && (
                   <div className="text-[10px] text-muted-foreground">charged R{(p.price_cents / 100).toLocaleString("en-ZA")}</div>
+                )}
+              </div>
+              <div className="col-span-2 text-right font-mono">
+                {sale ? (
+                  <>
+                    <div>{sale.unitsSold} sold</div>
+                    <div className="text-[10px] text-muted-foreground">
+                      R{(sale.revenueCents / 100).toLocaleString("en-ZA")}
+                    </div>
+                  </>
+                ) : (
+                  <span className="text-muted-foreground/50">—</span>
                 )}
               </div>
               <div className="col-span-2">
@@ -239,7 +286,8 @@ function AdminProducts() {
                 </Button>
               </div>
             </div>
-          ))}
+            );
+          })}
           {!list.isLoading && filtered.length === 0 && (
             <div className="px-4 py-12 text-center text-sm text-muted-foreground">
               No products yet.

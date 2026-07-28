@@ -49,6 +49,43 @@ export const adminListProducts = createServerFn({ method: "GET" })
     return { products: data ?? [] };
   });
 
+// Per-product sales counts + revenue (paid orders only), plus whether each
+// MailerLite group env var this app actually posts to is configured — so the
+// admin panel can show "which one is selling" and "is the lead capture wired
+// up" without anyone needing to check Cloudflare secrets or the DB directly.
+export const adminProductStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.userId);
+
+    const { data: rows, error } = await supabaseAdmin
+      .from("order_items")
+      .select("product_id, quantity, line_total_cents, orders!inner(status)")
+      .eq("orders.status", "paid");
+    if (error) throw new Error(error.message);
+
+    const byProduct = new Map<string, { unitsSold: number; revenueCents: number }>();
+    for (const row of rows ?? []) {
+      const cur = byProduct.get(row.product_id) ?? { unitsSold: 0, revenueCents: 0 };
+      cur.unitsSold += row.quantity;
+      cur.revenueCents += row.line_total_cents;
+      byProduct.set(row.product_id, cur);
+    }
+
+    const mailerlite = {
+      apiKeyConfigured: !!process.env.MAILERLITE_API_KEY,
+      groups: {
+        buyers: !!process.env.MAILERLITE_GROUP_ID_BUYERS,
+        starterKit: !!process.env.MAILERLITE_GROUP_ID_STARTER_KIT,
+        calledExpert: !!process.env.MAILERLITE_GROUP_ID_CALLED_EXPERT,
+        freeKnowledgeAudit: !!process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,
+        aligned: !!process.env.MAILERLITE_GROUP_ID_ALIGNED,
+      },
+    };
+
+    return { stats: Object.fromEntries(byProduct), mailerlite };
+  });
+
 export const adminUpsertProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => ProductInput.parse(input))
