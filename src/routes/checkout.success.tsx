@@ -11,7 +11,7 @@ import { useRef, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { trackPurchase } from "@/lib/track";
 import { useCountry } from "@/lib/currency";
-import { Check, Download } from "lucide-react";
+import { Check, Download, Mail } from "lucide-react";
 
 
 export const Route = createFileRoute("/checkout/success")({
@@ -108,6 +108,19 @@ function CheckoutSuccess() {
                 . Access has been granted to {q.data?.email}.
               </p>
             </div>
+
+            {!isKit && (
+              <div className="mt-8 flex items-start gap-3 rounded-lg border border-banana/30 bg-banana/5 p-5 text-left">
+                <Mail className="mt-0.5 size-5 shrink-0 text-banana" />
+                <div>
+                  <p className="text-sm font-medium text-foreground">Check your email.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    We've also sent your download straight to <strong>{q.data?.email}</strong> — no login
+                    needed. Can't find it? Grab it below or check your spam folder.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {isKit ? (
               <KitOnboarding email={q.data?.email ?? ""} />

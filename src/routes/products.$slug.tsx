@@ -18,6 +18,7 @@ import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 import { ProCohortBreakdown, VipTierBreakdown } from "@/components/PremiumProgramBreakdown";
+import { Lock, ShieldCheck, X } from "lucide-react";
 
 export const Route = createFileRoute("/products/$slug")({
   loader: async ({ params }) => {
@@ -87,9 +88,14 @@ function ProductDetail() {
   // so it is always present here — no conditional hooks, no SSR throw.
   const product = Route.useLoaderData();
   const country = useCountry();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const gardenMeta = product.garden ? GARDENS[product.garden as Garden] : null;
   const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country);
+  // Plain one-off purchase (not free, not application-gated) is the only path
+  // that opens the popup checkout — free products link straight to signup,
+  // and application-gated tiers keep their own inline qualification flow.
+  const isModalCheckout = !product.is_free && !product.requires_application;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -120,13 +126,13 @@ function ProductDetail() {
           )}
         </div>
 
-        {!product.is_free && !product.requires_application && (
-          <a
-            href="#buy"
+        {isModalCheckout && (
+          <button
+            onClick={() => setCheckoutOpen(true)}
             className="cta-glow mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm"
           >
             Get instant access → {priceLabel}
-          </a>
+          </button>
         )}
 
         {product.cover_image_url && (
@@ -150,9 +156,34 @@ function ProductDetail() {
         {product.slug === "contentpreneur-90day-cohort" && <ProCohortBreakdown />}
         {product.slug === "contentpreneur-vip-tier" && <VipTierBreakdown />}
 
-        {/* Primary CTA */}
+        {/* Primary CTA — free/application-gated flows render inline; a plain
+            purchase opens the popup checkout modal instead. */}
         <div id="buy" />
-        <BuyBlock product={product} priceLabel={priceLabel} />
+        {isModalCheckout ? (
+          <div className="mt-12 border border-border p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-full bg-banana/10 text-banana shrink-0">
+                <Lock className="size-4" />
+              </div>
+              <div>
+                <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Secure checkout</div>
+                <div className="font-display text-xl">{priceLabel} · instant download</div>
+              </div>
+            </div>
+            <Button
+              size="lg"
+              onClick={() => setCheckoutOpen(true)}
+              className="bg-banana text-banana-foreground hover:bg-banana/90 w-full sm:w-auto"
+            >
+              Buy now →
+            </Button>
+          </div>
+        ) : (
+          <BuyBlock product={product} priceLabel={priceLabel} />
+        )}
+        {isModalCheckout && checkoutOpen && (
+          <CheckoutModal product={product} priceLabel={priceLabel} onClose={() => setCheckoutOpen(false)} />
+        )}
 
         {/* Long-form sales copy */}
         {product.long_description && (
@@ -206,19 +237,19 @@ function ProductDetail() {
         </dl>
 
         {/* Secondary CTA */}
-        {!product.is_free && !product.requires_application && (
+        {isModalCheckout && (
           <div className="mt-12 border-t border-border pt-10 text-center">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
               Ready when you are
             </div>
             <h3 className="mt-3 font-display text-3xl">Get it for {priceLabel}</h3>
             <p className="mt-3 text-sm text-muted-foreground">Instant download. No subscription. No fluff.</p>
-            <a
-              href="#buy"
+            <button
+              onClick={() => setCheckoutOpen(true)}
               className="mt-6 inline-flex items-center gap-2 bg-banana text-banana-foreground hover:bg-banana/90 px-8 py-4 rounded-md font-medium text-base transition-colors"
             >
               Buy now → {priceLabel}
-            </a>
+            </button>
           </div>
         )}
       </article>
@@ -227,7 +258,15 @@ function ProductDetail() {
   );
 }
 
-function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string }) {
+function CheckoutModal({
+  product,
+  priceLabel,
+  onClose,
+}: {
+  product: any;
+  priceLabel: string;
+  onClose: () => void;
+}) {
   const { user } = useAuth();
   const isSubscription = SUBSCRIPTION_SLUGS.includes(product.slug);
   const priceText = isSubscription ? `${priceLabel}/mo` : priceLabel;
@@ -239,12 +278,10 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
   const [fullName, setFullName] = useState<string>(
     (user?.user_metadata?.full_name as string) ?? "",
   );
-  const [phone, setPhone] = useState<string>("");
+  const [whatsapp, setWhatsapp] = useState<string>("");
   const [tsToken, setTsToken] = useState<string | null>(null);
 
   const mut = useMutation({
-    // Subscriptions stay on Paystack (plan-based). One-off purchases route by
-    // region: African buyers → Paystack (ZAR), everyone else → Stripe (USD).
     mutationFn: isSubscription ? initSub : useStripe ? initStripe : initCheckout,
     onSuccess: (res: any) => {
       window.location.href = res.authorizationUrl;
@@ -252,6 +289,116 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
     onError: (e: any) => toast.error(e.message ?? "Could not start checkout"),
   });
 
+  function submit() {
+    if (!email) {
+      toast.error("Enter your email to continue.");
+      return;
+    }
+    trackLead();
+    mut.mutate({
+      data: {
+        productSlug: product.slug,
+        email,
+        fullName: fullName || undefined,
+        phone: whatsapp || undefined,
+        turnstileToken: tsToken ?? undefined,
+        ...getUtm(),
+      },
+    });
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="w-full max-w-md rounded-2xl border border-border bg-background shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Gateway-style header */}
+        <div className="flex items-center justify-between gap-4 rounded-t-2xl bg-[#0F172A] px-6 py-5">
+          <div className="flex items-center gap-2 text-white">
+            <ShieldCheck className="size-5 text-banana" />
+            <span className="font-mono text-xs tracking-[0.2em] uppercase">Secure Checkout</span>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="text-white/60 hover:text-white transition-colors"
+          >
+            <X className="size-5" />
+          </button>
+        </div>
+
+        <div className="p-6">
+          {/* Order summary */}
+          <div className="flex items-start justify-between gap-4 border-b border-border pb-5">
+            <div>
+              <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
+                {isSubscription ? "Subscribing to" : "Buying"}
+              </div>
+              <div className="mt-1 font-display text-lg leading-snug">{product.title}</div>
+            </div>
+            <div className="shrink-0 text-right">
+              <div className="font-display text-2xl text-banana">{priceText}</div>
+              <div className="text-[10px] text-muted-foreground">{useStripe && !isSubscription ? "USD" : "ZAR"}</div>
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-4">
+            <div>
+              <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Full name</label>
+              <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1.5" placeholder="Your name" />
+            </div>
+            <div>
+              <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5" placeholder="you@example.com" />
+              <p className="mt-1 text-[11px] text-muted-foreground">Your product will be delivered here instantly.</p>
+            </div>
+            <div>
+              <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">WhatsApp number</label>
+              <Input value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="mt-1.5" placeholder="+27 XX XXX XXXX" />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <TurnstileGate onToken={setTsToken} />
+          </div>
+
+          <Button
+            size="lg"
+            disabled={mut.isPending}
+            onClick={submit}
+            className="mt-5 w-full bg-banana text-banana-foreground hover:bg-banana/90 text-base py-6 h-auto"
+          >
+            {mut.isPending ? "Starting…" : isSubscription ? `Subscribe — ${priceText} →` : `Pay ${priceLabel} securely →`}
+          </Button>
+
+          {/* Trust row — the "real payment gateway" feel */}
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5">
+              <Lock className="size-3.5" /> 256-bit encrypted
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <ShieldCheck className="size-3.5" /> Powered by {useStripe && !isSubscription ? "Stripe" : "Paystack"}
+            </span>
+            <span>Instant digital delivery</span>
+          </div>
+          <p className="mt-3 text-center text-[11px] text-muted-foreground">
+            You'll be sent to our secure payment page, then straight back here — check your email right after for your download.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Only reached for free products (signup link) or application-gated tiers
+// (inline qualification flow) — plain one-off purchases use CheckoutModal.
+function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string }) {
   if (product.is_free) {
     return (
       <div className="mt-12">
@@ -264,72 +411,7 @@ function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string })
     );
   }
 
-  if (product.requires_application) {
-    return <ApplicationGate product={product} priceLabel={priceLabel} />;
-  }
-
-  return (
-    <div className="mt-12 border border-border p-6">
-      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Secure checkout · {useStripe && !isSubscription ? "USD" : "ZAR"}</div>
-      <h3 className="mt-2 font-display text-2xl">{isSubscription ? "Join" : "Buy"} {product.title}</h3>
-      {Array.isArray(product.benefits) && product.benefits.length > 0 && (
-        <div className="mt-4 rounded-md bg-banana/5 border border-banana/20 p-4">
-          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-banana mb-2">What you get for {priceText}</div>
-          <ul className="space-y-1.5">
-            {product.benefits.map((b: string, i: number) => (
-              <li key={i} className="flex gap-2 text-sm text-foreground">
-                <span className="text-banana shrink-0">✓</span><span>{b}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <div className="mt-6 grid gap-3 md:grid-cols-3">
-        <div>
-          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
-          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" placeholder="you@example.com" />
-        </div>
-        <div>
-          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Full name</label>
-          <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" placeholder="Optional" />
-        </div>
-        <div>
-          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Phone</label>
-          <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1" placeholder="Optional" />
-        </div>
-      </div>
-      <div className="mt-5">
-        <TurnstileGate onToken={setTsToken} />
-      </div>
-      <Button
-        size="lg"
-        disabled={mut.isPending}
-        onClick={() => {
-          if (!email) {
-            toast.error("Enter your email above to continue.");
-            return;
-          }
-          trackLead();
-          mut.mutate({
-            data: {
-              productSlug: product.slug,
-              email,
-              fullName: fullName || undefined,
-              phone: phone || undefined,
-              turnstileToken: tsToken ?? undefined,
-              ...getUtm(),
-            },
-          });
-        }}
-        className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90"
-      >
-        {mut.isPending ? "Starting…" : isSubscription ? `Subscribe — ${priceText} →` : `Pay ${priceLabel} →`}
-      </Button>
-      <p className="mt-3 text-xs text-muted-foreground">
-        You'll be sent to our secure checkout, then brought back here once payment is complete.
-      </p>
-    </div>
-  );
+  return <ApplicationGate product={product} priceLabel={priceLabel} />;
 }
 
 function ApplicationGate({ product, priceLabel }: { product: any; priceLabel: string }) {
@@ -449,7 +531,7 @@ function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: strin
           <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" placeholder="Optional" />
         </div>
         <div>
-          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Phone</label>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">WhatsApp number</label>
           <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1" placeholder="Optional" />
         </div>
       </div>

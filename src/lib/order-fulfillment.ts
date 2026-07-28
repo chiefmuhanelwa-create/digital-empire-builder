@@ -156,8 +156,31 @@ async function sendOrderReceipt(
 
   const { data: items } = await supabaseAdmin
     .from("order_items")
-    .select("product_title,quantity,line_total_cents")
+    .select("product_title,quantity,line_total_cents,products(slug,download_path)")
     .eq("order_id", order.id);
+
+  // Sign a direct download link per item right into the email itself — the
+  // buyer shouldn't have to log in to get the file they just paid for. 7 days
+  // (not the usual 24h dashboard-fetch window) since people don't always open
+  // a receipt email the moment it lands.
+  const downloadItems = await Promise.all(
+    (items ?? []).map(async (i) => {
+      const path = (i.products as { slug: string; download_path: string | null } | null)?.download_path;
+      let downloadUrl: string | null = null;
+      if (path) {
+        const { data: signed } = await supabaseAdmin.storage
+          .from("product-files")
+          .createSignedUrl(path, 60 * 60 * 24 * 7);
+        downloadUrl = signed?.signedUrl ?? null;
+      }
+      return {
+        title: i.product_title,
+        quantity: i.quantity,
+        line_total: formatMoney(i.line_total_cents, order.currency),
+        downloadUrl,
+      };
+    }),
+  );
 
   const dashboardUrl = `https://${ROOT_DOMAIN}${opts?.dashboardPath ?? "/dashboard"}`;
   const emailProps = {
@@ -170,11 +193,7 @@ async function sendOrderReceipt(
     customerName: order.customer_name,
     customerEmail: order.email,
     orderReference: order.provider_reference ?? order.id,
-    items: (items ?? []).map((i) => ({
-      title: i.product_title,
-      quantity: i.quantity,
-      line_total: formatMoney(i.line_total_cents, order.currency),
-    })),
+    items: downloadItems,
     total: formatMoney(order.total_cents, order.currency),
   };
   const html = await render(React.createElement(OrderReceiptEmail, emailProps));
