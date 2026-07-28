@@ -18,7 +18,8 @@ import { checkQualification } from "@/lib/qualification.functions";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 import { ProCohortBreakdown, VipTierBreakdown } from "@/components/PremiumProgramBreakdown";
-import { Lock, ShieldCheck, X } from "lucide-react";
+import { Lock, ShieldCheck, X, Mail, Download } from "lucide-react";
+import { claimFreeProduct } from "@/lib/products.functions";
 
 export const Route = createFileRoute("/products/$slug")({
   loader: async ({ params }) => {
@@ -454,18 +455,84 @@ function CheckoutModal({
 // (inline qualification flow) — plain one-off purchases use CheckoutModal.
 function BuyBlock({ product, priceLabel }: { product: any; priceLabel: string }) {
   if (product.is_free) {
+    return <FreeLeadMagnet product={product} />;
+  }
+
+  return <ApplicationGate product={product} priceLabel={priceLabel} />;
+}
+
+// Free products: email-only lead-magnet capture — no account/password wall.
+// Delivers the same way a paid purchase does: instant in-page download +
+// the file emailed to them.
+function FreeLeadMagnet({ product }: { product: any }) {
+  const { user } = useAuth();
+  const claimFn = useServerFn(claimFreeProduct);
+  const [email, setEmail] = useState(user?.email ?? "");
+  const [fullName, setFullName] = useState((user?.user_metadata?.full_name as string) ?? "");
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+  const mut = useMutation({
+    mutationFn: claimFn,
+    onSuccess: (res: { url: string }) => {
+      setDownloadUrl(res.url);
+      toast.success("It's yours — check your email too.");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  if (downloadUrl) {
     return (
-      <div className="mt-12">
-        <Link to="/signup">
-          <Button size="lg" className="bg-banana text-banana-foreground">
-            Create a free account to access
-          </Button>
-        </Link>
+      <div className="mt-12 border-2 border-banana bg-banana/5 p-6 text-center">
+        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">You're in</div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          We've also emailed a copy to {email} — check your inbox (or spam).
+        </p>
+        <Button
+          asChild
+          className="mt-5 bg-banana text-banana-foreground hover:bg-banana/90"
+        >
+          <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
+            <Download className="size-4 mr-2" />
+            Download now
+          </a>
+        </Button>
       </div>
     );
   }
 
-  return <ApplicationGate product={product} priceLabel={priceLabel} />;
+  return (
+    <div className="mt-12 border border-border p-6">
+      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Free download</div>
+      <h3 className="mt-2 font-display text-2xl">Get {product.title}</h3>
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Full name</label>
+          <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" placeholder="Your name" />
+        </div>
+        <div>
+          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
+          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" placeholder="you@example.com" />
+        </div>
+      </div>
+      <Button
+        size="lg"
+        disabled={mut.isPending}
+        onClick={() => {
+          if (!email) {
+            toast.error("Enter your email to continue.");
+            return;
+          }
+          trackLead();
+          mut.mutate({ data: { productSlug: product.slug, email, fullName: fullName || undefined } });
+        }}
+        className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90"
+      >
+        <Mail className="size-4 mr-2" />
+        {mut.isPending ? "Sending…" : "Send it to me — free"}
+      </Button>
+      <p className="mt-3 text-xs text-muted-foreground">No card required. Instant download.</p>
+    </div>
+  );
 }
 
 function ApplicationGate({ product, priceLabel }: { product: any; priceLabel: string }) {

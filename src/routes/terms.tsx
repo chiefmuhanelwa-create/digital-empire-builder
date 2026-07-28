@@ -110,8 +110,8 @@ function TermsPage() {
         <h2>10. Contact</h2>
         <p>
           Questions? Email{" "}
-          <a href="mailto:support@chkplt.com" className="text-banana">
-            support@chkplt.com
+          <a href="mailto:info@nochill.co.za" className="text-banana">
+            info@nochill.co.za
           </a>
           .
         </p>

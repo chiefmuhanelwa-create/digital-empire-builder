@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { addToMailerLiteGroup } from "@/lib/mailerlite";
 
 const GARDEN = z.enum(["deshe", "esev", "etz_pri", "devarim"]);
 const STATUS = z.enum(["draft", "published", "archived"]);
@@ -271,6 +272,59 @@ export const getDownloadUrl = createServerFn({ method: "POST" })
     const { data: signed, error: sErr } = await supabaseAdmin.storage
       .from("product-files")
       .createSignedUrl(product.download_path, 60 * 60 * 24); // 24h
+    if (sErr) throw new Error(sErr.message);
+    return { url: signed.signedUrl, title: product.title };
+  });
+
+// Free lead-magnet products: email-only capture (no account/signup wall,
+// no order) — syncs the lead to MailerLite and hands back the file
+// immediately. Guards against being used to leak a paid product's file by
+// requiring is_free = true server-side, not just trusting the client.
+export const claimFreeProduct = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z.object({
+      productSlug: z.string().min(1).max(120),
+      email: z.string().email().max(255),
+      fullName: z.string().max(200).optional(),
+    }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { data: product, error: pErr } = await supabaseAdmin
+      .from("products")
+      .select("id,title,download_path,is_free")
+      .eq("slug", data.productSlug)
+      .maybeSingle();
+    if (pErr) throw new Error(pErr.message);
+    if (!product || !product.is_free || !product.download_path) {
+      throw new Error("This product isn't available as a free download.");
+    }
+
+    const { data: sub, error: subErr } = await supabaseAdmin
+      .from("subscribers")
+      .upsert(
+        { email: data.email, first_name: data.fullName ?? null, source: `free-product:${data.productSlug}` },
+        { onConflict: "email", ignoreDuplicates: false },
+      )
+      .select("id")
+      .single();
+    if (subErr) console.error("[claimFreeProduct] subscriber upsert", subErr);
+
+    void addToMailerLiteGroup(data.email, process.env.MAILERLITE_GROUP_ID_BUYERS, {
+      first_name: data.fullName ?? null,
+    });
+
+    if (sub) {
+      await supabaseAdmin
+        .from("product_grants")
+        .upsert(
+          { product_id: product.id, subscriber_id: sub.id },
+          { onConflict: "product_id,subscriber_id", ignoreDuplicates: true },
+        );
+    }
+
+    const { data: signed, error: sErr } = await supabaseAdmin.storage
+      .from("product-files")
+      .createSignedUrl(product.download_path, 60 * 60 * 24 * 7);
     if (sErr) throw new Error(sErr.message);
     return { url: signed.signedUrl, title: product.title };
   });

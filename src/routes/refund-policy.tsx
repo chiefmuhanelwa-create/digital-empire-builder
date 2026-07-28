@@ -39,8 +39,8 @@ function RefundPage() {
           Complete the <strong>Niche Clarity Workbook</strong> and the{" "}
           <strong>Knowledge Audit</strong>, and if you do not walk away with a
           defined asset roadmap within 7 days of purchase, email{" "}
-          <a href="mailto:support@chkplt.com" className="text-banana">
-            support@chkplt.com
+          <a href="mailto:info@nochill.co.za" className="text-banana">
+            info@nochill.co.za
           </a>{" "}
           with your completed work and we will refund 100% of your order. The
           completed work is required so we can see you gave the frameworks a
@@ -53,8 +53,8 @@ function RefundPage() {
           and cannot be returned, so those sales are final once the download
           link has been issued. If you experience a technical issue accessing
           any file you paid for, email{" "}
-          <a href="mailto:support@chkplt.com" className="text-banana">
-            support@chkplt.com
+          <a href="mailto:info@nochill.co.za" className="text-banana">
+            info@nochill.co.za
           </a>{" "}
           within 7 days and we will repair access or refund the order.
         </p>
@@ -88,8 +88,8 @@ function RefundPage() {
         <h2>How to request a refund</h2>
         <p>
           Email{" "}
-          <a href="mailto:support@chkplt.com" className="text-banana">
-            support@chkplt.com
+          <a href="mailto:info@nochill.co.za" className="text-banana">
+            info@nochill.co.za
           </a>{" "}
           with your order reference (visible in your receipt). We respond
           within 2 business days.

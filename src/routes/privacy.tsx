@@ -91,8 +91,8 @@ function PrivacyPage() {
         <p>
           You may request a copy, correction, or deletion of your data at any
           time by emailing{" "}
-          <a href="mailto:privacy@chkplt.com" className="text-banana">
-            privacy@chkplt.com
+          <a href="mailto:info@nochill.co.za" className="text-banana">
+            info@nochill.co.za
           </a>
           . We will respond within 30 days. You may also lodge a complaint with
           the South African Information Regulator or your local supervisory
@@ -115,8 +115,8 @@ function PrivacyPage() {
         <h2>Contact</h2>
         <p>
           Data Protection contact:{" "}
-          <a href="mailto:privacy@chkplt.com" className="text-banana">
-            privacy@chkplt.com
+          <a href="mailto:info@nochill.co.za" className="text-banana">
+            info@nochill.co.za
           </a>
           .
         </p>

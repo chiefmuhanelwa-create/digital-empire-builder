@@ -162,7 +162,7 @@ function About() {
           </h2>
           <div className="mt-8 bg-white border border-[#E2E8F0] p-6 sm:p-8">
             <p className="text-base sm:text-lg text-[#555] leading-relaxed">
-              Ndivhuwo Muhanelwa — "NoChill" — went from sleeping in university bathrooms in Pretoria to building a knowledge business that crossed six figures in a single year. Over 50 brand campaigns. 23 agencies. A published book. A SAMA31 judge seat. A Meta speaker slot. Not as a tech founder — as a content creator from Tshikwarani, Limpopo who learned the system the hard way and wrote it down so you wouldn't have to.
+              Ndivhuwo Muhanelwa — "NoChill" — went from sleeping in university bathrooms in Pretoria to building a knowledge business that crossed six figures in a single year. Over 50 brand campaigns. 23 agencies. A published book. SAMA 30, 31 & 32 judge — three years running. A Meta speaker slot. Not as a tech founder — as a content creator from Tshikwarani, Limpopo who learned the system the hard way and wrote it down so you wouldn't have to.
             </p>
             <blockquote className="mt-6 border-l-4 border-[#F59E0B] pl-4 italic text-[#555] text-sm sm:text-base leading-relaxed">
               "I didn't just hustle — I obeyed the calling. And now I'm handing you the map."
@@ -170,7 +170,7 @@ function About() {
             <div className="mt-6 pt-5 border-t border-[#E2E8F0] font-mono text-xs tracking-[0.12em] uppercase text-[#5a5a5a] space-y-1">
               <div>Ndivhuwo Muhanelwa — "NoChill"</div>
               <div>Founder · NOCHILL PTY LTD · CHKPLT</div>
-              <div>SAMA31 Judge · Meta Speaker · Author</div>
+              <div>SAMA 30 · 31 · 32 Judge (3x) · Meta Speaker · Author</div>
               <div>Tshikwarani, Venda, Limpopo → the world</div>
             </div>
           </div>
