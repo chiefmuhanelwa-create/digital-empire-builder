@@ -37,7 +37,17 @@
     // part of the sales transaction itself (not ongoing account management),
     // so it stays on this domain regardless of the founder's decision to leave
     // post-purchase dashboard/login on chkplt.com.
-    { "pattern": "contentpreneur.africa/checkout*", "zone_name": "contentpreneur.africa" }
+    { "pattern": "contentpreneur.africa/checkout*", "zone_name": "contentpreneur.africa" },
+    // Same routing gap, caught proactively this time instead of via another
+    // screenshot: ContentpreneurFooter (used on starterkit/foundation/
+    // accelerator) links to /contact, /terms, /privacy, /refund-policy —
+    // real CHKPLT pages, kept CHKPLT-branded on purpose (they describe the
+    // actual platform processing the payment), but still need routing here
+    // or a hard refresh/direct link/new-tab open on these paths 404s.
+    { "pattern": "contentpreneur.africa/contact*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/terms*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/privacy*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/refund-policy*", "zone_name": "contentpreneur.africa" }
   ],
   "triggers": {
     // "10 4 * * *" daily → reconcile ZAR charges to the live USD→ZAR rate.
