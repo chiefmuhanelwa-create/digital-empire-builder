@@ -80,32 +80,78 @@ export function SiteHeader() {
   );
 }
 
+// Matches the real, live contentcreatorhub.online footer structure and style
+// (scraped directly 2026-07-28: white bg, centered, payment badge row,
+// "© YEAR STORE. A NOCHILL PTY LTD Brand." copyright) — not the old dark
+// CHKPLT-branded footer, per the explicit instruction to match the real
+// store's footer.
+const PAY_BADGES = [
+  {
+    title: "Paystack",
+    svg: (
+      <svg width="74" height="18" viewBox="0 0 74 18" xmlns="http://www.w3.org/2000/svg" aria-label="Paystack">
+        <text x="0" y="14" fontFamily="Arial,sans-serif" fontSize="14" fontWeight="800" fill="#00C3F7">Pay</text>
+        <text x="28" y="14" fontFamily="Arial,sans-serif" fontSize="14" fontWeight="800" fill="#011B33">stack</text>
+      </svg>
+    ),
+  },
+  {
+    title: "Visa",
+    svg: (
+      <svg width="42" height="18" viewBox="0 0 42 18" xmlns="http://www.w3.org/2000/svg" aria-label="Visa">
+        <text x="0" y="14" fontFamily="Arial,sans-serif" fontSize="16" fontWeight="900" letterSpacing="-0.5" fill="#1A1F71">VISA</text>
+      </svg>
+    ),
+  },
+  {
+    title: "Mastercard",
+    svg: (
+      <svg width="36" height="24" viewBox="0 0 36 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard">
+        <circle cx="13" cy="12" r="11" fill="#EB001B" />
+        <circle cx="23" cy="12" r="11" fill="#F79E1B" />
+      </svg>
+    ),
+  },
+  {
+    title: "Google Pay",
+    svg: (
+      <svg width="56" height="18" viewBox="0 0 56 18" xmlns="http://www.w3.org/2000/svg" aria-label="Google Pay">
+        <text x="0" y="14" fontFamily="Arial,sans-serif" fontSize="15" fontWeight="700" fill="#4285F4">G</text>
+        <text x="12" y="14" fontFamily="Arial,sans-serif" fontSize="13" fontWeight="400" fill="#5f6368">Pay</text>
+      </svg>
+    ),
+  },
+];
+
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[#0F172A]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-xs">
-          <div className="font-display text-base font-extrabold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
-            CHKPLT
+    <footer className="border-t border-[#e0e0e0] bg-white py-6 px-4 text-center">
+      <nav className="mb-3.5 flex flex-wrap justify-center gap-x-4 gap-y-1">
+        <Link to="/about" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">About</Link>
+        <Link to="/contact" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Contact</Link>
+        <Link to="/refund-policy" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Refund Policy</Link>
+        <Link to="/privacy" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Privacy Policy</Link>
+        <Link to="/terms" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Terms of Service</Link>
+      </nav>
+
+      <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-[0.8px] text-[#999]">
+        Multiple payment options supported
+      </p>
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        {PAY_BADGES.map((b) => (
+          <div
+            key={b.title}
+            title={b.title}
+            className="flex h-8 items-center justify-center rounded-md border border-[#e8e8e8] bg-[#f8f8f8] px-2.5"
+          >
+            {b.svg}
           </div>
-          <p className="mt-3 text-sm text-slate-400 leading-relaxed">
-            Build on land you own.
-          </p>
-        </div>
-
-        {/* Secondary links live here, small — kept off the funnel header. */}
-        <nav className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500">
-          <Link to="/about" className="hover:text-slate-300 transition-colors">About</Link>
-          <Link to="/contact" className="hover:text-slate-300 transition-colors">Contact</Link>
-          <Link to="/terms" className="hover:text-slate-300 transition-colors">Terms</Link>
-          <Link to="/privacy" className="hover:text-slate-300 transition-colors">Privacy</Link>
-          <Link to="/refund-policy" className="hover:text-slate-300 transition-colors">Refund Policy</Link>
-        </nav>
-
-        <div className="mt-8 border-t border-white/10 pt-6 text-xs tracking-[0.05em] text-slate-500">
-          © {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07
-        </div>
+        ))}
       </div>
+
+      <p className="mt-4 text-[11px] text-[#999]">
+        © {new Date().getFullYear()} CHKPLT. A NOCHILL PTY LTD Brand.
+      </p>
     </footer>
   );
 }
