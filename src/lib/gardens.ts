@@ -64,6 +64,54 @@ export const USD_DISPLAY: Record<string, number> = {
   "personal-brand-30-days": 4900,         // $49 video course (charged R899)
   "hook-science": 14700,                  // $147 flagship (Stage 4b — draft until content ships)
   "contentpreneur-community": 1900,       // $19/mo (charged ~R315) — draft until a real Paystack plan exists, see docs/RUNBOOK-COMMUNITY-LAUNCH.md
+
+  // Added 2026-07-28 — found via a real /products/$slug page render showing a
+  // raw ZAR/16.58-converted price ("$6" for a R99 product) instead of a clean
+  // marketing price. 23 published products had this gap (most pre-dating this
+  // session's imports, not just the new ones) — every one below gets a clean,
+  // deliberate USD price for international buyers instead of an accidental one.
+  "30-day-content-calendar": 900,          // $9  (R149)
+  "90-day-creator-blueprint": 1800,        // $18 (R299)
+  "african-creator-growth": 2400,          // $24 (R397)
+  "called-expert-foundation-kit-bonus": 1800, // $18 (R299)
+  "caption-formula": 900,                  // $9  (R149)
+  "content-to-cash": 2400,                 // $24 (R397)
+  "contract-red-flags": 900,               // $9  (R149)
+  "creator-reboot": 900,                   // $9  (R149)
+  "creator-starter-system": 300,           // $3  (R49)
+  "deal-decision-framework": 600,          // $6  (R99)
+  "find-your-product": 900,                // $9  (R149)
+  "first-r1000-sprint": 1200,              // $12 (R197)
+  "five-income-streams": 1500,             // $15 (R249)
+  "freebies-to-paid": 1800,                // $18 (R299)
+  "influencers-code-ebook": 900,           // $9  (R149)
+  "influencers-code-print": 1900,          // $19 (R320)
+  "monetise-your-expertise": 2400,         // $24 (R399)
+  "niche-bundle": 1200,                    // $12 (R199)
+  "niche-clarity-workbook": 1200,          // $12 (R199)
+  "niche-formula": 600,                    // $6  (R99)
+  "paids-framework-workbook": 5400,        // $54 (R899)
+  "phone-to-profit": 4200,                 // $42 (R699)
+  "post-scared": 900,                      // $9  (R149)
+  "tax-creator-bundle": 1200,              // $12 (R199)
+  "what-to-post": 900,                     // $9  (R149)
+  "whatsapp-selling": 1500,                // $15 (R249)
+  // Draft products (not yet published, but priced now so they're correct the
+  // moment they are): the 9 "TBD"-priced imports at their R199 placeholder,
+  // plus the 4 no-PDF products found via the live Shopify scrape.
+  "agency-intelligence-guide": 1200,
+  "agency-lens": 1200,
+  "brand-deal-sprint": 1200,
+  "cold-pitch-email": 1200,
+  "concept-survival-guide": 1200,
+  "creator-readiness-kit": 1200,
+  "post-campaign-upsell-kit": 1200,
+  "whatsapp-scripts": 1200,
+  "creator-loa": 1200,
+  "imposter-syndrome-fix": 1200,           // $12 (R199)
+  "first-brand-deal-script": 900,          // $9  (R149)
+  "sars-creator-income": 900,              // $9  (R149)
+  "content-creator-starter-system": 1800,  // $18 (R299)
 };
 
 // Display: South African buyers see the real ZAR they'll be charged (no exchange-

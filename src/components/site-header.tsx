@@ -63,13 +63,15 @@ export function SiteHeader() {
               >
                 Sign in
               </Link>
-              {/* Routes to the homepage and opens the SAME checkout modal as every other CTA */}
-              <a
-                href="/?buy=1"
+              {/* CHKPLT is a marketplace now (2026-07-28) — no single "the Kit" to
+                  route to. The old ?buy=1 checkout modal was removed with the
+                  Foundation Kit funnel; this now points at the shop itself. */}
+              <Link
+                to="/products"
                 className="inline-flex items-center gap-1 rounded-full bg-[var(--nx-gold)] px-5 py-2.5 text-[14px] font-bold text-[#0F172A] shadow-sm hover:bg-[var(--nx-gold-deep)] hover:-translate-y-px transition-all"
               >
-                Get the Kit
-              </a>
+                Shop Now
+              </Link>
             </>
           )}
         </div>
