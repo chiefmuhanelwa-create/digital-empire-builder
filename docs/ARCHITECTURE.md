@@ -7,8 +7,8 @@
 > the same session it makes the change.** It is not a one-time snapshot — treat drift
 > here the same as an untested code path: not done until it's written down.
 >
-> Last verified against the live repo: 2026-07-29 (62 migrations, cart/quick-view/header
-> rebuild just shipped).
+> Last verified against the live repo: 2026-07-29 (63 migrations, cart/quick-view/header
+> rebuild + Tools Hub Phase 1 just shipped).
 
 ---
 
@@ -184,6 +184,11 @@ subscriptions                            — Paystack recurring plans (Inner Cir
 income_transactions                      — member Income Tracker tool data
 niche_clarity_progress                   — member Niche Clarity Builder tool data
 offer_builder_leads                      — Offer Builder tool captures
+tool_submissions                         — generic cross-tool input/output capture
+                                            (tool_slug, email, user_id, payload jsonb) —
+                                            the reusable pattern for any NEW tool's data
+                                            capture, added once rather than a table per
+                                            tool; admin-read-only via RLS
 contact_submissions                      — /contact form
 incidents                                — error/incident log (admin/incidents)
 audit_ledgers                            — admin/ledger transaction audit
@@ -254,6 +259,27 @@ counterparts (RPCs: `enqueue_email`, `read_email_batch`, `delete_email`, `move_t
 - **`src/components/admin-shell.tsx`, `member-shell.tsx`**: layout wrappers for
   `/admin/*` and `_authenticated/*` respectively.
 - **UI kit**: `src/components/ui/` — shadcn/ui + Radix primitives, Tailwind 4.
+- **`src/lib/tools.ts` / `src/routes/tools.tsx`**: the Tools Hub (`/tools`) — a single
+  `TOOLS[]` array grouped into 3 founder-named categories (Brand Deals, Creator Finance,
+  Content Creation), each tool tagged `tier: "free" | "premium"`. Most are native CHKPLT
+  routes; a couple (`external: true`) are standalone `product-lab/web-tools` Vercel apps
+  not yet ported natively — rendered as a plain `<a target="_blank">` instead of a
+  router `<Link>`. A "Tools" pill sits alongside the marketplace's garden-filter pills
+  (`MarketplaceHome.tsx`) as a real navigation (not a grid filter).
+- **Adapting an external static-HTML tool "as-is" into a CHKPLT page** (used for
+  `/rate-card`): copy the tool's own `index.html` verbatim into
+  `public/tools/<name>/index.html` with only surgical edits — its own `<header>`/
+  `<footer>` get `style="display:none"` (hidden, not deleted — deleting breaks any
+  `getElementById` calls its own JS makes against those elements) so CHKPLT's
+  `SiteHeader`/`SiteFooter` are the only visible chrome, and any relative `/api/*`
+  fetch calls are rewritten to absolute URLs pointing at the tool's own still-live
+  Vercel backend (the file now serves from chkplt.com's own static bucket, a different
+  origin than its original API routes). The CHKPLT route itself is just
+  `SiteHeader` + a same-origin `<iframe src="/tools/<name>/index.html">` (same-origin
+  because it's served from chkplt.com's own `public/`, not iframed from the external
+  Vercel domain) + `SiteFooter` — being same-origin lets the wrapper read
+  `iframe.contentDocument.body.scrollHeight` via a `ResizeObserver` and auto-size the
+  iframe, with zero lines of the tool's own file touched for sizing.
 
 ---
 
@@ -273,6 +299,7 @@ browser for testing).
 | `account.functions.ts` | Profile, password, delete account |
 | `contacts.functions.ts`, `contacts-import.functions.ts`, `contact.functions.ts` | Contact management + CSV import + public contact form |
 | `income-tracker.functions.ts`, `niche-clarity.functions.ts`, `offer-builder.functions.ts`, `rate-card.functions.ts`, `media-kit.functions.ts`, `starterkit.functions.ts`, `aligned.functions.ts`, `inner-circle.functions.ts`, `community.functions.ts` | Per-tool/per-program server logic — mostly `requireSupabaseAuth`-gated CRUD or public email-capture-then-deliver patterns |
+| `hook-generator.functions.ts` | `generateHooks` — public, Turnstile-gated, calls Claude (`getAnthropic()`/`COACH_MODEL`, same pattern as `tool-ai.functions.ts`) to write 5 real hooks per request (not templates); logs every generation to `tool_submissions` |
 | `turnstile.functions.ts` / `turnstile.server.ts` | Site-key fetch + server-side token verification |
 | `geo.functions.ts` | `getViewerCountry` — reads Cloudflare's `CF-IPCountry` |
 | `tool-ai.functions.ts` | AI-assisted tool logic (Anthropic SDK) for the free tools |
@@ -430,9 +457,29 @@ for every server-only value in `.env.example`.
   repos — flagged to the founder, left as-is on explicit instruction ("not now, just
   flag it"). Never print the value in any output.
 - External `product-lab/web-tools/invoice-generator` (separate Vercel project, not
-  part of this repo) has a code fix committed/pushed but not deployed — that Vercel
-  project isn't wired for GitHub-push-triggers-deploy; needs a manual trigger from the
-  Vercel dashboard plus confirmation `ZOHO_EMAIL`/`ZOHO_APP_PASSWORD` env vars exist there.
+  part of this repo) — the email-fix code IS now deployed (confirmed via `vercel --prod`
+  and a live curl test 2026-07-29), but that Vercel project's `ZOHO_EMAIL`/
+  `ZOHO_APP_PASSWORD` env vars are genuinely not set (confirmed: the endpoint returns a
+  clear "Email service not configured" error). The sibling `rate-card-calculator`
+  project already has working Zoho credentials set — reusing them requires handling a
+  decrypted secret value, which is correctly outside what an AI session should do
+  unsupervised; needs the founder to copy those 2 values across in the Vercel dashboard.
+- `product-lab/web-tools/hooks-generator`'s `ANTHROPIC_API_KEY` (a different Vercel
+  project/Anthropic account than CHKPLT's own) has zero credit balance — confirmed via a
+  live API error, not a guess. The code itself is fine (and was improved to surface this
+  error instead of swallowing it) — needs the founder to add billing on that Anthropic
+  account. CHKPLT's OWN AI hook generator (`/hook-generator`, native) is unaffected —
+  it uses CHKPLT's own separately-funded `ANTHROPIC_API_KEY` Cloudflare secret.
+- `script-henna-tau.vercel.app` (a 5-platform viral script generator, Vercel project
+  name "script") has no source repo anywhere in `~/Desktop/VS code/` — confirmed via a
+  full-tree search. Its reported "credit issues" can't be fixed until the founder
+  provides the repo/access, same as was needed for the CreatorKit tools below.
+- CreatorKit (`github.com/chiefmuhanelwa-create/Sales-Copy`, contentprenuership.com) is
+  a real, separate Next.js/Prisma/Neon/Paystack/SendGrid SaaS the founder also owns —
+  its tax/finance tools (provisional/business tax calculators, expense tracker,
+  checklist, email generator) are candidates to re-implement natively in CHKPLT, but
+  that's a different stack with no direct code-share — not yet started (sequenced
+  as a later phase in the Tools Hub build).
 - `dashboard.inner-circle.tsx` hardcodes "$39/mo" in its copy while
   `USD_DISPLAY["called-expert-inner-circle"]` is `2900` ($29/mo) — a real drift, not yet
   resolved because the actual intended price isn't derivable from code (needs a
