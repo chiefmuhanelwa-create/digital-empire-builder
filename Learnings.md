@@ -4,6 +4,14 @@ The living record of what was discovered, what broke, what was corrected, and wh
 
 ---
 
+## 2026-07-29 (later again) — matched the full product page + Quick View exactly to the real store, using founder-supplied screenshots as the spec
+
+- Founder shared 3 real mobile screenshots of contentcreatorhub.online's actual product page and asked chkplt.com to match "exactly like that." Read the screenshots as a literal layout spec rather than a vibe: price row order (compare-price strikethrough → current price → Sale badge), a "Taxes included. Instant digital delivery." line right under price, Add to Cart + Buy now positioned immediately after that (not buried in a separate boxed "secure checkout" section further down), and everything below flowing as one continuous read (description → long pitch → plain "Inside:" bullets) instead of separately-labelled bordered boxes that don't exist on the real store.
+- Added a visible-scrollbar CSS utility (`.visible-scrollbar` in `styles.css`, sibling to the existing `.no-scrollbar`) and applied it to the Quick View popup — founder wanted a visible scroll affordance matching the real store's own page scrollbar, since native scrollbars are auto-hidden on most browsers/OSes by default.
+- Re-ran the full responsive audit (26 routes × 3 viewports, 0 issues) after this layout change to confirm the reorder didn't introduce a new overflow regression.
+
+---
+
 ## 2026-07-29 (still later) — Quick View modal didn't actually fit on a real phone; my own "responsive audit" test had a blind spot
 
 - **A second real phone screenshot found a bug my automated audit completely missed**: the Quick View modal's `max-h-[85vh]` cap only applied at the `sm:` breakpoint — on mobile there was NO height bound, and the outer backdrop didn't scroll. When a product's stacked content (portrait cover + title + price + description + benefits + buttons) exceeded the phone's viewport height, the modal — vertically centered with `items-center` and no scroll escape — got clipped at BOTH ends: founder couldn't see the close button (top) or reach Add to Cart (bottom), and reported "I can't even scroll until the end."
