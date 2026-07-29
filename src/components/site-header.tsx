@@ -68,6 +68,7 @@ export function SiteHeader() {
           <nav className="flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar">
             <Link to="/dashboard" className={navLink} activeProps={navActive}>My workspace</Link>
             <Link to="/products" className={navLink} activeProps={navActive}>Products</Link>
+            <Link to="/tools" className={navLink} activeProps={navActive}>Free Tools</Link>
             {isAdminQ.data && (
               <Link to="/admin" className={`${navLink} text-[var(--nx-orange-deep)]`} activeProps={navActive}>
                 Admin
@@ -163,6 +164,8 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-[#e0e0e0] bg-white py-6 px-4 text-center">
       <nav className="mb-3.5 flex flex-wrap justify-center gap-x-4 gap-y-1">
+        <Link to="/products" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Shop</Link>
+        <Link to="/tools" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Free Tools</Link>
         <Link to="/about" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">About</Link>
         <Link to="/contact" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Contact</Link>
         <Link to="/refund-policy" className="py-1 text-xs text-[#666] hover:text-[#333] transition-colors">Refund Policy</Link>
