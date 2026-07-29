@@ -480,6 +480,14 @@ label {
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* Opposite of the above — an always-visible thin scrollbar (used by the
+   product Quick View popup) so there's a clear visual cue that a panel keeps
+   scrolling, matching the real store's own page scrollbar affordance. */
+.visible-scrollbar { scrollbar-width: thin; scrollbar-color: #c9a884 #f0ebe1; }
+.visible-scrollbar::-webkit-scrollbar { width: 8px; }
+.visible-scrollbar::-webkit-scrollbar-track { background: #f0ebe1; }
+.visible-scrollbar::-webkit-scrollbar-thumb { background-color: #c9a884; border-radius: 8px; }
+
 /* Amber divider */
 .nx-gold-line {
   height: 1px;

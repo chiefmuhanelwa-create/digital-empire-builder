@@ -138,108 +138,82 @@ function ProductDetail() {
 
         <h1 className="mt-6 text-[22px] font-semibold leading-[1.3] text-[#000]">{product.title}</h1>
 
-        <div className="mt-3 flex items-baseline gap-3 flex-wrap">
-          <div className="text-[15px] font-semibold text-[#000]">{priceLabel}</div>
+        {/* Price row + Add to Cart positioned immediately after price, matching
+            the real store's own product-page layout exactly (compare price →
+            current price → Sale badge → tax/delivery note → the button) —
+            not buried further down inside a separate "secure checkout" box. */}
+        <div className="mt-3 flex items-baseline gap-2 flex-wrap">
           {product.compare_at_price_cents != null && (
-            <div className="text-[13px] text-[#999] line-through">
+            <span className="text-[14px] text-[#999] line-through">
               {formatPrice(product.compare_at_price_cents, product.currency, false, undefined, country)}
-            </div>
+            </span>
           )}
-          {!product.is_free && !product.requires_application && (
-            <div className="text-[12px] text-[#999]">· instant download</div>
+          <span className="text-[19px] font-bold text-[#000]">{priceLabel}</span>
+          {product.compare_at_price_cents != null && (
+            <span className="rounded-full bg-[#111] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
+              Sale
+            </span>
           )}
           {product.requires_application && (
-            <div className="text-[12px] text-[#999]">/ by application</div>
+            <span className="text-[12px] text-[#999]">/ by application</span>
           )}
         </div>
-
-        {isModalCheckout && (
-          <button
-            onClick={() => setCheckoutOpen(true)}
-            className="mt-4 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-[13px] font-semibold text-white transition-colors"
-            style={{ backgroundColor: "sienna" }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#8b4513")}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "sienna")}
-          >
-            Get instant access → {priceLabel}
-          </button>
+        {!product.is_free && !product.requires_application && (
+          <p className="mt-1.5 text-[13px] text-[#999]">Taxes included. Instant digital delivery.</p>
         )}
 
-        {product.description && (
-          <p className="mt-6 text-[14px] leading-[1.7] text-[#333] whitespace-pre-line">
-            {product.description}
-          </p>
+        <div id="buy" />
+        {isModalCheckout ? (
+          <div className="mt-5 flex gap-2">
+            <button
+              onClick={() => {
+                if (!inCart) {
+                  add(product.slug);
+                  toast.success("Added to cart");
+                }
+              }}
+              className="h-12 flex-1 rounded-lg border-2 text-[14px] font-semibold transition-colors"
+              style={{ borderColor: "sienna", color: inCart ? "#666" : "sienna" }}
+            >
+              {inCart ? "In cart ✓" : "Add to Cart"}
+            </button>
+            <button
+              onClick={() => setCheckoutOpen(true)}
+              className="h-12 flex-1 rounded-lg text-[14px] font-semibold text-white transition-colors"
+              style={{ backgroundColor: "sienna" }}
+            >
+              Buy now →
+            </button>
+          </div>
+        ) : (
+          <div className="mt-5">
+            <BuyBlock product={product} priceLabel={priceLabel} />
+          </div>
+        )}
+        {isModalCheckout && checkoutOpen && (
+          <CheckoutModal product={product} priceLabel={priceLabel} onClose={() => setCheckoutOpen(false)} />
         )}
 
         {/* Premium Program breakdowns (etz_pri tier) */}
         {product.slug === "contentpreneur-90day-cohort" && <ProCohortBreakdown />}
         {product.slug === "contentpreneur-vip-tier" && <VipTierBreakdown />}
 
-        {/* Primary CTA — free/application-gated flows render inline; a plain
-            purchase opens the popup checkout modal instead. */}
-        <div id="buy" />
-        {isModalCheckout ? (
-          <div className="mt-8 rounded-lg border border-[#e8e0d4] bg-[#FBFAF8] p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="flex size-9 items-center justify-center rounded-full shrink-0" style={{ backgroundColor: "#f5e6da", color: "sienna" }}>
-                <Lock className="size-4" />
-              </div>
-              <div>
-                <div className="text-[11px] uppercase tracking-wide text-[#999]">Secure checkout</div>
-                <div className="text-[15px] font-semibold text-[#000]">{priceLabel} · instant download</div>
-              </div>
-            </div>
-            <div className="flex w-full sm:w-auto gap-2">
-              <button
-                onClick={() => {
-                  if (!inCart) {
-                    add(product.slug);
-                    toast.success("Added to cart");
-                  }
-                }}
-                className="h-11 flex-1 sm:flex-none rounded-lg border-2 px-5 text-[13px] font-semibold transition-colors"
-                style={{ borderColor: "sienna", color: inCart ? "#666" : "sienna" }}
-              >
-                {inCart ? "In cart ✓" : "Add to Cart"}
-              </button>
-              <button
-                onClick={() => setCheckoutOpen(true)}
-                className="h-11 flex-1 sm:flex-none rounded-lg px-6 text-[13px] font-semibold text-white transition-colors"
-                style={{ backgroundColor: "sienna" }}
-              >
-                Buy now →
-              </button>
-            </div>
-          </div>
-        ) : (
-          <BuyBlock product={product} priceLabel={priceLabel} />
-        )}
-        {isModalCheckout && checkoutOpen && (
-          <CheckoutModal product={product} priceLabel={priceLabel} onClose={() => setCheckoutOpen(false)} />
-        )}
+        {/* Everything below flows as one continuous read — description, the
+            longer pitch, then the "Inside:" bullets as a plain list — matching
+            the real store's plain editorial layout instead of boxed/labelled
+            sections. */}
+        <div className="mt-8 text-[14px] leading-[1.7] text-[#333] space-y-4">
+          {product.description && <p className="whitespace-pre-line">{product.description}</p>}
+          {product.long_description && <p className="whitespace-pre-line">{product.long_description}</p>}
+        </div>
 
-        {/* Long-form sales copy */}
-        {product.long_description && (
-          <div className="mt-12 border-t border-[#eee] pt-8">
-            <div className="text-[11px] font-bold uppercase tracking-wide text-[#000]">
-              Why this exists
-            </div>
-            <div className="mt-4 text-[14px] leading-[1.7] whitespace-pre-line text-[#333]">
-              {product.long_description}
-            </div>
-          </div>
-        )}
-
-        {/* Benefits */}
         {Array.isArray(product.benefits) && product.benefits.length > 0 && (
-          <div className="mt-8 rounded-lg border border-[#e8e0d4] bg-[#FBFAF8] p-6">
-            <div className="text-[11px] font-bold uppercase tracking-wide text-[#000]">
-              What you get
-            </div>
-            <ul className="mt-4 space-y-2.5">
+          <div className="mt-4">
+            <p className="text-[14px] font-bold text-[#000]">Inside:</p>
+            <ul className="mt-2 space-y-2">
               {(product.benefits as string[]).map((b, i) => (
-                <li key={i} className="flex items-start gap-3 text-[14px] text-[#333]">
-                  <span className="mt-2 inline-block size-1.5 shrink-0 rounded-full" style={{ backgroundColor: "sienna" }} />
+                <li key={i} className="flex items-start gap-2.5 text-[14px] leading-[1.6] text-[#333]">
+                  <span className="mt-2 inline-block size-1.5 shrink-0 rounded-full bg-[#333]" />
                   <span>{b}</span>
                 </li>
               ))}
@@ -247,44 +221,22 @@ function ProductDetail() {
           </div>
         )}
 
-        {/* Metadata strip */}
-        <dl className="mt-8 grid gap-px bg-[#eee] border border-[#eee] rounded-lg overflow-hidden md:grid-cols-2">
-          {product.format && (
-            <div className="bg-white p-5">
-              <dt className="text-[11px] uppercase tracking-wide text-[#999]">Format</dt>
-              <dd className="mt-1.5 text-[14px] text-[#333]">{product.format}</dd>
-            </div>
-          )}
-          {product.target_audience && (
-            <div className="bg-white p-5">
-              <dt className="text-[11px] uppercase tracking-wide text-[#999]">Built for</dt>
-              <dd className="mt-1.5 text-[14px] text-[#333]">{product.target_audience}</dd>
-            </div>
-          )}
-          {product.cohort_capacity && (
-            <div className="bg-white p-5 md:col-span-2">
-              <dt className="text-[11px] uppercase tracking-wide text-[#999]">Group size</dt>
-              <dd className="mt-1.5 text-[14px] text-[#333]">{product.cohort_capacity} seats per intake</dd>
-            </div>
-          )}
-        </dl>
+        {(product.format || product.target_audience) && (
+          <p className="mt-4 text-[13px] text-[#666]">
+            {product.format}
+            {product.format && product.target_audience && " · "}
+            {product.target_audience}
+          </p>
+        )}
 
-        {/* Secondary CTA */}
+        {product.cohort_capacity && (
+          <p className="mt-4 text-[13px] text-[#666]">{product.cohort_capacity} seats per intake.</p>
+        )}
+
         {isModalCheckout && (
-          <div className="mt-10 border-t border-[#eee] pt-8 text-center">
-            <div className="text-[11px] font-bold uppercase tracking-wide text-[#999]">
-              Ready when you are
-            </div>
-            <h3 className="mt-2 text-[20px] font-semibold text-[#000]">Get it for {priceLabel}</h3>
-            <p className="mt-2 text-[13px] text-[#666]">Instant download. No subscription. No fluff.</p>
-            <button
-              onClick={() => setCheckoutOpen(true)}
-              className="mt-5 inline-flex h-12 items-center gap-2 rounded-lg px-8 text-[14px] font-semibold text-white transition-colors"
-              style={{ backgroundColor: "sienna" }}
-            >
-              Buy now → {priceLabel}
-            </button>
-          </div>
+          <p className="mt-6 text-[15px] font-bold text-[#000]">
+            {priceLabel}. Download instantly. {product.is_free ? "" : "No subscription. No fluff."}
+          </p>
         )}
       </article>
 
@@ -292,7 +244,7 @@ function ProductDetail() {
         <section className="border-t border-[#eee] bg-[#f5f5f5] py-10" style={{ fontFamily: "Inter, sans-serif" }}>
           <div className="mx-auto max-w-5xl px-5 sm:px-6">
             <div className="text-[11px] font-bold uppercase tracking-wide text-[#000]">
-              You might also like
+              You may also like
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {relatedProducts.map((r) => {

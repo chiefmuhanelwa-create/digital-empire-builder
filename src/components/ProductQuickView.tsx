@@ -29,7 +29,7 @@ export function ProductQuickView({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 p-4"
+      className="visible-scrollbar fixed inset-0 z-50 overflow-y-auto bg-black/60 p-4"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -76,12 +76,20 @@ export function ProductQuickView({
             is height-capped and this pane scrolls on its own instead, while the
             image column stays fixed-width alongside it — the standard
             side-by-side modal pattern. */}
-        <div className="flex-1 p-6 sm:overflow-y-auto" style={{ fontFamily: "Inter, sans-serif" }}>
+        <div className="visible-scrollbar flex-1 p-6 sm:overflow-y-auto" style={{ fontFamily: "Inter, sans-serif" }}>
           <h2 className="text-[19px] font-bold uppercase leading-snug text-[#000]">{product.title}</h2>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-[22px] font-bold text-[#000]">{priceLabel}</span>
             {compareLabel && <span className="text-[15px] text-[#999] line-through">{compareLabel}</span>}
+            <span className="text-[22px] font-bold text-[#000]">{priceLabel}</span>
+            {compareLabel && (
+              <span className="rounded-full bg-[#111] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                Sale
+              </span>
+            )}
           </div>
+          {!product.is_free && (
+            <p className="mt-1 text-[12px] text-[#999]">Taxes included. Instant digital delivery.</p>
+          )}
 
           <div className="mt-4 border-t border-[#eee] pt-4">
             {product.tagline && <p className="text-[14px] font-medium text-[#333]">{product.tagline}</p>}
