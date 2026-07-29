@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Search as SearchIcon } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { fetchMarketplaceProducts } from "@/components/MarketplaceHome";
 import { formatPrice } from "@/lib/gardens";
 import { useCountry } from "@/lib/currency";
@@ -38,8 +39,11 @@ function SearchPage() {
   return (
     <div className="min-h-screen bg-white text-[#111]" style={{ fontFamily: "Inter, sans-serif" }}>
       <SiteHeader />
-      <div className="mx-auto max-w-2xl px-5 pt-12 pb-4 text-center sm:px-6">
-        <h1 className="text-[26px] font-normal text-[#000]" style={{ fontFamily: "Georgia, serif" }}>
+      <div className="mx-auto max-w-2xl px-5 pt-6 pb-4 text-center sm:px-6">
+        <div className="text-left">
+          <BackNav to="/" label="Home" />
+        </div>
+        <h1 className="mt-4 text-[26px] font-normal text-[#000]" style={{ fontFamily: "Georgia, serif" }}>
           Search
         </h1>
         <div className="relative mt-6">

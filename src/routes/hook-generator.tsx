@@ -2,10 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Sparkles, Copy, Check, RotateCcw, Flame } from "lucide-react";
+import { ArrowRight, Sparkles, Copy, Check, RotateCcw, Flame, Lock, Mail } from "lucide-react";
 import { toast } from "sonner";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TurnstileGate } from "@/components/TurnstileGate";
@@ -49,17 +50,23 @@ function HookGeneratorPage() {
   const [a, setA] = useState("");
   const [ang, setAng] = useState("");
   const [aw, setAw] = useState<Awareness>("problem");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
   const [tsToken, setTsToken] = useState<string | null>(null);
   const [hooks, setHooks] = useState<Hook[] | null>(null);
+  const [locked, setLocked] = useState(false);
 
   const generateFn = useServerFn(generateHooks);
   const mut = useMutation({
     mutationFn: generateFn,
-    onSuccess: (res) => setHooks(res.hooks),
+    onSuccess: (res) => {
+      if (res.locked) setLocked(true);
+      else setHooks(res.hooks);
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const valid = t.trim().length >= 2 && a.trim().length >= 2;
+  const valid = t.trim().length >= 2 && a.trim().length >= 2 && /\S+@\S+\.\S+/.test(email);
 
   const generate = () => {
     mut.mutate({
@@ -68,6 +75,8 @@ function HookGeneratorPage() {
         audience: a.trim(),
         angle: ang.trim() || undefined,
         awareness: aw,
+        email: email.trim(),
+        fullName: fullName.trim() || undefined,
         turnstileToken: tsToken ?? undefined,
       },
     });
@@ -77,6 +86,7 @@ function HookGeneratorPage() {
     <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
+        <BackNav to="/tools" label="All tools" className="mb-6" />
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-banana mb-3">
             <Flame className="size-3.5" /> Free Hook Generator
@@ -90,7 +100,9 @@ function HookGeneratorPage() {
           </p>
         </div>
 
-        {!hooks ? (
+        {locked ? (
+          <HookLimitReached />
+        ) : !hooks ? (
           <div className="border border-[#e8e0d4] rounded-2xl bg-white p-6 sm:p-8 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.10)] space-y-6">
             <div>
               <label className={LABEL}>What's the topic?</label>
@@ -127,6 +139,17 @@ function HookGeneratorPage() {
               </div>
             </div>
 
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className={LABEL}>Your name <span className="text-[#999] font-normal">(optional)</span></label>
+                <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Your name" className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0" />
+              </div>
+              <div>
+                <label className={LABEL}>Your email</label>
+                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0" />
+              </div>
+            </div>
+
             <TurnstileGate onToken={setTsToken} />
 
             <Button
@@ -137,13 +160,39 @@ function HookGeneratorPage() {
             >
               {mut.isPending ? "Writing your hooks…" : "Generate my hooks"} <ArrowRight className="size-4 ml-1" />
             </Button>
-            <p className="text-center text-[#777] text-xs">Free. Written fresh by Claude for your exact input — not a template.</p>
+            <p className="text-center text-[#777] text-xs">
+              First 3 generations free — we'll also email you a copy. After that, it's part of the Foundation Kit.
+            </p>
           </div>
         ) : (
           <HookResults hooks={hooks} onReset={() => setHooks(null)} />
         )}
       </main>
       <SiteFooter />
+    </div>
+  );
+}
+
+function HookLimitReached() {
+  return (
+    <div className="border-2 rounded-2xl bg-white p-6 sm:p-8 text-center" style={{ borderColor: "#F59E0B" }}>
+      <div className="mx-auto inline-flex size-11 items-center justify-center rounded-full" style={{ backgroundColor: "#FBF7EC", color: "#F59E0B" }}>
+        <Lock className="size-5" />
+      </div>
+      <h3 className="font-display text-xl uppercase mt-4">You've used your 3 free hooks</h3>
+      <p className="text-[#555] text-sm mt-2 max-w-md mx-auto">
+        Real Claude-written hooks cost real money to generate — 3 free was the trial. Unlimited hooks
+        (plus the full 7-Act post structure, the 4E content calendar, and Offer Builder) come with the
+        Foundation Kit.
+      </p>
+      <Link
+        to="/products/$slug"
+        params={{ slug: "called-expert-foundation-kit" }}
+        className="cta-glow inline-flex items-center gap-2 mt-5 px-6 py-3 rounded-md text-sm font-display font-black uppercase tracking-wide"
+      >
+        Get the Foundation Kit <ArrowRight className="size-4" />
+      </Link>
+      <p className="text-[#999] text-xs mt-4">Already own the Foundation Kit? Make sure you're using the same email you purchased with, then try again.</p>
     </div>
   );
 }

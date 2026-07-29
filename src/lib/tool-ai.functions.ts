@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { getAnthropic, OFFER_MODEL, COACH_MODEL } from "@/lib/anthropic";
 
-const KIT_OWNER_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
+export const KIT_OWNER_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
 
 // Gate: only kit owners (or admins) get AI coaching — it costs money per call.
 async function assertKitAccess(userId: string) {

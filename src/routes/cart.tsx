@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { X, Lock, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -64,6 +65,7 @@ function CartPage() {
     <div className="min-h-screen bg-white text-[#111]" style={{ fontFamily: "Inter, sans-serif" }}>
       <SiteHeader />
       <div className="mx-auto max-w-4xl px-5 pt-10 pb-16 sm:px-6">
+        <BackNav to="/products" label="Continue shopping" className="mb-4" />
         <h1 className="text-center text-[26px] font-normal text-[#000]" style={{ fontFamily: "Georgia, serif" }}>
           Your Cart
         </h1>

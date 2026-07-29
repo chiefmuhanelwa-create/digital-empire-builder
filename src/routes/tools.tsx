@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { TOOLS, TOOL_CATEGORY_ORDER, type Tool } from "@/lib/tools";
 
 export const Route = createFileRoute("/tools")({
@@ -63,6 +64,7 @@ function ToolsIndex() {
       <SiteHeader />
 
       <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <BackNav to="/" label="Home" className="mb-6" />
         <p className="nx-label mb-3">Tools</p>
         <h1 className="mb-4">Practical tools. No fluff.</h1>
         <p className="nx-body max-w-2xl mb-12">

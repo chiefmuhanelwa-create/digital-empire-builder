@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowRight, ArrowLeft, Loader2, Sparkles, Check } from "lucide-react";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TurnstileGate } from "@/components/TurnstileGate";
@@ -13,13 +14,13 @@ import { trackLead } from "@/lib/track";
 export const Route = createFileRoute("/offer-builder")({
   head: () => ({
     meta: [
-      { title: "Free Offer Builder — turn your skill into a sellable offer | CHKPLT" },
+      { title: "Offer Builder — turn your skill into a sellable offer | CHKPLT" },
       {
         name: "description",
         content:
-          "Answer 4 quick questions and get a complete, sellable offer — name, promise, deliverables, price, and your first move this week. Free.",
+          "Answer 4 quick questions and get a complete, sellable offer — name, promise, deliverables, price, and your first move this week. 2 free, then Foundation Kit.",
       },
-      { property: "og:title", content: "Free Offer Builder — CHKPLT" },
+      { property: "og:title", content: "Offer Builder — CHKPLT" },
     ],
   }),
   component: OfferBuilderPage,
@@ -76,6 +77,7 @@ function OfferBuilderPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [offer, setOffer] = useState<GeneratedOffer | null>(null);
+  const [locked, setLocked] = useState(false);
 
   const set = <K extends keyof Fields>(key: K, val: Fields[K]) =>
     setFields((f) => ({ ...f, [key]: val }));
@@ -112,7 +114,8 @@ function OfferBuilderPage() {
         },
       });
       trackLead();
-      setOffer(result);
+      if (result.locked) setLocked(true);
+      else setOffer(result.offer);
     } catch (e) {
       setError((e as Error).message ?? "Something went wrong. Please try again.");
     } finally {
@@ -124,11 +127,28 @@ function OfferBuilderPage() {
     <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
-        {!offer ? (
+        <BackNav to="/tools" label="All tools" className="mb-6" />
+        {locked ? (
+          <div className="border-2 rounded-2xl bg-white p-6 sm:p-8 text-center" style={{ borderColor: "#F59E0B" }}>
+            <h3 className="font-display text-xl uppercase">You've used your 2 free offers</h3>
+            <p className="text-[#555] text-sm mt-2 max-w-md mx-auto">
+              Opus-tier AI generation costs real money to run — 2 free was the trial. Unlimited offer
+              building comes with the Foundation Kit.
+            </p>
+            <Link
+              to="/products/$slug"
+              params={{ slug: "called-expert-foundation-kit" }}
+              className="cta-glow inline-flex items-center gap-2 mt-5 px-6 py-3 rounded-md text-sm font-display font-black uppercase tracking-wide"
+            >
+              Get the Foundation Kit <ArrowRight className="size-4" />
+            </Link>
+            <p className="text-[#999] text-xs mt-4">Already own it? Use the same email you purchased with, then try again.</p>
+          </div>
+        ) : !offer ? (
           <>
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-banana mb-3">
-                <Sparkles className="size-3.5" /> Free Offer Builder
+                <Sparkles className="size-3.5" /> Offer Builder
               </div>
               <h1 className="font-display text-3xl sm:text-4xl uppercase leading-[1.05]">
                 Turn your skill into a <strong>sellable offer</strong>

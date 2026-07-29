@@ -1,9 +1,30 @@
 import { createServerFn } from "@tanstack/react-start";
+import { render } from "@react-email/components";
+import { randomUUID } from "crypto";
+import * as React from "react";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
 import { verifyTurnstile } from "@/lib/turnstile.server";
 import { getAnthropic, OFFER_MODEL } from "@/lib/anthropic";
+import { KIT_OWNER_SLUGS } from "@/lib/tool-ai.functions";
+import { OfferBuilderResultEmail } from "@/lib/email-templates/offer-builder-result";
+
+// Opus-tier AI generation costs real money per call. This was live with NO
+// usage limit at all despite the catalog/copy elsewhere claiming "Foundation
+// Kit owners only" — founder caught the discrepancy. Same free-then-gated
+// pattern as Hook Generator: FREE_LIMIT real generations per email, then
+// requires owning the Foundation Kit.
+const FREE_LIMIT = 2;
+
+async function emailOwnsFoundationKit(email: string): Promise<boolean> {
+  const { data } = await supabaseAdmin
+    .from("orders")
+    .select("metadata")
+    .ilike("email", email)
+    .eq("status", "paid");
+  return (data ?? []).some((o) => KIT_OWNER_SLUGS.includes((o.metadata as { product_slug?: string } | null)?.product_slug ?? ""));
+}
 
 // ── The generated offer (what the model returns + what the UI renders) ──────
 export interface GeneratedOffer {
@@ -103,11 +124,20 @@ export type OfferInput = z.infer<typeof offerInputSchema>;
 
 export const buildOffer = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => offerInputSchema.parse(input))
-  .handler(async ({ data }): Promise<GeneratedOffer> => {
+  .handler(async ({ data }): Promise<{ locked: true } | { locked: false; offer: GeneratedOffer }> => {
     // 1. Bot gate (no-op in dev when TURNSTILE_SECRET_KEY is unset).
     const ts = await verifyTurnstile(data.turnstileToken);
     if (!ts.success && !ts.skipped) {
       throw new Error("Verification failed. Please refresh and try again.");
+    }
+
+    // 1b. Payment gate — see FREE_LIMIT comment above.
+    const email = data.email.trim().toLowerCase();
+    const { count } = await (supabaseAdmin.from("offer_builder_leads" as any) as any)
+      .select("id", { count: "exact", head: true })
+      .eq("email", email);
+    if ((count ?? 0) >= FREE_LIMIT && !(await emailOwnsFoundationKit(email))) {
+      return { locked: true };
     }
 
     // 2. Generate the offer with Claude (structured output → guaranteed JSON).
@@ -179,5 +209,26 @@ Build the offer: name it, write the one-line promise (headline), the exact who-i
       { first_name: nameParts[0], last_name: nameParts.slice(1).join(" ") || null },
     );
 
-    return offer;
+    // 5. Email confirmation of the result — founder's explicit ask, same
+    // enqueue_email pattern every other tool uses.
+    const html = await render(React.createElement(OfferBuilderResultEmail, { firstName: nameParts[0], offer }));
+    const text = await render(React.createElement(OfferBuilderResultEmail, { firstName: nameParts[0], offer }), { plainText: true });
+    void supabaseAdmin.rpc("enqueue_email", {
+      queue_name: "transactional_emails",
+      payload: {
+        run_id: randomUUID(),
+        message_id: `offer-builder:${email}:${Date.now()}`,
+        to: email,
+        from: "CHKPLT <noreply@notify.chkplt.com>",
+        sender_domain: "notify.chkplt.com",
+        subject: `Your offer: ${offer.offerName}`,
+        html,
+        text,
+        purpose: "marketing",
+        label: "offer_builder_result",
+        queued_at: new Date().toISOString(),
+      },
+    });
+
+    return { locked: false, offer };
   });

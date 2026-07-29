@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,6 +45,7 @@ function LoginPage() {
       <SiteHeader />
       <div className="flex-1 flex items-center justify-center px-5 py-16">
         <div className="w-full max-w-md">
+          <BackNav to="/" label="Home" className="mb-4" />
           <div className="auth-card">
             <div className="nx-label text-center mb-2">Sign in</div>
             <h1 className="font-display text-3xl sm:text-4xl text-center tracking-tight">

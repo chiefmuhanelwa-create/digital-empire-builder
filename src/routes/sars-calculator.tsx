@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ShieldCheck, Plus, Trash2, PiggyBank } from "lucide-react";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -73,6 +74,7 @@ function SarsPage() {
     <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
+        <BackNav to="/tools" label="All tools" className="mb-6" />
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-banana mb-3">
             <ShieldCheck className="size-3.5" /> Free SARS 25% Reserve Calculator
@@ -94,7 +96,7 @@ function SarsPage() {
         </div>
 
         {/* Summary */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
           <Stat label="Income logged" value={fmtZAR(totals.income)} tone="ink" />
           <Stat label="Reserve (25%)" value={fmtZAR(totals.reserve)} tone="gold" />
           <Stat label="Yours to keep" value={fmtZAR(totals.keep)} tone="ink" />
@@ -177,17 +179,17 @@ function SarsPage() {
 
         {/* Bridge CTA */}
         <div className="mt-8 text-center border border-[#e8e0d4] rounded-2xl p-6 bg-white">
-          <h3 className="font-display text-xl uppercase">Reserving is step one. Stewardship is the system.</h3>
+          <h3 className="font-display text-xl uppercase">Reserving is step one. Knowing the rules is the system.</h3>
           <p className="text-[#555] text-sm mt-2 max-w-md mx-auto">
-            The 25% habit keeps you safe. The Tax &amp; Money bundle shows you the full picture — provisional tax dates, what's deductible, and how to register without fear.
+            The 25% habit keeps you safe. SARS &amp; Creator Income shows you the full picture — provisional tax dates, what's deductible, and how to register without fear.
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
             <Link
               to="/products/$slug"
-              params={{ slug: "tax-creator-bundle" }}
+              params={{ slug: "sars-creator-income" }}
               className="cta-glow inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-display font-black uppercase tracking-wide"
             >
-              Get the Tax &amp; Money bundle <ArrowRight className="size-4" />
+              Get SARS &amp; Creator Income <ArrowRight className="size-4" />
             </Link>
             <Link
               to="/rate-card"

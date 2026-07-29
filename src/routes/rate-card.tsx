@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 
 export const Route = createFileRoute("/rate-card")({
   head: () => ({
@@ -60,6 +61,9 @@ function RateCardPage() {
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader />
+      <div className="px-5 py-3 sm:px-6">
+        <BackNav to="/tools" label="All tools" />
+      </div>
       <iframe
         ref={iframeRef}
         src="/tools/rate-card/index.html"

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { subscribeAlignedToolkit } from "@/lib/aligned.functions";
 import { ArrowRight, ArrowLeft, Check, Sparkles, Lock, Download } from "lucide-react";
+import { BackNav } from "@/components/BackNav";
 
 export const Route = createFileRoute("/align-accelerate-excel")({
   head: () => ({
@@ -138,12 +139,15 @@ function AlignedToolPage() {
 
   return (
     <div className="min-h-screen bg-white text-[var(--foreground)]">
-      {/* Standalone wordmark — no nav. Keeps the giveaway page distraction-free. */}
+      {/* Standalone wordmark — no full site nav, keeps the giveaway page
+          distraction-free — but still a way back out, per store-wide back-nav. */}
       <header className="border-b border-[var(--border)]">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-4 flex items-center justify-center">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 py-4 flex items-center justify-between">
+          <BackNav to="/tools" label="Tools" />
           <span className="font-display text-lg tracking-[0.18em] text-[var(--foreground)]">
             CHK<span className="text-[var(--nx-gold-text)]">PLT</span>
           </span>
+          <span className="w-[70px]" aria-hidden="true" />
         </div>
       </header>
 
@@ -178,7 +182,7 @@ function AlignedToolPage() {
               <p className="text-xs text-slate-400 mt-3">12 questions · 90 seconds · free</p>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
               {(["align", "accelerate", "excel"] as Phase[]).map((p) => (
                 <div key={p} className="nx-card !p-4 text-center">
                   <div className="font-display text-lg text-[var(--nx-gold-deep)]">
@@ -431,6 +435,18 @@ function ToolkitCapture({ focusPhase }: { focusPhase: Phase }) {
         <p className="text-xs text-[var(--text-dim)] mt-4">
           Your 7-day sprint is above — save it and begin tomorrow morning.
         </p>
+        <div className="mt-6 border-t border-white/10 pt-5">
+          <p className="text-sm text-slate-300">
+            Alignment is the start. The Foundation Kit is the system that turns it into income you own.
+          </p>
+          <Link
+            to="/products/$slug"
+            params={{ slug: "called-expert-foundation-kit" }}
+            className="cta-glow inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-md text-sm font-display font-black uppercase tracking-wide"
+          >
+            See the Foundation Kit <ArrowRight className="size-4" />
+          </Link>
+        </div>
       </div>
     );
   }

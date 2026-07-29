@@ -6,6 +6,7 @@ import { ArrowRight, FileText, Printer, Instagram, Sparkles, Mail } from "lucide
 import { toast } from "sonner";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { emailMediaKit } from "@/lib/media-kit.functions";
@@ -90,6 +91,7 @@ function MediaKitPage() {
     <div className="min-h-screen bg-white text-[#0F172A]">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 pt-24 pb-20">
+        <BackNav to="/tools" label="All tools" className="mb-6 print:hidden" />
         <div className="text-center mb-8 print:hidden">
           <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-banana mb-3">
             <FileText className="size-3.5" /> Free Media Kit Builder

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -39,6 +40,7 @@ function About() {
 
       {/* HERO */}
       <section className="mx-auto max-w-3xl px-5 sm:px-6 pt-20 sm:pt-24 pb-12">
+        <BackNav to="/" label="Home" className="mb-6" />
         <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-banana">About CHKPLT</div>
         <h1 className="mt-4 font-display text-4xl sm:text-5xl md:text-6xl tracking-tight leading-[1.05]">
           The knowledge economy{" "}

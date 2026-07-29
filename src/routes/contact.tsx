@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { submitContact } from "@/lib/contact.functions";
@@ -44,6 +45,7 @@ function ContactPage() {
       <SiteHeader />
 
       <section className="mx-auto max-w-2xl px-6 pt-24 pb-24">
+        <BackNav to="/" label="Home" className="mb-6" />
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Contact</div>
         <h1 className="mt-4 font-display text-5xl md:text-6xl leading-[1.05]">Talk to us.</h1>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed">

@@ -81,7 +81,7 @@ export const TOOLS: Tool[] = [
     path: "/hook-generator",
     tier: "free",
     category: "Content Creation",
-    blurb: "5 scroll-stopping hooks, written fresh for your topic by Claude — not a template.",
+    blurb: "5 scroll-stopping hooks, written fresh for your topic by Claude — 3 free, then Foundation Kit.",
     icon: Zap,
   },
   {
@@ -89,7 +89,7 @@ export const TOOLS: Tool[] = [
     path: "/offer-builder",
     tier: "premium",
     category: "Content Creation",
-    blurb: "Turn your expertise into a clear, sellable offer — AI-assisted, Foundation Kit owners only.",
+    blurb: "Turn your expertise into a clear, sellable offer — AI-assisted, 2 free then Foundation Kit.",
     icon: Package,
   },
   {

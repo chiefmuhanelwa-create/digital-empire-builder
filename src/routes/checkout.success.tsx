@@ -2,6 +2,7 @@ import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
+import { BackNav } from "@/components/BackNav";
 import { verifyCheckout, initializeCheckout, chargeUpsell } from "@/lib/checkout.functions";
 import { getDownloadUrl } from "@/lib/products.functions";
 import { Button } from "@/components/ui/button";
@@ -77,6 +78,7 @@ function CheckoutSuccess() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <section className="mx-auto max-w-2xl px-6 pt-24 pb-24">
+        <BackNav to="/products" label="All products" className="mb-6" />
         {!reference && (
           <div className="text-center">
             <h1 className="font-display text-4xl">No reference found.</h1>
@@ -139,7 +141,7 @@ function CheckoutSuccess() {
               <UpsellFlow buyerEmail={q.data?.email ?? ""} slugs={upsellSlugs} />
             ) : (
               <>
-                <div className="mt-10 flex justify-center gap-3">
+                <div className="mt-10 flex flex-col sm:flex-row justify-center gap-3">
                   <Button asChild className="bg-banana text-banana-foreground hover:bg-banana/90">
                     <Link to="/dashboard">Open dashboard →</Link>
                   </Button>
