@@ -89,29 +89,43 @@ export function MarketplaceHome({
           </div>
         </div>
 
-        {availableGardens.length > 1 && (
-          <div className="mt-3 flex flex-wrap gap-2 px-4 sm:px-8 md:px-10">
-            <button
-              onClick={() => setActiveGarden("all")}
-              className={`rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.05em] transition-colors ${
-                activeGarden === "all" ? "bg-[#111] text-white" : "bg-white text-[#666] hover:bg-[#eee]"
-              }`}
-            >
-              All
-            </button>
-            {availableGardens.map((g) => (
+        <div className="mt-3 flex flex-wrap gap-2 px-4 sm:px-8 md:px-10">
+          {availableGardens.length > 1 && (
+            <>
               <button
-                key={g}
-                onClick={() => setActiveGarden(g)}
+                onClick={() => setActiveGarden("all")}
                 className={`rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.05em] transition-colors ${
-                  activeGarden === g ? "bg-[#111] text-white" : "bg-white text-[#666] hover:bg-[#eee]"
+                  activeGarden === "all" ? "bg-[#111] text-white" : "bg-white text-[#666] hover:bg-[#eee]"
                 }`}
               >
-                {GARDENS[g].name}
+                All
               </button>
-            ))}
-          </div>
-        )}
+              {availableGardens.map((g) => (
+                <button
+                  key={g}
+                  onClick={() => setActiveGarden(g)}
+                  className={`rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.05em] transition-colors ${
+                    activeGarden === g ? "bg-[#111] text-white" : "bg-white text-[#666] hover:bg-[#eee]"
+                  }`}
+                >
+                  {GARDENS[g].name}
+                </button>
+              ))}
+            </>
+          )}
+          {/* Not a grid filter like the pills above — this one navigates to the
+              interactive tools hub (calculators/generators), a different
+              destination from the purchasable PDF products these pills filter.
+              Deliberately NOT gated on availableGardens.length so it always
+              shows regardless of how many product categories are live. */}
+          <Link
+            to="/tools"
+            className="rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.05em] bg-white hover:bg-[#eee] transition-colors"
+            style={{ border: "1px solid sienna", color: "sienna" }}
+          >
+            Tools
+          </Link>
+        </div>
 
         <div className="mx-auto mt-4 grid max-w-6xl grid-cols-2 gap-3 px-4 sm:grid-cols-3 sm:px-8 md:grid-cols-4 md:px-10">
           {isLoading &&

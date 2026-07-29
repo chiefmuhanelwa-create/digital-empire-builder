@@ -1,10 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, Sparkles, Copy, Check, RotateCcw, Flame } from "lucide-react";
+import { toast } from "sonner";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { TurnstileGate } from "@/components/TurnstileGate";
+import { generateHooks } from "@/lib/hook-generator.functions";
 
 export const Route = createFileRoute("/hook-generator")({
   head: () => ({
@@ -30,99 +35,10 @@ const AWARENESS: { val: Awareness; t: string; d: string }[] = [
   { val: "product", t: "Product Aware", d: "They know you / your offer — they need a reason to act now." },
 ];
 
-interface Ctx {
-  t: string; // topic / expertise
-  a: string; // audience
-  ang: string; // unique angle (optional)
-  aw: Awareness;
-}
-
 interface Hook {
   type: string;
   text: string;
-  formula: string;
   why: string;
-}
-
-// Pain framing shifts by awareness level — same R×A×C×U^B engine, different entry point.
-const painFrame = (c: Ctx): string => {
-  switch (c.aw) {
-    case "symptom": return `you keep doing the work and ${c.t} still isn't paying off`;
-    case "problem": return `you know ${c.t} is the gap — you just don't have the system`;
-    case "solution": return `you've tried fixing ${c.t} and the usual advice didn't move the needle`;
-    case "product": return `you're ready to fix ${c.t} for good`;
-  }
-};
-
-const BUILDERS: ((c: Ctx) => Hook)[] = [
-  (c) => ({
-    type: "Contrarian",
-    text: `Everything you've been told about ${c.t} is keeping ${c.a} broke.`,
-    formula: "Relevance (their topic) × Pattern Interrupt (reverses belief) → forces a re-read.",
-    why: "A contrarian claim breaks the scroll because it attacks an assumption they hold. Back it up in line two.",
-  }),
-  (c) => ({
-    type: "Story Promise",
-    text: `I went from invisible to ${c.t} that actually pays. Here's the one shift that did it.`,
-    formula: "Story (before→after) × Clarity (one shift) × Curiosity gap → they stay for the reveal.",
-    why: "Specific transformation + a single named lever feels achievable, not hype. Name the real shift next.",
-  }),
-  (c) => ({
-    type: "List / Number",
-    text: `3 things about ${c.t} that ${c.a} learn too late.`,
-    formula: "Specificity (3) × Loss-aversion (too late) → low-friction, high-curiosity open.",
-    why: "Numbered hooks promise a finite, skimmable payoff. Deliver all 3 fast or they bounce.",
-  }),
-  (c) => ({
-    type: "Question Hook",
-    text: `What if ${painFrame(c)} — because no one taught you the part that matters?`,
-    formula: `Awareness (${c.aw}-aware entry) × Relevance × open loop → self-identification.`,
-    why: "A question they silently answer 'yes' to pulls them in. Then name 'the part that matters'.",
-  }),
-  (c) => ({
-    type: "Bold Claim",
-    text: `${cap(c.t)} isn't a talent problem. It's a system problem — and systems can be copied.`,
-    formula: "Reframe (talent→system) × Clarity × Empowerment → removes the excuse, keeps hope.",
-    why: "Reframing the obstacle as fixable lowers shame and raises belief. Show the system after.",
-  }),
-  (c) => ({
-    type: "Pattern Interrupt",
-    text: `Stop posting about ${c.t}. Start doing this instead.`,
-    formula: "Interrupt (stop X) × Curiosity (do this) → halts the scroll, demands the next line.",
-    why: "A blunt 'stop' against their current behaviour creates tension only your next line resolves.",
-  }),
-  (c) => ({
-    type: "Authority Building",
-    text: c.ang
-      ? `${c.ang}. That's why ${c.a} trust me on ${c.t}.`
-      : `After every mistake in ${c.t}, here's what I'd tell ${c.a} on day one.`,
-    formula: "Proof / earned-scars × Relevance → credibility without bragging.",
-    why: "Authority lands when it's framed as service ('what I'd tell you'), not a flex. Lead with the lesson.",
-  }),
-  (c) => ({
-    type: "Transformation",
-    text: `From ${painFrame(c)} → to ${c.t} that runs without you. In one post, here's the map.`,
-    formula: "Before→After × Clarity (a map) × Relevance → visualises the destination.",
-    why: "Showing the gap between now and the dream — then promising the bridge — is the core of every great hook.",
-  }),
-  (c) => ({
-    type: "Lead Generation",
-    text: `If you're ${c.a} stuck on ${c.t}, I made the thing I wish I'd had. It's free.`,
-    formula: "Qualifier (if you're X) × Relevance × Low-risk offer → self-selecting opt-in.",
-    why: "Naming exactly who it's for filters in your people and filters out tyre-kickers. End with a clear next step.",
-  }),
-  (c) => ({
-    type: "Direct Sale",
-    text: c.aw === "product"
-      ? `You already know ${c.t} is the move. This is your sign — and your system — to finally do it.`
-      : `When you're done guessing at ${c.t}, the system is here. No fluff.`,
-    formula: "Awareness (warm/product-aware) × Clarity × Urgency → permission to buy.",
-    why: "Direct works only on warm audiences. For colder ones, lead with the contrarian or question hooks above.",
-  }),
-];
-
-function cap(s: string) {
-  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
 
 const LABEL = "font-display text-[#0F172A] text-sm font-bold leading-snug block mb-1.5";
@@ -133,13 +49,28 @@ function HookGeneratorPage() {
   const [a, setA] = useState("");
   const [ang, setAng] = useState("");
   const [aw, setAw] = useState<Awareness>("problem");
+  const [tsToken, setTsToken] = useState<string | null>(null);
   const [hooks, setHooks] = useState<Hook[] | null>(null);
+
+  const generateFn = useServerFn(generateHooks);
+  const mut = useMutation({
+    mutationFn: generateFn,
+    onSuccess: (res) => setHooks(res.hooks),
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   const valid = t.trim().length >= 2 && a.trim().length >= 2;
 
   const generate = () => {
-    const ctx: Ctx = { t: t.trim().toLowerCase(), a: a.trim().toLowerCase(), ang: ang.trim(), aw };
-    setHooks(BUILDERS.map((b) => b(ctx)));
+    mut.mutate({
+      data: {
+        topic: t.trim(),
+        audience: a.trim(),
+        angle: ang.trim() || undefined,
+        awareness: aw,
+        turnstileToken: tsToken ?? undefined,
+      },
+    });
   };
 
   return (
@@ -154,7 +85,8 @@ function HookGeneratorPage() {
             Stop posting into <strong>silence.</strong>
           </h1>
           <p className="text-[#555] mt-3 max-w-md mx-auto">
-            Ten scroll-stopping hooks built on NoChill's <strong>R×A×C×U^B</strong> framework — and each one shows you exactly why it works, so you can write your own next time.
+            5 scroll-stopping hooks, written fresh for YOUR topic and audience by Claude on NoChill's
+            <strong> R×A×C×U^B</strong> framework — each one shows you exactly why it works.
           </p>
         </div>
 
@@ -195,15 +127,17 @@ function HookGeneratorPage() {
               </div>
             </div>
 
+            <TurnstileGate onToken={setTsToken} />
+
             <Button
               type="button"
-              disabled={!valid}
+              disabled={!valid || mut.isPending}
               onClick={generate}
               className="w-full bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto disabled:opacity-40"
             >
-              Generate my hooks <ArrowRight className="size-4 ml-1" />
+              {mut.isPending ? "Writing your hooks…" : "Generate my hooks"} <ArrowRight className="size-4 ml-1" />
             </Button>
-            <p className="text-center text-[#777] text-xs">Free. Instant. Nothing leaves your browser.</p>
+            <p className="text-center text-[#777] text-xs">Free. Written fresh by Claude for your exact input — not a template.</p>
           </div>
         ) : (
           <HookResults hooks={hooks} onReset={() => setHooks(null)} />
@@ -219,7 +153,7 @@ function HookResults({ hooks, onReset }: { hooks: Hook[]; onReset: () => void })
     <div>
       <div className="text-center mb-6">
         <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-banana mb-3">
-          <Sparkles className="size-3.5" /> 10 hooks, ready to post
+          <Sparkles className="size-3.5" /> {hooks.length} hooks, ready to post
         </div>
         <button
           type="button"
@@ -292,14 +226,7 @@ function HookCard({ hook, n }: { hook: Hook; n: number }) {
       </button>
       {open && (
         <div className="mt-3 space-y-3 border-t border-[#f0ebe1] pt-3">
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">The formula</div>
-            <p className="text-[#2A2A2A] text-sm font-mono">{hook.formula}</p>
-          </div>
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">Why it stops the scroll</div>
-            <p className="text-[#2A2A2A] text-sm">{hook.why}</p>
-          </div>
+          <p className="text-[#2A2A2A] text-sm">{hook.why}</p>
         </div>
       )}
     </div>

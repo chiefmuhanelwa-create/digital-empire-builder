@@ -480,6 +480,33 @@ export type Database = {
           },
         ]
       }
+      tool_submissions: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          payload: Json
+          tool_slug: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          payload?: Json
+          tool_slug: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          payload?: Json
+          tool_slug?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       niche_clarity_progress: {
         Row: {
           fields: Json
