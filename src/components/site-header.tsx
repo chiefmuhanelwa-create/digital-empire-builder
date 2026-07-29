@@ -18,16 +18,22 @@ function HeaderSearch() {
         e.preventDefault();
         navigate({ to: "/products", search: { q: term } });
       }}
-      className="relative hidden sm:block"
+      className="relative flex items-center"
     >
-      <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-[var(--text-dim)]" />
       <input
         type="search"
         value={term}
         onChange={(e) => setTerm(e.target.value)}
         placeholder="Search products…"
-        className="h-9 w-40 rounded-full border border-[var(--border)] bg-white pl-8 pr-3 text-xs text-[var(--foreground)] outline-none transition-[width] focus:w-56 focus:border-[var(--nx-gold)]"
+        className="h-9 w-32 sm:w-40 rounded-full border border-[var(--border)] bg-white pl-3 pr-9 text-xs text-[var(--foreground)] outline-none transition-[width] focus:w-40 sm:focus:w-56 focus:border-[var(--nx-gold)]"
       />
+      <button
+        type="submit"
+        aria-label="Search"
+        className="absolute right-1 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-[var(--text-dim)] hover:text-[var(--foreground)] hover:bg-muted transition-colors"
+      >
+        <Search className="size-3.5" />
+      </button>
     </form>
   );
 }

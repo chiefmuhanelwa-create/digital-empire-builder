@@ -115,50 +115,55 @@ function ProductDetail() {
   const isModalCheckout = !product.is_free && !product.requires_application;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-white text-[#111]" style={{ fontFamily: "Inter, sans-serif" }}>
       <SiteHeader />
-      <article className="mx-auto max-w-3xl px-6 pt-24 pb-16">
-        <Link to="/products" className="font-mono text-xs text-muted-foreground hover:text-banana">
+      <article className="mx-auto max-w-2xl px-5 sm:px-6 pt-10 pb-16">
+        <Link to="/products" className="text-[13px] text-[#666] hover:text-[sienna] transition-colors">
           ← All products
         </Link>
-        <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">
-          {product.tagline}
-        </div>
-        <h1 className="mt-3 font-display text-3xl sm:text-5xl md:text-6xl leading-[1.05]">{product.title}</h1>
 
+        {product.cover_image_url && (
+          <div className="mt-6 aspect-square w-full overflow-hidden rounded-xl bg-[#f8f6f3] p-6 flex items-center justify-center">
+            <img
+              src={product.cover_image_url}
+              alt={product.title}
+              className="max-h-full w-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+        )}
 
-        <div className="mt-10 flex items-baseline gap-4 flex-wrap">
-          <div className="font-display text-4xl sm:text-5xl text-banana">{priceLabel}</div>
+        <h1 className="mt-6 text-[22px] font-semibold leading-[1.3] text-[#000]">{product.title}</h1>
+
+        <div className="mt-3 flex items-baseline gap-3 flex-wrap">
+          <div className="text-[15px] font-semibold text-[#000]">{priceLabel}</div>
+          {product.compare_at_price_cents != null && (
+            <div className="text-[13px] text-[#999] line-through">
+              {formatPrice(product.compare_at_price_cents, product.currency, false, undefined, country)}
+            </div>
+          )}
           {!product.is_free && !product.requires_application && (
-            <div className="font-mono text-xs text-muted-foreground">one-time payment · instant download · billed in ZAR at checkout</div>
+            <div className="text-[12px] text-[#999]">· instant download</div>
           )}
           {product.requires_application && (
-            <div className="font-mono text-xs text-muted-foreground">/ by application</div>
+            <div className="text-[12px] text-[#999]">/ by application</div>
           )}
         </div>
 
         {isModalCheckout && (
           <button
             onClick={() => setCheckoutOpen(true)}
-            className="cta-glow mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm"
+            className="mt-4 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-[13px] font-semibold text-white transition-colors"
+            style={{ backgroundColor: "sienna" }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#8b4513")}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "sienna")}
           >
             Get instant access → {priceLabel}
           </button>
         )}
 
-        {product.cover_image_url && (
-          <div className="mt-10 border border-border bg-muted/20 p-6 flex items-center justify-center">
-            <img
-              src={product.cover_image_url}
-              alt={product.title}
-              className="max-h-[420px] w-auto object-contain"
-              loading="lazy"
-            />
-          </div>
-        )}
-
         {product.description && (
-          <p className="mt-10 text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
+          <p className="mt-6 text-[14px] leading-[1.7] text-[#333] whitespace-pre-line">
             {product.description}
           </p>
         )}
@@ -171,23 +176,23 @@ function ProductDetail() {
             purchase opens the popup checkout modal instead. */}
         <div id="buy" />
         {isModalCheckout ? (
-          <div className="mt-12 border border-border p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="mt-8 rounded-lg border border-[#e8e0d4] bg-[#FBFAF8] p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-full bg-banana/10 text-banana shrink-0">
+              <div className="flex size-9 items-center justify-center rounded-full shrink-0" style={{ backgroundColor: "#f5e6da", color: "sienna" }}>
                 <Lock className="size-4" />
               </div>
               <div>
-                <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Secure checkout</div>
-                <div className="font-display text-xl">{priceLabel} · instant download</div>
+                <div className="text-[11px] uppercase tracking-wide text-[#999]">Secure checkout</div>
+                <div className="text-[15px] font-semibold text-[#000]">{priceLabel} · instant download</div>
               </div>
             </div>
-            <Button
-              size="lg"
+            <button
               onClick={() => setCheckoutOpen(true)}
-              className="bg-banana text-banana-foreground hover:bg-banana/90 w-full sm:w-auto"
+              className="h-11 w-full sm:w-auto rounded-lg px-6 text-[13px] font-semibold text-white transition-colors"
+              style={{ backgroundColor: "sienna" }}
             >
               Buy now →
-            </Button>
+            </button>
           </div>
         ) : (
           <BuyBlock product={product} priceLabel={priceLabel} />
@@ -198,11 +203,11 @@ function ProductDetail() {
 
         {/* Long-form sales copy */}
         {product.long_description && (
-          <div className="mt-16 border-t border-border pt-12">
-            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+          <div className="mt-12 border-t border-[#eee] pt-8">
+            <div className="text-[11px] font-bold uppercase tracking-wide text-[#000]">
               Why this exists
             </div>
-            <div className="mt-6 text-base leading-relaxed whitespace-pre-line text-foreground/90">
+            <div className="mt-4 text-[14px] leading-[1.7] whitespace-pre-line text-[#333]">
               {product.long_description}
             </div>
           </div>
@@ -210,14 +215,14 @@ function ProductDetail() {
 
         {/* Benefits */}
         {Array.isArray(product.benefits) && product.benefits.length > 0 && (
-          <div className="mt-12 border border-banana/30 bg-banana/5 p-8">
-            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+          <div className="mt-8 rounded-lg border border-[#e8e0d4] bg-[#FBFAF8] p-6">
+            <div className="text-[11px] font-bold uppercase tracking-wide text-[#000]">
               What you get
             </div>
-            <ul className="mt-5 space-y-3">
+            <ul className="mt-4 space-y-2.5">
               {(product.benefits as string[]).map((b, i) => (
-                <li key={i} className="flex items-start gap-3 text-base">
-                  <span className="mt-2 inline-block size-1.5 shrink-0 rounded-full bg-banana" />
+                <li key={i} className="flex items-start gap-3 text-[14px] text-[#333]">
+                  <span className="mt-2 inline-block size-1.5 shrink-0 rounded-full" style={{ backgroundColor: "sienna" }} />
                   <span>{b}</span>
                 </li>
               ))}
@@ -226,38 +231,39 @@ function ProductDetail() {
         )}
 
         {/* Metadata strip */}
-        <dl className="mt-12 grid gap-px bg-border border border-border md:grid-cols-2">
+        <dl className="mt-8 grid gap-px bg-[#eee] border border-[#eee] rounded-lg overflow-hidden md:grid-cols-2">
           {product.format && (
-            <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Format</dt>
-              <dd className="mt-2 text-sm">{product.format}</dd>
+            <div className="bg-white p-5">
+              <dt className="text-[11px] uppercase tracking-wide text-[#999]">Format</dt>
+              <dd className="mt-1.5 text-[14px] text-[#333]">{product.format}</dd>
             </div>
           )}
           {product.target_audience && (
-            <div className="bg-background p-5">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Built for</dt>
-              <dd className="mt-2 text-sm">{product.target_audience}</dd>
+            <div className="bg-white p-5">
+              <dt className="text-[11px] uppercase tracking-wide text-[#999]">Built for</dt>
+              <dd className="mt-1.5 text-[14px] text-[#333]">{product.target_audience}</dd>
             </div>
           )}
           {product.cohort_capacity && (
-            <div className="bg-background p-5 md:col-span-2">
-              <dt className="font-mono text-xs tracking-[0.2em] uppercase text-muted-foreground">Group size</dt>
-              <dd className="mt-2 text-sm">{product.cohort_capacity} seats per intake</dd>
+            <div className="bg-white p-5 md:col-span-2">
+              <dt className="text-[11px] uppercase tracking-wide text-[#999]">Group size</dt>
+              <dd className="mt-1.5 text-[14px] text-[#333]">{product.cohort_capacity} seats per intake</dd>
             </div>
           )}
         </dl>
 
         {/* Secondary CTA */}
         {isModalCheckout && (
-          <div className="mt-12 border-t border-border pt-10 text-center">
-            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+          <div className="mt-10 border-t border-[#eee] pt-8 text-center">
+            <div className="text-[11px] font-bold uppercase tracking-wide text-[#999]">
               Ready when you are
             </div>
-            <h3 className="mt-3 font-display text-3xl">Get it for {priceLabel}</h3>
-            <p className="mt-3 text-sm text-muted-foreground">Instant download. No subscription. No fluff.</p>
+            <h3 className="mt-2 text-[20px] font-semibold text-[#000]">Get it for {priceLabel}</h3>
+            <p className="mt-2 text-[13px] text-[#666]">Instant download. No subscription. No fluff.</p>
             <button
               onClick={() => setCheckoutOpen(true)}
-              className="mt-6 inline-flex items-center gap-2 bg-banana text-banana-foreground hover:bg-banana/90 px-8 py-4 rounded-md font-medium text-base transition-colors"
+              className="mt-5 inline-flex h-12 items-center gap-2 rounded-lg px-8 text-[14px] font-semibold text-white transition-colors"
+              style={{ backgroundColor: "sienna" }}
             >
               Buy now → {priceLabel}
             </button>
@@ -266,38 +272,38 @@ function ProductDetail() {
       </article>
 
       {relatedProducts.length > 0 && (
-        <section className="border-t border-border py-16">
-          <div className="mx-auto max-w-5xl px-6">
-            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+        <section className="border-t border-[#eee] bg-[#f5f5f5] py-10" style={{ fontFamily: "Inter, sans-serif" }}>
+          <div className="mx-auto max-w-5xl px-5 sm:px-6">
+            <div className="text-[11px] font-bold uppercase tracking-wide text-[#000]">
               You might also like
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {relatedProducts.map((r) => (
                 <Link
                   key={r.slug}
                   to="/products/$slug"
                   params={{ slug: r.slug }}
-                  className="group flex flex-col overflow-hidden rounded-lg border border-border bg-background"
+                  className="group flex flex-col overflow-hidden rounded-[10px] bg-white"
                 >
-                  <div className="aspect-square w-full overflow-hidden bg-muted">
+                  <div className="aspect-square w-full overflow-hidden bg-[#f0f0f0]">
                     {r.cover_image_url ? (
                       <img
                         src={r.cover_image_url}
                         alt={r.title}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                        className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
+                      <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">
                         No image
                       </div>
                     )}
                   </div>
                   <div className="p-3">
-                    <p className="line-clamp-2 text-xs font-medium leading-snug text-foreground group-hover:text-banana">
+                    <p className="line-clamp-2 text-xs font-medium leading-snug text-[#000]">
                       {r.title}
                     </p>
-                    <p className="mt-1.5 text-xs font-semibold text-muted-foreground">
+                    <p className="mt-1.5 text-xs font-semibold text-[#000]">
                       {formatPrice(r.price_cents, r.currency, r.is_free, r.slug, country)}
                     </p>
                   </div>
@@ -482,40 +488,40 @@ function FreeLeadMagnet({ product }: { product: any }) {
 
   if (downloadUrl) {
     return (
-      <div className="mt-12 border-2 border-banana bg-banana/5 p-6 text-center">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">You're in</div>
-        <p className="mt-2 text-sm text-muted-foreground">
+      <div className="mt-8 rounded-lg border-2 p-6 text-center" style={{ borderColor: "sienna", backgroundColor: "#FBF0E8" }}>
+        <div className="text-[11px] font-bold uppercase tracking-wide" style={{ color: "sienna" }}>You're in</div>
+        <p className="mt-2 text-[13px] text-[#666]">
           We've also emailed a copy to {email} — check your inbox (or spam).
         </p>
-        <Button
-          asChild
-          className="mt-5 bg-banana text-banana-foreground hover:bg-banana/90"
+        <a
+          href={downloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-[13px] font-semibold text-white"
+          style={{ backgroundColor: "sienna" }}
         >
-          <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
-            <Download className="size-4 mr-2" />
-            Download now
-          </a>
-        </Button>
+          <Download className="size-4" />
+          Download now
+        </a>
       </div>
     );
   }
 
   return (
-    <div className="mt-12 border border-border p-6">
-      <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Free download</div>
-      <h3 className="mt-2 font-display text-2xl">Get {product.title}</h3>
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+    <div className="mt-8 rounded-lg border border-[#e8e0d4] p-6">
+      <div className="text-[11px] font-bold uppercase tracking-wide text-[#000]">Free download</div>
+      <h3 className="mt-2 text-[18px] font-semibold text-[#000]">Get {product.title}</h3>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Full name</label>
+          <label className="text-[11px] uppercase tracking-wide text-[#999]">Full name</label>
           <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" placeholder="Your name" />
         </div>
         <div>
-          <label className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Email</label>
+          <label className="text-[11px] uppercase tracking-wide text-[#999]">Email</label>
           <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" placeholder="you@example.com" />
         </div>
       </div>
-      <Button
-        size="lg"
+      <button
         disabled={mut.isPending}
         onClick={() => {
           if (!email) {
@@ -525,12 +531,13 @@ function FreeLeadMagnet({ product }: { product: any }) {
           trackLead();
           mut.mutate({ data: { productSlug: product.slug, email, fullName: fullName || undefined } });
         }}
-        className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90"
+        className="mt-5 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-[13px] font-semibold text-white disabled:opacity-60"
+        style={{ backgroundColor: "sienna" }}
       >
-        <Mail className="size-4 mr-2" />
+        <Mail className="size-4" />
         {mut.isPending ? "Sending…" : "Send it to me — free"}
-      </Button>
-      <p className="mt-3 text-xs text-muted-foreground">No card required. Instant download.</p>
+      </button>
+      <p className="mt-3 text-[12px] text-[#999]">No card required. Instant download.</p>
     </div>
   );
 }
