@@ -8,7 +8,7 @@
 > here the same as an untested code path: not done until it's written down.
 >
 > Last verified against the live repo: 2026-07-29 (63 migrations, cart/quick-view/header
-> rebuild + Tools Hub Phase 1/2 — back-nav, mobile fixes, real AI payment gates — just shipped).
+> rebuild + Tools Hub Phase 1/2 + real ops alerting on critical failures — just shipped).
 
 ---
 
@@ -67,6 +67,7 @@ categories). Categories:
 | Stripe | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `VITE_STRIPE_PUBLISHABLE_KEY` | USD rail. Webhook URL: `https://chkplt.com/api/public/stripe-webhook` |
 | Turnstile | `TURNSTILE_SITE_KEY` (no VITE_ prefix — read server-side), `TURNSTILE_SECRET_KEY` | Gates `/apply`, `/signup`, `/login`, `/contact`, all checkout-initiating server functions |
 | Resend | `RESEND_API_KEY`, `SUPABASE_AUTH_HOOK_SECRET` | Domain `notify.chkplt.com` must be DNS-verified in Resend. Auth hook secret must match in 3 places: `.env`, `wrangler secret put`, Supabase Dashboard → Auth → Hooks → Send Email |
+| Ops alerting | `OPS_ALERT_EMAIL` | Where "critical" `reportError()` calls get emailed (`src/lib/alerts.ts`) — no separate service, reuses the Resend key above. Optional; alerting no-ops if unset. |
 | MailerLite | `MAILERLITE_API_KEY`, `MAILERLITE_GROUP_ID_*` (one per lead magnet + a buyers group) | Marketing automation only — never used for transactional |
 | App | `VITE_APP_URL`, `NODE_ENV`, `VITE_WHATSAPP_SUPPORT_NUMBER` (optional — hides the chat panel if blank) | |
 
@@ -320,6 +321,21 @@ Shared libs (not server functions): `src/lib/gardens.ts` (garden enum + `formatP
 `src/lib/email-queue.ts` (cron job body + Resend send logic), `src/lib/cart.tsx`,
 `src/lib/currency.tsx`, `src/lib/mailerlite.ts`, `src/lib/order-fulfillment.ts` (the
 shared "mark order paid → grant product → send receipt" path both webhooks call).
+
+### Error reporting & ops alerting
+`src/lib/error-logger.ts`'s `reportError(error, context)` is the single place every
+server function/webhook/cron reports a failure — it always logs to console AND inserts
+a row into the `incidents` table (visible at `/admin/incidents`). When
+`context.severity === "critical"`, it ALSO calls `src/lib/alerts.ts`'s `sendOpsAlert()`,
+which emails `OPS_ALERT_EMAIL` directly via Resend (bypassing the transactional-email
+queue on purpose — an alert about the system being broken can't depend on the same
+queue/cron it might be alerting about). Self-rate-limited: repeat failures on the same
+`endpoint` within 15 minutes are deduped to one email, but a different endpoint failing
+still alerts immediately. No-ops silently if `OPS_ALERT_EMAIL` isn't set. Currently wired
+to "critical" on: both payment webhook handlers' catch blocks, both cron jobs (fx-sync,
+email-queue) on failure, account deletion, order fulfillment. A "Send test alert" button
+on `/admin/incidents` lets this be self-verified anytime (e.g. after rotating the Resend
+key) without needing to fake a webhook signature.
 
 ---
 
