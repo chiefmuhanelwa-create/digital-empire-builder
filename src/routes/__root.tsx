@@ -14,6 +14,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { captureUtm } from "@/lib/utm";
 import { CurrencyProvider } from "@/lib/currency";
+import { CartProvider } from "@/lib/cart";
 
 const FB_PIXEL_ID = import.meta.env.VITE_FB_PIXEL_ID as string | undefined;
 const GA_ID = import.meta.env.VITE_GA_ID as string | undefined;
@@ -120,8 +121,10 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CurrencyProvider>
-          <Outlet />
-          <Toaster />
+          <CartProvider>
+            <Outlet />
+            <Toaster />
+          </CartProvider>
         </CurrencyProvider>
       </AuthProvider>
     </QueryClientProvider>

@@ -13,6 +13,7 @@ import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StarterkitRouteImport } from './routes/starterkit'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as SarsCalculatorRouteImport } from './routes/sars-calculator'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
@@ -25,6 +26,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as HookGeneratorRouteImport } from './routes/hook-generator'
 import { Route as FoundationRouteImport } from './routes/foundation'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AlignAccelerateExcelRouteImport } from './routes/align-accelerate-excel'
 import { Route as AcceleratorRouteImport } from './routes/accelerator'
@@ -93,6 +95,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SarsCalculatorRoute = SarsCalculatorRouteImport.update({
   id: '/sars-calculator',
   path: '/sars-calculator',
@@ -151,6 +158,11 @@ const FoundationRoute = FoundationRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApplyRoute = ApplyRouteImport.update({
@@ -419,6 +431,7 @@ export interface FileRoutesByFullPath {
   '/accelerator': typeof AcceleratorRoute
   '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
+  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
@@ -431,6 +444,7 @@ export interface FileRoutesByFullPath {
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
+  '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/starterkit': typeof StarterkitRoute
   '/terms': typeof TermsRoute
@@ -483,6 +497,7 @@ export interface FileRoutesByTo {
   '/accelerator': typeof AcceleratorRoute
   '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
+  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
@@ -495,6 +510,7 @@ export interface FileRoutesByTo {
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
+  '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/starterkit': typeof StarterkitRoute
   '/terms': typeof TermsRoute
@@ -545,6 +561,7 @@ export interface FileRoutesById {
   '/accelerator': typeof AcceleratorRoute
   '/align-accelerate-excel': typeof AlignAccelerateExcelRoute
   '/apply': typeof ApplyRoute
+  '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
   '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
@@ -557,6 +574,7 @@ export interface FileRoutesById {
   '/refund-policy': typeof RefundPolicyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
+  '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/starterkit': typeof StarterkitRoute
   '/terms': typeof TermsRoute
@@ -611,6 +629,7 @@ export interface FileRouteTypes {
     | '/accelerator'
     | '/align-accelerate-excel'
     | '/apply'
+    | '/cart'
     | '/contact'
     | '/foundation'
     | '/hook-generator'
@@ -623,6 +642,7 @@ export interface FileRouteTypes {
     | '/refund-policy'
     | '/reset-password'
     | '/sars-calculator'
+    | '/search'
     | '/signup'
     | '/starterkit'
     | '/terms'
@@ -675,6 +695,7 @@ export interface FileRouteTypes {
     | '/accelerator'
     | '/align-accelerate-excel'
     | '/apply'
+    | '/cart'
     | '/contact'
     | '/foundation'
     | '/hook-generator'
@@ -687,6 +708,7 @@ export interface FileRouteTypes {
     | '/refund-policy'
     | '/reset-password'
     | '/sars-calculator'
+    | '/search'
     | '/signup'
     | '/starterkit'
     | '/terms'
@@ -736,6 +758,7 @@ export interface FileRouteTypes {
     | '/accelerator'
     | '/align-accelerate-excel'
     | '/apply'
+    | '/cart'
     | '/contact'
     | '/foundation'
     | '/hook-generator'
@@ -748,6 +771,7 @@ export interface FileRouteTypes {
     | '/refund-policy'
     | '/reset-password'
     | '/sars-calculator'
+    | '/search'
     | '/signup'
     | '/starterkit'
     | '/terms'
@@ -802,6 +826,7 @@ export interface RootRouteChildren {
   AcceleratorRoute: typeof AcceleratorRoute
   AlignAccelerateExcelRoute: typeof AlignAccelerateExcelRoute
   ApplyRoute: typeof ApplyRoute
+  CartRoute: typeof CartRoute
   ContactRoute: typeof ContactRoute
   FoundationRoute: typeof FoundationRoute
   HookGeneratorRoute: typeof HookGeneratorRoute
@@ -814,6 +839,7 @@ export interface RootRouteChildren {
   RefundPolicyRoute: typeof RefundPolicyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SarsCalculatorRoute: typeof SarsCalculatorRoute
+  SearchRoute: typeof SearchRoute
   SignupRoute: typeof SignupRoute
   StarterkitRoute: typeof StarterkitRoute
   TermsRoute: typeof TermsRoute
@@ -857,6 +883,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sars-calculator': {
@@ -941,6 +974,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/apply': {
@@ -1409,6 +1449,7 @@ const rootRouteChildren: RootRouteChildren = {
   AcceleratorRoute: AcceleratorRoute,
   AlignAccelerateExcelRoute: AlignAccelerateExcelRoute,
   ApplyRoute: ApplyRoute,
+  CartRoute: CartRoute,
   ContactRoute: ContactRoute,
   FoundationRoute: FoundationRoute,
   HookGeneratorRoute: HookGeneratorRoute,
@@ -1421,6 +1462,7 @@ const rootRouteChildren: RootRouteChildren = {
   RefundPolicyRoute: RefundPolicyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SarsCalculatorRoute: SarsCalculatorRoute,
+  SearchRoute: SearchRoute,
   SignupRoute: SignupRoute,
   StarterkitRoute: StarterkitRoute,
   TermsRoute: TermsRoute,

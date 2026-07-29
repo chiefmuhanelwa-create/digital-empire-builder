@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { ProCohortBreakdown, VipTierBreakdown } from "@/components/PremiumProgramBreakdown";
 import { Lock, ShieldCheck, X, Mail, Download } from "lucide-react";
 import { claimFreeProduct } from "@/lib/products.functions";
+import { useCart } from "@/lib/cart";
 
 export const Route = createFileRoute("/products/$slug")({
   loader: async ({ params }) => {
@@ -40,7 +41,7 @@ export const Route = createFileRoute("/products/$slug")({
     // like" is in the initial HTML, not a second client-side round trip.
     const { data: related } = await supabase
       .from("products")
-      .select("slug,title,price_cents,currency,is_free,cover_image_url,garden")
+      .select("slug,title,price_cents,compare_at_price_cents,currency,is_free,cover_image_url,garden")
       .eq("status", "published")
       .eq("show_in_marketplace", true)
       .neq("slug", params.slug)
@@ -107,6 +108,8 @@ function ProductDetail() {
   const { product, relatedProducts } = Route.useLoaderData();
   const country = useCountry();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const { add, has } = useCart();
+  const inCart = has(product.slug);
 
   const priceLabel = formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country);
   // Plain one-off purchase (not free, not application-gated) is the only path
@@ -186,13 +189,27 @@ function ProductDetail() {
                 <div className="text-[15px] font-semibold text-[#000]">{priceLabel} · instant download</div>
               </div>
             </div>
-            <button
-              onClick={() => setCheckoutOpen(true)}
-              className="h-11 w-full sm:w-auto rounded-lg px-6 text-[13px] font-semibold text-white transition-colors"
-              style={{ backgroundColor: "sienna" }}
-            >
-              Buy now →
-            </button>
+            <div className="flex w-full sm:w-auto gap-2">
+              <button
+                onClick={() => {
+                  if (!inCart) {
+                    add(product.slug);
+                    toast.success("Added to cart");
+                  }
+                }}
+                className="h-11 flex-1 sm:flex-none rounded-lg border-2 px-5 text-[13px] font-semibold transition-colors"
+                style={{ borderColor: "sienna", color: inCart ? "#666" : "sienna" }}
+              >
+                {inCart ? "In cart ✓" : "Add to Cart"}
+              </button>
+              <button
+                onClick={() => setCheckoutOpen(true)}
+                className="h-11 flex-1 sm:flex-none rounded-lg px-6 text-[13px] font-semibold text-white transition-colors"
+                style={{ backgroundColor: "sienna" }}
+              >
+                Buy now →
+              </button>
+            </div>
           </div>
         ) : (
           <BuyBlock product={product} priceLabel={priceLabel} />
@@ -278,37 +295,51 @@ function ProductDetail() {
               You might also like
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {relatedProducts.map((r) => (
-                <Link
-                  key={r.slug}
-                  to="/products/$slug"
-                  params={{ slug: r.slug }}
-                  className="group flex flex-col overflow-hidden rounded-[10px] bg-white"
-                >
-                  <div className="w-full overflow-hidden bg-[#f8f6f3] p-2" style={{ aspectRatio: "3/4" }}>
-                    {r.cover_image_url ? (
-                      <img
-                        src={r.cover_image_url}
-                        alt={r.title}
-                        loading="lazy"
-                        className="h-full w-full object-contain"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">
-                        No image
+              {relatedProducts.map((r) => {
+                const rCompare =
+                  r.compare_at_price_cents != null
+                    ? formatPrice(r.compare_at_price_cents, r.currency, false, undefined, country)
+                    : null;
+                return (
+                  <Link
+                    key={r.slug}
+                    to="/products/$slug"
+                    params={{ slug: r.slug }}
+                    className="group flex flex-col overflow-hidden rounded-[10px] bg-white"
+                  >
+                    <div className="relative w-full overflow-hidden bg-[#f8f6f3] p-2" style={{ aspectRatio: "3/4" }}>
+                      {rCompare && (
+                        <span className="absolute left-2 top-2 z-10 rounded-full bg-[#111] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
+                          Sale
+                        </span>
+                      )}
+                      {r.cover_image_url ? (
+                        <img
+                          src={r.cover_image_url}
+                          alt={r.title}
+                          loading="lazy"
+                          className="h-full w-full object-contain"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <p className="line-clamp-2 text-xs font-medium leading-snug text-[#000]">
+                        {r.title}
+                      </p>
+                      <div className="mt-1.5 flex items-baseline gap-1.5">
+                        <span className="text-xs font-semibold text-[#000]">
+                          {formatPrice(r.price_cents, r.currency, r.is_free, r.slug, country)}
+                        </span>
+                        {rCompare && <span className="text-[11px] text-[#999] line-through">{rCompare}</span>}
                       </div>
-                    )}
-                  </div>
-                  <div className="p-3">
-                    <p className="line-clamp-2 text-xs font-medium leading-snug text-[#000]">
-                      {r.title}
-                    </p>
-                    <p className="mt-1.5 text-xs font-semibold text-[#000]">
-                      {formatPrice(r.price_cents, r.currency, r.is_free, r.slug, country)}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>

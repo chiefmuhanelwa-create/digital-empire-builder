@@ -1,11 +1,92 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Search, ShoppingBag, User } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/lib/cart";
+import { useCurrencyOverride } from "@/lib/currency";
 
 const navLink =
   "text-[15px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-1 py-1";
 const navActive = { className: "text-[var(--foreground)] font-semibold" };
+
+// Mirrors the real store's top-left "ZAR ▼" switcher — lets a shopper
+// manually pick their billing currency instead of trusting geo-detection
+// (useful for anyone browsing on a VPN, or who just prefers USD pricing).
+function CurrencySwitcher() {
+  const { override, setOverride } = useCurrencyOverride();
+  const [open, setOpen] = useState(false);
+  const label = override ?? "ZAR";
+
+  return (
+    <div className="relative shrink-0">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        className="flex items-center gap-1 text-[13px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors"
+      >
+        {label} <span className="text-[10px]">▼</span>
+      </button>
+      {open && (
+        <div className="absolute left-0 top-full z-50 mt-2 w-32 rounded-md border border-[var(--border)] bg-white py-1 shadow-lg">
+          {(["ZAR", "USD"] as const).map((c) => (
+            <button
+              key={c}
+              onMouseDown={() => {
+                setOverride(c);
+                setOpen(false);
+              }}
+              className={`block w-full px-3 py-1.5 text-left text-[13px] hover:bg-[#f5f5f5] ${
+                label === c ? "font-semibold text-[#000]" : "text-[#666]"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HeaderIcons() {
+  const { user } = useAuth();
+  const { slugs } = useCart();
+  return (
+    <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+      <Link
+        to={user ? "/dashboard" : "/login"}
+        aria-label={user ? "My account" : "Sign in"}
+        className="text-[var(--foreground)] opacity-80 hover:opacity-100 transition-opacity"
+      >
+        <User className="size-[18px]" />
+      </Link>
+      <Link
+        to="/search"
+        aria-label="Search products"
+        className="text-[var(--foreground)] opacity-80 hover:opacity-100 transition-opacity"
+      >
+        <Search className="size-[18px]" />
+      </Link>
+      <Link
+        to="/cart"
+        aria-label="Cart"
+        className="relative text-[var(--foreground)] opacity-80 hover:opacity-100 transition-opacity"
+      >
+        <ShoppingBag className="size-[18px]" />
+        {slugs.length > 0 && (
+          <span
+            className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white"
+            style={{ backgroundColor: "sienna" }}
+          >
+            {slugs.length}
+          </span>
+        )}
+      </Link>
+    </div>
+  );
+}
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
@@ -23,18 +104,20 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <CurrencySwitcher />
+
         <Link
           to="/"
-          className="font-display text-base sm:text-lg font-extrabold tracking-[0.18em] uppercase text-[var(--foreground)] shrink-0"
+          className="font-display text-base sm:text-lg font-extrabold tracking-[0.18em] uppercase text-[var(--foreground)] shrink-0 absolute left-1/2 -translate-x-1/2"
         >
           CHKPLT
         </Link>
 
         {/* Members see workspace nav. The public funnel stays distraction-free —
             no About/Contact/etc up top; those live small in the footer. */}
-        {user ? (
-          <nav className="flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar">
+        {user && (
+          <nav className="hidden md:flex items-center gap-5 sm:gap-6 overflow-x-auto no-scrollbar ml-24">
             <Link to="/dashboard" className={navLink} activeProps={navActive}>My workspace</Link>
             <Link to="/products" className={navLink} activeProps={navActive}>Products</Link>
             <Link to="/tools" className={navLink} activeProps={navActive}>Free Tools</Link>
@@ -44,38 +127,18 @@ export function SiteHeader() {
               </Link>
             )}
           </nav>
-        ) : (
-          <div className="flex-1" />
         )}
+        {!user && <div className="flex-1" />}
 
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {user ? (
-            <>
-              <button
-                onClick={() => signOut()}
-                className="rounded-full border-2 border-[var(--border-mid)] text-[14px] font-semibold text-[var(--text-dim)] hover:border-[var(--border-hover)] hover:text-[var(--foreground)] transition-colors px-4 py-2 cursor-pointer"
-              >
-                Sign out
-              </button>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="hidden sm:block text-[15px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-3 py-2"
-              >
-                Sign in
-              </Link>
-              {/* CHKPLT is a marketplace now (2026-07-28) — no single "the Kit" to
-                  route to. The old ?buy=1 checkout modal was removed with the
-                  Foundation Kit funnel; this now points at the shop itself. */}
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--nx-gold)] px-5 py-2.5 text-[14px] font-bold text-[#0F172A] shadow-sm hover:bg-[var(--nx-gold-deep)] hover:-translate-y-px transition-all"
-              >
-                Shop Now
-              </Link>
-            </>
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <HeaderIcons />
+          {user && (
+            <button
+              onClick={() => signOut()}
+              className="hidden sm:block rounded-full border-2 border-[var(--border-mid)] text-[13px] font-semibold text-[var(--text-dim)] hover:border-[var(--border-hover)] hover:text-[var(--foreground)] transition-colors px-3.5 py-1.5 cursor-pointer"
+            >
+              Sign out
+            </button>
           )}
         </div>
       </div>

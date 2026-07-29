@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ProfileHero } from "@/components/ProfileHero";
+import { ProductQuickView } from "@/components/ProductQuickView";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice, GARDENS, GARDEN_ORDER, type Garden } from "@/lib/gardens";
 import { useCountry } from "@/lib/currency";
@@ -43,6 +44,7 @@ export function MarketplaceHome({
   const country = useCountry();
   const [search, setSearch] = useState(initialSearch);
   const [activeGarden, setActiveGarden] = useState<Garden | "all">("all");
+  const [quickView, setQuickView] = useState<Tables<"products"> | null>(null);
   const { data: products, isLoading } = useQuery({
     queryKey: MARKETPLACE_QUERY_KEY,
     queryFn: fetchMarketplaceProducts,
@@ -123,6 +125,77 @@ export function MarketplaceHome({
               p.compare_at_price_cents != null
                 ? formatPrice(p.compare_at_price_cents, p.currency, false, undefined, country)
                 : null;
+            const onSale = compareLabel != null;
+            // Free lead magnets have no cart line to add — go straight to the
+            // page. Everything else opens the quick-view popup first, same as
+            // the real store's product-tile click behavior.
+            const canQuickView = !p.is_free;
+
+            const media = (
+              <div className="relative w-full overflow-hidden bg-[#f8f6f3] p-2" style={{ aspectRatio: "3/4" }}>
+                {onSale && (
+                  <span className="absolute left-2 top-2 z-10 rounded-full bg-[#111] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
+                    Sale
+                  </span>
+                )}
+                {p.cover_image_url ? (
+                  <img
+                    src={p.cover_image_url}
+                    alt={p.title}
+                    loading="lazy"
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">
+                    No image
+                  </div>
+                )}
+              </div>
+            );
+
+            const body = (
+              <div className="flex flex-1 flex-col p-3">
+                <p
+                  className="mb-1.5 flex-1 text-xs font-medium leading-snug text-[#000]"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
+                >
+                  {p.title}
+                </p>
+                <div className="mb-2.5 mt-auto flex flex-wrap items-baseline gap-1">
+                  <span className="text-[13px] font-semibold text-[#000]">{priceLabel}</span>
+                  {compareLabel && (
+                    <span className="text-[11px] text-[#999] line-through">{compareLabel}</span>
+                  )}
+                  {p.requires_application && (
+                    <span className="text-[10px] text-[#999]">/ application</span>
+                  )}
+                </div>
+                <span
+                  className="flex h-11 w-full shrink-0 items-center justify-center rounded-[6px] text-[11px] font-semibold uppercase tracking-[0.3px] text-white transition-colors"
+                  style={{ backgroundColor: "sienna" }}
+                >
+                  {canQuickView ? "Quick View" : "View Details"}
+                </span>
+              </div>
+            );
+
+            if (canQuickView) {
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setQuickView(p)}
+                  className="flex flex-col overflow-hidden rounded-[10px] bg-white text-left"
+                >
+                  {media}
+                  {body}
+                </button>
+              );
+            }
             return (
               <Link
                 key={p.id}
@@ -130,48 +203,8 @@ export function MarketplaceHome({
                 params={{ slug: p.slug }}
                 className="flex flex-col overflow-hidden rounded-[10px] bg-white"
               >
-                <div className="w-full overflow-hidden bg-[#f8f6f3] p-2" style={{ aspectRatio: "3/4" }}>
-                  {p.cover_image_url ? (
-                    <img
-                      src={p.cover_image_url}
-                      alt={p.title}
-                      loading="lazy"
-                      className="h-full w-full object-contain"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">
-                      No image
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-1 flex-col p-3">
-                  <p
-                    className="mb-1.5 flex-1 text-xs font-medium leading-snug text-[#000]"
-                    style={{
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {p.title}
-                  </p>
-                  <div className="mb-2.5 mt-auto flex flex-wrap items-baseline gap-1">
-                    <span className="text-[13px] font-semibold text-[#000]">{priceLabel}</span>
-                    {compareLabel && (
-                      <span className="text-[11px] text-[#999] line-through">{compareLabel}</span>
-                    )}
-                    {p.requires_application && (
-                      <span className="text-[10px] text-[#999]">/ application</span>
-                    )}
-                  </div>
-                  <span
-                    className="flex h-11 w-full shrink-0 items-center justify-center rounded-[6px] text-[11px] font-semibold uppercase tracking-[0.3px] text-white transition-colors"
-                    style={{ backgroundColor: "sienna" }}
-                  >
-                    View Details
-                  </span>
-                </div>
+                {media}
+                {body}
               </Link>
             );
           })}
@@ -183,6 +216,8 @@ export function MarketplaceHome({
           )}
         </div>
       </section>
+
+      {quickView && <ProductQuickView product={quickView} onClose={() => setQuickView(null)} />}
     </>
   );
 }
