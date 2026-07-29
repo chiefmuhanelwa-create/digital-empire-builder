@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { fulfillPaidOrder, type FulfillableOrder } from "@/lib/order-fulfillment";
+import { reportError } from "@/lib/error-logger";
 
 async function handleChargeSuccess(payload: any) {
   const dataObj = payload?.data ?? {};
@@ -199,6 +200,11 @@ export const Route = createFileRoute("/api/public/paystack-webhook")({
           }
         } catch (err: any) {
           console.error("[paystack-webhook] handler error", err);
+          await reportError(err, {
+            endpoint: "paystack-webhook",
+            severity: "critical",
+            meta: { event: payload?.event, reference: payload?.data?.reference },
+          });
           return new Response("Handler error", { status: 500 });
         }
 

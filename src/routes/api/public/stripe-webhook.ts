@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Stripe from "stripe";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { fulfillPaidOrder, type FulfillableOrder } from "@/lib/order-fulfillment";
+import { reportError } from "@/lib/error-logger";
 
 // Cloudflare Workers: the SDK must use the fetch HTTP client, and signature
 // verification must use the ASYNC verifier backed by Web Crypto (SubtleCrypto).
@@ -131,6 +132,11 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
           }
         } catch (err) {
           console.error("[stripe-webhook] handler error", err);
+          await reportError(err, {
+            endpoint: "stripe-webhook",
+            severity: "critical",
+            meta: { eventType: event?.type, eventId: event?.id },
+          });
           return new Response("Handler error", { status: 500 });
         }
 

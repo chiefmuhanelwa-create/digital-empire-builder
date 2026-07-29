@@ -105,11 +105,17 @@ export default {
     if (cron === "10 4 * * *") {
       ctx.waitUntil(
         (async () => {
+          const { reportError } = await import("./lib/error-logger");
           try {
             const { syncFxRates } = await import("./lib/fx-sync");
-            console.log("[fx-sync]", JSON.stringify(await syncFxRates()));
+            const result = await syncFxRates();
+            console.log("[fx-sync]", JSON.stringify(result));
+            if (!result.ok) {
+              await reportError(new Error(result.error), { endpoint: "cron:fx-sync", severity: "critical" });
+            }
           } catch (error) {
             console.error("[fx-sync] failed", error);
+            await reportError(error, { endpoint: "cron:fx-sync", severity: "critical" });
           }
         })(),
       );
@@ -120,11 +126,17 @@ export default {
     // its own public hostname; that self-request returns Cloudflare 522.)
     ctx.waitUntil(
       (async () => {
+        const { reportError } = await import("./lib/error-logger");
         try {
           const { drainEmailQueues } = await import("./lib/email-queue");
-          console.log("[email-drain]", JSON.stringify(await drainEmailQueues()));
+          const result = await drainEmailQueues();
+          console.log("[email-drain]", JSON.stringify(result));
+          if (!result.ok) {
+            await reportError(new Error(result.error), { endpoint: "cron:email-drain", severity: "critical" });
+          }
         } catch (error) {
           console.error("[email-drain] failed", error);
+          await reportError(error, { endpoint: "cron:email-drain", severity: "critical" });
         }
       })(),
     );
