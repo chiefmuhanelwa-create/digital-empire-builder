@@ -66,12 +66,26 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   return brandedErrorResponse();
 }
 
+// SSR page responses have no explicit Cache-Control, so browsers fall back
+// to heuristic caching on repeat visits — a real product/content edit can
+// look "not deployed" when it's actually just a stale local copy. Static
+// assets (JS/CSS/images) are served by Cloudflare's assets binding before
+// this handler runs, so this only touches actual page HTML.
+function withNoCacheForHtml(response: Response): Response {
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("text/html")) return response;
+  const headers = new Headers(response.headers);
+  headers.set("Cache-Control", "no-cache, must-revalidate");
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return withNoCacheForHtml(normalized);
     } catch (error) {
       console.error(error);
       return brandedErrorResponse();
