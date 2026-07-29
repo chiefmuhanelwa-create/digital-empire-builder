@@ -8,7 +8,7 @@
 > here the same as an untested code path: not done until it's written down.
 >
 > Last verified against the live repo: 2026-07-29 (63 migrations, cart/quick-view/header
-> rebuild + Tools Hub Phase 1 just shipped).
+> rebuild + Tools Hub Phase 1/2 — back-nav, mobile fixes, real AI payment gates — just shipped).
 
 ---
 
@@ -259,6 +259,16 @@ counterparts (RPCs: `enqueue_email`, `read_email_batch`, `delete_email`, `move_t
 - **`src/components/admin-shell.tsx`, `member-shell.tsx`**: layout wrappers for
   `/admin/*` and `_authenticated/*` respectively.
 - **UI kit**: `src/components/ui/` — shadcn/ui + Radix primitives, Tailwind 4.
+- **`src/components/BackNav.tsx`**: the one reusable back-navigation link (icon + label)
+  used across every page that would otherwise be a dead end — added store-wide 2026-07-29.
+- **Free-then-paid AI tool gate pattern** (Hook Generator, Offer Builder): resolve access
+  by EMAIL (not login session, since both tools work without an account) — count prior
+  real generations for that email from the tool's own capture table
+  (`tool_submissions`/`offer_builder_leads`), and once over a small free limit, check
+  whether that email has a `paid` order whose `metadata.product_slug` is in
+  `KIT_OWNER_SLUGS` (exported from `tool-ai.functions.ts`). Under the limit or Kit-owned →
+  generate normally; otherwise the server fn returns `{ locked: true }` (not a thrown
+  error) so the route renders a real upsell card instead of a toast.
 - **`src/lib/tools.ts` / `src/routes/tools.tsx`**: the Tools Hub (`/tools`) — a single
   `TOOLS[]` array grouped into 3 founder-named categories (Brand Deals, Creator Finance,
   Content Creation), each tool tagged `tier: "free" | "premium"`. Most are native CHKPLT
@@ -299,7 +309,8 @@ browser for testing).
 | `account.functions.ts` | Profile, password, delete account |
 | `contacts.functions.ts`, `contacts-import.functions.ts`, `contact.functions.ts` | Contact management + CSV import + public contact form |
 | `income-tracker.functions.ts`, `niche-clarity.functions.ts`, `offer-builder.functions.ts`, `rate-card.functions.ts`, `media-kit.functions.ts`, `starterkit.functions.ts`, `aligned.functions.ts`, `inner-circle.functions.ts`, `community.functions.ts` | Per-tool/per-program server logic — mostly `requireSupabaseAuth`-gated CRUD or public email-capture-then-deliver patterns |
-| `hook-generator.functions.ts` | `generateHooks` — public, Turnstile-gated, calls Claude (`getAnthropic()`/`COACH_MODEL`, same pattern as `tool-ai.functions.ts`) to write 5 real hooks per request (not templates); logs every generation to `tool_submissions` |
+| `hook-generator.functions.ts` | `generateHooks` — public, Turnstile-gated, calls Claude (`getAnthropic()`/`COACH_MODEL`) to write 5 real hooks per request; free-then-paid gated (3/email via `tool_submissions` count, then requires Foundation Kit ownership resolved by email against `orders`), sends a confirmation email, logs to `tool_submissions` |
+| `offer-builder.functions.ts` | `buildOffer` — public, Turnstile-gated, calls Claude (`OFFER_MODEL`, Opus-tier) for a full structured offer; same free-then-paid gate as Hook Generator (2/email via `offer_builder_leads` count) — this gate was ADDED 2026-07-29 after an audit found the function had no usage limit at all despite the catalog claiming "Foundation Kit owners only"; sends a confirmation email |
 | `turnstile.functions.ts` / `turnstile.server.ts` | Site-key fetch + server-side token verification |
 | `geo.functions.ts` | `getViewerCountry` — reads Cloudflare's `CF-IPCountry` |
 | `tool-ai.functions.ts` | AI-assisted tool logic (Anthropic SDK) for the free tools |
