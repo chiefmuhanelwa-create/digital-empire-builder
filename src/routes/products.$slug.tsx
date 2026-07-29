@@ -123,11 +123,11 @@ function ProductDetail() {
         </Link>
 
         {product.cover_image_url && (
-          <div className="mt-6 aspect-square w-full overflow-hidden rounded-xl bg-[#f8f6f3] p-6 flex items-center justify-center">
+          <div className="mt-6 w-full max-w-[280px] mx-auto overflow-hidden rounded-xl bg-[#f8f6f3] p-3" style={{ aspectRatio: "3/4" }}>
             <img
               src={product.cover_image_url}
               alt={product.title}
-              className="max-h-full w-auto object-contain"
+              className="h-full w-full object-contain"
               loading="lazy"
             />
           </div>
@@ -285,13 +285,13 @@ function ProductDetail() {
                   params={{ slug: r.slug }}
                   className="group flex flex-col overflow-hidden rounded-[10px] bg-white"
                 >
-                  <div className="aspect-square w-full overflow-hidden bg-[#f0f0f0]">
+                  <div className="w-full overflow-hidden bg-[#f8f6f3] p-2" style={{ aspectRatio: "3/4" }}>
                     {r.cover_image_url ? (
                       <img
                         src={r.cover_image_url}
                         alt={r.title}
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">

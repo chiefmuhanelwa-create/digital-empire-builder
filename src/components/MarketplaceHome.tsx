@@ -130,13 +130,13 @@ export function MarketplaceHome({
                 params={{ slug: p.slug }}
                 className="flex flex-col overflow-hidden rounded-[10px] bg-white"
               >
-                <div className="aspect-square w-full overflow-hidden bg-[#f0f0f0]">
+                <div className="w-full overflow-hidden bg-[#f8f6f3] p-2" style={{ aspectRatio: "3/4" }}>
                   {p.cover_image_url ? (
                     <img
                       src={p.cover_image_url}
                       alt={p.title}
                       loading="lazy"
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xs text-[#999]">
