@@ -4,6 +4,14 @@ The living record of what was discovered, what broke, what was corrected, and wh
 
 ---
 
+## 2026-07-29 (yet even later) — a real phone screenshot found a 2nd/3rd leaked internal migration note in live product descriptions
+
+- **Founder sent an actual screenshot from their own phone** of "The Content Creator Starter System"'s live product page showing raw internal migration commentary as its description: `"(Source PDF not found anywhere accessible to this migration — needs sourcing before publish. NAME COLLISION FLAG: this is NOT the same product as the already-live 'creator-starter-system'...)"`. This is the SAME failure pattern as `creator-starter-bundle` fixed earlier this session (20260729210000) — proof it wasn't a one-off, it's systemic to how the original bulk-import migration wrote `description` fields.
+- **Before fixing just the reported one, swept every product's `description`/`long_description`/`tagline`/`format`/`target_audience` for the same pattern** (`migration`, `flag`, `TODO`, `not found`, `sourcing`, `collision`, `overlap`, `confirm`, `placeholder`, `draft`, `TBD`, etc.) — found ONE more live leak: `sars-creator-income` (the exact product the SARS Calculator's upsell CTA points at, fixed earlier this session) had an identical leaked note referencing a "tax-creator-bundle" overlap — a product slug already confirmed this session to not exist in the DB at all, meaning the note's own concern was moot. Fixed both using their real `long_description`/`benefits` (already correct) as the source for a proper short `description` — re-ran the same sweep afterward across all 22 products, zero hits. **Lesson: when a leaked-internal-note bug is found once, grep the WHOLE catalog for the same authoring pattern immediately — don't wait for the founder to find each instance one screenshot at a time.**
+- Confirmed via direct curl (both meta description tag and body text) that both fixes are live — no rebuild/redeploy needed since this was a pure Supabase data migration, not a code change.
+
+---
+
 ## 2026-07-29 (even later still) — site-wide back-nav, mobile audit, broken-link fixes, and a real payment-gating bug found in Offer Builder
 
 - **Found a genuine, live security/cost bug via a routine audit, not a bug report:** `offer-builder.functions.ts`'s `buildOffer` had ZERO usage gate — no auth, no rate limit, no ownership check — despite `src/lib/tools.ts` and the page copy already claiming "Foundation Kit owners only." Anyone could call the Opus-tier model (the most expensive available) unlimited times for free. Confirmed by reading the actual handler, not by trusting the catalog's claim. **Lesson: a UI/copy claim ("gated," "premium," "owners only") is not evidence the backend actually enforces it — always read the server function itself.**
