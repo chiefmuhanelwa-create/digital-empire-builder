@@ -10,6 +10,12 @@ After every work session — without being asked — extract ALL teachable conte
 1. `~/Desktop/VS code/nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md` — any framework, SOP, lesson, or practical step a Contentpreneur needs to do this themselves. 6-tag format: Stage · MS/TS/SS · Framework · Lesson · Steps(SOP) · Proof.
 2. Project `Learnings.md` — raw technical receipts (what broke, what worked).
 3. Memory system — new preferences, feedback, project facts.
+4. **`docs/ARCHITECTURE.md`** — the master replication blueprint (stack, env vars,
+   routes, schema, integrations, deploy process, known gaps). Any session that adds a
+   route, a table/migration, an integration, a cron job, or changes the deploy process
+   updates this file in the SAME session — it is kept live, not written once. This is
+   the single file that must be enough (with `.env.example` + `supabase/migrations/`)
+   to rebuild chkplt.com from zero if it ever had to be duplicated.
 
 **Never wait to be asked. "Have you recorded the teachable?" should never need to be said.**
 
@@ -149,170 +155,37 @@ Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 
 ## This Project — Technical Reference
 
+**Full architecture, routing map, database schema, payment flow, deployment steps, and
+a from-scratch duplication runbook all live in one place: `docs/ARCHITECTURE.md`. Read
+it before any structural work, and update it in the same session as any change to
+routes/schema/integrations/cron/deploy — see the mandatory end-of-session rule above.**
+This section only holds the durable behavioral rules that don't belong in a reference
+doc.
+
 ### Commands
 
 ```bash
-bun install          # Install dependencies (use BUN, not npm or yarn)
-bun dev              # Local dev server (port 3000)
-bun run build        # Production build for Cloudflare Workers
-bunx wrangler deploy # Deploy to Cloudflare Workers (requires all env vars set)
-bunx tsc --noEmit    # Type-check only — run BEFORE and AFTER every code change
+npm install          # this repo currently has BOTH bun.lock and package-lock.json —
+npm run dev           # confirm which the team is actually using before assuming; the
+npx wrangler deploy    # commands here work with either since node_modules is what matters
+npx tsc --noEmit      # Type-check — run BEFORE and AFTER every code change
 ```
-
-### Architecture
-
-**Stack:** TanStack Start v1 (SSR) + React 19 + Vite 7 — **NOT Next.js**
-**Hosting:** Cloudflare Workers (`wrangler.jsonc` configured)
-**Database:** Supabase PostgreSQL (14 tables, RLS on all, 22 migrations)
-**Auth:** Supabase magic-link + password. First user auto-becomes admin via DB trigger.
-**Payments:** Paystack (ZAR, SA/Africa) + Stripe (USD/GBP/EUR, international) — dual-rail
-**Email transactional:** Lovable Cloud via pgmq + pg_cron queues, 7 React-Email templates
-**Email marketing:** MailerLite (sequences, segments, broadcasts)
-**CAPTCHA:** Cloudflare Turnstile (required on all public forms)
-**Package manager:** Bun (not npm, not yarn, not pnpm)
-
-### Routing (TanStack file-based — `src/routes/`)
-
-```
-Public routes:
-  /                         Landing page (John 21 story, transformation, proof)
-  /apply                    23-point Contentpreneur qualification diagnostic
-  /login, /signup           Magic-link + password auth
-  /products                 Catalog (published products only)
-  /products/$slug           Single product detail
-  /products/garden/$garden  Category filter (deshe/esev/etz_pri/devarim)
-  /niche-clarity            Free lead magnet tool
-  /about, /contact, /terms, /privacy, /refund-policy
-
-Authenticated (_authenticated/ prefix):
-  /dashboard                Student progress + next steps
-  /account                  Profile + password management
-  /learn                    My courses (LMS access list)
-  /learn/$slug              Course modules + lessons
-  /learn/$slug/$lessonSlug  Single lesson
-
-Admin (admin role required via has_role() RPC):
-  /admin/products           Manage product catalog
-  /admin/curriculum/$slug   Build course curriculum (modules + lessons)
-  /admin/contacts           View + manage contacts
-  /admin/import-contacts    CSV import
-  /admin/ledger             Transaction audit log
-  /admin/incidents          Error log
-
-Webhooks (no auth — HMAC-validated):
-  /api/public/paystack-webhook  Paystack payment events
-  /api/public/stripe-webhook    Stripe payment events (not yet built)
-```
-
-### Key Files
-
-```
-docs/CURRICULUM.md          LMS curriculum blueprint — 30 lessons, 7 stages (resolves BLOCKER-002)
-docs/STORY-BANK.md          11 verified proof stories with figures, platform scripts, product mapping
-docs/SALES-PIPELINE.md      12-step Contentpreneur sales SOP with discovery call scripts
-docs/BLOCKERS.md            Current launch blockers in priority order
-docs/PAYMENTS.md            Dual-rail Paystack + Stripe implementation plan
-docs/PRODUCTS.md            Product catalog and build status
-
-src/lib/                    Server functions (business logic)
-  products.functions.ts     — admin CRUD + public catalog
-  checkout.functions.ts     — Paystack checkout init
-  lms.functions.ts          — course access, modules, progress
-  apply.functions.ts        — 23-point form submission
-  qualification.functions.ts — check if email is qualified
-  contacts.functions.ts     — contact management
-  account.functions.ts      — profile + password + delete
-
-src/routes/                 File-based routing (TanStack)
-src/integrations/supabase/  Supabase client (browser + admin) + auth
-src/lib/email-templates/    7 React-Email templates (magic-link, order-receipt, etc.)
-src/lib/gardens.ts          Product category enum
-src/utils/evaluator.ts      23-point qualification scoring algorithm
-
-supabase/migrations/        22 SQL migration files — NEVER edit, always create new
-supabase/config.toml        Supabase project config
-
-wrangler.jsonc              Cloudflare Workers config
-vite.config.ts              Vite + TanStack + Cloudflare plugin
-components.json             shadcn/ui config
-```
-
-### Database (14 Tables)
-
-| Table | Purpose |
-|---|---|
-| `profiles` | User metadata (name, avatar) |
-| `user_roles` | Auth roles (admin / student) |
-| `products` | Product catalog (slug, title, price_cents, status, garden) |
-| `orders` | Purchase records (provider: paystack \| stripe, status, total_cents) |
-| `order_items` | Line items per order |
-| `payments` | Payment events (provider_reference, status, gateway_response) |
-| `product_grants` | LMS access (user_id + product_id = access unlocked) |
-| `modules` | Course modules (title, sort_order) |
-| `lessons` | Lesson content (HTML, sort_order) |
-| `lesson_progress` | Completion tracking (completed_at) |
-| `client_stewardship_applications` | 23-point diagnostic responses |
-| `email_send_log` | Transactional email audit trail |
-| `email_send_state` | Email rate limit + queue config (singleton) |
-| pgmq queues (4) | auth_emails, transactional_emails + dead-letter queues |
-
-**Product gardens (categories):**
-- `deshe` — Foundation (free + entry level)
-- `esev` — Intermediate
-- `etz_pri` — Premium (requires application)
-- `devarim` — Advanced / specialized
 
 ### Non-Negotiable Rules
 
-1. **Bun only** — `bun add`, `bun remove`, `bunx`. Never `npm install` or `yarn add`.
-2. **TanStack, not Next.js** — No `app/` directory. No `use server`. No `getServerSideProps`. No `useRouter` from `next/navigation`.
-3. **Always type-check** — `bunx tsc --noEmit` before AND after every code change.
-4. **HMAC on all webhooks** — Both Paystack and Stripe webhooks must verify signatures before processing.
-5. **Turnstile everywhere public** — `/apply`, `/signup`, `/login`, `/contact`, checkout init all require Cloudflare Turnstile validation.
-6. **Never edit migrations** — `supabase/migrations/` files are immutable. Always create a new `.sql` file.
-7. **SARS 25% reserve** — Every payment must store `tax_reserve_cents = ROUND(total_cents * 0.25)`. This field is not yet in schema — add via new migration.
-8. **No Anthropic API here** — AI generation lives in `full-content-system`. This project delivers products, not generates content.
-9. **No hardcoded prices** — Always read `price_cents` from DB. Never write `18000 * 100` in code.
-10. **Proof numbers only** — Never fabricate story outcomes. Use the verified table above.
+1. **TanStack, not Next.js** — No `app/` directory. No `use server`. No `getServerSideProps`. No `useRouter` from `next/navigation`.
+2. **Always type-check** — `tsc --noEmit` before AND after every code change.
+3. **HMAC on all webhooks** — Both Paystack and Stripe webhooks must verify signatures before processing.
+4. **Turnstile everywhere public** — `/apply`, `/signup`, `/login`, `/contact`, checkout init all require Cloudflare Turnstile validation.
+5. **Never edit migrations** — `supabase/migrations/` files are immutable. Always create a new `.sql` file.
+6. **No Anthropic API here** — AI generation lives in `full-content-system`. This project delivers products, not generates content.
+7. **No hardcoded prices** — Always read `price_cents` from DB. Never write `18000 * 100` in code.
+8. **Proof numbers only** — Never fabricate story outcomes. Use the verified table above.
+9. **Products/prices are founder-locked** — do not let automation (FX-sync cron, migrations, imports) silently rewrite a manually-set price or mockup. See `docs/ARCHITECTURE.md` §9 for the current lock mechanism.
 
-### Payment Architecture — Dual Rail
-
-```
-ZAR (SA + Africa)          → Paystack
-  Secret: PAYSTACK_SECRET_KEY
-  Public: VITE_PAYSTACK_PUBLIC_KEY
-  Webhook: /api/public/paystack-webhook (verify x-paystack-signature HMAC)
-  Orders: provider = 'paystack'
-
-USD/GBP/EUR/AUD (global)   → Stripe
-  Secret: STRIPE_SECRET_KEY
-  Public: VITE_STRIPE_PUBLISHABLE_KEY
-  Webhook: /api/public/stripe-webhook (verify stripe-signature, STRIPE_WEBHOOK_SECRET)
-  Orders: provider = 'stripe'
-
-Currency routing:
-  Cloudflare CF-IPCountry header → ZA/NG/GH/KE/UG/TZ → Paystack
-  All other countries → Stripe
-  User can override with manual currency picker on checkout
-```
-
-**Pending migrations needed for dual-rail:**
-1. `orders.provider` — add 'stripe' to enum (currently only 'paystack' in code)
-2. `products.price_usd_cents` — new column for international pricing
-3. `orders.tax_reserve_cents` — SARS 25% reserve per order
-
-### Critical Blockers (Fix Before Launch)
-
-See `docs/BLOCKERS.md` for full detail and fix instructions.
-
-| # | Blocker | Impact |
-|---|---------|--------|
-| 🔴 1 | Email domain `notify.chkplt.com` drifted | ALL email broken (login, signup, receipts) |
-| 🔴 2 | Premium programmes have 0 curriculum | User pays R18K, gets empty LMS |
-| 🔴 3 | No qualified users in diagnostic | Premium checkout gate rejects everyone |
-| 🟡 4 | `is_published = false` in DB | Platform invisible to public |
-| 🟡 5 | Stripe not built | International market locked out |
-| 🟡 6 | SARS reserve column missing | Compliance risk |
+See `docs/ARCHITECTURE.md` §13 "Known Gaps" for the current, kept-live list of open
+issues — that section replaces what used to be a separate static blockers list here,
+specifically so it can't drift out of sync with reality the way this section once did.
 
 ### System Memory
 
