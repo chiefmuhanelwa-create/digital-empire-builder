@@ -179,4 +179,4 @@ Update the CHKPLT services (digital-empire-builder) to reflect the machine:
 
 ---
 
-*Sources: this session's build log + `make-question-cards-poster`, `no-chill-performance-tracker.md`, `whatsapp-sales-sop.md`, `paystack-*`, `email-funnel-insights`, full-content-system, knowledge-base, digital-empire-builder. Teachable assets to be mirrored into `nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md` (6-field tags).*
+*Sources: this session's build log + `make-question-cards-poster`, `no-chill-performance-tracker.md`, `~/Desktop/VS code/automations/docs/whatsapp-sales-sop.md`, `paystack-*`, `email-funnel-insights`, full-content-system, knowledge-base, digital-empire-builder. Teachable assets to be mirrored into `nochill-knowledge-base/CALLED-EXPERT-CURRICULUM.md` (6-field tags).*

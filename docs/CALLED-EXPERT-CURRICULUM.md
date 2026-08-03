@@ -68,7 +68,7 @@
 ### M3 — Content & Posting Automation (Stages 3–4 · TS · 4E)
 - **Lesson:** Consistency isn't a personality, it's a system. The brand is built on the days you don't feel like it.
 - **Toolset:** Make.com + Dropbox queue (media) + Facebook Pages modules; embedded text bank + random index (no DB).
-- **Steps (SOP):** build a content bank → random-pick by time seed → post on a schedule → (media) move file to /Posted so none repeat. Pattern + gotchas in `docs/AUTOMATION-WAT.md`.
+- **Steps (SOP):** build a content bank → random-pick by time seed → post on a schedule → (media) move file to /Posted so none repeat. Pattern + gotchas in `~/Desktop/VS code/automations/docs/AUTOMATION-WAT-shopify.md`.
 - **Proof / lessons:** 4 live posters (meme, questions, quotes, paused reels). Comments > likes on debate questions → optimise for arguments. **Cadence discipline:** every-30-min × 2 pages is spam-risk; hourly + staggered is safer; watch FB flags. Make gotchas: SetVariable2 needs scope; no mod operator; `formatDate "X"` throws (see `~/.claude/... make-api-limitations`).
 
 ### M4 — Lead Generation (Stage 5 · SS · SEEDS Signal→Engagement)
@@ -151,7 +151,7 @@ When we build or discover ANYTHING teachable in any NOCHILL project:
 - **MS/TS/SS:** Skillset (qualify + close) × Mindset (never lead with price; confrontation is care)
 - **Framework:** 12-Step Sales Pipeline + SEEDS (Decision)
 - **Lesson:** Warm hook → ONE qualifying question → recommend the right product → close with urgency → follow up. Free bundle is the consolation, not the welcome. Don't hand-hold broke leads for an hour; qualify out fast.
-- **Steps (SOP):** the 6-step script in `shopify/docs/whatsapp-sales-sop.md`.
+- **Steps (SOP):** the 6-step script in `~/Desktop/VS code/automations/docs/whatsapp-sales-sop.md`.
 - **Proof:** Live sale (What to Post R149) closed via this exact flow.
 
 ## MODULE — DATA → FRAMEWORKS → WISDOM (the operator's loop)
