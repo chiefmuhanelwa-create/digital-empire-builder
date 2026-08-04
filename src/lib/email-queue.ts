@@ -34,13 +34,22 @@ async function moveToDlq(
   reason: string,
 ): Promise<void> {
   const payload = msg.message;
-  await supabase.from("email_send_log").insert({
-    message_id: payload.message_id,
-    template_name: (payload.label || queue) as string,
-    recipient_email: payload.to,
-    status: "dlq",
-    error_message: reason,
-  });
+  // Upsert, not insert: a "pending" row already exists from the original enqueue
+  // claim (email_send_log_message_id_uniq is a full unique index on message_id,
+  // not scoped to any status), so a plain insert here silently fails and leaves
+  // the log frozen on "pending" forever even though the message really did land
+  // in the DLQ. Confirmed live 2026-08-04: a receipt sent successfully but its
+  // log row never advanced past "pending" for exactly this reason.
+  await supabase.from("email_send_log").upsert(
+    {
+      message_id: payload.message_id,
+      template_name: (payload.label || queue) as string,
+      recipient_email: payload.to,
+      status: "dlq",
+      error_message: reason,
+    },
+    { onConflict: "message_id" },
+  );
   const { error } = await supabase.rpc("move_to_dlq", {
     source_queue: queue,
     dlq_name: `${queue}_dlq`,
@@ -168,12 +177,15 @@ export async function drainEmailQueues(): Promise<DrainResult> {
           err.status = (sendError as unknown as { statusCode?: number }).statusCode ?? 500;
           throw err;
         }
-        await supabase.from("email_send_log").insert({
-          message_id: payload.message_id,
-          template_name: payload.label || queue,
-          recipient_email: payload.to,
-          status: "sent",
-        });
+        await supabase.from("email_send_log").upsert(
+          {
+            message_id: payload.message_id,
+            template_name: payload.label || queue,
+            recipient_email: payload.to,
+            status: "sent",
+          },
+          { onConflict: "message_id" },
+        );
         await supabase.rpc("delete_email", { queue_name: queue, message_id: msg.msg_id });
         totalProcessed++;
       } catch (error) {
@@ -181,13 +193,16 @@ export async function drainEmailQueues(): Promise<DrainResult> {
         console.error("[email-queue] send failed", { queue, msg_id: msg.msg_id, error: errorMsg });
 
         if (isRateLimited(error)) {
-          await supabase.from("email_send_log").insert({
-            message_id: payload.message_id,
-            template_name: payload.label || queue,
-            recipient_email: payload.to,
-            status: "failed",
-            error_message: errorMsg.slice(0, 1000),
-          });
+          await supabase.from("email_send_log").upsert(
+            {
+              message_id: payload.message_id,
+              template_name: payload.label || queue,
+              recipient_email: payload.to,
+              status: "failed",
+              error_message: errorMsg.slice(0, 1000),
+            },
+            { onConflict: "message_id" },
+          );
           await supabase
             .from("email_send_state")
             .update({
@@ -201,13 +216,16 @@ export async function drainEmailQueues(): Promise<DrainResult> {
           await moveToDlq(supabase, queue, msg, errorMsg.slice(0, 1000));
           return { ok: true, processed: totalProcessed, stopped: "forbidden" };
         }
-        await supabase.from("email_send_log").insert({
-          message_id: payload.message_id,
-          template_name: payload.label || queue,
-          recipient_email: payload.to,
-          status: "failed",
-          error_message: errorMsg.slice(0, 1000),
-        });
+        await supabase.from("email_send_log").upsert(
+          {
+            message_id: payload.message_id,
+            template_name: payload.label || queue,
+            recipient_email: payload.to,
+            status: "failed",
+            error_message: errorMsg.slice(0, 1000),
+          },
+          { onConflict: "message_id" },
+        );
         if (typeof payload?.message_id === "string") {
           failedAttemptsByMessageId.set(payload.message_id, failedAttempts + 1);
         }
