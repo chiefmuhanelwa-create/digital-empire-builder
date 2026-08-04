@@ -47,7 +47,16 @@
     { "pattern": "contentpreneur.africa/contact*", "zone_name": "contentpreneur.africa" },
     { "pattern": "contentpreneur.africa/terms*", "zone_name": "contentpreneur.africa" },
     { "pattern": "contentpreneur.africa/privacy*", "zone_name": "contentpreneur.africa" },
-    { "pattern": "contentpreneur.africa/refund-policy*", "zone_name": "contentpreneur.africa" }
+    { "pattern": "contentpreneur.africa/refund-policy*", "zone_name": "contentpreneur.africa" },
+    // Bug found 2026-08-02: every form on this domain (starterkit, apply, etc.)
+    // hung forever on "Sending..." — TanStack Start's server functions (the
+    // actual mutation call behind every form submit) POST to "/_serverFn/*"
+    // by default, a path never added to this route list. It doesn't collide
+    // with any page path above so it was harmless while the old Next.js site's
+    // wildcard silently swallowed it; once that wildcard was narrowed (see
+    // contentpreneur-africa-site/wrangler.jsonc, same date) it matched nothing
+    // on either Worker at all, causing the hang instead of a 404.
+    { "pattern": "contentpreneur.africa/_serverFn/*", "zone_name": "contentpreneur.africa" }
   ],
   "triggers": {
     // "10 4 * * *" daily → reconcile ZAR charges to the live USD→ZAR rate.

@@ -5,6 +5,7 @@ import * as React from "react";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { utmRawDataPatch } from "@/lib/utm";
 import { MediaKitResultEmail } from "@/lib/email-templates/media-kit-result";
 
 // Same lead-magnet pattern as Rate Card: the builder itself is free and
@@ -28,13 +29,21 @@ export const emailMediaKit = createServerFn({ method: "POST" })
       statLines: z.array(z.string().max(300)).max(20),
       contactEmail: z.string().max(255).optional(),
       booking: z.string().max(200).optional(),
+      utmSource: z.string().max(120).optional(),
+      utmMedium: z.string().max(120).optional(),
+      utmCampaign: z.string().max(120).optional(),
     }).parse(input),
   )
   .handler(async ({ data }) => {
     const { error: subErr } = await supabaseAdmin
       .from("subscribers")
       .upsert(
-        { email: data.recipientEmail, first_name: data.fullName ?? null, source: "tool:media-kit" },
+        {
+          email: data.recipientEmail,
+          first_name: data.fullName ?? null,
+          source: "tool:media-kit",
+          ...utmRawDataPatch(data),
+        },
         { onConflict: "email", ignoreDuplicates: false },
       );
     if (subErr) console.error("[emailMediaKit] subscriber upsert", subErr);

@@ -45,6 +45,7 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
+import { Route as ApiPublicManychatLeadRouteImport } from './routes/api/public/manychat-lead'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedDashboardInnerCircleRouteImport } from './routes/_authenticated/dashboard.inner-circle'
@@ -256,6 +257,11 @@ const ApiPublicPaystackWebhookRoute =
     path: '/api/public/paystack-webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicManychatLeadRoute = ApiPublicManychatLeadRouteImport.update({
+  id: '/api/public/manychat-lead',
+  path: '/api/public/manychat-lead',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCronSyncFxRoute = ApiCronSyncFxRouteImport.update({
   id: '/api/cron/sync-fx',
   path: '/api/cron/sync-fx',
@@ -477,6 +483,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
+  '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -539,6 +546,7 @@ export interface FileRoutesByTo {
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
+  '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -607,6 +615,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
+  '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -675,6 +684,7 @@ export interface FileRouteTypes {
     | '/dashboard/inner-circle'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
+    | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
     | '/api/public/stripe-webhook'
     | '/admin/'
@@ -737,6 +747,7 @@ export interface FileRouteTypes {
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
     | '/api/cron/sync-fx'
+    | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
     | '/api/public/stripe-webhook'
     | '/admin'
@@ -804,6 +815,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/inner-circle'
     | '/_authenticated/learn/$slug'
     | '/api/cron/sync-fx'
+    | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
     | '/api/public/stripe-webhook'
     | '/_authenticated/admin/'
@@ -848,6 +860,7 @@ export interface RootRouteChildren {
   ProductsSlugRoute: typeof ProductsSlugRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
+  ApiPublicManychatLeadRoute: typeof ApiPublicManychatLeadRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ApiEmailAuthPreviewRoute: typeof ApiEmailAuthPreviewRoute
@@ -1107,6 +1120,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/paystack-webhook'
       fullPath: '/api/public/paystack-webhook'
       preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/manychat-lead': {
+      id: '/api/public/manychat-lead'
+      path: '/api/public/manychat-lead'
+      fullPath: '/api/public/manychat-lead'
+      preLoaderRoute: typeof ApiPublicManychatLeadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/cron/sync-fx': {
@@ -1471,6 +1491,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsSlugRoute: ProductsSlugRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ApiCronSyncFxRoute: ApiCronSyncFxRoute,
+  ApiPublicManychatLeadRoute: ApiPublicManychatLeadRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ApiEmailAuthPreviewRoute: ApiEmailAuthPreviewRoute,

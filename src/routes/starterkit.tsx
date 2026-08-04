@@ -6,6 +6,7 @@ import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/content
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { claimStarterKit } from "@/lib/starterkit.functions";
+import { getUtm } from "@/lib/utm";
 import { toast } from "sonner";
 
 // The free Knowledge Entrepreneur Starter Kit — moved here from the separate
@@ -88,6 +89,7 @@ function StarterKitPage() {
 
 function ClaimForm() {
   const claimFn = useServerFn(claimStarterKit);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
@@ -115,17 +117,25 @@ function ClaimForm() {
   }
 
   return (
-    <div className="mx-auto flex max-w-md flex-col gap-3 sm:flex-row">
-      <Input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="your@email.com"
-      />
+    <div className="mx-auto flex max-w-md flex-col gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your name"
+        />
+        <Input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your@email.com"
+        />
+      </div>
       <Button
         disabled={!email || mut.isPending}
-        onClick={() => mut.mutate({ data: { email } })}
+        onClick={() => mut.mutate({ data: { email, name: name || undefined, ...getUtm() } })}
         className="whitespace-nowrap bg-banana text-banana-foreground hover:bg-banana/90"
       >
         {mut.isPending ? "Sending…" : "Get The Free Kit"}

@@ -512,7 +512,7 @@ function FreeLeadMagnet({ product }: { product: any }) {
             return;
           }
           trackLead();
-          mut.mutate({ data: { productSlug: product.slug, email, fullName: fullName || undefined } });
+          mut.mutate({ data: { productSlug: product.slug, email, fullName: fullName || undefined, ...getUtm() } });
         }}
         className="mt-5 inline-flex h-11 items-center gap-2 rounded-lg px-6 text-[13px] font-semibold text-white disabled:opacity-60"
         style={{ backgroundColor: "sienna" }}

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { subscribeAlignedToolkit } from "@/lib/aligned.functions";
+import { getUtm } from "@/lib/utm";
 import { ArrowRight, ArrowLeft, Check, Sparkles, Lock, Download } from "lucide-react";
 import { BackNav } from "@/components/BackNav";
 
@@ -496,6 +497,7 @@ function ToolkitCapture({ focusPhase }: { focusPhase: Phase }) {
                 phone: phone || undefined,
                 focusPhase,
                 turnstileToken: tsToken ?? undefined,
+                ...getUtm(),
               },
             })
           }

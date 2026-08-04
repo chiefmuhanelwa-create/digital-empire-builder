@@ -4,6 +4,7 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { assertTurnstile } from "./turnstile.server";
 import { addToMailerLiteGroup } from "./mailerlite";
+import { utmRawDataPatch } from "./utm";
 
 // Lead capture for the ALIGN·ACCELERATE·EXCEL toolkit (Aligned 2026 giveaway).
 // Captures the warm lead into `subscribers` (source: aligned-2026) and syncs to
@@ -18,6 +19,9 @@ export const subscribeAlignedToolkit = createServerFn({ method: "POST" })
         // The lowest phase from their self-assessment — lets us segment the sequence.
         focusPhase: z.enum(["align", "accelerate", "excel"]).optional(),
         turnstileToken: z.string().max(2048).optional(),
+        utmSource: z.string().max(120).optional(),
+        utmMedium: z.string().max(120).optional(),
+        utmCampaign: z.string().max(120).optional(),
       })
       .parse(input),
   )
@@ -30,12 +34,16 @@ export const subscribeAlignedToolkit = createServerFn({ method: "POST" })
     const email = data.email.toLowerCase();
     const firstName = data.name.split(" ")[0];
 
+    const utmPatch = utmRawDataPatch(data);
     const { error } = await supabaseAdmin.from("subscribers").upsert(
       {
         email,
         first_name: firstName,
         phone: data.phone ?? null,
         source: "aligned-2026",
+        // focusPhase was previously accepted but silently dropped — now
+        // persisted alongside any UTM breakdown instead of being lost.
+        raw_data: { ...("raw_data" in utmPatch ? utmPatch.raw_data : {}), focus_phase: data.focusPhase ?? null },
       },
       { onConflict: "email" },
     );
@@ -46,7 +54,7 @@ export const subscribeAlignedToolkit = createServerFn({ method: "POST" })
       email,
       process.env.MAILERLITE_GROUP_ID_ALIGNED ??
         process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,
-      { first_name: firstName },
+      { first_name: firstName, custom: { focus_phase: data.focusPhase } },
     );
 
     return { ok: true };

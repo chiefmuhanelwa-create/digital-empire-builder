@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { generateHooks } from "@/lib/hook-generator.functions";
+import { getUtm } from "@/lib/utm";
 
 export const Route = createFileRoute("/hook-generator")({
   head: () => ({
@@ -78,6 +79,7 @@ function HookGeneratorPage() {
         email: email.trim(),
         fullName: fullName.trim() || undefined,
         turnstileToken: tsToken ?? undefined,
+        ...getUtm(),
       },
     });
   };

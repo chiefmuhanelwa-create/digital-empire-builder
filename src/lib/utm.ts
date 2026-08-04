@@ -35,3 +35,26 @@ export function getUtm(): {
     utmCampaign: get("utm_campaign"),
   };
 }
+
+// Server-side helper: builds a `subscribers.raw_data` patch carrying the UTM
+// breakdown, without clobbering whatever the tool-specific `source` literal
+// already says (unlike checkout.functions.ts, which overwrites `source`
+// itself with `utm:${source}` — losing which tool/page captured the lead).
+// Returns {} (no-op) when no UTM params were present, so a plain upsert never
+// blasts away an existing raw_data on a repeat submission with no UTM.
+export function utmRawDataPatch(input: {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+}): { raw_data: { utm: { source: string | null; medium: string | null; campaign: string | null } } } | {} {
+  if (!input.utmSource && !input.utmMedium && !input.utmCampaign) return {};
+  return {
+    raw_data: {
+      utm: {
+        source: input.utmSource ?? null,
+        medium: input.utmMedium ?? null,
+        campaign: input.utmCampaign ?? null,
+      },
+    },
+  };
+}

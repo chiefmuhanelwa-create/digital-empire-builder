@@ -10,6 +10,7 @@ import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { emailMediaKit } from "@/lib/media-kit.functions";
+import { getUtm } from "@/lib/utm";
 
 export const Route = createFileRoute("/media-kit")({
   head: () => ({
@@ -219,6 +220,7 @@ function MediaKitPage() {
                             statLines: k.stats.split("\n").map((s) => s.replace(/^[•\-\s]+/, "").trim()),
                             contactEmail: k.email,
                             booking: k.booking,
+                            ...getUtm(),
                           },
                         });
                       }}

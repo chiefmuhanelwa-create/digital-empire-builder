@@ -9,6 +9,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { assertTurnstile } from "@/lib/turnstile.server";
 import { reportError } from "@/lib/error-logger";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { utmRawDataPatch } from "@/lib/utm";
 import { KIT_OWNER_SLUGS } from "@/lib/tool-ai.functions";
 import { HookGeneratorResultEmail } from "@/lib/email-templates/hook-generator-result";
 
@@ -56,6 +57,9 @@ export const generateHooks = createServerFn({ method: "POST" })
         turnstileToken: z.string().max(2048).optional(),
         email: z.string().email().max(255),
         fullName: z.string().max(200).optional(),
+        utmSource: z.string().max(120).optional(),
+        utmMedium: z.string().max(120).optional(),
+        utmCampaign: z.string().max(120).optional(),
       })
       .parse(input),
   )
@@ -124,7 +128,7 @@ Respond with ONLY a JSON array, no markdown fences, no commentary, in this exact
     });
 
     void supabaseAdmin.from("subscribers").upsert(
-      { email, first_name: data.fullName ?? null, source: "tool:hook-generator" },
+      { email, first_name: data.fullName ?? null, source: "tool:hook-generator", ...utmRawDataPatch(data) },
       { onConflict: "email", ignoreDuplicates: false },
     );
     void addToMailerLiteGroup(email, process.env.MAILERLITE_GROUP_ID_BUYERS, {

@@ -3,16 +3,28 @@
 export async function addToMailerLiteGroup(
   email: string,
   groupId: string | undefined | null,
-  fields?: { first_name?: string | null; last_name?: string | null },
+  fields?: {
+    first_name?: string | null;
+    last_name?: string | null;
+    // Any other MailerLite custom field (segment, pain_point, source_platform,
+    // source_keyword, icp, focus_phase, ...) — the field must already exist in
+    // MailerLite (Subscribers → Fields); the v3 API does not auto-create them.
+    custom?: Record<string, string | null | undefined>;
+  },
 ): Promise<void> {
   const apiKey = process.env.MAILERLITE_API_KEY;
   if (!apiKey || !groupId) return;
 
+  const customFields = Object.fromEntries(
+    Object.entries(fields?.custom ?? {}).filter(([, v]) => !!v),
+  );
+
   const body: Record<string, unknown> = { email, groups: [groupId] };
-  if (fields?.first_name || fields?.last_name) {
+  if (fields?.first_name || fields?.last_name || Object.keys(customFields).length > 0) {
     body.fields = {
-      ...(fields.first_name ? { name: fields.first_name } : {}),
-      ...(fields.last_name ? { last_name: fields.last_name } : {}),
+      ...(fields?.first_name ? { name: fields.first_name } : {}),
+      ...(fields?.last_name ? { last_name: fields.last_name } : {}),
+      ...customFields,
     };
   }
 

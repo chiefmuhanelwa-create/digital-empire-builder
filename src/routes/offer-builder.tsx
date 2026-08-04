@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { TurnstileGate } from "@/components/TurnstileGate";
 import { buildOffer, type GeneratedOffer } from "@/lib/offer-builder.functions";
 import { trackLead } from "@/lib/track";
+import { getUtm } from "@/lib/utm";
 
 export const Route = createFileRoute("/offer-builder")({
   head: () => ({
@@ -111,6 +112,7 @@ function OfferBuilderPage() {
           proof: fields.proof.trim(),
           experienceLevel: fields.experienceLevel,
           turnstileToken: tsToken!,
+          ...getUtm(),
         },
       });
       trackLead();

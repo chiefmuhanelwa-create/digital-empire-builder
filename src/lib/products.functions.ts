@@ -3,6 +3,7 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { utmRawDataPatch } from "@/lib/utm";
 
 const GARDEN = z.enum(["deshe", "esev", "etz_pri", "devarim"]);
 const STATUS = z.enum(["draft", "published", "archived"]);
@@ -286,6 +287,9 @@ export const claimFreeProduct = createServerFn({ method: "POST" })
       productSlug: z.string().min(1).max(120),
       email: z.string().email().max(255),
       fullName: z.string().max(200).optional(),
+      utmSource: z.string().max(120).optional(),
+      utmMedium: z.string().max(120).optional(),
+      utmCampaign: z.string().max(120).optional(),
     }).parse(input),
   )
   .handler(async ({ data }) => {
@@ -302,7 +306,12 @@ export const claimFreeProduct = createServerFn({ method: "POST" })
     const { data: sub, error: subErr } = await supabaseAdmin
       .from("subscribers")
       .upsert(
-        { email: data.email, first_name: data.fullName ?? null, source: `free-product:${data.productSlug}` },
+        {
+          email: data.email,
+          first_name: data.fullName ?? null,
+          source: `free-product:${data.productSlug}`,
+          ...utmRawDataPatch(data),
+        },
         { onConflict: "email", ignoreDuplicates: false },
       )
       .select("id")

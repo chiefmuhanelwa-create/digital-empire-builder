@@ -5,6 +5,7 @@ import * as React from "react";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { utmRawDataPatch } from "@/lib/utm";
 import { verifyTurnstile } from "@/lib/turnstile.server";
 import { getAnthropic, OFFER_MODEL } from "@/lib/anthropic";
 import { KIT_OWNER_SLUGS } from "@/lib/tool-ai.functions";
@@ -118,6 +119,9 @@ const offerInputSchema = z.object({
   proof: z.string().trim().max(800).optional().default(""),
   experienceLevel: z.enum(["starting", "traction", "established"]),
   turnstileToken: z.string().min(1).max(4096),
+  utmSource: z.string().max(120).optional(),
+  utmMedium: z.string().max(120).optional(),
+  utmCampaign: z.string().max(120).optional(),
 });
 
 export type OfferInput = z.infer<typeof offerInputSchema>;
@@ -199,14 +203,32 @@ Build the offer: name it, write the one-line promise (headline), the exact who-i
         if (error) console.error("[offer-builder] lead insert failed", error);
       });
 
-    // 4. MailerLite — ICP 1 → professional/buyer nurture, ICP 2 → free-knowledge nurture.
+    // 3b. Also converge into the shared `subscribers` table (same as every
+    // other lead-magnet tool) so this tool's leads aren't only reachable via
+    // the bespoke offer_builder_leads table.
     const nameParts = data.name.trim().split(/\s+/);
+    void supabaseAdmin.from("subscribers").upsert(
+      {
+        email,
+        first_name: nameParts[0] || null,
+        last_name: nameParts.slice(1).join(" ") || null,
+        source: "tool:offer-builder",
+        ...utmRawDataPatch(data),
+      },
+      { onConflict: "email", ignoreDuplicates: false },
+    );
+
+    // 4. MailerLite — ICP 1 → professional/buyer nurture, ICP 2 → free-knowledge nurture.
     void addToMailerLiteGroup(
       data.email,
       data.icp === "called_expert"
         ? process.env.MAILERLITE_GROUP_ID_CALLED_EXPERT
         : process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,
-      { first_name: nameParts[0], last_name: nameParts.slice(1).join(" ") || null },
+      {
+        first_name: nameParts[0],
+        last_name: nameParts.slice(1).join(" ") || null,
+        custom: { icp: data.icp },
+      },
     );
 
     // 5. Email confirmation of the result — founder's explicit ask, same

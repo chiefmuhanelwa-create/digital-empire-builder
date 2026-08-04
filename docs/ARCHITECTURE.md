@@ -68,7 +68,8 @@ categories). Categories:
 | Turnstile | `TURNSTILE_SITE_KEY` (no VITE_ prefix — read server-side), `TURNSTILE_SECRET_KEY` | Gates `/apply`, `/signup`, `/login`, `/contact`, all checkout-initiating server functions |
 | Resend | `RESEND_API_KEY`, `SUPABASE_AUTH_HOOK_SECRET` | Domain `notify.chkplt.com` must be DNS-verified in Resend. Auth hook secret must match in 3 places: `.env`, `wrangler secret put`, Supabase Dashboard → Auth → Hooks → Send Email |
 | Ops alerting | `OPS_ALERT_EMAIL` | Where "critical" `reportError()` calls get emailed (`src/lib/alerts.ts`) — no separate service, reuses the Resend key above. Optional; alerting no-ops if unset. |
-| MailerLite | `MAILERLITE_API_KEY`, `MAILERLITE_GROUP_ID_*` (one per lead magnet + a buyers group) | Marketing automation only — never used for transactional |
+| MailerLite | `MAILERLITE_API_KEY`, `MAILERLITE_GROUP_ID_*` (one per lead magnet + a buyers group) | Marketing automation only — never used for transactional. Custom fields (`segment`, `pain_point`, `source_platform`, `source_keyword`, `icp`, `focus_phase`) must be created in MailerLite → Subscribers → Fields — the v3 API won't auto-create unknown ones |
+| ManyChat | `MANYCHAT_WEBHOOK_SECRET` | Shared-secret auth for `/api/public/manychat-lead` — see §4 route table |
 | App | `VITE_APP_URL`, `NODE_ENV`, `VITE_WHATSAPP_SUPPORT_NUMBER` (optional — hides the chat panel if blank) | |
 
 Cloudflare Worker secrets (`bunx wrangler secret put <NAME>`) must mirror every
@@ -156,6 +157,7 @@ exports `scheduled()` to route the two cron triggers above to `fx-sync.ts` /
 | `/api/cron/sync-fx` | Manual/triggered FX sync (same logic the daily cron calls) |
 | `/api/email/queue/process` | Manual/triggered email-queue drain (same logic the every-minute cron calls) |
 | `/api/email/auth/webhook`, `/api/email/auth/preview` | Supabase Auth "Send Email" hook → renders + queues the right template |
+| `/api/public/manychat-lead` | ManyChat DM-automation Hub flow's "External Request" action, at each segmentation stage → `Authorization: Bearer MANYCHAT_WEBHOOK_SECRET` (shared secret, timing-safe compare — ManyChat can't HMAC-sign) → upserts `subscribers` (first-touch `source`, segment/pain_point/source_keyword in `raw_data.manychat`) → syncs to MailerLite with custom fields |
 
 ---
 
