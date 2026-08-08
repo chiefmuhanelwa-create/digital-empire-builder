@@ -8,12 +8,11 @@ import { MailerLiteEmbedForm } from "@/components/MailerLiteEmbedForm";
 // send people that actually captures their email, instead of delivering the
 // bundle natively inside Messenger where no lead ever reaches MailerLite.
 //
-// Form: swapped to MailerLite's own embedded form (slug "q6qiYX", "Creator
-// Bundle Opt-in") per direct instruction 2026-08-06. Delivery of the actual
-// bundle is now entirely MailerLite's responsibility — that form must be
-// active with a real automation attached before this page goes live for
-// real traffic (confirmed via the MailerLite API at swap time: it was not,
-// despite already having 45 historical conversions on it).
+// Form: MailerLite's own embedded form (slug "BPvaab", "Creator Bundle
+// Opt-in v2") per direct instruction 2026-08-08 — replaces the original
+// "q6qiYX" form. Delivery of the actual bundle is entirely MailerLite's
+// responsibility — confirmed via the MailerLite API at swap time that this
+// form is still inactive with no automation attached, same gap as before.
 const MODULES: [string, string][] = [
   [
     "The Niche Clarity Workbook",
@@ -45,7 +44,7 @@ function CreatorBundlePage() {
         <div className="grid gap-6 sm:gap-x-10 sm:gap-y-8 items-center [grid-template-areas:'hook''form''image''description'] sm:[grid-template-areas:'hook_image''description_image''form_form'] sm:grid-cols-[1.1fr_0.9fr]">
           <div className="[grid-area:hook] text-center sm:text-left">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-              Free · Delivered Instantly By Email
+              Free · Delivered By Email + Phone
             </div>
             <h1 className="mt-3 sm:mt-6 font-display text-3xl sm:text-5xl leading-[1.1] sm:leading-[1.05]">
               You're posting. You're consistent. Nothing's converting.
@@ -56,9 +55,10 @@ function CreatorBundlePage() {
           </div>
 
           <div className="[grid-area:form] mx-auto w-full max-w-md">
-            <MailerLiteEmbedForm formSlug="q6qiYX" />
+            <MailerLiteEmbedForm formSlug="BPvaab" />
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              We'll email both PDFs straight away — no spam, unsubscribe anytime.
+              We'll email both PDFs straight away, and may call or message about the bundle — no
+              spam, unsubscribe anytime.
             </p>
           </div>
 
