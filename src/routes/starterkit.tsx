@@ -67,11 +67,13 @@ function StarterKitPage() {
             </p>
           </div>
 
-          <img
-            src="/product-covers/knowledge-entrepreneur-starter-kit-cover.png"
-            alt="The Knowledge Entrepreneur Starter Kit — 7 Worksheets, One Clear Direction"
-            className="[grid-area:image] mx-auto w-full max-w-[220px] sm:max-w-[280px] rounded-lg shadow-xl"
-          />
+          <div className="[grid-area:image] mx-auto w-full max-w-[220px] sm:max-w-[280px] rounded-xl border-4 border-banana bg-card p-4 shadow-xl">
+            <img
+              src="/product-covers/knowledge-entrepreneur-starter-kit-cover.png"
+              alt="The Knowledge Entrepreneur Starter Kit — 7 Worksheets, One Clear Direction"
+              className="w-full h-auto"
+            />
+          </div>
 
           <div className="[grid-area:description] text-center sm:text-left">
             <p className="sm:hidden font-display text-sm font-bold uppercase tracking-wide text-banana">
