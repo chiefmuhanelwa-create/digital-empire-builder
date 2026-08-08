@@ -46,7 +46,7 @@ function StarterKitPage() {
         <div className="grid items-center gap-10 sm:grid-cols-[1.1fr_0.9fr]">
           <div className="text-center sm:text-left">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-              Free · No Login Required
+              Free · Delivered By Email + WhatsApp
             </div>
             <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">
               You already have the knowledge. You just don't have the plan.
