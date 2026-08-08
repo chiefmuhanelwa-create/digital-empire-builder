@@ -42,35 +42,38 @@ function StarterKitPage() {
     <div className="min-h-screen bg-background text-foreground">
       <ContentpreneurHeader />
 
-      <section className="mx-auto max-w-4xl px-6 pt-20 pb-16">
-        <div className="grid items-center gap-10 sm:grid-cols-[1.1fr_0.9fr]">
-          <div className="text-center sm:text-left">
+      <section className="mx-auto max-w-4xl px-6 pt-10 sm:pt-20 pb-16">
+        <div className="grid gap-6 sm:gap-x-10 sm:gap-y-8 items-center [grid-template-areas:'hook''form''image''description'] sm:[grid-template-areas:'hook_image''description_image''form_form'] sm:grid-cols-[1.1fr_0.9fr]">
+          <div className="[grid-area:hook] text-center sm:text-left">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
               Free · Delivered By Email + WhatsApp
             </div>
-            <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">
+            <h1 className="mt-3 sm:mt-6 font-display text-3xl sm:text-5xl leading-[1.1] sm:leading-[1.05]">
               You already have the knowledge. You just don't have the plan.
             </h1>
-            <p className="mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
+            <p className="mt-3 sm:mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
               The Knowledge Entrepreneur Starter Kit
             </p>
-            <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-              7 short worksheets that take you from "I have valuable knowledge but no idea what to
-              do with it" to a clear next step — your niche named, your positioning written, your
-              first offer sketched out. Most people finish it in one sitting.
+          </div>
+
+          <div className="[grid-area:form] mx-auto w-full max-w-md">
+            <MailerLiteEmbedForm formSlug="v3XiMi" />
+            <p className="mt-3 text-center text-xs text-muted-foreground">
+              We'll email your kit, and WhatsApp you if there's something worth your time — no spam,
+              unsubscribe anytime.
             </p>
           </div>
+
           <img
             src="/product-covers/knowledge-entrepreneur-starter-kit-cover.png"
             alt="The Knowledge Entrepreneur Starter Kit — 7 Worksheets, One Clear Direction"
-            className="mx-auto w-full max-w-[280px] rounded-lg shadow-xl"
+            className="[grid-area:image] mx-auto w-full max-w-[220px] sm:max-w-[280px] rounded-lg shadow-xl"
           />
-        </div>
-        <div className="mt-10 mx-auto max-w-md">
-          <MailerLiteEmbedForm formSlug="v3XiMi" />
-          <p className="mt-3 text-center text-xs text-muted-foreground">
-            We'll email your kit, and WhatsApp you if there's something worth your time — no spam,
-            unsubscribe anytime.
+
+          <p className="[grid-area:description] text-center sm:text-left text-lg text-muted-foreground leading-relaxed">
+            7 short worksheets that take you from "I have valuable knowledge but no idea what to do
+            with it" to a clear next step — your niche named, your positioning written, your first
+            offer sketched out. Most people finish it in one sitting.
           </p>
         </div>
       </section>
