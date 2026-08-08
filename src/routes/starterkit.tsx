@@ -13,14 +13,17 @@ import { MailerLiteEmbedForm } from "@/components/MailerLiteEmbedForm";
 // is now entirely MailerLite's responsibility — that form must be active
 // with a real automation attached before this page goes live for real
 // traffic (confirmed via the MailerLite API at swap time: it was not).
+// Verified against the real deliverable PDF (Google Drive, checked 2026-08-08)
+// — it's 8 modules, not 7. "Your Lowest Axis" was missing from this list.
 const MODULES: [string, string][] = [
-  ["The Knowledge Audit", "Identify your monetizable knowledge"],
-  ["The Knowledge Entrepreneur Scorecard", "Where you actually stand, across 5 axes"],
-  ["The Positioning Blueprint", "Who you help, what you help with, why they should listen"],
-  ["Your First Content Engine", "Know what to talk about"],
-  ["The River → Fish → Tank Framework", "Stop building only on rented platforms"],
-  ["Your First Offer", "Create your first paid asset"],
-  ["The PAIDS Map", "Your future income roadmap, in 5 streams"],
+  ["The Knowledge Audit", "Find the thing you know that people pay for"],
+  ["The Scorecard", "Where you actually stand, across 5 axes"],
+  ["Your Lowest Axis", "What to do about it, depending on which one"],
+  ["The Positioning Blueprint", "Who you help, and why they should listen"],
+  ["Your First Content Engine", "What to talk about, in the right ratio"],
+  ["River, Fish, Tank", "Stop building on ground you do not own"],
+  ["Your First Offer", "One thing, priced, that someone can buy"],
+  ["The PAIDS Map", "Five ways knowledge becomes income"],
 ];
 
 export const Route = createFileRoute("/starterkit")({
@@ -30,7 +33,7 @@ export const Route = createFileRoute("/starterkit")({
       {
         name: "description",
         content:
-          "7 short worksheets to take you from having valuable knowledge with no plan, to a clear next step. Free, no login required.",
+          "8 short worksheets to take you from having valuable knowledge with no plan, to a clear next step. Free, no login required.",
       },
     ],
   }),
@@ -42,16 +45,16 @@ function StarterKitPage() {
     <div className="min-h-screen bg-background text-foreground">
       <ContentpreneurHeader />
 
-      <section className="mx-auto max-w-4xl px-6 pt-10 sm:pt-20 pb-16">
-        <div className="grid gap-6 sm:gap-x-10 sm:gap-y-8 items-center [grid-template-areas:'hook''form''image''description'] sm:[grid-template-areas:'hook_image''description_image''form_form'] sm:grid-cols-[1.1fr_0.9fr]">
+      <section className="mx-auto max-w-4xl px-6 pt-2 sm:pt-20 pb-16">
+        <div className="grid gap-2 sm:gap-x-10 sm:gap-y-8 items-center [grid-template-areas:'hook''form''image''description'] sm:[grid-template-areas:'hook_image''description_image''form_form'] sm:grid-cols-[1.1fr_0.9fr]">
           <div className="[grid-area:hook] text-center sm:text-left">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
               Free · Delivered By Email + WhatsApp
             </div>
-            <h1 className="mt-3 sm:mt-6 font-display text-3xl sm:text-5xl leading-[1.1] sm:leading-[1.05]">
+            <h1 className="mt-2 sm:mt-6 font-display text-2xl sm:text-5xl leading-tight sm:leading-[1.05]">
               You already have the knowledge. You just don't have the plan.
             </h1>
-            <p className="mt-3 sm:mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
+            <p className="hidden sm:block mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
               The Knowledge Entrepreneur Starter Kit
             </p>
           </div>
@@ -70,11 +73,16 @@ function StarterKitPage() {
             className="[grid-area:image] mx-auto w-full max-w-[220px] sm:max-w-[280px] rounded-lg shadow-xl"
           />
 
-          <p className="[grid-area:description] text-center sm:text-left text-lg text-muted-foreground leading-relaxed">
-            7 short worksheets that take you from "I have valuable knowledge but no idea what to do
-            with it" to a clear next step — your niche named, your positioning written, your first
-            offer sketched out. Most people finish it in one sitting.
-          </p>
+          <div className="[grid-area:description] text-center sm:text-left">
+            <p className="sm:hidden font-display text-sm font-bold uppercase tracking-wide text-banana">
+              The Knowledge Entrepreneur Starter Kit
+            </p>
+            <p className="mt-2 sm:mt-0 text-lg text-muted-foreground leading-relaxed">
+              8 short worksheets that take you from "I have valuable knowledge but no idea what to
+              do with it" to a clear next step — your niche named, your positioning written, your
+              first offer sketched out. Most people finish it in one sitting.
+            </p>
+          </div>
         </div>
       </section>
 

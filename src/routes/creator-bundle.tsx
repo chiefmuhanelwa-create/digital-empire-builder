@@ -40,16 +40,16 @@ function CreatorBundlePage() {
     <div className="min-h-screen bg-background text-foreground">
       <ContentpreneurHeader />
 
-      <section className="mx-auto max-w-4xl px-6 pt-10 sm:pt-20 pb-16">
-        <div className="grid gap-6 sm:gap-x-10 sm:gap-y-8 items-center [grid-template-areas:'hook''form''image''description'] sm:[grid-template-areas:'hook_image''description_image''form_form'] sm:grid-cols-[1.1fr_0.9fr]">
+      <section className="mx-auto max-w-4xl px-6 pt-2 sm:pt-20 pb-16">
+        <div className="grid gap-2 sm:gap-x-10 sm:gap-y-8 items-center [grid-template-areas:'hook''form''image''description'] sm:[grid-template-areas:'hook_image''description_image''form_form'] sm:grid-cols-[1.1fr_0.9fr]">
           <div className="[grid-area:hook] text-center sm:text-left">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
               Free · Delivered By Email + Phone
             </div>
-            <h1 className="mt-3 sm:mt-6 font-display text-3xl sm:text-5xl leading-[1.1] sm:leading-[1.05]">
+            <h1 className="mt-2 sm:mt-6 font-display text-2xl sm:text-5xl leading-tight sm:leading-[1.05]">
               You're posting. You're consistent. Nothing's converting.
             </h1>
-            <p className="mt-3 sm:mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
+            <p className="hidden sm:block mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
               The Creator Starter Bundle
             </p>
           </div>
@@ -68,11 +68,16 @@ function CreatorBundlePage() {
             className="[grid-area:image] mx-auto w-full max-w-[220px] sm:max-w-[280px] rounded-lg shadow-xl"
           />
 
-          <p className="[grid-area:description] text-center sm:text-left text-lg text-muted-foreground leading-relaxed">
-            You're missing two things: clarity on your niche, and a real monetisation system. This
-            free bundle gives you both — two guided PDFs built specifically for South African
-            creators. No card, no catch.
-          </p>
+          <div className="[grid-area:description] text-center sm:text-left">
+            <p className="sm:hidden font-display text-sm font-bold uppercase tracking-wide text-banana">
+              The Creator Starter Bundle
+            </p>
+            <p className="mt-2 sm:mt-0 text-lg text-muted-foreground leading-relaxed">
+              You're missing two things: clarity on your niche, and a real monetisation system. This
+              free bundle gives you both — two guided PDFs built specifically for South African
+              creators. No card, no catch.
+            </p>
+          </div>
         </div>
       </section>
 
