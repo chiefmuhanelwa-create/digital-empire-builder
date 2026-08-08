@@ -19,6 +19,10 @@
     { "pattern": "contentpreneur.africa/foundation*", "zone_name": "contentpreneur.africa" },
     { "pattern": "contentpreneur.africa/accelerator*", "zone_name": "contentpreneur.africa" },
     { "pattern": "contentpreneur.africa/apply*", "zone_name": "contentpreneur.africa" },
+    // Creator Bundle landing page added 2026-08-06 — same family as the 4
+    // routes above, needs the same explicit path-specific entry or it 522s
+    // (falls through to the Next.js site's Worker, which has no such route).
+    { "pattern": "contentpreneur.africa/creator-bundle*", "zone_name": "contentpreneur.africa" },
     // Bug found 2026-07-28 (live, via a real screenshot): the 4 page routes
     // above load fine, but their CSS/JS bundles are requested from bare
     // "/assets/*" and "/downloads/*" paths — those don't match any pattern

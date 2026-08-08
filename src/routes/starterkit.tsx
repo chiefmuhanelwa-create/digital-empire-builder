@@ -1,19 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/contentpreneur-header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { claimStarterKit } from "@/lib/starterkit.functions";
-import { getUtm } from "@/lib/utm";
-import { toast } from "sonner";
+import { MailerLiteEmbedForm } from "@/components/MailerLiteEmbedForm";
 
 // The free Knowledge Entrepreneur Starter Kit — moved here from the separate
 // contentpreneur-africa-site (Next.js) so it lives entirely on CHKPLT's proven
 // checkout/lead-capture stack, reachable at contentpreneur.africa/starterkit.
 // Content ported verbatim from that site's app/start/page.tsx.
+//
+// Form: swapped to MailerLite's own embedded form (slug "v3XiMi", "Starter
+// Kit Opt-in") per direct instruction 2026-08-06. Delivery of the actual kit
+// is now entirely MailerLite's responsibility — that form must be active
+// with a real automation attached before this page goes live for real
+// traffic (confirmed via the MailerLite API at swap time: it was not).
 const MODULES: [string, string][] = [
   ["The Knowledge Audit", "Identify your monetizable knowledge"],
   ["The Knowledge Entrepreneur Scorecard", "Where you actually stand, across 5 axes"],
@@ -43,23 +42,32 @@ function StarterKitPage() {
     <div className="min-h-screen bg-background text-foreground">
       <ContentpreneurHeader />
 
-      <section className="mx-auto max-w-2xl px-6 pt-20 pb-16 text-center">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-          Free · No Login Required
+      <section className="mx-auto max-w-4xl px-6 pt-20 pb-16">
+        <div className="grid items-center gap-10 sm:grid-cols-[1.1fr_0.9fr]">
+          <div className="text-center sm:text-left">
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              Free · No Login Required
+            </div>
+            <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">
+              You already have the knowledge. You just don't have the plan.
+            </h1>
+            <p className="mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
+              The Knowledge Entrepreneur Starter Kit
+            </p>
+            <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+              7 short worksheets that take you from "I have valuable knowledge but no idea what to
+              do with it" to a clear next step — your niche named, your positioning written, your
+              first offer sketched out. Most people finish it in one sitting.
+            </p>
+          </div>
+          <img
+            src="/product-covers/knowledge-entrepreneur-starter-kit-cover.png"
+            alt="The Knowledge Entrepreneur Starter Kit — 7 Worksheets, One Clear Direction"
+            className="mx-auto w-full max-w-[280px] rounded-lg shadow-xl"
+          />
         </div>
-        <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">
-          You already have the knowledge. You just don't have the plan.
-        </h1>
-        <p className="mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
-          The Knowledge Entrepreneur Starter Kit
-        </p>
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-          7 short worksheets that take you from "I have valuable knowledge but no idea what to do
-          with it" to a clear next step — your niche named, your positioning written, your first
-          offer sketched out. Most people finish it in one sitting.
-        </p>
-        <div className="mt-10">
-          <ClaimForm />
+        <div className="mt-10 mx-auto max-w-md">
+          <MailerLiteEmbedForm formSlug="v3XiMi" />
         </div>
       </section>
 
@@ -108,63 +116,6 @@ function StarterKitPage() {
       </section>
 
       <ContentpreneurFooter />
-    </div>
-  );
-}
-
-function ClaimForm() {
-  const claimFn = useServerFn(claimStarterKit);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
-  const mut = useMutation({
-    mutationFn: claimFn,
-    onSuccess: (res: { ok: true; downloadUrl: string }) => setDownloadUrl(res.downloadUrl),
-    onError: (e: Error) => toast.error(e.message ?? "Something went wrong — try again"),
-  });
-
-  if (downloadUrl) {
-    return (
-      <div className="border border-border bg-background p-6 text-center">
-        <p className="font-display text-lg font-bold text-banana">You're in.</p>
-        <p className="mt-2 text-sm text-muted-foreground">Your kit is ready — open it below.</p>
-        <a
-          href={downloadUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-5 inline-flex items-center justify-center rounded-md bg-banana px-6 py-3 font-display text-sm text-banana-foreground hover:bg-banana/90"
-        >
-          Open Your Starter Kit →
-        </a>
-      </div>
-    );
-  }
-
-  return (
-    <div className="mx-auto flex max-w-md flex-col gap-3">
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-        />
-        <Input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com"
-        />
-      </div>
-      <Button
-        disabled={!email || mut.isPending}
-        onClick={() => mut.mutate({ data: { email, name: name || undefined, ...getUtm() } })}
-        className="whitespace-nowrap bg-banana text-banana-foreground hover:bg-banana/90"
-      >
-        {mut.isPending ? "Sending…" : "Get The Free Kit"}
-      </Button>
     </div>
   );
 }

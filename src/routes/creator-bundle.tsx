@@ -1,25 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/contentpreneur-header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { claimFreeProduct } from "@/lib/products.functions";
-import { getUtm } from "@/lib/utm";
-import { trackLead } from "@/lib/track";
-import { toast } from "sonner";
+import { MailerLiteEmbedForm } from "@/components/MailerLiteEmbedForm";
 
 // Dedicated, branded landing page for the "Creator Starter Bundle" free lead
-// magnet — same product already live at /products/creator-starter-bundle
-// (generic product template), same server function (claimFreeProduct), same
-// MailerLite group (MAILERLITE_GROUP_ID_BUYERS). This page exists so the
-// Facebook/ManyChat funnel has somewhere on-brand to send people that
-// actually captures their email, instead of delivering the bundle natively
-// inside Messenger where no lead ever reaches MailerLite.
-const PRODUCT_SLUG = "creator-starter-bundle";
-
+// magnet. Exists so the Facebook/ManyChat funnel has somewhere on-brand to
+// send people that actually captures their email, instead of delivering the
+// bundle natively inside Messenger where no lead ever reaches MailerLite.
+//
+// Form: swapped to MailerLite's own embedded form (slug "q6qiYX", "Creator
+// Bundle Opt-in") per direct instruction 2026-08-06. Delivery of the actual
+// bundle is now entirely MailerLite's responsibility — that form must be
+// active with a real automation attached before this page goes live for
+// real traffic (confirmed via the MailerLite API at swap time: it was not,
+// despite already having 45 historical conversions on it).
 const MODULES: [string, string][] = [
   [
     "The Niche Clarity Workbook",
@@ -47,23 +41,32 @@ function CreatorBundlePage() {
     <div className="min-h-screen bg-background text-foreground">
       <ContentpreneurHeader />
 
-      <section className="mx-auto max-w-2xl px-6 pt-20 pb-16 text-center">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-          Free · No Login Required
+      <section className="mx-auto max-w-4xl px-6 pt-20 pb-16">
+        <div className="grid items-center gap-10 sm:grid-cols-[1.1fr_0.9fr]">
+          <div className="text-center sm:text-left">
+            <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
+              Free · No Login Required
+            </div>
+            <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">
+              You're posting. You're consistent. Nothing's converting.
+            </h1>
+            <p className="mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
+              The Creator Starter Bundle
+            </p>
+            <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+              You're missing two things: clarity on your niche, and a real monetisation system. This
+              free bundle gives you both — two guided PDFs built specifically for South African
+              creators. No card, no catch.
+            </p>
+          </div>
+          <img
+            src="/product-covers/creator-starter-bundle-cover.png"
+            alt="The Creator Starter Kit — Niche Clarity Workbook + PAIDS Framework Workbook, free"
+            className="mx-auto w-full max-w-[280px] rounded-lg shadow-xl"
+          />
         </div>
-        <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">
-          You're posting. You're consistent. Nothing's converting.
-        </h1>
-        <p className="mt-4 font-display text-sm font-bold uppercase tracking-wide text-banana">
-          The Creator Starter Bundle
-        </p>
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-          You're missing two things: clarity on your niche, and a real monetisation system. This
-          free bundle gives you both — two guided PDFs built specifically for South African
-          creators. No card, no catch.
-        </p>
-        <div className="mt-10">
-          <ClaimForm />
+        <div className="mt-10 mx-auto max-w-md">
+          <MailerLiteEmbedForm formSlug="q6qiYX" />
         </div>
       </section>
 
@@ -115,74 +118,6 @@ function CreatorBundlePage() {
       </section>
 
       <ContentpreneurFooter />
-    </div>
-  );
-}
-
-function ClaimForm() {
-  const claimFn = useServerFn(claimFreeProduct);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
-  const mut = useMutation({
-    mutationFn: claimFn,
-    onSuccess: (res: { url: string }) => {
-      setDownloadUrl(res.url);
-      toast.success("It's yours — check your email too.");
-    },
-    onError: (e: Error) => toast.error(e.message ?? "Something went wrong — try again"),
-  });
-
-  if (downloadUrl) {
-    return (
-      <div className="border border-border bg-background p-6 text-center">
-        <p className="font-display text-lg font-bold text-banana">You're in.</p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We've also emailed a copy — check your inbox (or spam).
-        </p>
-        <a
-          href={downloadUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-5 inline-flex items-center justify-center gap-2 rounded-md bg-banana px-6 py-3 font-display text-sm text-banana-foreground hover:bg-banana/90"
-        >
-          <Download className="size-4" />
-          Open Your Bundle →
-        </a>
-      </div>
-    );
-  }
-
-  return (
-    <div className="mx-auto flex max-w-md flex-col gap-3">
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-        />
-        <Input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com"
-        />
-      </div>
-      <Button
-        disabled={!email || mut.isPending}
-        onClick={() => {
-          trackLead();
-          mut.mutate({
-            data: { productSlug: PRODUCT_SLUG, email, fullName: name || undefined, ...getUtm() },
-          });
-        }}
-        className="whitespace-nowrap bg-banana text-banana-foreground hover:bg-banana/90"
-      >
-        {mut.isPending ? "Sending…" : "Get The Free Bundle"}
-      </Button>
     </div>
   );
 }
