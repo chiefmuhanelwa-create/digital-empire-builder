@@ -67,6 +67,9 @@ function CreatorBundlePage() {
         </div>
         <div className="mt-10 mx-auto max-w-md">
           <MailerLiteEmbedForm formSlug="q6qiYX" />
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            We'll email both PDFs straight away — no spam, unsubscribe anytime.
+          </p>
         </div>
       </section>
 

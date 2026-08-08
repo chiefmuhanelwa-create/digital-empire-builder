@@ -33,6 +33,9 @@
     // with the Next.js site's "/_next/static/*" convention, so this is safe to add.
     { "pattern": "contentpreneur.africa/assets/*", "zone_name": "contentpreneur.africa" },
     { "pattern": "contentpreneur.africa/downloads/*", "zone_name": "contentpreneur.africa" },
+    // Same bug as above, found 2026-08-08: starterkit/creator-bundle's product
+    // cover images live under "/product-covers/*", also uncaught by any pattern.
+    { "pattern": "contentpreneur.africa/product-covers/*", "zone_name": "contentpreneur.africa" },
     // Phase 2C, 2026-07-28: checkout.functions.ts builds the post-payment
     // redirect from the ACTUAL request host (getRequestHost()) — so a purchase
     // started on contentpreneur.africa/foundation redirects back to
