@@ -27,6 +27,7 @@ const bodySchema = z.object({
   source_keyword: z.string().trim().max(80).optional(),
   segment: z.enum(["knowledge_entrepreneur", "content_creator", "cant_determine"]).optional(),
   pain_point: z.enum(["ideas", "niche", "rate", "tax", "starting"]).optional(),
+  blocker_detail: z.string().trim().max(1000).optional(),
 });
 
 function safeEqual(a: string, b: string): boolean {
@@ -81,7 +82,12 @@ export const Route = createFileRoute("/api/public/manychat-lead")({
 
           const existingRawData = (existing?.raw_data as Record<string, Json> | null) ?? {};
           const prevManychat = existingRawData.manychat as
-            | { source_keyword?: string | null; segment?: string | null; pain_point?: string | null }
+            | {
+                source_keyword?: string | null;
+                segment?: string | null;
+                pain_point?: string | null;
+                blocker_detail?: string | null;
+              }
             | undefined;
 
           const manychatPatch: Record<string, string | null> = {
@@ -89,6 +95,7 @@ export const Route = createFileRoute("/api/public/manychat-lead")({
             source_keyword: data.source_keyword ?? prevManychat?.source_keyword ?? null,
             segment: data.segment ?? prevManychat?.segment ?? null,
             pain_point: data.pain_point ?? prevManychat?.pain_point ?? null,
+            blocker_detail: data.blocker_detail ?? prevManychat?.blocker_detail ?? null,
             updated_at: new Date().toISOString(),
           };
 

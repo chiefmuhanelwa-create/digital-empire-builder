@@ -1,3 +1,5 @@
+import { reportError } from "@/lib/error-logger";
+
 // Fire-and-forget MailerLite v3 helper.
 // Silently skips if MAILERLITE_API_KEY or groupId is falsy — safe to call unconditionally.
 export async function addToMailerLiteGroup(
@@ -39,9 +41,20 @@ export async function addToMailerLiteGroup(
     });
     if (!res.ok) {
       const text = await res.text();
-      console.warn(`[mailerlite] group ${groupId} sync failed ${res.status}: ${text.slice(0, 200)}`);
+      const message = `[mailerlite] group ${groupId} sync failed ${res.status}: ${text.slice(0, 200)}`;
+      console.warn(message);
+      await reportError(new Error(message), {
+        endpoint: "addToMailerLiteGroup",
+        severity: "warning",
+        meta: { email, groupId, status: res.status },
+      });
     }
   } catch (err) {
     console.warn("[mailerlite] fetch error:", err);
+    await reportError(err, {
+      endpoint: "addToMailerLiteGroup",
+      severity: "warning",
+      meta: { email, groupId },
+    });
   }
 }

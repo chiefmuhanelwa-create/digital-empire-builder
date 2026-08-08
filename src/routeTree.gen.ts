@@ -25,6 +25,7 @@ import { Route as MediaKitRouteImport } from './routes/media-kit'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HookGeneratorRouteImport } from './routes/hook-generator'
 import { Route as FoundationRouteImport } from './routes/foundation'
+import { Route as CreatorBundleRouteImport } from './routes/creator-bundle'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as ApplyRouteImport } from './routes/apply'
@@ -154,6 +155,11 @@ const HookGeneratorRoute = HookGeneratorRouteImport.update({
 const FoundationRoute = FoundationRouteImport.update({
   id: '/foundation',
   path: '/foundation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreatorBundleRoute = CreatorBundleRouteImport.update({
+  id: '/creator-bundle',
+  path: '/creator-bundle',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -439,6 +445,7 @@ export interface FileRoutesByFullPath {
   '/apply': typeof ApplyRoute
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
+  '/creator-bundle': typeof CreatorBundleRoute
   '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
@@ -506,6 +513,7 @@ export interface FileRoutesByTo {
   '/apply': typeof ApplyRoute
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
+  '/creator-bundle': typeof CreatorBundleRoute
   '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
@@ -571,6 +579,7 @@ export interface FileRoutesById {
   '/apply': typeof ApplyRoute
   '/cart': typeof CartRoute
   '/contact': typeof ContactRoute
+  '/creator-bundle': typeof CreatorBundleRoute
   '/foundation': typeof FoundationRoute
   '/hook-generator': typeof HookGeneratorRoute
   '/login': typeof LoginRoute
@@ -640,6 +649,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/cart'
     | '/contact'
+    | '/creator-bundle'
     | '/foundation'
     | '/hook-generator'
     | '/login'
@@ -707,6 +717,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/cart'
     | '/contact'
+    | '/creator-bundle'
     | '/foundation'
     | '/hook-generator'
     | '/login'
@@ -771,6 +782,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/cart'
     | '/contact'
+    | '/creator-bundle'
     | '/foundation'
     | '/hook-generator'
     | '/login'
@@ -840,6 +852,7 @@ export interface RootRouteChildren {
   ApplyRoute: typeof ApplyRoute
   CartRoute: typeof CartRoute
   ContactRoute: typeof ContactRoute
+  CreatorBundleRoute: typeof CreatorBundleRoute
   FoundationRoute: typeof FoundationRoute
   HookGeneratorRoute: typeof HookGeneratorRoute
   LoginRoute: typeof LoginRoute
@@ -980,6 +993,13 @@ declare module '@tanstack/react-router' {
       path: '/foundation'
       fullPath: '/foundation'
       preLoaderRoute: typeof FoundationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creator-bundle': {
+      id: '/creator-bundle'
+      path: '/creator-bundle'
+      fullPath: '/creator-bundle'
+      preLoaderRoute: typeof CreatorBundleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -1471,6 +1491,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApplyRoute: ApplyRoute,
   CartRoute: CartRoute,
   ContactRoute: ContactRoute,
+  CreatorBundleRoute: CreatorBundleRoute,
   FoundationRoute: FoundationRoute,
   HookGeneratorRoute: HookGeneratorRoute,
   LoginRoute: LoginRoute,
