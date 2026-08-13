@@ -45,6 +45,7 @@ import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
+import { Route as ApiPublicRateCardRouteImport } from './routes/api/public/rate-card'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiPublicManychatLeadRouteImport } from './routes/api/public/manychat-lead'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
@@ -255,6 +256,11 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   id: '/api/public/stripe-webhook',
   path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicRateCardRoute = ApiPublicRateCardRouteImport.update({
+  id: '/api/public/rate-card',
+  path: '/api/public/rate-card',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaystackWebhookRoute =
@@ -492,6 +498,7 @@ export interface FileRoutesByFullPath {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -556,6 +563,7 @@ export interface FileRoutesByTo {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
@@ -626,6 +634,7 @@ export interface FileRoutesById {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -696,6 +705,7 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
     | '/admin/'
     | '/dashboard/'
@@ -760,6 +770,7 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
     | '/admin'
     | '/dashboard'
@@ -829,6 +840,7 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
     | '/_authenticated/admin/'
     | '/_authenticated/dashboard/'
@@ -875,6 +887,7 @@ export interface RootRouteChildren {
   ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
   ApiPublicManychatLeadRoute: typeof ApiPublicManychatLeadRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ApiPublicRateCardRoute: typeof ApiPublicRateCardRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ApiEmailAuthPreviewRoute: typeof ApiEmailAuthPreviewRoute
   ApiEmailAuthWebhookRoute: typeof ApiEmailAuthWebhookRoute
@@ -1133,6 +1146,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/stripe-webhook'
       fullPath: '/api/public/stripe-webhook'
       preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/rate-card': {
+      id: '/api/public/rate-card'
+      path: '/api/public/rate-card'
+      fullPath: '/api/public/rate-card'
+      preLoaderRoute: typeof ApiPublicRateCardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/paystack-webhook': {
@@ -1514,6 +1534,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCronSyncFxRoute: ApiCronSyncFxRoute,
   ApiPublicManychatLeadRoute: ApiPublicManychatLeadRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ApiPublicRateCardRoute: ApiPublicRateCardRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ApiEmailAuthPreviewRoute: ApiEmailAuthPreviewRoute,
   ApiEmailAuthWebhookRoute: ApiEmailAuthWebhookRoute,

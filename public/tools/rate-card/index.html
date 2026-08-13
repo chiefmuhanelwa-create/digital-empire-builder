@@ -1068,11 +1068,11 @@ async function sendRateCard(){
       floor:zar(R.range_low),standard:zar(R.total),ceiling:zar(R.range_high),
       followers:fmtN(R.followers),date:new Date().toLocaleDateString('en-ZA',{year:'numeric',month:'long',day:'numeric'})
     };
-    const res=await fetch('https://nochill-rate-card.vercel.app/api/send-rate-card',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,brand,rateData})});
+    const res=await fetch('/api/public/rate-card',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,brand,rateData})});
     const data=await res.json();
     if(!data.ok)throw new Error(data.error||'Send failed');
     btn.textContent='✓ Rate Card Sent!';
-    showMsg(`✅ Check <strong>${email}</strong> — your rate card is on its way. Forward the PDF directly to the brand.`,'#059669');
+    showMsg(`✅ Check <strong>${email}</strong> — your rate card is on its way. Forward the PDF directly to the brand.<br><br>Knowing your number is half of it. Sending the pitch is the other half — <a href="https://chkplt.com/products/first-brand-deal-script" target="_blank" rel="noopener" style="color:#C9A84C;font-weight:700;text-decoration:underline;">Your First Brand Deal Script</a> has the word-for-word pitch, and the reply for when they lowball this rate.`,'#059669');
   }catch(err){
     btn.disabled=false;btn.textContent='Send My Rate Card PDF →';
     showMsg(`❌ ${err.message||'Send failed — try again.'}`,'#EF4444');

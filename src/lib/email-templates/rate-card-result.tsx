@@ -1,31 +1,45 @@
 import * as React from "react";
-import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from "@react-email/components";
-import { emailStyles, SLATE_200 } from "./theme";
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Hr,
+  Html,
+  Link,
+  Preview,
+  Section,
+  Text,
+} from "@react-email/components";
+import { emailStyles, SLATE_200, SLATE_500, SLATE_700, AMBER_DEEP } from "./theme";
 
+// Delivery email for the rate-card PDF. Replaces the version that used to be
+// sent from the standalone Vercel app over Zoho SMTP — same job, now on
+// CHKPLT's own Resend queue so the lead is captured in the same breath.
+// The upsell points at chkplt.com, not the retired contentcreatorhub.online
+// Shopify URL the old copy still linked to.
 export interface RateCardResultProps {
   firstName?: string | null;
-  niche: string;
-  total: string;
-  low: string;
-  high: string;
-  deliverable: string;
-  breakdown: { label: string; value: string }[];
-  marketNote: string;
+  brand?: string | null;
+  tier?: string | null;
+  platform?: string | null;
+  floor: string;
+  standard: string;
+  ceiling: string;
 }
 
 export const RateCardResultEmail = ({
   firstName,
-  niche,
-  total,
-  low,
-  high,
-  deliverable,
-  breakdown,
-  marketNote,
+  brand,
+  tier,
+  platform,
+  floor,
+  standard,
+  ceiling,
 }: RateCardResultProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Your rate card: {total} per {deliverable}</Preview>
+    <Preview>Your rate card is attached — {standard} is your opening quote.</Preview>
     <Body style={emailStyles.main}>
       <Container style={emailStyles.container}>
         <Text style={emailStyles.brand}>CHKPLT · Rate Card</Text>
@@ -33,41 +47,62 @@ export const RateCardResultEmail = ({
           {firstName ? `${firstName}, here's` : "Here's"} your number.
         </Heading>
         <Text style={emailStyles.text}>
-          Built on real South African CPM benchmarks for {niche}, your engagement, and the deliverable.
-          Walk into the negotiation with a defensible rate — not a guess.
+          Your rate card is attached. Forward the PDF straight to any brand you're pitching — your
+          rate is built on real South African CPM benchmarks{platform ? ` for ${platform}` : ""}.
+          When they push back on your price, that document is your evidence.
         </Text>
+        {brand ? (
+          <Text style={{ fontSize: "13px", color: SLATE_500, margin: "0 0 16px" }}>
+            Prepared for: <strong style={{ color: SLATE_700 }}>{brand}</strong>
+          </Text>
+        ) : null}
 
         <Section style={{ textAlign: "center" as const, margin: "8px 0 20px" }}>
-          <Text style={{ fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase" as const, color: "#64748B", margin: "0 0 4px" }}>
-            Recommended rate
+          <Text
+            style={{
+              fontSize: "13px",
+              letterSpacing: "2px",
+              textTransform: "uppercase" as const,
+              color: SLATE_500,
+              margin: "0 0 4px",
+            }}
+          >
+            Your opening quote{tier ? ` · ${tier}` : ""}
           </Text>
-          <Text style={{ fontSize: "40px", fontWeight: "800" as const, color: "#D97706", margin: "0" }}>
-            {total}
+          <Text
+            style={{ fontSize: "40px", fontWeight: "800" as const, color: AMBER_DEEP, margin: "0" }}
+          >
+            {standard}
           </Text>
-          <Text style={{ fontSize: "14px", color: "#334155", margin: "6px 0 0" }}>
-            Negotiation range {low} — {high} per {deliverable}
+          <Text style={{ fontSize: "14px", color: SLATE_700, margin: "6px 0 0" }}>
+            Floor {floor} — never go below it. Premium {ceiling} for full rights and exclusivity.
           </Text>
         </Section>
 
         <Hr style={{ borderColor: SLATE_200, margin: "20px 0" }} />
 
-        {breakdown.map((row, i) => (
-          <Section key={i} style={{ display: "flex" as const, justifyContent: "space-between" as const, marginBottom: "8px" }}>
-            <Text style={{ fontSize: "14px", color: "#334155", margin: 0, display: "inline-block" as const }}>
-              {row.label}: <strong>{row.value}</strong>
-            </Text>
-          </Section>
-        ))}
+        <Text style={{ fontSize: "13px", color: SLATE_700, lineHeight: "1.65" }}>
+          <strong>The floor rate is your absolute minimum.</strong> The premium rate is your ceiling
+          for usage rights, exclusivity, or an urgent turnaround. The standard rate is what you
+          quote first — always.
+        </Text>
 
         <Hr style={{ borderColor: SLATE_200, margin: "20px 0" }} />
 
-        <Text style={{ fontSize: "13px", color: "#64748B", lineHeight: "1.6" }}>
-          <strong>{niche} — SA market note:</strong> {marketNote}
+        <Text style={{ fontSize: "14px", color: SLATE_700, lineHeight: "1.7" }}>
+          Knowing your number is half of it. Sending the pitch is the other half.{" "}
+          <Link
+            href="https://chkplt.com/products/first-brand-deal-script"
+            style={{ color: AMBER_DEEP, fontWeight: 600 }}
+          >
+            Your First Brand Deal Script
+          </Link>{" "}
+          gives you the 4-Part Pitch and the word-for-word cold, warm and upgrade scripts —
+          including exactly what to say when a brand lowballs the rate you just calculated.
         </Text>
 
         <Text style={emailStyles.footer}>
-          Now go close the deal — CHKPLT's Foundation Kit has the rate-card template, the "I don't do
-          freebies" reply script, and the system to turn one brand reply into a recurring retainer.
+          chkplt.com · Generated by RateCard Pro · NOCHILL PTY LTD
         </Text>
       </Container>
     </Body>

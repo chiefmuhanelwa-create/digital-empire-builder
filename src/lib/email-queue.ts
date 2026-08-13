@@ -56,7 +56,8 @@ async function moveToDlq(
     message_id: msg.msg_id,
     payload,
   });
-  if (error) console.error("Failed to move message to DLQ", { queue, msg_id: msg.msg_id, reason, error });
+  if (error)
+    console.error("Failed to move message to DLQ", { queue, msg_id: msg.msg_id, reason, error });
 }
 
 export type DrainResult =
@@ -78,7 +79,9 @@ export async function drainEmailQueues(): Promise<DrainResult> {
 
   const { data: state } = await supabase
     .from("email_send_state")
-    .select("retry_after_until, batch_size, send_delay_ms, auth_email_ttl_minutes, transactional_email_ttl_minutes")
+    .select(
+      "retry_after_until, batch_size, send_delay_ms, auth_email_ttl_minutes, transactional_email_ttl_minutes",
+    )
     .single();
 
   if (state?.retry_after_until && new Date(state.retry_after_until) > new Date()) {
@@ -89,7 +92,8 @@ export async function drainEmailQueues(): Promise<DrainResult> {
   const sendDelayMs = state?.send_delay_ms ?? DEFAULT_SEND_DELAY_MS;
   const ttlMinutes: Record<string, number> = {
     auth_emails: state?.auth_email_ttl_minutes ?? DEFAULT_AUTH_TTL_MINUTES,
-    transactional_emails: state?.transactional_email_ttl_minutes ?? DEFAULT_TRANSACTIONAL_TTL_MINUTES,
+    transactional_emails:
+      state?.transactional_email_ttl_minutes ?? DEFAULT_TRANSACTIONAL_TTL_MINUTES,
   };
 
   let totalProcessed = 0;
@@ -109,7 +113,9 @@ export async function drainEmailQueues(): Promise<DrainResult> {
     const messageIds = Array.from(
       new Set(
         messages
-          .map((msg: any) => (typeof msg?.message?.message_id === "string" ? msg.message.message_id : null))
+          .map((msg: any) =>
+            typeof msg?.message?.message_id === "string" ? msg.message.message_id : null,
+          )
           .filter((id: string | null): id is string => Boolean(id)),
       ),
     );
@@ -124,7 +130,10 @@ export async function drainEmailQueues(): Promise<DrainResult> {
         for (const row of failedRows ?? []) {
           const messageId = row?.message_id;
           if (typeof messageId !== "string" || !messageId) continue;
-          failedAttemptsByMessageId.set(messageId, (failedAttemptsByMessageId.get(messageId) ?? 0) + 1);
+          failedAttemptsByMessageId.set(
+            messageId,
+            (failedAttemptsByMessageId.get(messageId) ?? 0) + 1,
+          );
         }
       }
     }
@@ -170,6 +179,10 @@ export async function drainEmailQueues(): Promise<DrainResult> {
           subject: payload.subject,
           html: payload.html,
           text: payload.text ?? undefined,
+          // Optional base64 attachments — used by the rate-card tool, which
+          // delivers a generated PDF. Resend accepts `content` as a base64
+          // string, which is what survives the round-trip through pgmq's JSONB.
+          attachments: payload.attachments ?? undefined,
           headers: { "X-Entity-Ref-ID": payload.idempotency_key ?? payload.message_id },
         });
         if (sendError) {
@@ -206,7 +219,9 @@ export async function drainEmailQueues(): Promise<DrainResult> {
           await supabase
             .from("email_send_state")
             .update({
-              retry_after_until: new Date(Date.now() + getRetryAfterSeconds(error) * 1000).toISOString(),
+              retry_after_until: new Date(
+                Date.now() + getRetryAfterSeconds(error) * 1000,
+              ).toISOString(),
               updated_at: new Date().toISOString(),
             })
             .eq("id", 1);
