@@ -56,7 +56,7 @@ A **custom, owned funnel** — the same system running live at chkplt.com — bu
 
 ## Why me
 - I built and run this exact system live at **chkplt.com** — it's not theory.
-- Spoke on the global stage at the **Meta Youth Summit (2026)**; **R600,000+** in Meta payouts; **3M+** followers at peak; **SAMA31 judge**.
+- Spoke on the global stage at the **Meta Youth Summit (2026)**; **R600,000+** in Meta payouts; **SAMA31 judge**.
 - I teach what I build — you're not left in the dark; you get the manual and the knowledge.
 
 ## FAQ

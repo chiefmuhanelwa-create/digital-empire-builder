@@ -57,7 +57,7 @@ Most people try to fix this by buying more tools. Wrong lever. Fix Mindset first
 
 ---
 
-## Email 3 (Day 4) — "100,000 followers and R47 in my account"
+## Email 3 (Day 4) — "200,000 followers and 47 email subscribers"
 
 **Subject:** The follower count that meant nothing
 **Preview text:** No links today. Just the truth.
@@ -66,15 +66,15 @@ Most people try to fix this by buying more tools. Wrong lever. Fix Mindset first
 
 I'm not going to sell you anything in this email.
 
-There was a point where the numbers looked good from the outside — a growing audience, brand deals coming in — and my account still sat at **R47**. Lowest point I can remember. Followers don't pay rent.
+There was a point where the numbers looked good from the outside — 200,000 Facebook followers, brand deals coming in — and I started an email list that got **47 subscribers**. Forty-seven people. That is humbling when you are celebrating 200,000 anywhere else. It turned out to be the only number that mattered. It grew to 100,000.
 
 Later, a different kind of number hit: **Instagram suspended the account in August 2025. 780,000 followers, gone, in 24 hours. No warning, no appeal window, no timeline.**
 
 That's rented land. The algorithm is the landlord. It can evict you with no notice, and there's no court you can appeal to.
 
-What survived that suspension: the email list. Same list you're reading this on right now. Owned land — nobody can suspend it, shadowban it, or change the rules on it overnight.
+What survived that suspension: those 47 people, grown up. When Instagram suspended my 780K account, I still had 100K people I could email that same day. Same list you're reading this on right now. Owned land — nobody can suspend it, shadowban it, or change the rules on it overnight.
 
-There's also a tax story I don't tell often — a SARS assessment that hit R207,879.20 because income was coming in with nobody telling me to set 25% aside. That got resolved (down to R162,174.14 after an amended-returns objection), but it cost eleven months of payments and a lesson I'll never unlearn: **untracked income becomes a debt with your name on it.**
+There's also a tax story I don't tell often — a SARS assessment that hit R207,879.20 because income was coming in with nobody telling me to set 25% aside. I came forward and corrected it rather than hide from it. I'm still carrying it. And that's the lesson I'll never unlearn: **untracked income becomes a debt with your name on it.**
 
 No CTA today. Just: protect what you're building. Don't build only on land you don't own.
 

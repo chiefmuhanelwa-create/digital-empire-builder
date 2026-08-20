@@ -129,8 +129,8 @@ export const TaxResultEmail = ({
 
         <Text style={{ fontSize: "14px", color: SLATE_700, lineHeight: "1.7" }}>
           I learned this the expensive way. An assessment of <strong>R207,879</strong> landed
-          because nothing had been set aside — I came forward, corrected it, and SARS waived{" "}
-          <strong>R45,705</strong> in penalties. It was survivable. Not knowing is what costs you.{" "}
+          because nothing had been set aside. I came forward and corrected it rather than hide
+          — and I am still carrying it. Not knowing is what costs you.{" "}
           <Link
             href="https://chkplt.com/products/sars-creator-income"
             style={{ color: AMBER_DEEP, fontWeight: 600 }}

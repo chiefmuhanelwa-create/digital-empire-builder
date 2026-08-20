@@ -98,12 +98,12 @@ const VERDICTS: Record<Phase, { kicker: string; title: string; body: string }> =
   align: {
     kicker: "Start here — ALIGN",
     title: "You're trying to DO before you've settled who you BE.",
-    body: "This is where I was on the bathroom floor in 2013 — R47, no plan that made sense. Alignment happens in the dark, before anybody claps. Joshua 1:8 says meditate first, THEN your way prospers. Lock your identity and your daily habits this week, and everything downstream gets easier. The 7-Day Sprint below is built exactly for you.",
+    body: "This is where I was on the bathroom floor in 2013 — no plan that made sense. Alignment happens in the dark, before anybody claps. Joshua 1:8 says meditate first, THEN your way prospers. Lock your identity and your daily habits this week, and everything downstream gets easier. The 7-Day Sprint below is built exactly for you.",
   },
   accelerate: {
     kicker: "Start here — ACCELERATE",
     title: "Your roots are set. Now break the friction.",
-    body: "You know who you are — but you're still adding when God called you to multiply. My first deal was R350; one aligned link later it was R23,000 in a single day. Acceleration isn't for the talented, it's for the positioned. Publish more, build the owned list, and treat every small job like it's worth R100,000. The Sprint sharpens your execution.",
+    body: "You know who you are — but you're still adding when God called you to multiply. I undercharged my first 50 brand deals and lost R132,500 doing it; one aligned link later it was R23,000 in a single day. Acceleration isn't for the talented, it's for the positioned. Publish more, build the owned list, and treat every small job like it's worth R100,000. The Sprint sharpens your execution.",
   },
   excel: {
     kicker: "Guard the dominion — EXCEL",

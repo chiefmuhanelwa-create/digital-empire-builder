@@ -195,7 +195,7 @@ The email address captured by ManyChat is pushed into MailerLite/ConvertKit, tri
 - **CTA:** No links, no sale. Pure relationship and trust validation.
 
   > **Verified-figures note:** use the CLAUDE.md proof table, not this section's placeholder framing —
-  > SARS original assessment R207,879.20, final debt paid R162,174.14. Never use R285,000.
+  > SARS original assessment R207,879.20 — and that is the ONLY figure to use. The debt is NOT paid: no payments started, he is still carrying it. Never write "paid off", "cleared" or "settled", never state a final-debt or waived-penalty figure, a monthly amount, a number of months, or the mechanism. Never use R285,000.
 
 #### Email 4 (Day 6) — "What 90 Days of Structured Building Looks Like"
 
@@ -235,7 +235,7 @@ Your sales calendar is a high-value asset. The application form acts as a strict
 
 When a qualified corporate executive arrives on your Zoom calendar, run this reverse-engineered closing structure:
 
-- **Step 1: The Integrity Alignment (0–10 min):** Establish absolute safety. State clearly: *"I do not run an aggressive sales pitch. My only assignment today is to run a deep diagnostic on your career assets and show you the exact gap between your calling and your current system. If there is alignment, I will invite you into our cohort room; if not, we part as kingdom peers. Is that a fair boundary?"* Share your brief 60-second origin narrative (Tshikwarani village to building 3M+ followers and surviving platform wiped land).
+- **Step 1: The Integrity Alignment (0–10 min):** Establish absolute safety. State clearly: *"I do not run an aggressive sales pitch. My only assignment today is to run a deep diagnostic on your career assets and show you the exact gap between your calling and your current system. If there is alignment, I will invite you into our cohort room; if not, we part as kingdom peers. Is that a fair boundary?"* Share your brief 60-second origin narrative (Tshikwarani village to building a national audience and surviving platform wiped land).
 
 - **Step 2: Current Reality Diagnostic (10–25 min):** Ask open-ended questions and take detailed notes. Use their exact vocabulary. *"Walk me through your career skills. What do you know better than 90% of the people in your organization?"* Track their output and current unmonetized metrics.
 

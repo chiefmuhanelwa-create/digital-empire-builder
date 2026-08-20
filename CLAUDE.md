@@ -95,7 +95,7 @@ Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 | Story / Fact | Figure |
 |---|---|
 | First online payment | R200 |
-| First brand deal (2017) | R350 (one post, 500K+ followers) |
+| Brand-deal undercharging | R132,500 lost across the first 50 deals (market rate was R3,000). ⚠ The "R350 first deal" figure is banned — the books contradict each other on it. |
 | AdMarula affiliate day (March 2019) | R23,000 in ONE day; R38,070+ total |
 | First R50K month (March 2021) | R50,000 → crashed to R8,000 (algorithm change) |
 | Savanna Cider retainer | R25,000/month × 4 months = R100,000 |
@@ -109,12 +109,8 @@ Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 | Total Ads & Affiliates (all streams, all years) | R800,000+ |
 | AdMarula — Mr Price affiliate (March 2019) | R23,000 in ONE DAY; R38,070+ total |
 | Google AdSense (annual, disabled Dec 2024) | R180,000/year |
-| SARS original assessment (2020–2022) | R207,879.20 |
-| SARS base undeclared income tax | R146,185.51 |
-| SARS penalties waived (amended eFiling) | R45,705.06 |
-| SARS final debt paid | R162,174.14 |
-| SARS payment plan | ~R17,000/month × 11 months |
-| SARS professional fees (Thome-Lee Wright) | R30,000 |
+| SARS original assessment | R207,879.20 — **the only publishable SARS figure** |
+| SARS debt status | **UNPAID — no payments started, still being carried** (confirmed 2026-08-20) |
 | Instagram suspended (August 2025) | ~780K followers |
 | Total cross-platform followers (peak) | 3M+ (Facebook 1M+ · Instagram ~800K · TikTok + YouTube) |
 | Contentpreneur Programme | R18,000 PIF / R6,500×3 |
@@ -122,7 +118,7 @@ Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 
 **Never use:** R285,000 (unverified SARS figure) · R207,869 (slightly wrong) · fabricated follower counts · round estimates
 
-**SARS story specifics:** VDP was FILED then WITHDRAWN on Thome-Lee Wright's advice. Standard eFiling amended returns used instead — gave better payment terms + penalty objection rights. SARS reference: 2990409167. VDP reference: VDP1059030.
+**SARS story specifics:** He came forward and corrected it rather than hiding. ⛔ Never claim it was paid off, cleared, settled or resolved. ⛔ Never state a final-debt figure, a waived-penalty figure, a monthly amount, a number of months, or the mechanism (whether the voluntary disclosure proceeded or was withdrawn) — two internal records contradict each other and even disagree on the tax years. ⛔ Never publish a reference number or name a tax practitioner or firm. The teachable lesson is the 35% Rule: 25% SARS, 10% business, 65% yours, split the day money lands.
 
 **Full verified story bank (11 stories):** See `docs/STORY-BANK.md`
 **Full verified proof statement:** "From sleeping in university bathrooms to R600,000+ in a single year — with receipts from Capitec, Netflix, Standard Bank, Superbalist, Suzuki, SA Tourism, ABSA, Showmax, Flying Fish, and 40+ other brands — across 23 agencies, 10 awards, a SAMA 30 & 31 judge seat (consecutive), and a Meta speaker slot."

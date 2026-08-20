@@ -38,7 +38,7 @@
 
 ### Numbers
 - Before: R0 income, sleeping in UP bathrooms, mother gone, owed NMMU R25K
-- After: R600,000+ annual income, 50+ brand deals, Netflix/Samsung/Huawei campaigns
+- After: R600,000+ annual income, 19 named brands, Netflix/Samsung/Huawei campaigns
 - Timeline: 8 years from bathroom floor to six-figure content empire
 
 ### Lesson
@@ -115,29 +115,23 @@
 
 ## STORY 05 — SARS R207K Tax Debt
 
-**Title:** The R207K Lesson I Couldn't Afford
+**Title:** The R207K Lesson I'm Still Carrying
 **ICP:** Both | **4E:** Educate | **Shadow Fear:** SF2 (Financial Ceiling)
 
-### VERIFIED FIGURES — DO NOT ALTER (from actual SARS + email archive 2025)
-- **SARS reference:** 2990409167 — N MUHANELWA
-- **VDP reference:** VDP1059030 — filed, then WITHDRAWN on Thome-Lee Wright's advice
-- **Tax practitioner:** Thome-Lee Wright (wrightbizz.co.za)
-- **Original assessment** (base tax + penalties): **R207,879.20**
-- **Base undeclared income tax:** R146,185.51
-- **Penalties imposed:** ~R61,694
-- **Penalties waived by SARS:** **R45,705.06** (voluntary disclosure credit via amended eFiling)
-- **Final debt paid:** **R162,174.14**
-- **Payment plan:** ~R17,000/month × 11 months
-- **Professional fees:** R30,000 to Thome-Lee Wright
-- **Tax years:** 2020, 2021, 2022 (2018/2019 income rolled into 2020)
+### VERIFIED FIGURE — DO NOT ALTER
+- **Original assessment:** **R207,879.20** — this is the ONLY figure that is verified and publishable
+- **He came forward and corrected it rather than hiding.**
+- ⛔ **NOT PAID. No payments started. He is still carrying it.** Never write "paid off", "cleared", "settled" or "resolved".
+- ⛔ Never state a final-debt figure, a waived-penalty figure, a monthly amount, a number of months, or the mechanism used — internal records contradict each other and none of it is settled.
+- ⛔ Never publish a SARS/VDP/case reference number. Never name a tax practitioner or firm.
 
-**NEVER USE:** R285,000 (unverified) | R207,869 (slightly wrong) | "VDP saved me" (it was WITHDRAWN)
+**NEVER USE:** R285,000 (unverified) | R207,869 (slightly wrong) | any repayment or "it's done" ending
 
 ### Snippet (15–18s)
-> "I owed SARS R207,879. Not because I was hiding. Because nobody told me Meta payouts were taxable. I came forward myself. Got R45,705 in penalties waived. Final bill: R162,174. Here's what you need to know."
+> "I owe SARS R207,879. Not because I was hiding. Because nobody told me Meta payouts were taxable. I came forward myself. And I'm still carrying it. Here's what you need to know before it's your turn."
 
 ### Lesson
-> The VDP is not always the safety net it sounds like. Get a tax practitioner who knows the difference. Come forward before SARS comes for you. Every brand deal, Meta payout, and AdSense cent — SARS can see it.
+> Come forward before SARS comes for you — but understand that coming forward doesn't erase it. You carry it. Every brand deal, Meta payout, and AdSense cent — SARS can see it. So reserve the money before it is owed: 25% SARS, 10% business, 65% yours. That's the 35% Rule, applied the day the money lands, not at year end.
 
 ### Products This Story Sells
 - Tax Guide for Content Creators (R299) | PAIDS Starter Course
@@ -241,7 +235,7 @@
 **ICP:** ICP 1 (primary) | **4E:** Encourage | **Shadow Fear:** SF10 (Legacy Void)
 
 ### Snippet (15–18s)
-> "I share everything I know because Ubuntu teaches: your success doesn't diminish mine. Lifted 200+ creators to their first R10K month. Their wins are my legacy — for children's children."
+> "I share everything I know because Ubuntu teaches: your success doesn't diminish mine. Lifted creators to their first R10K month. Their wins are my legacy — for children's children."
 
 ### Numbers
 - Creators lifted to first R10K/month: 200+

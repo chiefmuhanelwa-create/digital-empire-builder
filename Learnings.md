@@ -1133,14 +1133,14 @@ The platform uses `#F5C842` as the CSS variable `--banana` for gold colour. This
 
 ### SARS 25% Reserve Rule — Why It's Non-Negotiable
 
-Ndivhuwo paid R207,879.20 in SARS debt (final: R162,174.14 after R45,705.06 penalty waiver) from undeclared income across 2020–2022. This was the direct consequence of not ring-fencing tax.
+Ndivhuwo was assessed R207,879.20 by SARS on undeclared income. He came forward and corrected it rather than hiding — and as of 2026-08-20 it is **still unpaid, with no payments started**. This was the direct consequence of not ring-fencing tax.
 
 This platform MUST implement tax reserve at the DB level:
 - Field: `orders.tax_reserve_cents = ROUND(total_cents * 0.25)`
 - This field does NOT currently exist — migration required
 - When querying for business income: `SELECT SUM(total_cents - tax_reserve_cents) AS available_income`
 - Monthly: transfer exact reserve to dedicated tax savings account
-- SARS reference: 2990409167. Practitioner: Thome-Lee Wright (wrightbizz.co.za)
+- ⛔ Never record a SARS reference number or a tax practitioner/firm name in this repo
 
 ---
 
@@ -1224,7 +1224,7 @@ Added from verified credibility report (email archive, 840+ campaigns):
 - Playa Bets retainer (active): R12,500/month
 - Total Ads & Affiliates (all years): R800,000+
 - AdMarula Mr Price (March 2019): R23,000 in ONE DAY; R38,070+ total
-- SARS breakdown: base R146,185.51 + penalties ~R61,694 → waived R45,705.06 → final R162,174.14
+- SARS: **R207,879.20 assessed** — the only publishable figure. Unpaid, still carried. No final-debt/waived-penalty/monthly/months/mechanism claims.
 - 18+ brands · 23 agencies · 50+ deals confirmed
 
 Story 11 (AdMarula R23K day) added to story bank and referenced in CLAUDE.md.

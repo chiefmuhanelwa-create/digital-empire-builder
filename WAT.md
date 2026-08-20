@@ -132,20 +132,21 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 
 **What:** Designate and protect 25% of every ZAR received for SARS obligations.
 
-**Why:** Ndivhuwo paid R207,879.20 in SARS debt (R162,174.14 final after penalty waiver) from undeclared income. This will never happen again. 25% is set aside before any business expense. This is not optional.
+**Why:** Ndivhuwo was assessed R207,879.20 by SARS on undeclared income. He came forward and corrected it — and he is **still carrying it, unpaid**. This will never happen again. 25% is set aside before any business expense. This is not optional.
 
 **How:**
 1. **Every payment processed** — DB stores `tax_reserve_cents = total_cents × 0.25` (migration required — not yet implemented)
 2. **Monthly reconciliation** — Query: `SELECT SUM(tax_reserve_cents) FROM orders WHERE status = 'paid' AND created_at >= date_trunc('month', now())`
 3. **Transfer** — Transfer exact SARS reserve amount to designated tax savings account by month-end
-4. **SARS filing** — Annual return via eFiling (reference: 2990409167). Provisional tax due Feb + Aug.
+4. **SARS filing** — Annual return via eFiling. Provisional tax due Feb + Aug. (⛔ never record a SARS reference number in this repo.)
 5. **Never use tax reserve** — Not for cash flow, not for emergencies, not for expenses. It is not yours.
 
 **SARS data (verified, do not change):**
-- Original 2020–2022 assessment: R207,879.20
-- Penalty waived via eFiling amended returns: R45,705.06
-- Final paid: R162,174.14 over ~11 months at ~R17,000/month
-- Practitioner: Thome-Lee Wright (wrightbizz.co.za)
+- Original assessment: **R207,879.20** — the ONLY verified, publishable figure
+- He came forward and corrected it rather than hiding
+- ⛔ **NOT PAID. No payments started. Still being carried** (confirmed 2026-08-20)
+- ⛔ Never state a final-debt figure, a waived-penalty figure, a monthly amount, a number of months, or the mechanism — internal records contradict each other, including on the tax years
+- ⛔ Never record a reference number or a practitioner/firm name
 
 ---
 
@@ -290,7 +291,7 @@ Claude Code operates as the primary development and documentation agent for CHKP
 | **Canva** | Product PDFs, social content, covers | Heritage Gold `#C9A84C` · Charcoal `#1C1C1C` · Tool Black `#111111` · Cream `#FAF7F0` |
 | | | Fonts: Montserrat (headings 700–900) · Lato (body 400/700) |
 | | | Footer on all PDFs: `chkplt.com \| @nochill_god` |
-| | | Proof statement: "Sleeping in university bathrooms → R600,000+ annual income · 50+ brand deals · 23 agencies · 9 awards · SAMA31 judge · Meta speaker" |
+| | | Proof statement: "Sleeping in university bathrooms → R600,000+ annual income · 19 named brands · 23 agencies · 9 awards · SAMA31 judge · Meta speaker" |
 
 ### Analytics & Monitoring
 

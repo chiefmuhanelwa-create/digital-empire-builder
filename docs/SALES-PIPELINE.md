@@ -212,7 +212,7 @@ Qualify for the programme. Brief description: "I run a 90-day intensive for [the
 
 ### Opening Script Key Points
 - Be transparent: "I have no agenda to pitch you anything today — I want to understand where you are"
-- Brief personal bio (90 seconds max): Tshikwarani → bathroom floors → ATNS → 3M+ followers → rebuilt
+- Brief personal bio (90 seconds max): Tshikwarani → bathroom floors → night shifts → built and rebuilt
 - ⚠️ SARS figure: **R207,879** (never R285,000)
 - Revenue figure: only use **R600,000** (Meta 12-month payout, 2023 — verified)
 

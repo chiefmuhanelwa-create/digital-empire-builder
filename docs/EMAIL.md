@@ -139,7 +139,7 @@ Any reply or engagement that includes these words → tag `contentpreneur-potent
 - Micro (10K–50K): R3,000–R8,000
 - Mid (50K–500K): R8,000–R20,000
 - Macro (500K+): R20,000–R100,000+
-**Proof:** R350 first brand deal (2017) → R10,500 per Reel (Capitec 2026)
+**Proof:** R132,500 lost undercharging the first 50 brand deals → R10,500 per Reel (Capitec 2026)
 
 ### Email 7 — Day 13 (Offer)
 **Subject:** "I built something for you"

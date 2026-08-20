@@ -85,7 +85,7 @@ _Original (now-obsolete) framing kept for history below:_
 
 **Impact:** The checkout gate for premium programmes (R18,000 / R45,000) checks qualification before allowing payment. If no one is qualified, the premium programmes cannot be purchased by anyone — including the owner.
 
-**Fix:** SEEDED via migration `20260615100000_seed_owner_qualification.sql`. Inserts Ndivhuwo's application with `QUALIFIED_FOR_CORE_PROGRAM` status using verified proof numbers (3M+ followers, 4,895 subscribers, 5 PAIDS income streams, R300K+/month). The `checkQualification` function reads the most recent application per email — this seed immediately unlocks premium checkout for `chiefmuhanelwa@gmail.com`.
+**Fix:** SEEDED via migration `20260615100000_seed_owner_qualification.sql`. Inserts Ndivhuwo's application with `QUALIFIED_FOR_CORE_PROGRAM` status using verified proof numbers (4,895 subscribers, 5 PAIDS income streams, R300K+/month). The `checkQualification` function reads the most recent application per email — this seed immediately unlocks premium checkout for `chiefmuhanelwa@gmail.com`.
 
 **Remaining step:** Run the migration against the live Supabase project (`supabase db push` or apply via Supabase dashboard SQL editor).
 

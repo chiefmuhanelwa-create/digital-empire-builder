@@ -66,7 +66,7 @@ was won first).
 
 ---
 
-## Email 2 — Stage 1: Knowledge/Experience/Story — Subject: "R47. Then a risk."
+## Email 2 — Stage 1: Knowledge/Experience/Story — Subject: "The bathroom floor. Then a risk."
 
 **Preheader:** No CTA today. Just where it actually starts.
 
@@ -78,7 +78,7 @@ was won first).
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
-<title>R47. Then a risk.</title>
+<title>The bathroom floor. Then a risk.</title>
 <style>
 @media only screen and (max-width:620px) {
   .email-wrapper { padding: 16px 8px !important; }
@@ -107,7 +107,7 @@ was won first).
 <tr><td class="content-pad" style="padding: 16px 40px 0 40px;">
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, I want to guess something about you. You've spent years, maybe decades, getting genuinely good at something. And somewhere along the way you started believing that on its own isn't enough — that you need more letters after your name, more permission, more proof, before it counts as something worth building on. I know that belief from the inside. I lived in it long before I had any letters after my name at all.</p>
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">2013. University of Pretoria. I fail one module — one — in my first semester, and the bursary that was paying for everything drops me the same week. My mother, Florah, had passed not long before that. She earned R400 a month picking potatoes on a farm in Venda. I remember thinking, clearly, for the first time: I'm by myself now.</p>
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">I sleep in the university bathrooms for two to four months. I don't tell people that easily, even now. At the lowest point in that stretch, my bank account read R47.</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">I sleep in the university bathrooms for two to four months. I don't tell people that easily, even now.</p>
 </td></tr>
 <tr><td style="padding: 4px 40px 0 40px;">
   <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:4px 0 4px 0;"><tr><td>
@@ -116,7 +116,7 @@ was won first).
   </td></tr></table>
 </td></tr>
 <tr><td class="content-pad" style="padding: 12px 40px 0 40px;">
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, I want you to actually sit with that number for a second before you keep reading. Not skim past it. R47. That's not a story I tell for sympathy. It's the floor I found out I could stand on.</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, I want you to actually sit with that for a second before you keep reading. Not skim past it. A bathroom stall, night after night, for months. That's not a story I tell for sympathy. It's the floor I found out I could stand on.</p>
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">A year later, 2014, posted to OR Tambo with a real salary for the first time, I stand in a shop talking myself out of a R6,000 smartphone for longer than I'd like to admit. It feels reckless. I buy it anyway. Same week, no plan, no strategy document, no idea what I was doing — I start a Facebook page and call it "No Chill in Mzansi."</p>
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, here's what I need you to actually understand, not just agree with politely: I didn't have a system. I didn't have clarity. I didn't even have confidence. What I had was a phone, and a story nobody had asked me to tell yet — my own. That was the entire starting material. Everything else got built on top of it, slowly, badly, one attempt at a time.</p>
   <p class="body-text" style="margin:0 0 24px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">That's the part almost nobody believes about themselves. Not that they lack a system — that they already have the raw material, and they're waiting for permission to call it enough.</p>
@@ -595,7 +595,7 @@ was won first).
 </td></tr>
 <tr><td class="content-pad" style="padding: 16px 40px 0 40px;">
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">Six emails ago I told you that you already had something. Let me show you the whole shape of it now, back to back instead of scattered across a week.</p>
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">R47 in my account, and a R6,000 phone I nearly talked myself out of — that's where all of this actually started, long before I had a word for any of it. A table with Vusi Thembekwayo where nobody once asked my follower count — that's when I understood one clear sentence beats a thousand posts. Half a million followers and not one name I could call — that's the warning I almost didn't listen to in time. 780,000 people gone overnight, and my income went up instead of down — that's the day I found out what I'd actually built was safe. One link paying me R23,524 while I slept — that's when I stopped thinking of myself as someone who just posts. And a finance leader telling me she just needed direction — that's when I understood none of this was ever meant to stop at me.</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">A bathroom stall at the University of Pretoria, and a R6,000 phone I nearly talked myself out of — that's where all of this actually started, long before I had a word for any of it. A table with Vusi Thembekwayo where nobody once asked my follower count — that's when I understood one clear sentence beats a thousand posts. Half a million followers and not one name I could call — that's the warning I almost didn't listen to in time. 780,000 people gone overnight, and my income went up instead of down — that's the day I found out what I'd actually built was safe. One link paying me R23,524 while I slept — that's when I stopped thinking of myself as someone who just posts. And a finance leader telling me she just needed direction — that's when I understood none of this was ever meant to stop at me.</p>
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, here's the part I haven't said outright yet, and it's the whole reason any of the other six matter. Gomotsegang and Gaopalelwe — my sons — are the actual reason. "A good person leaves an inheritance for their children's children." Every framework, every rand tracked and taxed properly, every email in this sequence, is me trying to be faithful with what's in my hand so there's something real left behind. Not fame. Not a following. An owned asset that outlives a platform, an algorithm, even me.</p>
   <p class="body-text" style="margin:0 0 24px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">That's what I actually want for you, {$name}. Not more followers. Something worth leaving.</p>
 </td></tr>
