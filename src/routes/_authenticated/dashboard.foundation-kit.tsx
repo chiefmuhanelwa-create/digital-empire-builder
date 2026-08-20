@@ -1,354 +1,274 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
-import { STAGES, TOOLS, toolsForStage, startedSlugs, type KitTool, type StageId } from "@/lib/kit-catalog";
+import { WorkspaceShell, BLUE, BLUE_DARK, INK, BODY, MUTED, LINE, TINT } from "@/components/workspace-shell";
+import { STAGES, TOOLS, toolsForStage, startedSlugs, type KitTool } from "@/lib/kit-catalog";
 import { readOffer, assembleSentence, isOfferComplete, EMPTY_OFFER, type Offer } from "@/lib/offer-spine";
-import { Lock, ArrowRight, Check, Circle, Search, Database, Link2, Sparkles } from "lucide-react";
+import { Lock, ArrowRight, Check, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")({
   head: () => ({ meta: [{ title: "Your Workspace — Contentpreneur Africa" }] }),
   component: Workspace,
 });
 
-// THE WORKSPACE
+// THE WORKSPACE — rebuilt after founder feedback: "I don't know where to start,
+// everything is all over, the words are too small, links leave the workspace."
 //
-// This replaces a dashboard that listed eight of the twenty-four tools a buyer
-// had paid for. The rest existed and were reachable only if you knew the URL.
+// Every one of those was true, and they share one cause: the page presented
+// twenty-four equal options and let the person work out the order themselves.
 //
-// Organised by the seven stages rather than by tool type, because the stages are
-// the journey the customer is actually on and the thing the Accelerator's gates
-// key off. A buyer should open this and see a route, not an inventory.
-//
-// Dark by deliberate choice: this is the signed-in room, and it should not look
-// like the sales page that sold it. Contrast is checked against the surfaces —
-// gold on obsidian, never gold on a mid-tone.
-
-const INK = "#0E0E0C";
-const PANEL = "#171714";
-const RAISED = "#1E1E1A";
-const LINE = "#2C2C27";
-const LINE_HI = "#3D3D35";
-const TEXT = "#F4F2EA";
-const DIM = "#A8A396";
-const FAINT = "#77736A";
-const GOLD = "#D4A82F";
-const GOLD_HI = "#E8C462";
+// The fix is not decoration. It is subtraction:
+//   • ONE thing at the top. Not a dashboard — a next action.
+//   • Stages closed by default, current one open. Seven headings beats
+//     twenty-four cards.
+//   • Body text at 16-17px, headings large. Nothing under 13px anywhere.
+//   • Black on white, one blue for anything clickable. No mid-greys on white,
+//     no gold-on-cream, no tiny uppercase mono labels.
+//   • Nothing links out of the workspace.
 
 function Workspace() {
   const { access, loading } = useKitAccess();
   const [started, setStarted] = useState<Set<string>>(new Set());
   const [offer, setOffer] = useState<Offer>(EMPTY_OFFER);
-  const [q, setQ] = useState("");
-  const [openStage, setOpenStage] = useState<StageId | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
 
   useEffect(() => {
     setStarted(startedSlugs());
     setOffer(readOffer());
   }, []);
 
-  const doneCount = started.size;
-  const pct = Math.round((doneCount / TOOLS.length) * 100);
+  const done = started.size;
 
-  // Where they actually are: the first stage with unfinished tools.
-  const currentStage = useMemo(() => {
-    for (const s of STAGES) {
-      const tools = toolsForStage(s.id);
-      if (tools.some((t) => !started.has(t.slug))) return s;
-    }
-    return STAGES[STAGES.length - 1];
-  }, [started]);
+  // Where they actually are — the first stage with anything unfinished.
+  const current = useMemo(
+    () => STAGES.find((s) => toolsForStage(s.id).some((t) => !started.has(t.slug))) ?? STAGES[6],
+    [started],
+  );
 
-  const nextTool = useMemo(() => {
-    const inStage = toolsForStage(currentStage.id);
-    return inStage.find((t) => t.start && !started.has(t.slug))
-      ?? inStage.find((t) => !started.has(t.slug))
-      ?? null;
-  }, [currentStage, started]);
+  // The single next action. A "start here" tool if the stage has one, else the
+  // first unfinished tool in that stage.
+  const next = useMemo(() => {
+    const inStage = toolsForStage(current.id);
+    return inStage.find((t) => t.start && !started.has(t.slug)) ?? inStage.find((t) => !started.has(t.slug)) ?? null;
+  }, [current, started]);
 
-  const results = useMemo(() => {
-    const n = q.trim().toLowerCase();
-    if (!n) return null;
-    return TOOLS.filter(
-      (t) => t.name.toLowerCase().includes(n) || t.blurb.toLowerCase().includes(n) || t.output.toLowerCase().includes(n),
-    );
-  }, [q]);
+  useEffect(() => { setOpen(current.id); }, [current.id]);
 
   if (loading) {
     return (
-      <Shell>
-        <div className="py-32 text-center" style={{ color: FAINT }}>
-          <span className="font-mono text-xs tracking-[0.25em] uppercase">Loading your workspace</span>
-        </div>
-      </Shell>
+      <WorkspaceShell>
+        <div className="py-32 text-center text-[16px]" style={{ color: MUTED }}>Loading…</div>
+      </WorkspaceShell>
     );
   }
 
   if (!access) {
     return (
-      <Shell>
-        <main className="mx-auto max-w-2xl px-5 py-24 text-center">
-          <Lock className="size-9 mx-auto" style={{ color: FAINT }} />
-          <h1 className="mt-5 text-3xl font-black tracking-tight" style={{ color: TEXT }}>
+      <WorkspaceShell>
+        <main className="mx-auto max-w-xl px-5 py-24 text-center">
+          <Lock className="size-10 mx-auto" style={{ color: MUTED }} />
+          <h1 className="mt-5 text-[32px] font-black leading-tight" style={{ color: INK }}>
             Your workspace is part of the Foundation Kit.
           </h1>
-          <p className="mt-3" style={{ color: DIM }}>
-            Twenty-four tools across seven stages, and your answers carry from one to the next.
+          <p className="mt-3 text-[17px]" style={{ color: BODY }}>
+            Twenty-four tools, in the order you need them.
           </p>
-          <a href="/foundation" className="mt-7 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold"
-             style={{ background: GOLD, color: "#111" }}>
+          <a
+            href="/foundation"
+            className="mt-7 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
+            style={{ background: BLUE, color: "#fff", textDecoration: "none" }}
+          >
             Get the Kit <ArrowRight className="size-4" />
           </a>
         </main>
-      </Shell>
+      </WorkspaceShell>
     );
   }
 
   return (
-    <Shell>
-      {/* ── masthead */}
-      <section style={{ borderBottom: `1px solid ${LINE}` }}>
-        <div className="mx-auto max-w-6xl px-5 pt-12 pb-9">
-          <p className="font-mono text-[11px] tracking-[0.22em] uppercase" style={{ color: GOLD }}>
-            Your workspace
-          </p>
-          <h1 className="mt-3 text-[2.1rem] sm:text-[3rem] font-black leading-[1.03] tracking-tight" style={{ color: TEXT }}>
-            {isOfferComplete(offer) ? "Everything you build reads from one sentence." : "Seven stages. Twenty-four tools."}
-          </h1>
+    <WorkspaceShell>
+      <main className="mx-auto max-w-3xl px-5 py-10">
 
-          {isOfferComplete(offer) ? (
-            <p className="mt-4 max-w-3xl text-[1.05rem] leading-relaxed" style={{ color: DIM }}>
-              <span style={{ color: GOLD_HI }}>&ldquo;{assembleSentence(offer)}&rdquo;</span>
+        {/* ─── ONE next action. Everything else is below the fold, on purpose. */}
+        {next ? (
+          <section className="rounded-2xl p-6 sm:p-8" style={{ background: TINT, border: `1px solid ${LINE}` }}>
+            <p className="text-[15px] font-semibold" style={{ color: BLUE }}>
+              {done === 0 ? "Start here" : "Next up"}
             </p>
-          ) : (
-            <p className="mt-4 max-w-2xl text-[1.02rem] leading-relaxed" style={{ color: DIM }}>
-              Work them in order. Each stage ends in something you can point at &mdash; and your
-              answers carry forward, so you never type the same thing twice.
+            <h1 className="mt-2 text-[28px] sm:text-[34px] font-black leading-[1.15]" style={{ color: INK }}>
+              {next.name}
+            </h1>
+            <p className="mt-3 text-[17px] leading-relaxed" style={{ color: BODY }}>
+              {next.blurb}
             </p>
-          )}
-
-          {/* progress + next action */}
-          <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <div className="flex items-baseline gap-3">
-                <span className="font-black text-2xl tabular-nums" style={{ color: TEXT }}>{doneCount}</span>
-                <span className="text-sm" style={{ color: FAINT }}>of {TOOLS.length} tools started &middot; {pct}%</span>
-              </div>
-              <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: LINE }}>
-                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: GOLD }} />
-              </div>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {STAGES.map((s) => {
-                  const tools = toolsForStage(s.id);
-                  const done = tools.filter((t) => started.has(t.slug)).length;
-                  const full = done === tools.length;
-                  return (
-                    <button
-                      key={s.id}
-                      onClick={() => { setOpenStage(s.id); setQ(""); document.getElementById(`stage-${s.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
-                      className="rounded-md px-2.5 py-1 font-mono text-[10px] tracking-wider transition-colors"
-                      style={{
-                        background: full ? GOLD : done > 0 ? RAISED : "transparent",
-                        color: full ? "#111" : done > 0 ? GOLD_HI : FAINT,
-                        border: `1px solid ${full ? GOLD : LINE_HI}`,
-                      }}
-                      title={`${s.name} — ${done}/${tools.length}`}
-                    >
-                      {String(s.id).padStart(2, "0")}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {nextTool && (
-              <a
-                href={`/apps/${nextTool.slug}`}
-                className="rounded-xl p-5 transition-transform hover:-translate-y-0.5 lg:max-w-xs"
-                style={{ background: RAISED, border: `1px solid ${GOLD}`, textDecoration: "none" }}
-              >
-                <span className="font-mono text-[10px] tracking-[0.18em] uppercase" style={{ color: GOLD }}>
-                  Pick up here
-                </span>
-                <span className="block font-bold text-lg mt-1" style={{ color: TEXT }}>{nextTool.name}</span>
-                <span className="block text-xs mt-1" style={{ color: DIM }}>
-                  Stage {nextTool.stage} &middot; {STAGES[nextTool.stage - 1].outcome}
-                </span>
-                <span className="inline-flex items-center gap-1.5 mt-3 text-xs font-bold" style={{ color: GOLD_HI }}>
-                  Open <ArrowRight className="size-3.5" />
-                </span>
-              </a>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ── search */}
-      <section style={{ borderBottom: `1px solid ${LINE}`, background: PANEL }}>
-        <div className="mx-auto max-w-6xl px-5 py-4">
-          <div className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5"
-               style={{ background: INK, border: `1px solid ${LINE_HI}` }}>
-            <Search className="size-4 shrink-0" style={{ color: FAINT }} />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Find a tool — or what you need it to do"
-              className="w-full bg-transparent text-sm outline-none"
-              style={{ color: TEXT }}
-            />
-            {q && (
-              <button onClick={() => setQ("")} className="text-xs font-mono shrink-0" style={{ color: FAINT }}>clear</button>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <main className="mx-auto max-w-6xl px-5 py-9">
-        {results ? (
-          <>
-            <p className="font-mono text-[11px] tracking-[0.2em] uppercase mb-4" style={{ color: FAINT }}>
-              {results.length} result{results.length === 1 ? "" : "s"}
+            <p className="mt-4 text-[16px]" style={{ color: BODY }}>
+              <strong style={{ color: INK }}>You'll finish with:</strong> {next.output}
             </p>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {results.map((t) => <ToolCard key={t.slug} t={t} started={started.has(t.slug)} showStage />)}
-            </div>
-          </>
+            <a
+              href={`/apps/${next.slug}`}
+              className="mt-6 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
+              style={{ background: BLUE, color: "#fff", textDecoration: "none" }}
+              onMouseOver={(e) => (e.currentTarget.style.background = BLUE_DARK)}
+              onMouseOut={(e) => (e.currentTarget.style.background = BLUE)}
+            >
+              Open this tool <ArrowRight className="size-4" />
+            </a>
+            <p className="mt-4 text-[15px]" style={{ color: MUTED }}>
+              Step {current.id} of 7 &middot; {current.name} &mdash; {current.outcome}
+            </p>
+          </section>
         ) : (
-          <div className="space-y-4">
+          <section className="rounded-2xl p-6 sm:p-8" style={{ background: TINT, border: `1px solid ${LINE}` }}>
+            <h1 className="text-[30px] font-black leading-tight" style={{ color: INK }}>
+              You have been through all seven stages.
+            </h1>
+            <p className="mt-3 text-[17px]" style={{ color: BODY }}>
+              Come back to any tool whenever the answer changes. They keep what you wrote.
+            </p>
+          </section>
+        )}
+
+        {/* ─── their sentence, once it exists */}
+        {isOfferComplete(offer) && (
+          <section className="mt-6 rounded-2xl p-6" style={{ border: `1px solid ${LINE}` }}>
+            <p className="text-[15px] font-semibold" style={{ color: MUTED }}>Your sentence</p>
+            <p className="mt-2 text-[19px] font-bold leading-relaxed" style={{ color: INK }}>
+              &ldquo;{assembleSentence(offer)}&rdquo;
+            </p>
+            <p className="mt-2 text-[15px]" style={{ color: MUTED }}>
+              Every tool below fills itself in from this.
+            </p>
+          </section>
+        )}
+
+        {/* ─── progress, stated plainly */}
+        <section className="mt-6">
+          <div className="flex items-baseline justify-between">
+            <p className="text-[16px] font-semibold" style={{ color: INK }}>
+              {done} of {TOOLS.length} tools started
+            </p>
+            <p className="text-[15px]" style={{ color: MUTED }}>Stage {current.id} of 7</p>
+          </div>
+          <div className="mt-2 h-2 rounded-full overflow-hidden" style={{ background: LINE }}>
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{ width: `${Math.round((done / TOOLS.length) * 100)}%`, background: BLUE }}
+            />
+          </div>
+        </section>
+
+        {/* ─── the seven stages. Closed by default; current one open. */}
+        <section className="mt-8">
+          <h2 className="text-[22px] font-black" style={{ color: INK }}>All tools, in order</h2>
+          <p className="mt-1.5 text-[16px]" style={{ color: BODY }}>
+            Seven stages. Work them top to bottom &mdash; each one builds on the last.
+          </p>
+
+          <div className="mt-5 space-y-3">
             {STAGES.map((stage) => {
               const tools = toolsForStage(stage.id);
-              const done = tools.filter((t) => started.has(t.slug)).length;
-              const isOpen = openStage === null ? stage.id === currentStage.id : openStage === stage.id;
-              const complete = done === tools.length;
+              const doneHere = tools.filter((t) => started.has(t.slug)).length;
+              const isOpen = open === stage.id;
+              const complete = doneHere === tools.length;
 
               return (
-                <section
-                  key={stage.id}
-                  id={`stage-${stage.id}`}
-                  className="rounded-2xl overflow-hidden scroll-mt-4"
-                  style={{ background: PANEL, border: `1px solid ${isOpen ? LINE_HI : LINE}` }}
-                >
+                <div key={stage.id} className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${LINE}` }}>
                   <button
-                    onClick={() => setOpenStage(isOpen ? null : stage.id)}
-                    className="w-full text-left px-5 sm:px-6 py-5 transition-colors"
-                    style={{ background: isOpen ? RAISED : "transparent" }}
+                    onClick={() => setOpen(isOpen ? null : stage.id)}
+                    className="w-full text-left px-5 py-5 flex items-center gap-4"
+                    style={{ background: isOpen ? TINT : "#fff" }}
                   >
-                    <div className="flex items-start gap-4">
-                      <span
-                        className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-bold"
-                        style={{
-                          background: complete ? GOLD : INK,
-                          color: complete ? "#111" : GOLD,
-                          border: `1px solid ${complete ? GOLD : LINE_HI}`,
-                        }}
-                      >
-                        {complete ? <Check className="size-4" /> : String(stage.id).padStart(2, "0")}
-                      </span>
+                    <span
+                      className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl text-[17px] font-black"
+                      style={{
+                        background: complete ? BLUE : isOpen ? "#fff" : TINT,
+                        color: complete ? "#fff" : BLUE,
+                        border: `1px solid ${complete ? BLUE : LINE}`,
+                      }}
+                    >
+                      {complete ? <Check className="size-5" /> : stage.id}
+                    </span>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline gap-3 flex-wrap">
-                          <span className="font-black text-xl tracking-tight" style={{ color: TEXT }}>{stage.name}</span>
-                          <span className="font-mono text-[10px] tracking-[0.16em] uppercase px-2 py-0.5 rounded"
-                                style={{ color: GOLD, border: `1px solid ${LINE_HI}` }}>
-                            {stage.outcome}
-                          </span>
-                        </div>
-                        <p className="text-sm mt-1.5 max-w-2xl" style={{ color: DIM }}>{stage.premise}</p>
-                      </div>
-
-                      <span className="font-mono text-xs shrink-0 tabular-nums" style={{ color: done ? GOLD_HI : FAINT }}>
-                        {done}/{tools.length}
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-[18px] font-bold leading-tight" style={{ color: INK }}>
+                        {stage.outcome}
                       </span>
-                    </div>
+                      <span className="block text-[15px] mt-0.5" style={{ color: MUTED }}>
+                        {tools.length} tool{tools.length === 1 ? "" : "s"} &middot; {doneHere} started
+                      </span>
+                    </span>
+
+                    <ChevronDown
+                      className="size-5 shrink-0 transition-transform"
+                      style={{ color: MUTED, transform: isOpen ? "rotate(180deg)" : "none" }}
+                    />
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 sm:px-6 pb-6">
-                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {tools.map((t) => <ToolCard key={t.slug} t={t} started={started.has(t.slug)} />)}
+                    <div className="px-5 pb-5" style={{ borderTop: `1px solid ${LINE}` }}>
+                      <p className="text-[16px] leading-relaxed mt-4" style={{ color: BODY }}>
+                        {stage.premise}
+                      </p>
+
+                      <div className="mt-4 space-y-2.5">
+                        {tools.map((t) => <ToolRow key={t.slug} t={t} started={started.has(t.slug)} />)}
                       </div>
 
-                      <div className="mt-5 rounded-xl px-4 py-3.5" style={{ background: INK, border: `1px solid ${LINE_HI}` }}>
-                        <span className="font-mono text-[10px] tracking-[0.18em] uppercase" style={{ color: GOLD }}>
-                          You leave this stage when
-                        </span>
-                        <p className="text-sm mt-1" style={{ color: TEXT }}>{stage.gate}</p>
+                      <div className="mt-4 rounded-xl px-4 py-3.5" style={{ background: TINT }}>
+                        <p className="text-[15px] font-semibold" style={{ color: INK }}>
+                          You finish this stage when:
+                        </p>
+                        <p className="text-[16px] mt-1" style={{ color: BODY }}>{stage.gate}</p>
                       </div>
                     </div>
                   )}
-                </section>
+                </div>
               );
             })}
           </div>
-        )}
-
-        <p className="mt-8 text-xs text-center" style={{ color: FAINT }}>
-          Your work saves to your account and follows you between devices.
-        </p>
+        </section>
       </main>
-    </Shell>
+    </WorkspaceShell>
   );
 }
 
-function ToolCard({ t, started, showStage }: { t: KitTool; started: boolean; showStage?: boolean }) {
+function ToolRow({ t, started }: { t: KitTool; started: boolean }) {
   return (
     <a
       href={`/apps/${t.slug}`}
-      className="group block rounded-xl p-4 transition-all hover:-translate-y-0.5"
-      style={{
-        background: RAISED,
-        border: `1px solid ${started ? "rgba(212,168,47,0.35)" : LINE}`,
-        textDecoration: "none",
-      }}
+      className="flex items-start gap-3.5 rounded-xl p-4 transition-colors"
+      style={{ border: `1px solid ${LINE}`, textDecoration: "none", background: "#fff" }}
+      onMouseOver={(e) => (e.currentTarget.style.background = TINT)}
+      onMouseOut={(e) => (e.currentTarget.style.background = "#fff")}
     >
-      <div className="flex items-start justify-between gap-2">
-        <span className="font-bold text-[15px] leading-snug" style={{ color: TEXT }}>{t.name}</span>
-        {started
-          ? <Check className="size-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
-          : <Circle className="size-3.5 shrink-0 mt-1" style={{ color: FAINT }} />}
-      </div>
+      <span
+        className="inline-flex size-6 shrink-0 items-center justify-center rounded-full mt-0.5"
+        style={{ background: started ? BLUE : "#fff", border: `1px solid ${started ? BLUE : LINE}` }}
+      >
+        {started && <Check className="size-3.5" style={{ color: "#fff" }} />}
+      </span>
 
-      {showStage && (
-        <span className="font-mono text-[10px] tracking-wider" style={{ color: GOLD }}>
-          Stage {t.stage}
+      <span className="flex-1 min-w-0">
+        <span className="flex items-center gap-2 flex-wrap">
+          <span className="text-[17px] font-bold" style={{ color: INK }}>{t.name}</span>
+          {t.start && !started && (
+            <span
+              className="text-[13px] font-bold px-2 py-0.5 rounded-md"
+              style={{ background: TINT, color: BLUE }}
+            >
+              Start here
+            </span>
+          )}
         </span>
-      )}
+        <span className="block text-[15px] mt-1 leading-relaxed" style={{ color: BODY }}>
+          {t.blurb}
+        </span>
+        <span className="block text-[15px] mt-1.5" style={{ color: MUTED }}>
+          You get: {t.output}
+        </span>
+      </span>
 
-      <p className="text-[13px] mt-1.5 leading-relaxed" style={{ color: DIM }}>{t.blurb}</p>
-
-      <p className="text-[12px] mt-2.5 pt-2.5" style={{ color: FAINT, borderTop: `1px solid ${LINE}` }}>
-        <span style={{ color: GOLD_HI }}>You get:</span> {t.output}
-      </p>
-
-      <div className="flex items-center gap-2.5 mt-2.5">
-        {t.start && !started && (
-          <span className="inline-flex items-center gap-1 font-mono text-[9px] tracking-wider uppercase px-1.5 py-0.5 rounded"
-                style={{ color: GOLD, border: `1px solid rgba(212,168,47,0.4)` }}>
-            <Sparkles className="size-2.5" /> Start here
-          </span>
-        )}
-        {t.storage === "server" && (
-          <span className="inline-flex items-center gap-1 font-mono text-[9px] tracking-wider uppercase" style={{ color: FAINT }}>
-            <Database className="size-2.5" /> Saved
-          </span>
-        )}
-        {t.readsFrom && (
-          <span className="inline-flex items-center gap-1 font-mono text-[9px] tracking-wider uppercase" style={{ color: FAINT }}
-                title={`Reads from ${t.readsFrom}`}>
-            <Link2 className="size-2.5" /> Linked
-          </span>
-        )}
-      </div>
+      <ArrowRight className="size-5 shrink-0 mt-1" style={{ color: BLUE }} />
     </a>
-  );
-}
-
-function Shell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen" style={{ background: INK, color: TEXT }}>
-      <SiteHeader />
-      {children}
-      <SiteFooter />
-    </div>
   );
 }

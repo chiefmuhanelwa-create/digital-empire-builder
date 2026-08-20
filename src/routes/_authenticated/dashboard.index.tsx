@@ -190,13 +190,19 @@ function Dashboard() {
           <div>
             <div className="nx-label mb-1 flex items-center gap-2"><Sparkles className="size-4 text-banana" /> Recommended next</div>
             <h2 className="font-display text-2xl sm:text-3xl mb-1">Complete your toolkit</h2>
-            <p className="text-sm text-muted-foreground mb-5">The next steps that build on what you already have.</p>
+            <p className="text-sm text-muted-foreground mb-5">
+              The next steps that build on what you already have. These open the store in a new tab —
+              your workspace stays where it is.
+            </p>
             <div className="grid sm:grid-cols-3 gap-4">
               {recommended.map((p) => (
-                <a key={p.slug} href={storeProductUrl(p.slug)} className="nx-card !p-5 flex flex-col group">
+                // Opens in a new tab on purpose: this is the storefront on another
+                // domain, and losing the workspace behind a purchase page is
+                // disorienting for someone mid-way through the seven stages.
+                <a key={p.slug} href={storeProductUrl(p.slug)} target="_blank" rel="noopener noreferrer" className="nx-card !p-5 flex flex-col group">
                   <div className="font-display text-lg group-hover:text-banana transition-colors">{p.title}</div>
                   {p.tagline && <p className="text-sm text-muted-foreground mt-1 flex-1">{p.tagline}</p>}
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[var(--nx-gold-text)]">See details <ArrowRight className="size-4" /></span>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[var(--nx-gold-text)]">See details in the store <ArrowRight className="size-4" /></span>
                 </a>
               ))}
             </div>
