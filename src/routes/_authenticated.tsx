@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth-context";
 import { claimMyGrants } from "@/lib/products.functions";
+import { getKitWorkspace, saveKitWorkspace } from "@/lib/kit-workspace.functions";
+import { mergeIntoLocal, startKitSync } from "@/lib/kit-sync";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthGate,
@@ -14,6 +16,8 @@ function AuthGate() {
   const navigate = useNavigate();
   const claimFn = useServerFn(claimMyGrants);
   const qc = useQueryClient();
+  const getWorkspace = useServerFn(getKitWorkspace);
+  const saveWorkspace = useServerFn(saveKitWorkspace);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
@@ -32,6 +36,27 @@ function AuthGate() {
       .catch(() => { /* non-fatal */ });
     return () => { cancelled = true; };
   }, [loading, user, claimFn, qc]);
+
+  // Pull this buyer's kit answers down to whatever device they just opened,
+  // then keep mirroring. Everything the seventeen tools write lived only in
+  // this browser before — a new phone showed an empty paid product.
+  useEffect(() => {
+    if (loading || !user) return;
+    let stop: (() => void) | undefined;
+    let cancelled = false;
+    getWorkspace()
+      .then((res) => {
+        if (cancelled) return;
+        const state = (res as { state?: Record<string, unknown> } | undefined)?.state;
+        mergeIntoLocal(state ?? {});
+      })
+      .catch(() => { /* offline or first run — local state still works */ })
+      .finally(() => {
+        if (cancelled) return;
+        stop = startKitSync((state) => saveWorkspace({ data: { state } }));
+      });
+    return () => { cancelled = true; stop?.(); };
+  }, [loading, user, getWorkspace, saveWorkspace]);
 
   if (loading || !user) {
     return (
