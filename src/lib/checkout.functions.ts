@@ -3,7 +3,7 @@ import { z } from "zod";
 import Stripe from "stripe";
 import { getRequestHost, getRequestIP } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { assertTurnstile } from "./turnstile.server";
+import { verifyTurnstile } from "./turnstile.server";
 import { reportError } from "./error-logger";
 import { USD_DISPLAY, ZAR_PER_USD } from "./gardens";
 
@@ -18,6 +18,65 @@ function resolveUsdCents(slug: string, priceCents: number, currency: string): nu
 
 // Paystack expects the smallest currency unit (kobo for NGN, cents for ZAR).
 // Our price_cents is already in cents, so we pass it as-is.
+
+// ─── Turnstile on checkout is a SIGNAL, not a GATE ──────────────────────────
+//
+// These three handlers used to `assertTurnstile()` and throw. On 2026-08-18 the
+// incidents log showed what that cost: `iikhune32@icloud.com` hit checkout three
+// times in nine seconds and was refused every time, and
+// `trerulagantse@gmail.com` was refused 18 minutes after confirming his opt-in.
+// Both were real, named, warm buyers.
+//
+// The asymmetry is the whole argument. A blocked checkout is a CERTAIN lost sale.
+// What a hard gate here prevents is a bot creating one pending-order row and one
+// payment-provider init call — no AI credits spent, no email sent, no file
+// served, and no money moves without a real card on the provider's own hosted
+// page. Cloudflare's WAF already sits in front of this Worker. So a failed or
+// missing token now records a CRITICAL incident and stamps the order, and the
+// buyer goes through.
+//
+// Deliberately NOT applied to endpoints that spend something on an attacker's
+// behalf: `generateHooks` (Anthropic credits), `buildOffer`, `/contact` and
+// `/apply` all still fail closed.
+//
+// To go back to hard-failing, flip this to false — a deliberate decision, not a
+// default to drift on.
+const CHECKOUT_FAILS_OPEN = true;
+
+async function checkTurnstileForCheckout(
+  endpoint: string,
+  token: string | undefined,
+  email: string,
+): Promise<{ verified: boolean; reason: string | null }> {
+  const ip = getRequestIP({ xForwardedFor: true }) ?? undefined;
+  const result = await verifyTurnstile(token, ip, getRequestHost());
+
+  // `skipped` = TURNSTILE_SECRET_KEY isn't configured. Nothing to report.
+  if (result.success || result.skipped) return { verified: true, reason: null };
+
+  const reason = result.errorCodes.join(",") || (token ? "unknown" : "missing-token");
+
+  await reportError(
+    new Error(
+      CHECKOUT_FAILS_OPEN
+        ? `Turnstile did not verify (${reason}) — checkout was ALLOWED THROUGH so the sale is not lost. Check the widget's allowed-hostnames list in Cloudflare.`
+        : `Turnstile did not verify (${reason}) — checkout BLOCKED.`,
+    ),
+    {
+      endpoint,
+      // Critical, not the default "error": a buyer reaching this line means bot
+      // protection is broken on a revenue path. That has to page someone, not
+      // queue up unread in /admin/incidents the way 10 of these did for weeks.
+      severity: "critical",
+      meta: { email, reason, failedOpen: CHECKOUT_FAILS_OPEN },
+    },
+  );
+
+  if (!CHECKOUT_FAILS_OPEN) {
+    throw new Error("Verification failed — please refresh the page and try again.");
+  }
+  return { verified: false, reason };
+}
 
 export const initializeCheckout = createServerFn({ method: "POST" })
   .inputValidator((input) =>
@@ -36,12 +95,11 @@ export const initializeCheckout = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }) => {
-    try {
-      await assertTurnstile(data.turnstileToken, getRequestIP({ xForwardedFor: true }) ?? undefined);
-    } catch (err) {
-      await reportError(err, { endpoint: "initializeCheckout:turnstile", meta: { email: data.email } });
-      throw err;
-    }
+    const turnstile = await checkTurnstileForCheckout(
+      "initializeCheckout:turnstile",
+      data.turnstileToken,
+      data.email,
+    );
     const secret = process.env.PAYSTACK_SECRET_KEY;
     if (!secret) throw new Error("Paystack is not configured yet.");
 
@@ -109,6 +167,9 @@ export const initializeCheckout = createServerFn({ method: "POST" })
           product_slug: product.slug,
           garden: product.garden,
           bump_slugs: bumps.map((b) => b.slug),
+          // Kept on the order itself so an unverified purchase stays auditable
+          // after the incident row is marked resolved.
+          turnstile: turnstile.verified ? "verified" : `unverified:${turnstile.reason}`,
           utm: {
             source: data.utmSource ?? null,
             medium: data.utmMedium ?? null,
@@ -238,12 +299,11 @@ export const initializeStripeCheckout = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }) => {
-    try {
-      await assertTurnstile(data.turnstileToken, getRequestIP({ xForwardedFor: true }) ?? undefined);
-    } catch (err) {
-      await reportError(err, { endpoint: "initializeStripeCheckout:turnstile", meta: { email: data.email } });
-      throw err;
-    }
+    const turnstile = await checkTurnstileForCheckout(
+      "initializeStripeCheckout:turnstile",
+      data.turnstileToken,
+      data.email,
+    );
     const secret = process.env.STRIPE_SECRET_KEY;
     if (!secret) throw new Error("Stripe is not configured yet.");
 
@@ -313,6 +373,9 @@ export const initializeStripeCheckout = createServerFn({ method: "POST" })
           product_slug: product.slug,
           garden: product.garden,
           bump_slugs: bumps.map((b) => b.slug),
+          // Kept on the order itself so an unverified purchase stays auditable
+          // after the incident row is marked resolved.
+          turnstile: turnstile.verified ? "verified" : `unverified:${turnstile.reason}`,
           utm: {
             source: data.utmSource ?? null,
             medium: data.utmMedium ?? null,
@@ -581,12 +644,11 @@ export const initializeSubscription = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }) => {
-    try {
-      await assertTurnstile(data.turnstileToken, getRequestIP({ xForwardedFor: true }) ?? undefined);
-    } catch (err) {
-      await reportError(err, { endpoint: "initializeSubscription:turnstile", meta: { email: data.email } });
-      throw err;
-    }
+    const turnstile = await checkTurnstileForCheckout(
+      "initializeSubscription:turnstile",
+      data.turnstileToken,
+      data.email,
+    );
     const secret = process.env.PAYSTACK_SECRET_KEY;
     if (!secret) throw new Error("Paystack is not configured yet.");
     const plan = SUBSCRIPTION_PLANS[data.productSlug];
@@ -611,7 +673,12 @@ export const initializeSubscription = createServerFn({ method: "POST" })
         total_cents: product.price_cents,
         provider: "paystack",
         status: "pending",
-        metadata: { product_slug: product.slug, garden: product.garden, subscription: true },
+        metadata: {
+          product_slug: product.slug,
+          garden: product.garden,
+          subscription: true,
+          turnstile: turnstile.verified ? "verified" : `unverified:${turnstile.reason}`,
+        },
       })
       .select("id")
       .single();

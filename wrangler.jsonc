@@ -23,6 +23,35 @@
     // routes above, needs the same explicit path-specific entry or it 522s
     // (falls through to the Next.js site's Worker, which has no such route).
     { "pattern": "contentpreneur.africa/creator-bundle*", "zone_name": "contentpreneur.africa" },
+    // 2026-08-19 — landing page for the Instagram keyword "rent" (the River,
+    // Fish, Tank video). Needs its own route entry or it 522s, same as every
+    // other path-specific page on this zone.
+    { "pattern": "contentpreneur.africa/rented*", "zone_name": "contentpreneur.africa" },
+    // Phase 3, 2026-08-18 — THE MEMBER WORKSPACE MOVES HERE. Founder ruling:
+    // the Foundation Kit workspace lives under contentpreneur.africa, not
+    // chkplt.com. Before this, /foundation sold on this domain but
+    // /dashboard/foundation-kit only existed on chkplt.com — verified live:
+    // contentpreneur.africa/dashboard/foundation-kit HUNG (no Worker owned it,
+    // the Next.js site's routes were narrowed to /, /about*, /_next/* on
+    // 2026-08-02) and contentpreneur.africa/login 404'd. So every kit buyer was
+    // handed to a second brand the moment they tried to open what they bought.
+    //
+    // /login, /signup, /reset-password and /account come along because a
+    // workspace you cannot sign in to is not a workspace. /admin comes along
+    // because it shares the same login — leaving it behind would strand admin
+    // on a domain whose /login now 301s away (see src/server.ts).
+    //
+    // The storefront (/products, /cart, /search, /tools) deliberately does NOT
+    // move: it is CHKPLT-branded and its header links across the whole
+    // catalogue. Member-area links to it are absolute — see src/lib/domains.ts.
+    { "pattern": "contentpreneur.africa/dashboard*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/apps/*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/learn*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/account*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/login*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/signup*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/reset-password*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/admin*", "zone_name": "contentpreneur.africa" },
     // Bug found 2026-07-28 (live, via a real screenshot): the 4 page routes
     // above load fine, but their CSS/JS bundles are requested from bare
     // "/assets/*" and "/downloads/*" paths — those don't match any pattern
@@ -66,8 +95,14 @@
     { "pattern": "contentpreneur.africa/_serverFn/*", "zone_name": "contentpreneur.africa" }
   ],
   "triggers": {
-    // "10 4 * * *" daily → reconcile ZAR charges to the live USD→ZAR rate.
     // "* * * * *" every minute → drain the transactional/auth email queue (Resend).
-    "crons": ["10 4 * * *", "* * * * *"]
+    //
+    // The daily "10 4 * * *" FX job is DELIBERATELY REMOVED (2026-08-14).
+    // It rewrote every product's price_cents each morning to track a fixed USD
+    // price at the live rand rate, so displayed ZAR prices moved on their own —
+    // sars-creator-income was observed changing from R145.61 to R145.21 inside a
+    // single day. Prices are now whatever is set in the products table and stay
+    // there until a human changes them. See src/lib/fx-sync.ts.
+    "crons": ["* * * * *"]
   }
 }
