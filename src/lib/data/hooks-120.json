@@ -1,0 +1,1421 @@
+{
+  "name": "NOCHILL 120 Proven Hooks Bank",
+  "version": "1.0",
+  "description": "120 battle-tested hooks across 6 categories, all following R×A×C×U^B formula and 4 Foundational Principles",
+  "author": "Ndivhuwo 'NO CHILL in Mzansi' Muhanelwa",
+  "total_hooks": 120,
+
+  "categories": [
+    {
+      "id": 1,
+      "category": "Origin & Struggle Hooks",
+      "description": "Build instant relatability and emotional connection through origin stories and struggles",
+      "count": 20,
+      "emotional_impact": "Very High",
+      "best_for": ["Relatability content", "About me sections", "Connection building"],
+      "hooks": [
+        {
+          "id": 1,
+          "hook": "Your family thinks you're wasting your life. Prove them wrong in 90 days.",
+          "r_a_c_u_b": {
+            "relevant": "Creators feeling judged by family",
+            "awareness": "Symptom aware - feeling the pressure",
+            "clarity": "90-day transformation promise",
+            "unique": "Direct confrontation of family judgment",
+            "broadened": "Anyone with unsupportive family"
+          }
+        },
+        {
+          "id": 2,
+          "hook": "I went from sleeping in university bathrooms to R600K in platform revenue. Here's what I learned.",
+          "r_a_c_u_b": {
+            "relevant": "Struggling students/entrepreneurs",
+            "awareness": "Solution aware - seeking breakthrough stories",
+            "clarity": "Specific lessons from transformation",
+            "unique": "Extreme contrast (bathrooms → R600K)",
+            "broadened": "Anyone facing extreme adversity"
+          }
+        },
+        {
+          "id": 3,
+          "hook": "Your mom worked her entire life so you could succeed. Don't let her down.",
+          "r_a_c_u_b": {
+            "relevant": "Children of working-class parents",
+            "awareness": "Symptom aware - feeling pressure to succeed",
+            "clarity": "Honor parents through success",
+            "unique": "Emotional guilt as motivator",
+            "broadened": "Anyone with family sacrifice background"
+          }
+        },
+        {
+          "id": 4,
+          "hook": "Everyone said 'get a real job.' I built a business instead. Here's the truth they didn't tell you.",
+          "r_a_c_u_b": {
+            "relevant": "Aspiring entrepreneurs",
+            "awareness": "Problem aware - traditional path vs. entrepreneurship",
+            "clarity": "Hidden truths about business building",
+            "unique": "Defying conventional wisdom",
+            "broadened": "Anyone questioning traditional career paths"
+          }
+        },
+        {
+          "id": 5,
+          "hook": "From R400/month village life to partnerships with Netflix. The journey started with one decision.",
+          "r_a_c_u_b": {
+            "relevant": "People from humble beginnings",
+            "awareness": "Solution aware - seeking transformation path",
+            "clarity": "One pivotal decision that changed everything",
+            "unique": "Extreme poverty to major brand deals",
+            "broadened": "Anyone from disadvantaged background"
+          }
+        },
+        {
+          "id": 6,
+          "hook": "You're 28. Your classmates own houses. You have 8K followers and regret. Time to change that.",
+          "r_a_c_u_b": {
+            "relevant": "Late 20s/early 30s creators feeling behind",
+            "awareness": "Symptom aware - comparison anxiety",
+            "clarity": "Time to change current trajectory",
+            "unique": "Specific age + brutal comparison",
+            "broadened": "Anyone feeling behind their peers"
+          }
+        },
+        {
+          "id": 7,
+          "hook": "I owed SARS R207K because I didn't understand this one thing about creator taxes.",
+          "r_a_c_u_b": {
+            "relevant": "South African creators",
+            "awareness": "Problem aware - tax compliance fears",
+            "clarity": "One critical tax concept",
+            "unique": "Massive debt as cautionary tale",
+            "broadened": "All creators navigating business taxes"
+          }
+        },
+        {
+          "id": 8,
+          "hook": "Lost 780K followers overnight. Best thing that ever happened to my business. Here's why.",
+          "r_a_c_u_b": {
+            "relevant": "Creators dependent on platforms",
+            "awareness": "Problem aware - platform dependency risks",
+            "clarity": "Why loss became breakthrough",
+            "unique": "Counterintuitive - loss as win",
+            "broadened": "Anyone experiencing major setback"
+          }
+        },
+        {
+          "id": 9,
+          "hook": "The R6,000 phone that generated R600K. ROI: 10,000%. Here's the investment mindset shift.",
+          "r_a_c_u_b": {
+            "relevant": "Creators with limited capital",
+            "awareness": "Solution aware - looking for high-ROI investments",
+            "clarity": "Mindset shift for returns",
+            "unique": "Insane ROI percentage",
+            "broadened": "Anyone hesitating to invest in business"
+          }
+        },
+        {
+          "id": 10,
+          "hook": "Your partner is losing faith in your 'creator dreams.' Show them the business plan.",
+          "r_a_c_u_b": {
+            "relevant": "Creators with skeptical partners",
+            "awareness": "Symptom aware - relationship tension",
+            "clarity": "Business plan that proves viability",
+            "unique": "Relationship pressure as catalyst",
+            "broadened": "Anyone with unsupportive significant other"
+          }
+        },
+        {
+          "id": 11,
+          "hook": "Tired of being the joke at Sunday lunch? Here's how to become the provider.",
+          "r_a_c_u_b": {
+            "relevant": "Creators mocked by family",
+            "awareness": "Symptom aware - social embarrassment",
+            "clarity": "Path to family provider role",
+            "unique": "Sunday lunch cultural reference",
+            "broadened": "Anyone disrespected by family"
+          }
+        },
+        {
+          "id": 12,
+          "hook": "From accepting R750 brand deals to commanding R8,333/month retainers. The 5-step framework.",
+          "r_a_c_u_b": {
+            "relevant": "Creators underpricing services",
+            "awareness": "Solution aware - seeking pricing strategy",
+            "clarity": "5-step framework for 10x pricing",
+            "unique": "Specific before/after numbers",
+            "broadened": "Any service provider undercharging"
+          }
+        },
+        {
+          "id": 13,
+          "hook": "Your following isn't the problem. Your business model is. Let me show you.",
+          "r_a_c_u_b": {
+            "relevant": "Creators blaming small audience",
+            "awareness": "Problem aware - monetization struggles",
+            "clarity": "Business model fix",
+            "unique": "Shifts blame from followers to model",
+            "broadened": "Anyone struggling to monetize"
+          }
+        },
+        {
+          "id": 14,
+          "hook": "I worked 16-hour days for 18 months straight. Then I learned this about systems.",
+          "r_a_c_u_b": {
+            "relevant": "Burnt-out creators/entrepreneurs",
+            "awareness": "Symptom aware - exhaustion",
+            "clarity": "Systems that reduce working hours",
+            "unique": "Extreme hours as credibility",
+            "broadened": "Anyone overworking"
+          }
+        },
+        {
+          "id": 15,
+          "hook": "Stop asking for permission. Start building for your children's children.",
+          "r_a_c_u_b": {
+            "relevant": "Creators waiting for validation",
+            "awareness": "Symptom aware - permission-seeking",
+            "clarity": "Legacy-focused building",
+            "unique": "Multi-generational perspective",
+            "broadened": "Anyone hesitating to start"
+          }
+        },
+        {
+          "id": 16,
+          "hook": "The bathroom floor covenant that changed everything. Faith + strategy = breakthrough.",
+          "r_a_c_u_b": {
+            "relevant": "Faith-based entrepreneurs",
+            "awareness": "Solution aware - seeking spiritual + practical",
+            "clarity": "Integration of faith and strategy",
+            "unique": "Covenant framing",
+            "broadened": "Anyone at rock bottom seeking hope"
+          }
+        },
+        {
+          "id": 17,
+          "hook": "You're creating content for validation. Here's how to create content for cash.",
+          "r_a_c_u_b": {
+            "relevant": "Creators chasing likes",
+            "awareness": "Problem aware - validation addiction",
+            "clarity": "Shift to monetization-focused content",
+            "unique": "Brutal truth about validation",
+            "broadened": "Anyone in attention-seeking cycle"
+          }
+        },
+        {
+          "id": 18,
+          "hook": "Platform dependency killed my business once. Never again. The diversification strategy.",
+          "r_a_c_u_b": {
+            "relevant": "Single-platform creators",
+            "awareness": "Problem aware - platform risks",
+            "clarity": "Diversification strategy",
+            "unique": "Personal loss as proof",
+            "broadened": "Any business over-reliant on one channel"
+          }
+        },
+        {
+          "id": 19,
+          "hook": "From dropout to award-winning creator. The degree they can't take away: proof.",
+          "r_a_c_u_b": {
+            "relevant": "Non-traditional education paths",
+            "awareness": "Symptom aware - insecurity about credentials",
+            "clarity": "Proof as new credential",
+            "unique": "Anti-academic positioning",
+            "broadened": "Anyone without formal qualifications"
+          }
+        },
+        {
+          "id": 20,
+          "hook": "Your story is your unfair advantage. Here's how to monetize it ethically.",
+          "r_a_c_u_b": {
+            "relevant": "Creators with unique backgrounds",
+            "awareness": "Solution aware - seeking ethical monetization",
+            "clarity": "Story monetization framework",
+            "unique": "Emphasizes ethics",
+            "broadened": "Anyone with compelling life story"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "category": "Transformation Hooks",
+      "description": "Demonstrate possibility through before/after transformations",
+      "count": 20,
+      "emotional_impact": "High",
+      "best_for": ["Case studies", "Social proof", "Method validation"],
+      "hooks": [
+        {
+          "id": 21,
+          "hook": "R0 to R50K/month in 90 days. No ads. No fancy equipment. Just this system.",
+          "r_a_c_u_b": {
+            "relevant": "Creators at R0",
+            "awareness": "Solution aware - seeking proven system",
+            "clarity": "Specific income transformation + timeline",
+            "unique": "No traditional requirements",
+            "broadened": "Any beginner seeking income"
+          }
+        },
+        {
+          "id": 22,
+          "hook": "From 200 views per video to 2M views. Changed one thing in my hooks.",
+          "r_a_c_u_b": {
+            "relevant": "Low-view creators",
+            "awareness": "Problem aware - poor performance",
+            "clarity": "One hook change = 10,000x growth",
+            "unique": "Single change, massive impact",
+            "broadened": "Anyone with low content performance"
+          }
+        },
+        {
+          "id": 23,
+          "hook": "I turned 10 followers into R100K in revenue. Here's the owned audience strategy.",
+          "r_a_c_u_b": {
+            "relevant": "Micro-creators",
+            "awareness": "Solution aware - quality over quantity",
+            "clarity": "Revenue despite tiny following",
+            "unique": "Extreme ratio (10 followers → R100K)",
+            "broadened": "Any small audience monetization"
+          }
+        },
+        {
+          "id": 24,
+          "hook": "Quit my R25K/month job. Now earn R180K/month. The 6-month transition plan.",
+          "r_a_c_u_b": {
+            "relevant": "Employed people wanting freedom",
+            "awareness": "Solution aware - seeking exit strategy",
+            "clarity": "Job → business transition plan",
+            "unique": "7x income increase",
+            "broadened": "Anyone considering leaving employment"
+          }
+        },
+        {
+          "id": 25,
+          "hook": "From posting daily and getting nothing to posting 3x/week and making R40K. Quality > Quantity.",
+          "r_a_c_u_b": {
+            "relevant": "Burnt-out daily posters",
+            "awareness": "Problem aware - hustle not working",
+            "clarity": "Less posting + more revenue",
+            "unique": "Counterintuitive - work less, earn more",
+            "broadened": "Anyone in hustle-culture trap"
+          }
+        },
+        {
+          "id": 26,
+          "hook": "3 months ago I had 0 email subscribers. Today: 15K. The lead magnet that converted 47%.",
+          "r_a_c_u_b": {
+            "relevant": "Creators ignoring email",
+            "awareness": "Solution aware - seeking list growth",
+            "clarity": "Fast growth + high-converting lead magnet",
+            "unique": "47% conversion rate",
+            "broadened": "Anyone building email list"
+          }
+        },
+        {
+          "id": 27,
+          "hook": "My first brand deal: R500. My last brand deal: R50,000. The positioning shift.",
+          "r_a_c_u_b": {
+            "relevant": "Creators accepting low-paying deals",
+            "awareness": "Solution aware - seeking better deals",
+            "clarity": "100x deal value increase",
+            "unique": "Massive before/after contrast",
+            "broadened": "Any freelancer/consultant underpriced"
+          }
+        },
+        {
+          "id": 28,
+          "hook": "I spent R12K on a course. Made it back in 8 days. Then R200K in 90 days. ROI breakdown.",
+          "r_a_c_u_b": {
+            "relevant": "People hesitant to invest in education",
+            "awareness": "Solution aware - looking for proven ROI",
+            "clarity": "Fast payback + long-term returns",
+            "unique": "8-day payback period",
+            "broadened": "Anyone afraid to invest in learning"
+          }
+        },
+        {
+          "id": 29,
+          "hook": "From begging brands to DM me to brands begging to work with me. The authority flip.",
+          "r_a_c_u_b": {
+            "relevant": "Creators pitching desperately",
+            "awareness": "Problem aware - low negotiation power",
+            "clarity": "Authority positioning that attracts brands",
+            "unique": "Complete power reversal",
+            "broadened": "Any service provider seeking leverage"
+          }
+        },
+        {
+          "id": 30,
+          "hook": "Deleted 90% of my content. Grew faster than ever. The content pruning method.",
+          "r_a_c_u_b": {
+            "relevant": "Creators with inconsistent content",
+            "awareness": "Solution aware - seeking clarity",
+            "clarity": "Less but better strategy",
+            "unique": "Deletion as growth strategy",
+            "broadened": "Anyone overwhelmed by content volume"
+          }
+        },
+        {
+          "id": 31,
+          "hook": "From R2,000/month freelance gigs to R50K/month retainers. Stopped selling hours, started selling outcomes.",
+          "r_a_c_u_b": {
+            "relevant": "Hourly freelancers",
+            "awareness": "Problem aware - income ceiling",
+            "clarity": "Value-based pricing shift",
+            "unique": "25x income increase",
+            "broadened": "Any time-for-money worker"
+          }
+        },
+        {
+          "id": 32,
+          "hook": "I replaced my R30K salary with R30K/month in 4 months. The income stacking framework.",
+          "r_a_c_u_b": {
+            "relevant": "Side hustlers aiming to replace income",
+            "awareness": "Solution aware - seeking transition strategy",
+            "clarity": "4-month salary replacement plan",
+            "unique": "Fast replacement timeline",
+            "broadened": "Anyone building side income"
+          }
+        },
+        {
+          "id": 33,
+          "hook": "From 6 clients/year to 40 clients/year. Same audience size. Better systems.",
+          "r_a_c_u_b": {
+            "relevant": "Service providers with inconsistent bookings",
+            "awareness": "Solution aware - seeking systems",
+            "clarity": "6x client increase through systems",
+            "unique": "Growth without audience growth",
+            "broadened": "Any business wanting more clients"
+          }
+        },
+        {
+          "id": 34,
+          "hook": "Went from 'Can I get a discount?' clients to 'When can we start?' clients. The vetting process.",
+          "r_a_c_u_b": {
+            "relevant": "Service providers with bad clients",
+            "awareness": "Problem aware - client quality issues",
+            "clarity": "Client vetting that attracts premium buyers",
+            "unique": "Complete client quality shift",
+            "broadened": "Anyone dealing with difficult customers"
+          }
+        },
+        {
+          "id": 35,
+          "hook": "From working in the business to working on the business. Hired myself out in 6 months.",
+          "r_a_c_u_b": {
+            "relevant": "Overwhelmed business owners",
+            "awareness": "Solution aware - seeking delegation strategy",
+            "clarity": "6-month transition to CEO role",
+            "unique": "'Hired myself out' framing",
+            "broadened": "Any entrepreneur doing everything"
+          }
+        },
+        {
+          "id": 36,
+          "hook": "I 10x'd my pricing and lost 0 clients. The value demonstration framework.",
+          "r_a_c_u_b": {
+            "relevant": "Underpriced service providers",
+            "awareness": "Problem aware - afraid to raise prices",
+            "clarity": "10x pricing without client loss",
+            "unique": "0% churn despite 10x increase",
+            "broadened": "Anyone undercharging for services"
+          }
+        },
+        {
+          "id": 37,
+          "hook": "From 2-month sales cycles to 2-day sales cycles. The urgency architecture.",
+          "r_a_c_u_b": {
+            "relevant": "Consultants with long sales cycles",
+            "awareness": "Problem aware - slow closing",
+            "clarity": "30x faster closing speed",
+            "unique": "Dramatic time compression",
+            "broadened": "Any high-ticket seller"
+          }
+        },
+        {
+          "id": 38,
+          "hook": "I turned my biggest failure into my best-selling product. The transformation formula.",
+          "r_a_c_u_b": {
+            "relevant": "People with past failures",
+            "awareness": "Solution aware - seeking redemption path",
+            "clarity": "Failure → product method",
+            "unique": "Failure as asset",
+            "broadened": "Anyone with 'wasted' experiences"
+          }
+        },
+        {
+          "id": 39,
+          "hook": "From copying competitors to being copied by competitors. The original voice discovery.",
+          "r_a_c_u_b": {
+            "relevant": "Creators lacking uniqueness",
+            "awareness": "Problem aware - blending in",
+            "clarity": "Voice differentiation process",
+            "unique": "Follower → leader shift",
+            "broadened": "Anyone in crowded market"
+          }
+        },
+        {
+          "id": 40,
+          "hook": "I stopped 'networking' and started building real relationships. 3x more referrals in 90 days.",
+          "r_a_c_u_b": {
+            "relevant": "Ineffective networkers",
+            "awareness": "Problem aware - networking not working",
+            "clarity": "Relationship strategy that drives referrals",
+            "unique": "Anti-networking positioning",
+            "broadened": "Anyone doing transactional networking"
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "category": "Lesson & Breakthrough Hooks",
+      "description": "Teach principles through experience and 'aha' moments",
+      "count": 20,
+      "emotional_impact": "Medium-High",
+      "best_for": ["Educational content", "Framework teaching", "Wisdom sharing"],
+      "hooks": [
+        {
+          "id": 41,
+          "hook": "I made R207K in mistakes so you don't have to. The 7 creator tax traps.",
+          "r_a_c_u_b": {
+            "relevant": "South African creators",
+            "awareness": "Problem aware - tax compliance fears",
+            "clarity": "7 specific mistakes to avoid",
+            "unique": "Massive debt as credentials",
+            "broadened": "All creators navigating business taxes"
+          }
+        },
+        {
+          "id": 42,
+          "hook": "The algorithm doesn't hate you. Your hooks just suck. Here's the formula.",
+          "r_a_c_u_b": {
+            "relevant": "Low-performing creators",
+            "awareness": "Problem aware - blaming algorithm",
+            "clarity": "Hook formula fix",
+            "unique": "Brutal directness",
+            "broadened": "Anyone with poor content performance"
+          }
+        },
+        {
+          "id": 43,
+          "hook": "You're one funnel away from freedom. But you keep building 10 at once. Focus framework.",
+          "r_a_c_u_b": {
+            "relevant": "Scattered entrepreneurs",
+            "awareness": "Symptom aware - overwhelm",
+            "clarity": "Single-funnel focus strategy",
+            "unique": "Shiny object syndrome call-out",
+            "broadened": "Anyone juggling too many projects"
+          }
+        },
+        {
+          "id": 44,
+          "hook": "I studied 1,000 viral videos. 97% had this one thing in common.",
+          "r_a_c_u_b": {
+            "relevant": "Creators seeking virality",
+            "awareness": "Solution aware - studying success",
+            "clarity": "One viral commonality revealed",
+            "unique": "Large research sample",
+            "broadened": "Anyone wanting viral content"
+          }
+        },
+        {
+          "id": 45,
+          "hook": "Your content doesn't need to be better. It needs to be different. The pattern interrupt playbook.",
+          "r_a_c_u_b": {
+            "relevant": "Creators in crowded niches",
+            "awareness": "Problem aware - blending in",
+            "clarity": "Differentiation over perfection",
+            "unique": "Counterintuitive - different > better",
+            "broadened": "Any saturated market player"
+          }
+        },
+        {
+          "id": 46,
+          "hook": "I wasted 18 months creating content nobody wanted. Then I learned to ask these 3 questions first.",
+          "r_a_c_u_b": {
+            "relevant": "Creators making unwanted content",
+            "awareness": "Symptom aware - low engagement",
+            "clarity": "3 pre-creation validation questions",
+            "unique": "18-month failure as lesson",
+            "broadened": "Anyone creating without market fit"
+          }
+        },
+        {
+          "id": 47,
+          "hook": "Stop trying to serve everyone. I niched down and doubled revenue in 60 days.",
+          "r_a_c_u_b": {
+            "relevant": "Generalist creators/businesses",
+            "awareness": "Problem aware - lack of focus",
+            "clarity": "Niche-down strategy + fast results",
+            "unique": "Revenue doubled through narrowing",
+            "broadened": "Any business too broad"
+          }
+        },
+        {
+          "id": 48,
+          "hook": "The best time to build your email list was 5 years ago. The second-best time is today. Start here.",
+          "r_a_c_u_b": {
+            "relevant": "Creators without email lists",
+            "awareness": "Problem aware - missed opportunity regret",
+            "clarity": "Starting point for email building",
+            "unique": "Tree-planting wisdom applied",
+            "broadened": "Anyone delaying important action"
+          }
+        },
+        {
+          "id": 49,
+          "hook": "Your biggest competitor isn't other creators. It's your audience's thumb scrolling past you.",
+          "r_a_c_u_b": {
+            "relevant": "Creators focused on competition",
+            "awareness": "Problem aware - misdirected focus",
+            "clarity": "Attention as real competition",
+            "unique": "Reframes competition entirely",
+            "broadened": "Any attention-economy business"
+          }
+        },
+        {
+          "id": 50,
+          "hook": "I posted daily for a year. Got nowhere. Then I posted 3x/week strategically. Everything changed.",
+          "r_a_c_u_b": {
+            "relevant": "Burnt-out daily posters",
+            "awareness": "Symptom aware - exhaustion without results",
+            "clarity": "Strategic frequency over constant posting",
+            "unique": "Year of effort validated the lesson",
+            "broadened": "Anyone in quantity-over-quality trap"
+          }
+        },
+        {
+          "id": 51,
+          "hook": "You don't have an audience problem. You have a trust problem. The 4-step credibility system.",
+          "r_a_c_u_b": {
+            "relevant": "Creators with followers but no sales",
+            "awareness": "Problem aware - conversion issues",
+            "clarity": "4-step trust-building process",
+            "unique": "Reframes audience size focus",
+            "broadened": "Any business with trust deficit"
+          }
+        },
+        {
+          "id": 52,
+          "hook": "The content that performs worst is often the content that sells best. The engagement paradox.",
+          "r_a_c_u_b": {
+            "relevant": "Creators chasing vanity metrics",
+            "awareness": "Solution aware - engagement ≠ revenue",
+            "clarity": "Understanding engagement vs. conversion",
+            "unique": "Counterintuitive paradox",
+            "broadened": "Anyone optimizing wrong metrics"
+          }
+        },
+        {
+          "id": 53,
+          "hook": "I deleted my most viral video (2.5M views). It was attracting the wrong audience.",
+          "r_a_c_u_b": {
+            "relevant": "Creators with misaligned viral content",
+            "awareness": "Problem aware - wrong audience growth",
+            "clarity": "Audience quality over vanity metrics",
+            "unique": "Deleting success as strategic move",
+            "broadened": "Any business with wrong customers"
+          }
+        },
+        {
+          "id": 54,
+          "hook": "Your free content is too valuable. Give less for free, charge for the rest. The value ladder.",
+          "r_a_c_u_b": {
+            "relevant": "Over-giving creators",
+            "awareness": "Problem aware - giving away too much",
+            "clarity": "Value ladder monetization strategy",
+            "unique": "Counterintuitive - give less",
+            "broadened": "Any expert undervaluing their knowledge"
+          }
+        },
+        {
+          "id": 55,
+          "hook": "I learned more from 10 sales calls than 100 hours of content creation. Talk to your people.",
+          "r_a_c_u_b": {
+            "relevant": "Creators avoiding sales conversations",
+            "awareness": "Solution aware - seeking market insight",
+            "clarity": "Sales calls as research method",
+            "unique": "10 calls > 100 hours",
+            "broadened": "Any business guessing at customer needs"
+          }
+        },
+        {
+          "id": 56,
+          "hook": "The framework that took me 5 years to build takes 5 minutes to copy. Here's why I share it anyway.",
+          "r_a_c_u_b": {
+            "relevant": "Creators afraid to share knowledge",
+            "awareness": "Symptom aware - scarcity mindset",
+            "clarity": "Abundance mindset explanation",
+            "unique": "Vulnerability + generosity",
+            "broadened": "Anyone hoarding information"
+          }
+        },
+        {
+          "id": 57,
+          "hook": "Your calendar reveals your priorities. Mine was full of other people's. The boundary system.",
+          "r_a_c_u_b": {
+            "relevant": "People-pleasers",
+            "awareness": "Symptom aware - no time for priorities",
+            "clarity": "Calendar boundary framework",
+            "unique": "Calendar as priority mirror",
+            "broadened": "Anyone losing time to others"
+          }
+        },
+        {
+          "id": 58,
+          "hook": "I said no to a R100K deal because it didn't align with my values. Best decision ever.",
+          "r_a_c_u_b": {
+            "relevant": "Creators facing ethical compromises",
+            "awareness": "Problem aware - values vs. money tension",
+            "clarity": "Long-term values over short-term cash",
+            "unique": "Turning down huge money",
+            "broadened": "Anyone facing integrity tests"
+          }
+        },
+        {
+          "id": 59,
+          "hook": "The 80/20 rule is bullshit for creators. It's more like 95/5. Here's what to focus on.",
+          "r_a_c_u_b": {
+            "relevant": "Creators spreading efforts thin",
+            "awareness": "Solution aware - seeking focus clarity",
+            "clarity": "95/5 focus identification",
+            "unique": "Challenges popular 80/20 rule",
+            "broadened": "Any business needing focus"
+          }
+        },
+        {
+          "id": 60,
+          "hook": "I tracked every minute for 30 days. Wasted 127 hours on shit that didn't matter. The audit.",
+          "r_a_c_u_b": {
+            "relevant": "Busy but unproductive people",
+            "awareness": "Symptom aware - busy but not progressing",
+            "clarity": "Time audit methodology",
+            "unique": "Shocking waste quantification",
+            "broadened": "Anyone feeling time-poor"
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "category": "Social Proof & Authority Hooks",
+      "description": "Build credibility through results, partnerships, and expertise",
+      "count": 20,
+      "emotional_impact": "Medium",
+      "best_for": ["Credibility building", "Premium positioning", "Trust establishment"],
+      "hooks": [
+        {
+          "id": 61,
+          "hook": "Netflix, Samsung, Coca-Cola. Here's how I landed partnerships most creators dream of.",
+          "r_a_c_u_b": {
+            "relevant": "Creators seeking premium brand deals",
+            "awareness": "Solution aware - studying success paths",
+            "clarity": "Partnership acquisition strategy",
+            "unique": "Major brand name-drop",
+            "broadened": "Any business seeking enterprise clients"
+          }
+        },
+        {
+          "id": 62,
+          "hook": "100K email subscribers. The only metric that actually matters.",
+          "r_a_c_u_b": {
+            "relevant": "Creators chasing follower counts",
+            "awareness": "Problem aware - vanity metrics focus",
+            "clarity": "Real success metric revealed",
+            "unique": "Massive numbers as credentials",
+            "broadened": "Any business measuring wrong things"
+          }
+        },
+        {
+          "id": 63,
+          "hook": "I've coached 5,000+ creators. 87% make this same pricing mistake. Fix it today.",
+          "r_a_c_u_b": {
+            "relevant": "Creators underpricing",
+            "awareness": "Problem aware - pricing struggles",
+            "clarity": "Common mistake + immediate fix",
+            "unique": "5,000+ coaching credibility",
+            "broadened": "Any service provider pricing"
+          }
+        },
+        {
+          "id": 64,
+          "hook": "From 15 scripts/day for 6 months straight came this viral scripting system. Volume = insight.",
+          "r_a_c_u_b": {
+            "relevant": "Scriptwriters seeking mastery",
+            "awareness": "Solution aware - seeking proven methods",
+            "clarity": "System born from extreme volume",
+            "unique": "15 scripts/day for 6 months",
+            "broadened": "Any creative seeking breakthrough"
+          }
+        },
+        {
+          "id": 65,
+          "hook": "5,000+ books sold. R50K/month in passive income. The digital product blueprint.",
+          "r_a_c_u_b": {
+            "relevant": "Creators considering digital products",
+            "awareness": "Solution aware - seeking product strategy",
+            "clarity": "Proven product sales + income",
+            "unique": "5-figure monthly passive income",
+            "broadened": "Anyone wanting passive revenue"
+          }
+        },
+        {
+          "id": 66,
+          "hook": "15 full-service clients at R8K-R15K/month each. The agency model that scales.",
+          "r_a_c_u_b": {
+            "relevant": "Solopreneurs wanting to scale",
+            "awareness": "Solution aware - seeking agency model",
+            "clarity": "Client count + pricing + scalability",
+            "unique": "R120K-R225K/month revenue proof",
+            "broadened": "Any service business scaling"
+          }
+        },
+        {
+          "id": 67,
+          "hook": "I've generated R600K+ from platform revenue alone. Then I built the system that doesn't need it.",
+          "r_a_c_u_b": {
+            "relevant": "Platform-dependent creators",
+            "awareness": "Solution aware - seeking independence",
+            "clarity": "Platform success → owned system",
+            "unique": "Succeeded then transcended platforms",
+            "broadened": "Any business reducing dependency"
+          }
+        },
+        {
+          "id": 68,
+          "hook": "780K followers vanished overnight. Rebuilt to 3M+ across platforms. The anti-fragile strategy.",
+          "r_a_c_u_b": {
+            "relevant": "Creators fearing platform loss",
+            "awareness": "Problem aware - platform risk",
+            "clarity": "Loss recovery + growth strategy",
+            "unique": "Comeback bigger than original",
+            "broadened": "Anyone recovering from major setback"
+          }
+        },
+        {
+          "id": 69,
+          "hook": "My content has been viewed 50M+ times. Here are the 4 principles behind every viral piece.",
+          "r_a_c_u_b": {
+            "relevant": "Creators seeking virality",
+            "awareness": "Solution aware - studying viral patterns",
+            "clarity": "4 core viral principles",
+            "unique": "50M+ views credibility",
+            "broadened": "Any content creator"
+          }
+        },
+        {
+          "id": 70,
+          "hook": "I went from bathroom floors to boardrooms in 5 years. The covenant I made changed everything.",
+          "r_a_c_u_b": {
+            "relevant": "People at rock bottom",
+            "awareness": "Symptom aware - seeking hope",
+            "clarity": "Extreme transformation story",
+            "unique": "Bathrooms → boardrooms contrast",
+            "broadened": "Anyone in desperate circumstances"
+          }
+        },
+        {
+          "id": 71,
+          "hook": "My client went from R5K/month to R80K/month in 120 days. The exact system we used.",
+          "r_a_c_u_b": {
+            "relevant": "Service providers seeking results",
+            "awareness": "Solution aware - wanting proven systems",
+            "clarity": "Client result + timeline + system",
+            "unique": "16x income increase",
+            "broadened": "Any coach/consultant"
+          }
+        },
+        {
+          "id": 72,
+          "hook": "I've invested R250K+ in courses and coaching. Here are the only 3 that paid for themselves.",
+          "r_a_c_u_b": {
+            "relevant": "People considering education investments",
+            "awareness": "Solution aware - seeking ROI clarity",
+            "clarity": "Which investments actually work",
+            "unique": "Massive investment total",
+            "broadened": "Anyone evaluating learning investments"
+          }
+        },
+        {
+          "id": 73,
+          "hook": "From university bathrooms to speaking on stages with multi-millionaires. The journey nobody sees.",
+          "r_a_c_u_b": {
+            "relevant": "Aspiring speakers/authorities",
+            "awareness": "Solution aware - seeking positioning path",
+            "clarity": "Behind-the-scenes journey",
+            "unique": "Extreme credibility contrast",
+            "broadened": "Anyone building authority"
+          }
+        },
+        {
+          "id": 74,
+          "hook": "I've written 10,000+ scripts. These 7 patterns show up in every viral one.",
+          "r_a_c_u_b": {
+            "relevant": "Scriptwriters seeking mastery",
+            "awareness": "Solution aware - studying patterns",
+            "clarity": "7 viral script patterns",
+            "unique": "10,000+ script volume",
+            "broadened": "Any content creator"
+          }
+        },
+        {
+          "id": 75,
+          "hook": "My students have collectively made R5M+ using these frameworks. The proven playbook.",
+          "r_a_c_u_b": {
+            "relevant": "People considering coaching/courses",
+            "awareness": "Solution aware - seeking proven results",
+            "clarity": "Student success as proof",
+            "unique": "R5M collective results",
+            "broadened": "Anyone evaluating mentorship"
+          }
+        },
+        {
+          "id": 76,
+          "hook": "From R400/month village life to multiple 6-figure businesses. The 10-year blueprint.",
+          "r_a_c_u_b": {
+            "relevant": "Long-term builders from humble backgrounds",
+            "awareness": "Solution aware - seeking sustained growth",
+            "clarity": "Decade-long transformation",
+            "unique": "Extreme poverty → wealth journey",
+            "broadened": "Anyone on long entrepreneurial path"
+          }
+        },
+        {
+          "id": 77,
+          "hook": "I've analyzed 1,000+ creator businesses. The top 10% all do these 5 things.",
+          "r_a_c_u_b": {
+            "relevant": "Creators wanting top-tier results",
+            "awareness": "Solution aware - seeking success patterns",
+            "clarity": "5 actions of top performers",
+            "unique": "1,000+ business analysis",
+            "broadened": "Any business seeking excellence"
+          }
+        },
+        {
+          "id": 78,
+          "hook": "My personal brand has opened R2M+ in opportunities. Here's how to build one that pays.",
+          "r_a_c_u_b": {
+            "relevant": "People underestimating personal brand value",
+            "awareness": "Solution aware - seeking brand building",
+            "clarity": "Monetizable personal brand strategy",
+            "unique": "R2M+ opportunity value",
+            "broadened": "Any professional building visibility"
+          }
+        },
+        {
+          "id": 79,
+          "hook": "I turned one covenant into a movement. 100K+ people in the community. The mission-driven model.",
+          "r_a_c_u_b": {
+            "relevant": "Mission-driven entrepreneurs",
+            "awareness": "Solution aware - seeking purpose + profit",
+            "clarity": "Mission as business foundation",
+            "unique": "100K+ community built",
+            "broadened": "Any purpose-driven business"
+          }
+        },
+        {
+          "id": 80,
+          "hook": "From sleeping in bathrooms to teaching thousands. The proof is in the transformation.",
+          "r_a_c_u_b": {
+            "relevant": "Aspiring teachers/mentors",
+            "awareness": "Solution aware - seeking credibility path",
+            "clarity": "Transformation as teaching authority",
+            "unique": "Bathrooms → thousands taught",
+            "broadened": "Anyone wanting to teach/mentor"
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "category": "Curiosity & Pattern Interrupt Hooks",
+      "description": "Break expected patterns to capture attention immediately",
+      "count": 20,
+      "emotional_impact": "High",
+      "best_for": ["Stopping the scroll", "Standing out", "Creating intrigue"],
+      "hooks": [
+        {
+          "id": 81,
+          "hook": "Delete your most popular content. Seriously. Here's why it's killing your growth.",
+          "r_a_c_u_b": {
+            "relevant": "Creators stuck repeating viral hits",
+            "awareness": "Problem aware - growth plateau",
+            "clarity": "Why popular content hurts growth",
+            "unique": "Counterintuitive - delete success",
+            "broadened": "Anyone trapped by past success"
+          }
+        },
+        {
+          "id": 82,
+          "hook": "I made more money the month I posted nothing than the month I posted daily. The paradox explained.",
+          "r_a_c_u_b": {
+            "relevant": "Burnt-out content creators",
+            "awareness": "Symptom aware - hustle not paying off",
+            "clarity": "Less posting = more money paradox",
+            "unique": "Complete reversal of expectations",
+            "broadened": "Anyone in hustle-culture trap"
+          }
+        },
+        {
+          "id": 83,
+          "hook": "Your audience doesn't want more content. They want this instead.",
+          "r_a_c_u_b": {
+            "relevant": "Creators focused on volume",
+            "awareness": "Problem aware - engagement dropping",
+            "clarity": "What audiences actually want",
+            "unique": "Challenges content-quantity dogma",
+            "broadened": "Any business overproducing"
+          }
+        },
+        {
+          "id": 84,
+          "hook": "I charge more for less. Clients are happier. Revenue is up. The minimalist service model.",
+          "r_a_c_u_b": {
+            "relevant": "Over-delivering service providers",
+            "awareness": "Problem aware - undervaluing services",
+            "clarity": "Less delivery + higher prices = better results",
+            "unique": "Charge more for less",
+            "broadened": "Any service business"
+          }
+        },
+        {
+          "id": 85,
+          "hook": "The worst advice I ever got: 'Follow your passion.' Here's what actually works.",
+          "r_a_c_u_b": {
+            "relevant": "People stuck following passion advice",
+            "awareness": "Symptom aware - passion not paying bills",
+            "clarity": "Alternative to passion-following",
+            "unique": "Challenges popular advice",
+            "broadened": "Anyone struggling with career direction"
+          }
+        },
+        {
+          "id": 86,
+          "hook": "I don't reply to all my DMs anymore. Engagement went up. Here's the psychology.",
+          "r_a_c_u_b": {
+            "relevant": "Creators drowning in DMs",
+            "awareness": "Problem aware - time management issues",
+            "clarity": "Selective response strategy",
+            "unique": "Less engagement = more engagement",
+            "broadened": "Any overwhelmed business owner"
+          }
+        },
+        {
+          "id": 87,
+          "hook": "Your competitors are your biggest asset. I made R100K from this collaboration framework.",
+          "r_a_c_u_b": {
+            "relevant": "Creators viewing others as threats",
+            "awareness": "Solution aware - seeking collaboration",
+            "clarity": "Competitor collaboration revenue",
+            "unique": "Competitors as assets",
+            "broadened": "Any business in competitive market"
+          }
+        },
+        {
+          "id": 88,
+          "hook": "I stopped creating 'valuable content' and started creating 'shareable content.' 10x reach.",
+          "r_a_c_u_b": {
+            "relevant": "Creators with low shares",
+            "awareness": "Problem aware - content not spreading",
+            "clarity": "Shareability over value",
+            "unique": "Challenges 'value' focus",
+            "broadened": "Any content creator"
+          }
+        },
+        {
+          "id": 89,
+          "hook": "The number one predictor of creator success isn't talent. It's this psychological trait.",
+          "r_a_c_u_b": {
+            "relevant": "Aspiring creators",
+            "awareness": "Solution aware - seeking success factors",
+            "clarity": "One key psychological predictor",
+            "unique": "Talent isn't the answer",
+            "broadened": "Anyone pursuing creative work"
+          }
+        },
+        {
+          "id": 90,
+          "hook": "I turned off comments on my best-performing content. Conversions tripled. The focus shift.",
+          "r_a_c_u_b": {
+            "relevant": "Creators optimizing for sales",
+            "awareness": "Solution aware - seeking conversion tactics",
+            "clarity": "Comments-off = 3x conversions",
+            "unique": "Anti-engagement for sales",
+            "broadened": "Any business reducing distractions"
+          }
+        },
+        {
+          "id": 91,
+          "hook": "Your personality is a liability. Your system is an asset. Build the system.",
+          "r_a_c_u_b": {
+            "relevant": "Personal-brand-dependent businesses",
+            "awareness": "Problem aware - burnout from being 'on'",
+            "clarity": "System over personality",
+            "unique": "Personality as liability",
+            "broadened": "Any founder-dependent business"
+          }
+        },
+        {
+          "id": 92,
+          "hook": "I made R50K from content I created 2 years ago. The evergreen monetization strategy.",
+          "r_a_c_u_b": {
+            "relevant": "Creators on content hamster wheel",
+            "awareness": "Solution aware - seeking passive income",
+            "clarity": "Evergreen content revenue",
+            "unique": "2-year-old content still paying",
+            "broadened": "Anyone wanting residual income"
+          }
+        },
+        {
+          "id": 93,
+          "hook": "The more I raised my prices, the better my clients became. The pricing filter effect.",
+          "r_a_c_u_b": {
+            "relevant": "Service providers with difficult clients",
+            "awareness": "Problem aware - client quality issues",
+            "clarity": "Price as client quality filter",
+            "unique": "Higher price = better clients",
+            "broadened": "Any service business"
+          }
+        },
+        {
+          "id": 94,
+          "hook": "I ignored the algorithm for 30 days. Focused on email. Made R80K. Platform independence.",
+          "r_a_c_u_b": {
+            "relevant": "Algorithm-chasing creators",
+            "awareness": "Problem aware - algorithm dependency",
+            "clarity": "Email > algorithm focus",
+            "unique": "30-day algorithm ignore experiment",
+            "broadened": "Any platform-dependent business"
+          }
+        },
+        {
+          "id": 95,
+          "hook": "Your biggest growth will come from saying no, not yes. The subtraction strategy.",
+          "r_a_c_u_b": {
+            "relevant": "Overcommitted entrepreneurs",
+            "awareness": "Symptom aware - overwhelm",
+            "clarity": "Growth through subtraction",
+            "unique": "No > Yes for growth",
+            "broadened": "Any busy business owner"
+          }
+        },
+        {
+          "id": 96,
+          "hook": "I stopped teaching tactics. Started teaching principles. Revenue 5x'd. The shift.",
+          "r_a_c_u_b": {
+            "relevant": "Educators/coaches",
+            "awareness": "Solution aware - seeking differentiation",
+            "clarity": "Principles > tactics revenue impact",
+            "unique": "5x revenue from shift",
+            "broadened": "Any knowledge business"
+          }
+        },
+        {
+          "id": 97,
+          "hook": "My worst-performing content made me the most money. Engagement ≠ Revenue.",
+          "r_a_c_u_b": {
+            "relevant": "Creators chasing engagement",
+            "awareness": "Problem aware - high engagement, low sales",
+            "clarity": "Decoupling engagement from revenue",
+            "unique": "Worst content = most money",
+            "broadened": "Any business optimizing wrong metrics"
+          }
+        },
+        {
+          "id": 98,
+          "hook": "I fired my best client. Revenue dropped 30%, then grew 200%. The capacity principle.",
+          "r_a_c_u_b": {
+            "relevant": "Service providers with draining clients",
+            "awareness": "Problem aware - bad-fit client issues",
+            "clarity": "Short-term loss, long-term gain",
+            "unique": "Firing best client paradox",
+            "broadened": "Any business with wrong customers"
+          }
+        },
+        {
+          "id": 99,
+          "hook": "Your free content is competing with your paid content. Fix this or stay broke.",
+          "r_a_c_u_b": {
+            "relevant": "Creators giving away too much",
+            "awareness": "Problem aware - can't sell because of free content",
+            "clarity": "Free vs. paid content strategy",
+            "unique": "Brutal truth about over-giving",
+            "broadened": "Any expert undermonetizing knowledge"
+          }
+        },
+        {
+          "id": 100,
+          "hook": "I studied my haters' comments. They were right. Changed everything.",
+          "r_a_c_u_b": {
+            "relevant": "Creators dealing with criticism",
+            "awareness": "Symptom aware - hurt by negative feedback",
+            "clarity": "Extracting value from hate",
+            "unique": "Haters as advisors",
+            "broadened": "Anyone receiving criticism"
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "category": "Controversy & Hot Take Hooks",
+      "description": "Challenge conventional wisdom and spark debate (use strategically)",
+      "count": 20,
+      "emotional_impact": "Very High",
+      "best_for": ["Viral potential", "Positioning as thought leader", "Sparking conversation"],
+      "hooks": [
+        {
+          "id": 101,
+          "hook": "Posting daily is killing your growth. Here's the uncomfortable truth nobody's telling you.",
+          "r_a_c_u_b": {
+            "relevant": "Burnt-out daily posters",
+            "awareness": "Problem aware - hustle not working",
+            "clarity": "Why daily posting hurts",
+            "unique": "Challenges hustle culture",
+            "broadened": "Anyone overworking"
+          }
+        },
+        {
+          "id": 102,
+          "hook": "Your engagement rate means nothing. Vanity metrics are keeping you poor.",
+          "r_a_c_u_b": {
+            "relevant": "Engagement-obsessed creators",
+            "awareness": "Problem aware - metrics ≠ money",
+            "clarity": "Which metrics actually matter",
+            "unique": "Dismisses popular metrics",
+            "broadened": "Any business tracking wrong KPIs"
+          }
+        },
+        {
+          "id": 103,
+          "hook": "99% of content advice is bullshit. Here's what actually moves the needle.",
+          "r_a_c_u_b": {
+            "relevant": "Creators drowning in conflicting advice",
+            "awareness": "Symptom aware - confused and overwhelmed",
+            "clarity": "Real drivers of success",
+            "unique": "Dismisses most advice",
+            "broadened": "Anyone paralyzed by information overload"
+          }
+        },
+        {
+          "id": 104,
+          "hook": "Being authentic is terrible business advice. Here's what actually sells.",
+          "r_a_c_u_b": {
+            "relevant": "Creators focused on authenticity",
+            "awareness": "Problem aware - authenticity not converting",
+            "clarity": "What drives actual sales",
+            "unique": "Challenges authenticity gospel",
+            "broadened": "Any business over-indexing on being 'real'"
+          }
+        },
+        {
+          "id": 105,
+          "hook": "Your haters are more valuable than your fans. Here's how to weaponize criticism.",
+          "r_a_c_u_b": {
+            "relevant": "Creators avoiding controversy",
+            "awareness": "Solution aware - seeking polarization strategy",
+            "clarity": "Using hate as fuel",
+            "unique": "Haters > fans claim",
+            "broadened": "Anyone facing criticism"
+          }
+        },
+        {
+          "id": 106,
+          "hook": "Collaboration is overrated. Competition made me more money. The rivalry advantage.",
+          "r_a_c_u_b": {
+            "relevant": "Creators in collaboration-heavy spaces",
+            "awareness": "Solution aware - seeking differentiation",
+            "clarity": "Competition as growth driver",
+            "unique": "Anti-collaboration stance",
+            "broadened": "Any competitive market player"
+          }
+        },
+        {
+          "id": 107,
+          "hook": "Your purpose is a distraction. Focus on profit first, purpose later.",
+          "r_a_c_u_b": {
+            "relevant": "Purpose-paralyzed entrepreneurs",
+            "awareness": "Symptom aware - stuck finding purpose",
+            "clarity": "Profit enables purpose",
+            "unique": "Challenges purpose-first advice",
+            "broadened": "Anyone delaying action for 'purpose'"
+          }
+        },
+        {
+          "id": 108,
+          "hook": "Most courses are scams. Including some of mine. The education industry truth.",
+          "r_a_c_u_b": {
+            "relevant": "Course buyers and creators",
+            "awareness": "Problem aware - course skepticism",
+            "clarity": "Honest education industry critique",
+            "unique": "Self-indictment builds trust",
+            "broadened": "Anyone in info product space"
+          }
+        },
+        {
+          "id": 109,
+          "hook": "Work-life balance is a lie sold to keep you average. Hustle harder.",
+          "r_a_c_u_b": {
+            "relevant": "Ambitious builders",
+            "awareness": "Solution aware - seeking permission to work harder",
+            "clarity": "Embrace imbalance for success",
+            "unique": "Pro-hustle in anti-hustle era",
+            "broadened": "Anyone with big ambitions"
+          }
+        },
+        {
+          "id": 110,
+          "hook": "Following trends is for followers. Leaders set trends. Stop copying.",
+          "r_a_c_u_b": {
+            "relevant": "Trend-chasing creators",
+            "awareness": "Problem aware - blending in",
+            "clarity": "Originality over trends",
+            "unique": "Dismisses trend-following",
+            "broadened": "Anyone lacking differentiation"
+          }
+        },
+        {
+          "id": 111,
+          "hook": "Your degree is worthless. Your results are priceless. The credential shift.",
+          "r_a_c_u_b": {
+            "relevant": "Non-traditional education paths",
+            "awareness": "Symptom aware - insecurity about credentials",
+            "clarity": "Results > credentials",
+            "unique": "Dismisses traditional education",
+            "broadened": "Anyone without formal qualifications"
+          }
+        },
+        {
+          "id": 112,
+          "hook": "Giving value for free is keeping you broke. Charge from day one.",
+          "r_a_c_u_b": {
+            "relevant": "Over-giving new creators",
+            "awareness": "Problem aware - giving away too much",
+            "clarity": "Monetize immediately",
+            "unique": "Challenges 'free value' advice",
+            "broadened": "Any expert undercharging"
+          }
+        },
+        {
+          "id": 113,
+          "hook": "Your audience is lying to you. What they say they want ≠ what they buy.",
+          "r_a_c_u_b": {
+            "relevant": "Creators making unwanted products",
+            "awareness": "Problem aware - surveys don't match sales",
+            "clarity": "Watch behavior, ignore words",
+            "unique": "Audience as unreliable",
+            "broadened": "Any business with feedback-action gap"
+          }
+        },
+        {
+          "id": 114,
+          "hook": "Patience is bullshit. Speed is the only unfair advantage you have. Move faster.",
+          "r_a_c_u_b": {
+            "relevant": "Slow-moving entrepreneurs",
+            "awareness": "Symptom aware - opportunities passing by",
+            "clarity": "Speed as competitive edge",
+            "unique": "Challenges patience virtue",
+            "broadened": "Anyone moving too slowly"
+          }
+        },
+        {
+          "id": 115,
+          "hook": "Building in public is narcissism disguised as transparency. Build in private.",
+          "r_a_c_u_b": {
+            "relevant": "Build-in-public skeptics",
+            "awareness": "Problem aware - performative building",
+            "clarity": "Privacy as strategy",
+            "unique": "Attacks popular movement",
+            "broadened": "Anyone tired of public building pressure"
+          }
+        },
+        {
+          "id": 116,
+          "hook": "Your morning routine doesn't matter. Your business model does. Stop optimizing bullshit.",
+          "r_a_c_u_b": {
+            "relevant": "Productivity-obsessed entrepreneurs",
+            "awareness": "Problem aware - optimizing wrong things",
+            "clarity": "Focus on business fundamentals",
+            "unique": "Dismisses productivity culture",
+            "broadened": "Anyone lost in optimization theater"
+          }
+        },
+        {
+          "id": 117,
+          "hook": "Networking is transactional bullshit. Build real relationships or build alone.",
+          "r_a_c_u_b": {
+            "relevant": "Ineffective networkers",
+            "awareness": "Problem aware - networking feels fake",
+            "clarity": "Relationships vs. networking",
+            "unique": "Anti-networking stance",
+            "broadened": "Anyone uncomfortable with networking"
+          }
+        },
+        {
+          "id": 118,
+          "hook": "The algorithm doesn't owe you anything. Make better content or quit complaining.",
+          "r_a_c_u_b": {
+            "relevant": "Algorithm-blaming creators",
+            "awareness": "Problem aware - low performance",
+            "clarity": "Ownership over victimhood",
+            "unique": "Brutal personal responsibility",
+            "broadened": "Anyone making excuses"
+          }
+        },
+        {
+          "id": 119,
+          "hook": "Your comfort zone is a prison. Discomfort is the price of growth. Pay it.",
+          "r_a_c_u_b": {
+            "relevant": "Risk-averse individuals",
+            "awareness": "Symptom aware - stuck in comfort",
+            "clarity": "Embrace discomfort intentionally",
+            "unique": "Comfort as prison metaphor",
+            "broadened": "Anyone avoiding necessary change"
+          }
+        },
+        {
+          "id": 120,
+          "hook": "If you're not polarizing, you're invisible. Pick a side or disappear.",
+          "r_a_c_u_b": {
+            "relevant": "Bland, safe creators",
+            "awareness": "Problem aware - ignored despite effort",
+            "clarity": "Polarization as visibility strategy",
+            "unique": "Demands taking stance",
+            "broadened": "Any business blending in"
+          }
+        }
+      ]
+    }
+  ],
+
+  "usage_guidelines": {
+    "category_distribution": {
+      "origin_struggle": "Use for relatability and connection building - early in customer journey",
+      "transformation": "Use for social proof and method validation - mid customer journey",
+      "lesson_breakthrough": "Use for educational content and authority building - throughout journey",
+      "social_proof_authority": "Use for credibility and premium positioning - mid to late journey",
+      "curiosity_pattern_interrupt": "Use for attention capture and viral potential - always",
+      "controversy_hot_take": "Use strategically and sparingly - for polarization and debate"
+    },
+    "customization_instructions": [
+      "Replace Ndivhuwo's specific numbers/stories with your own proof stories",
+      "Keep the structure (R×A×C×U^B formula) but personalize the content",
+      "Test hooks against your specific audience awareness level",
+      "Track which hooks drive highest engagement vs. highest conversions",
+      "Rotate hooks to prevent audience fatigue"
+    ],
+    "platform_adaptation": {
+      "instagram_reels": "Use shorter, punchier hooks (1-1.5 seconds)",
+      "tiktok": "Use more conversational, trend-adjacent hooks",
+      "youtube_shorts": "Use question-based or statement hooks",
+      "youtube_longform": "Use story-driven hooks with intrigue",
+      "email_subject_lines": "Use curiosity and controversy hooks",
+      "sales_pages": "Use transformation and social proof hooks"
+    },
+    "testing_framework": {
+      "A_B_test": "Test 2 hooks from different categories on same content",
+      "track_metrics": ["Views", "Watch time", "Saves", "Shares", "DMs", "Link clicks", "Conversions"],
+      "iterate": "Double down on winning hook categories for your specific audience"
+    }
+  }
+}
