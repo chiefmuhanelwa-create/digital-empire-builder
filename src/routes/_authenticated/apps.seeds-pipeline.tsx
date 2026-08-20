@@ -6,7 +6,7 @@ import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, Workflow } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/seeds-pipeline")({
-  head: () => ({ meta: [{ title: "SEEDS Pipeline — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "SEEDS Pipeline — Contentpreneur Africa" }] }),
   component: SeedsPipeline,
 });
 
@@ -67,7 +67,7 @@ function SeedsPipeline() {
 
         <AiCoach tool="seeds-pipeline" getPayload={() => JSON.stringify(v)} />
 
-        <div className="rounded-2xl bg-[#0F172A] p-6 text-center mt-4">
+        <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-center mt-4">
           <p className="nx-label !text-[var(--nx-gold-bright)]">Your next action</p>
           <p className="text-white text-lg mt-1">{filled < 5 ? `Fill the ${5 - filled} missing stage${5 - filled > 1 ? "s" : ""} — a gap is a leak.` : "Pipeline mapped. Now set up your first free opt-in (the Education step) this week."}</p>
           <Link to="/dashboard/foundation-kit" className="cta-glow inline-flex items-center gap-2 mt-4">Mark done → next step <ArrowRight className="size-4" /></Link>
@@ -84,7 +84,7 @@ function Locked() {
         <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
         <h2 className="mt-4 text-2xl">This is Step 5 of the Clarity System.</h2>
         <p className="nx-body max-w-md mx-auto mt-2">Get the Foundation Kit to unlock the SEEDS Pipeline and the full 7-step system.</p>
-        <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+        <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
       </div>
     </main>
   );

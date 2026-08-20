@@ -35,10 +35,19 @@ function AuthGate() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="theme-contentpreneur min-h-screen flex items-center justify-center bg-background">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-muted-foreground">Loading…</div>
       </div>
     );
   }
-  return <Outlet />;
+  // The whole signed-in area is Contentpreneur Africa, not CHKPLT — it lives on
+  // contentpreneur.africa and chkplt.com 301s every member path here. Applying
+  // the brand theme at this single point re-skins every member route (see
+  // .theme-contentpreneur in styles.css); the storefront keeps CHKPLT's amber
+  // and slate untouched.
+  return (
+    <div className="theme-contentpreneur">
+      <Outlet />
+    </div>
+  );
 }

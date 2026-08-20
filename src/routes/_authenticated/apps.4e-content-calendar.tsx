@@ -6,7 +6,7 @@ import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, CalendarDays, RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/4e-content-calendar")({
-  head: () => ({ meta: [{ title: "4E Content Calendar — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "4E Content Calendar — Contentpreneur Africa" }] }),
   component: FourECalendar,
 });
 
@@ -143,7 +143,7 @@ function FourECalendar() {
 
         <AiCoach tool="4e-content-calendar" getPayload={() => JSON.stringify({ who, topic, pain, after })} />
 
-        <div className="rounded-2xl bg-[#0F172A] p-6 text-center mt-8">
+        <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-center mt-8">
           <p className="nx-label !text-[var(--nx-gold-bright)]">Your next action</p>
           <p className="text-white text-lg mt-1">Don't plan all 30 — film and post <strong>Day 1 today</strong>. Momentum first, perfection never.</p>
           <Link to="/dashboard/foundation-kit" className="cta-glow inline-flex items-center gap-2 mt-4">Mark done → next step <ArrowRight className="size-4" /></Link>
@@ -160,7 +160,7 @@ function Locked() {
         <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
         <h2 className="mt-4 text-2xl">This is Step 3 of the Clarity System.</h2>
         <p className="nx-body max-w-md mx-auto mt-2">Get the Foundation Kit to unlock the 4E Content Calendar and the full 7-step system.</p>
-        <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+        <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
       </div>
     </main>
   );

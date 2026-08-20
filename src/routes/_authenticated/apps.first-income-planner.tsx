@@ -5,7 +5,7 @@ import { useKitAccess } from "@/lib/use-kit-access";
 import { Lock, ArrowRight, Target } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/first-income-planner")({
-  head: () => ({ meta: [{ title: "90-Day First Income Planner — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "90-Day First Income Planner — Contentpreneur Africa" }] }),
   component: FirstIncomePlanner,
 });
 
@@ -59,7 +59,7 @@ function FirstIncomePlanner() {
               <div key={p.k} className="nx-card !p-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full font-display ${done ? "bg-[#15803D] text-white" : "bg-[#0F172A] text-[var(--nx-gold-bright)]"}`}>{i + 1}</span>
+                    <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full font-display ${done ? "bg-[#15803D] text-white" : "bg-[var(--obsidian)] text-[var(--nx-gold-bright)]"}`}>{i + 1}</span>
                     <div>
                       <div className="font-display text-lg">{p.name}</div>
                       <div className="text-xs text-[var(--text-dim)]">{p.days} · milestone: {p.milestone}</div>
@@ -76,7 +76,7 @@ function FirstIncomePlanner() {
           })}
         </div>
 
-        <div className="rounded-2xl bg-[#0F172A] p-6 text-center mt-8">
+        <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-center mt-8">
           <p className="nx-label !text-[var(--nx-gold-bright)]">Your next action · {doneCount}/3 phases</p>
           <p className="text-white text-lg mt-1">Pick your Day 1 — an actual date, this week. The 90 days start when you say they do.</p>
           <Link to="/dashboard/foundation-kit" className="cta-glow inline-flex items-center gap-2 mt-4">Back to your Clarity System <ArrowRight className="size-4" /></Link>
@@ -93,7 +93,7 @@ function Locked() {
         <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
         <h2 className="mt-4 text-2xl">This bonus is in the Foundation Kit.</h2>
         <p className="nx-body max-w-md mx-auto mt-2">Get the kit to unlock the 90-Day First Income Planner and the full Clarity System.</p>
-        <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+        <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
       </div>
     </main>
   );

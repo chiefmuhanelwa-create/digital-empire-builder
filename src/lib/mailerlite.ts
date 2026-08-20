@@ -43,9 +43,20 @@ export async function addToMailerLiteGroup(
       const text = await res.text();
       const message = `[mailerlite] group ${groupId} sync failed ${res.status}: ${text.slice(0, 200)}`;
       console.warn(message);
+
+      // A 4xx here (other than a timeout/rate-limit) is CONFIGURATION, not a
+      // hiccup: the group was deleted or the env var points at a stale ID, and
+      // EVERY lead down this path will keep failing until a human changes it.
+      // At "warning" that never alerts — it just accumulates in /admin/incidents,
+      // which is how group 190855179540628547 sat dead and unnoticed (found
+      // 2026-08-18). Transient failures (5xx, 429, network) stay a warning.
+      const isConfigFailure = res.status >= 400 && res.status < 500 && res.status !== 408 && res.status !== 429;
+
       await reportError(new Error(message), {
-        endpoint: "addToMailerLiteGroup",
-        severity: "warning",
+        // Per-group endpoint so sendOpsAlert's 15-minute dedup is per broken
+        // group, and so the alert subject line names the one that is broken.
+        endpoint: isConfigFailure ? `addToMailerLiteGroup:invalid-group:${groupId}` : "addToMailerLiteGroup",
+        severity: isConfigFailure ? "critical" : "warning",
         meta: { email, groupId, status: res.status },
       });
     }

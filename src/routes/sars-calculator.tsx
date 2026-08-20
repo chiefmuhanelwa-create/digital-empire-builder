@@ -6,6 +6,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToolView } from "@/lib/tool-analytics";
 
 export const Route = createFileRoute("/sars-calculator")({
   head: () => ({
@@ -25,7 +26,11 @@ export const Route = createFileRoute("/sars-calculator")({
 const RESERVE_RATE = 0.25;
 const KEY = "chkplt-sars-entries-v1";
 
-interface Entry { id: string; source: string; amount: number; }
+interface Entry {
+  id: string;
+  source: string;
+  amount: number;
+}
 
 const fmtZAR = (n: number) => "R " + Math.round(n).toLocaleString("en-ZA");
 const parseNum = (s: string) => parseFloat(String(s).replace(/[,\s]/g, "")) || 0;
@@ -41,6 +46,7 @@ function load(): Entry[] {
 }
 
 function SarsPage() {
+  useToolView("sars-calculator");
   const [entries, setEntries] = useState<Entry[]>([]);
   const [source, setSource] = useState("");
   const [amount, setAmount] = useState("");
@@ -49,7 +55,11 @@ function SarsPage() {
   useEffect(() => setEntries(load()), []);
   useEffect(() => {
     if (typeof window !== "undefined") {
-      try { window.localStorage.setItem(KEY, JSON.stringify(entries)); } catch {}
+      try {
+        window.localStorage.setItem(KEY, JSON.stringify(entries));
+      } catch {
+        /* private mode / storage blocked — entries just won't persist */
+      }
     }
   }, [entries]);
 
@@ -83,15 +93,38 @@ function SarsPage() {
             The 25% you <strong>don't touch.</strong>
           </h1>
           <p className="text-[#555] mt-3 max-w-md mx-auto">
-            Reserve a quarter of every rand the day it lands — so a tax bill never blindsides you. Log what you earn, see exactly what to move into a separate account, keep the rest with a clear conscience.
+            Reserve a quarter of every rand the day it lands — so a tax bill never blindsides you.
+            Log what you earn, see exactly what to move into a separate account, keep the rest with
+            a clear conscience.
+          </p>
+        </div>
+
+        {/* This tool is the habit; the provisional calculator is the number.
+            Without this pointer the two tax tools read as duplicates. */}
+        <div className="mb-6 rounded-2xl border border-[#0F172A]/15 bg-[#0F172A] p-5 text-center">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#C9A84C]">
+            Want the exact figure?
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-[#e8e2d4]">
+            This reserves a flat 25% — a safe habit, not a calculation. The{" "}
+            <Link to="/provisional-tax" className="font-bold text-[#C9A84C] underline">
+              Provisional Tax Calculator
+            </Link>{" "}
+            runs your real income and deductions through the current SARS brackets and gives you
+            both IRP6 payments with their dates.
           </p>
         </div>
 
         {/* The story / why */}
         <div className="border border-[#F59E0B]/40 rounded-2xl bg-[#FBF7EC] p-5 mb-6">
-          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">Why 25%, why now</div>
+          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">
+            Why 25%, why now
+          </div>
           <p className="text-[#2A2A2A] text-sm leading-relaxed">
-            I learned this the hard way: an assessment of <strong>R207,879</strong> landed because the tax was never set aside. Don't let that be you. The fix is boring and it works — the moment money hits your account, move 25% out of reach. When SARS comes, it's already waiting.
+            I learned this the hard way: an assessment of <strong>R207,879</strong> landed because
+            the tax was never set aside. Don't let that be you. The fix is boring and it works — the
+            moment money hits your account, move 25% out of reach. When SARS comes, it's already
+            waiting.
           </p>
         </div>
 
@@ -104,7 +137,9 @@ function SarsPage() {
 
         {/* Add entry */}
         <div className="border border-[#e8e0d4] rounded-2xl bg-white p-5 sm:p-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.10)] mb-6">
-          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-banana mb-3">Log income</div>
+          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-banana mb-3">
+            Log income
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-[1.4fr_1fr_auto] gap-2">
             <Input
               value={source}
@@ -131,7 +166,9 @@ function SarsPage() {
           </div>
           {amount && parseNum(amount) > 0 && (
             <p className="mt-3 text-sm text-[#555]">
-              From this, set aside <strong className="text-banana">{fmtZAR(parseNum(amount) * RESERVE_RATE)}</strong>, keep <strong>{fmtZAR(parseNum(amount) * (1 - RESERVE_RATE))}</strong>.
+              From this, set aside{" "}
+              <strong className="text-banana">{fmtZAR(parseNum(amount) * RESERVE_RATE)}</strong>,
+              keep <strong>{fmtZAR(parseNum(amount) * (1 - RESERVE_RATE))}</strong>.
             </p>
           )}
         </div>
@@ -141,9 +178,12 @@ function SarsPage() {
           <div className="border border-[#0F172A] rounded-2xl bg-[#0F172A] text-[#f1e7c3] p-5 mb-6 flex items-start gap-3">
             <PiggyBank className="size-5 text-[#B45309] shrink-0 mt-0.5" />
             <div>
-              <div className="font-display text-lg text-white">Move {fmtZAR(totals.reserve)} to your SARS account.</div>
+              <div className="font-display text-lg text-white">
+                Move {fmtZAR(totals.reserve)} to your SARS account.
+              </div>
               <p className="text-[#cdc3a8] text-sm mt-1">
-                Open a separate savings account you never spend from. That balance isn't yours — it's SARS's, sitting safely until provisional tax is due (Aug &amp; Feb).
+                Open a separate savings account you never spend from. That balance isn't yours —
+                it's SARS's, sitting safely until provisional tax is due (Aug &amp; Feb).
               </p>
             </div>
           </div>
@@ -153,10 +193,15 @@ function SarsPage() {
         {entries.length > 0 && (
           <div className="border border-[#e8e0d4] rounded-2xl bg-white overflow-hidden mb-2">
             {entries.map((e) => (
-              <div key={e.id} className="flex items-center justify-between gap-3 px-5 py-3 border-b border-[#f0ebe1] last:border-0">
+              <div
+                key={e.id}
+                className="flex items-center justify-between gap-3 px-5 py-3 border-b border-[#f0ebe1] last:border-0"
+              >
                 <div className="min-w-0">
                   <div className="text-sm font-medium text-[#0F172A] truncate">{e.source}</div>
-                  <div className="text-xs text-[#777]">reserve {fmtZAR(e.amount * RESERVE_RATE)}</div>
+                  <div className="text-xs text-[#777]">
+                    reserve {fmtZAR(e.amount * RESERVE_RATE)}
+                  </div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <span className="font-mono text-sm text-[#0F172A]">{fmtZAR(e.amount)}</span>
@@ -174,14 +219,20 @@ function SarsPage() {
           </div>
         )}
         {entries.length > 0 && (
-          <p className="text-[#777] text-xs text-center mb-2">Saved on this device. This is a discipline tool, not tax advice — confirm your bracket with a practitioner.</p>
+          <p className="text-[#777] text-xs text-center mb-2">
+            Saved on this device. This is a discipline tool, not tax advice — confirm your bracket
+            with a practitioner.
+          </p>
         )}
 
         {/* Bridge CTA */}
         <div className="mt-8 text-center border border-[#e8e0d4] rounded-2xl p-6 bg-white">
-          <h3 className="font-display text-xl uppercase">Reserving is step one. Knowing the rules is the system.</h3>
+          <h3 className="font-display text-xl uppercase">
+            Reserving is step one. Knowing the rules is the system.
+          </h3>
           <p className="text-[#555] text-sm mt-2 max-w-md mx-auto">
-            The 25% habit keeps you safe. SARS &amp; Creator Income shows you the full picture — provisional tax dates, what's deductible, and how to register without fear.
+            The 25% habit keeps you safe. SARS &amp; Creator Income shows you the full picture —
+            provisional tax dates, what's deductible, and how to register without fear.
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
             <Link
@@ -192,10 +243,10 @@ function SarsPage() {
               Get SARS &amp; Creator Income <ArrowRight className="size-4" />
             </Link>
             <Link
-              to="/rate-card"
+              to="/provisional-tax"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#F59E0B] text-[#0F172A] hover:bg-[#F59E0B] hover:text-[#111] transition-colors"
             >
-              Price your next deal
+              Work out what you owe
             </Link>
           </div>
         </div>
@@ -207,8 +258,14 @@ function SarsPage() {
 
 function Stat({ label, value, tone }: { label: string; value: string; tone: "ink" | "gold" }) {
   return (
-    <div className={`rounded-xl p-4 text-center border ${tone === "gold" ? "border-[#F59E0B]/50 bg-[#FBF7EC]" : "border-[#e8e0d4] bg-[#FBFAF8]"}`}>
-      <div className={`font-display text-xl sm:text-2xl ${tone === "gold" ? "text-banana" : "text-[#0F172A]"}`}>{value}</div>
+    <div
+      className={`rounded-xl p-4 text-center border ${tone === "gold" ? "border-[#F59E0B]/50 bg-[#FBF7EC]" : "border-[#e8e0d4] bg-[#FBFAF8]"}`}
+    >
+      <div
+        className={`font-display text-xl sm:text-2xl ${tone === "gold" ? "text-banana" : "text-[#0F172A]"}`}
+      >
+        {value}
+      </div>
       <div className="font-mono text-[9px] uppercase tracking-wide text-[#777] mt-1">{label}</div>
     </div>
   );

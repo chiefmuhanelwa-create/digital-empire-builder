@@ -51,7 +51,7 @@ function ResetPage() {
       <SiteHeader />
       <div className="mx-auto max-w-md px-6 pt-20 pb-16">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Reset</div>
-        <h1 className="mt-4 font-display text-5xl">
+        <h1 className="mt-4 font-display text-4xl sm:text-5xl">
           {mode === "request" ? "Forgot password?" : "Set a new password."}
         </h1>
 

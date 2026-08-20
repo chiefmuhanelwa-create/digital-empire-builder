@@ -6,7 +6,7 @@ import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ShieldAlert } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/paids-auditor")({
-  head: () => ({ meta: [{ title: "PAIDS Income-Stream Auditor — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "PAIDS Income-Stream Auditor — Contentpreneur Africa" }] }),
   component: PaidsAuditor,
 });
 
@@ -153,13 +153,13 @@ function PaidsAuditor() {
 
         {/* Output */}
         <div className="lg:col-span-2 space-y-5 lg:sticky lg:top-6 self-start">
-          <div className="rounded-2xl bg-[#0F172A] p-6 text-white text-center">
-            <div className="font-display text-5xl" style={{ color: r.tone === "muted" ? "#94A3B8" : "var(--nx-gold-bright)" }}>{r.score}<span className="text-xl text-slate-400">/100</span></div>
+          <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-white text-center">
+            <div className="font-display text-4xl sm:text-5xl" style={{ color: r.tone === "muted" ? "#94A3B8" : "var(--nx-gold-bright)" }}>{r.score}<span className="text-xl text-[#9A9488]">/100</span></div>
             <p className="nx-label !text-[var(--nx-gold-bright)] mt-1">Diversification</p>
-            <p className="mt-2 text-sm text-slate-300">{r.verdict}{r.total > 0 ? ` · ${r.active}/5 active` : ""}</p>
+            <p className="mt-2 text-sm text-[#C8C2B4]">{r.verdict}{r.total > 0 ? ` · ${r.active}/5 active` : ""}</p>
             <div className="mt-4 grid grid-cols-2 gap-3 text-left">
-              <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-400">Total / month</div><div className="font-display text-lg">{money(r.total)}</div></div>
-              <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-400">Biggest dependency</div><div className="font-display text-lg">{r.depPct}%</div></div>
+              <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-[#9A9488]">Total / month</div><div className="font-display text-lg">{money(r.total)}</div></div>
+              <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-[#9A9488]">Biggest dependency</div><div className="font-display text-lg">{r.depPct}%</div></div>
             </div>
           </div>
 
@@ -211,7 +211,7 @@ function Locked({ title, body }: { title: string; body: string }) {
           <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
           <h2 className="mt-4 text-2xl">{title}</h2>
           <p className="nx-body max-w-md mx-auto mt-2">{body}</p>
-          <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+          <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
       </main>
     </Shell>

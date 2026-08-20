@@ -26,7 +26,10 @@ export function MailerLiteEmbedForm({ formSlug }: { formSlug: string }) {
     script.async = true;
     script.src = "https://assets.mailerlite.com/js/universal.js";
     document.head.appendChild(script);
-    (window.ml as (...args: unknown[]) => void)("account", MAILERLITE_ACCOUNT_ID);
+    // `w.ml` was just assigned above, so read it from `w` rather than casting
+    // `window.ml` (typed optional) through undefined — that cast was the only
+    // TypeScript error left in the repo.
+    (w.ml as (...args: unknown[]) => void)("account", MAILERLITE_ACCOUNT_ID);
   }, []);
 
   return <div className="ml-embedded" data-form={formSlug} />;

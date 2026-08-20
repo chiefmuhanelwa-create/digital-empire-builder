@@ -1,15 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { TurnstileGate } from "@/components/TurnstileGate";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import { subscribeAlignedToolkit } from "@/lib/aligned.functions";
 import { getUtm } from "@/lib/utm";
 import { ArrowRight, ArrowLeft, Check, Sparkles, Lock, Download } from "lucide-react";
 import { BackNav } from "@/components/BackNav";
+import { useToolView } from "@/lib/tool-analytics";
 
 export const Route = createFileRoute("/align-accelerate-excel")({
   head: () => ({
@@ -113,6 +114,7 @@ const VERDICTS: Record<Phase, { kicker: string; title: string; body: string }> =
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 function AlignedToolPage() {
+  useToolView("align-accelerate-excel");
   const [step, setStep] = useState<"intro" | "q" | "result">("intro");
   const [qIndex, setQIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
@@ -285,7 +287,7 @@ function AlignedToolPage() {
               <div className="flex flex-wrap items-center gap-6">
                 <div className="text-center">
                   <div
-                    className="font-display text-5xl"
+                    className="font-display text-4xl sm:text-5xl"
                     style={{ color: "var(--nx-gold-bright)" }}
                   >
                     {pct}%
@@ -408,10 +410,15 @@ function ToolkitCapture({ focusPhase }: { focusPhase: Phase }) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
 
   const mut = useMutation({
     mutationFn: subscribeFn,
     onError: (e: Error) => toast.error(e.message ?? "Something went wrong. Try again."),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   if (mut.isSuccess) {
@@ -485,10 +492,10 @@ function ToolkitCapture({ focusPhase }: { focusPhase: Phase }) {
           placeholder="WhatsApp number (optional)"
           className="bg-white/10 border-white/20 text-white placeholder:text-slate-400"
         />
-        <TurnstileGate onToken={setTsToken} />
+        <TurnstileGate ref={tsRef} onToken={setTsToken} />
         <Button
           size="lg"
-          disabled={!name || !email || mut.isPending}
+          disabled={!name || !email || !tsToken || mut.isPending}
           onClick={() =>
             mut.mutate({
               data: {

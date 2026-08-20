@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { ArrowRight, ArrowLeft, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TurnstileGate } from "@/components/TurnstileGate";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 
 import { submitApplication } from "@/lib/apply.functions";
 import type { RecommendationResult } from "@/utils/evaluator";
@@ -169,6 +169,10 @@ function ApplyPage() {
   const [step, setStep] = useState(0);
   const [fields, setFields] = useState<Fields>(INITIAL);
   const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<(RecommendationResult & { applicationId: string }) | null>(null);
@@ -246,6 +250,9 @@ function ApplyPage() {
           primary_e: fields.primary_e as "Educate" | "Entertain" | "Encourage" | "Earn",
           abundance_mindset: fields.expertise_worth_more === "yes",
           building_horizon: fields.building_for as "GENERATIONS" | "TODAY",
+          // canProceed() already blocks submit until this exists; sending it is
+          // what makes the check real rather than decorative.
+          turnstileToken: tsToken ?? undefined,
         },
       });
       setResult(res);
@@ -255,6 +262,8 @@ function ApplyPage() {
       );
     } finally {
       setLoading(false);
+      // Spent token — swap it for a fresh one so a retry after an error works.
+      tsRef.current?.reset();
     }
   }
 
@@ -323,16 +332,23 @@ function ApplyPage() {
                   The Foundation Kit First.
                 </h2>
                 <p className="text-[#555] text-base leading-relaxed mb-6 max-w-sm mx-auto">
-                  You're not ready for the Accelerator PRO yet — and that's not a failure. It means we caught your gap before you paid $499 for something you'd struggle to execute. Start with the Foundation Kit. Build the base. Apply again in 90 days.
+                  You're not ready for the Accelerator PRO yet — and that's not a failure. It means we caught your gap before you paid $997 for something you'd struggle to execute. Start with the Foundation Kit. Build the base. Apply again in 90 days.
                 </p>
                 {result.focusPillars && (
                   <p className="text-[#777] text-sm mb-6 max-w-xs mx-auto">
                     <strong className="text-[#0F172A]">Your focus area:</strong> {result.focusPillars}
                   </p>
                 )}
+                {/* /foundation, NOT /products/called-expert-foundation-kit.
+                    This page is served on contentpreneur.africa, where /products/*
+                    is deliberately not routed (the storefront stays on chkplt.com),
+                    so the old link returned a hard 404 — verified live 2026-08-19.
+                    It was doing that at the single highest-intent moment in the
+                    funnel: the downsell shown to someone who just failed to qualify
+                    for PRO. /foundation is a route in this app and resolves on both
+                    hostnames, so it is the correct target from either domain. */}
                 <Link
-                  to="/products/$slug"
-                  params={{ slug: "called-expert-foundation-kit" }}
+                  to="/foundation"
                   className="inline-flex items-center justify-center gap-2 bg-[#F59E0B] text-[#0F172A] font-display font-black uppercase tracking-wide text-base py-4 px-10 hover:bg-[#D97706] transition-colors w-full max-w-xs"
                   style={GOLD_GLOW}
                 >
@@ -642,7 +658,15 @@ function ApplyPage() {
                         ))}
                       </div>
                     </FieldRow>
-                    <TurnstileGate onToken={setTsToken} className="pt-1" />
+                    {/* "allow": this form is the front door to the $997 programme.
+                        A widget that cannot load must not be able to close it — the
+                        server verifies and decides (see submitApplication). */}
+                    <TurnstileGate
+                      ref={tsRef}
+                      onToken={setTsToken}
+                      unavailablePolicy="allow"
+                      className="pt-1"
+                    />
                   </>
                 )}
 
@@ -709,7 +733,7 @@ function ApplyPage() {
             <p className="mt-6 text-center text-[#555] text-xs leading-relaxed">
               We review every application within 24 hours. No automated rejection — a real human reads your answers.
               <br />
-              Investment: $499 once-off · billed in ZAR. Application is free and non-binding.
+              Investment: $997 once-off · billed in ZAR. Application is free and non-binding.
             </p>
           </>
         )}

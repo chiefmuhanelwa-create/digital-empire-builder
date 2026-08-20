@@ -123,7 +123,7 @@ function AdminContacts() {
       <SiteHeader />
       <section className="mx-auto max-w-7xl px-6 pt-16 pb-24">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Admin</div>
-        <h1 className="mt-4 font-display text-5xl">Contacts &amp; Tags</h1>
+        <h1 className="mt-4 font-display text-4xl sm:text-5xl">Contacts &amp; Tags</h1>
         <p className="mt-4 text-muted-foreground max-w-2xl">
           Every email, every tag, every segment. Owned forever.
         </p>

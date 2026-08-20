@@ -16,7 +16,11 @@ import {
 } from "lucide-react";
 
 export type ToolCategory = "Brand Deals" | "Creator Finance" | "Content Creation";
-export const TOOL_CATEGORY_ORDER: ToolCategory[] = ["Brand Deals", "Creator Finance", "Content Creation"];
+export const TOOL_CATEGORY_ORDER: ToolCategory[] = [
+  "Brand Deals",
+  "Creator Finance",
+  "Content Creation",
+];
 
 export type Tool = {
   name: string;
@@ -57,6 +61,15 @@ export const TOOLS: Tool[] = [
 
   // ── Creator Finance ──────────────────────────────────────────────────────
   {
+    name: "Provisional Tax Calculator",
+    path: "/provisional-tax",
+    tier: "free",
+    category: "Creator Finance",
+    blurb:
+      "What you actually owe SARS on creator income — real brackets, your deductions, both IRP6 dates.",
+    icon: Receipt,
+  },
+  {
     name: "Invoice Generator",
     path: "https://invoice-generator-delta-navy.vercel.app",
     external: true,
@@ -81,7 +94,8 @@ export const TOOLS: Tool[] = [
     path: "/hook-generator",
     tier: "free",
     category: "Content Creation",
-    blurb: "5 scroll-stopping hooks, written fresh for your topic by Claude — 3 free, then Foundation Kit.",
+    blurb:
+      "5 scroll-stopping hooks, written fresh for your topic by Claude — 3 free, then Foundation Kit.",
     icon: Zap,
   },
   {
@@ -89,7 +103,8 @@ export const TOOLS: Tool[] = [
     path: "/offer-builder",
     tier: "premium",
     category: "Content Creation",
-    blurb: "Turn your expertise into a clear, sellable offer — AI-assisted, 2 free then Foundation Kit.",
+    blurb:
+      "Turn your expertise into a clear, sellable offer — AI-assisted, 2 free then Foundation Kit.",
     icon: Package,
   },
   {

@@ -29,7 +29,7 @@ function PrivacyPage() {
         <p className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
           Legal · Last updated June 2026
         </p>
-        <h1 className="font-display text-5xl leading-[1.05] mt-3">
+        <h1 className="font-display text-4xl sm:text-5xl leading-[1.05] mt-3">
           Privacy Policy
         </h1>
 

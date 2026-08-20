@@ -480,6 +480,36 @@ export type Database = {
           },
         ]
       }
+      tool_events: {
+        Row: {
+          created_at: string
+          email: string | null
+          event: string
+          id: string
+          meta: Json
+          session_id: string | null
+          tool_slug: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          event: string
+          id?: string
+          meta?: Json
+          session_id?: string | null
+          tool_slug: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          event?: string
+          id?: string
+          meta?: Json
+          session_id?: string | null
+          tool_slug?: string
+        }
+        Relationships: []
+      }
       tool_submissions: {
         Row: {
           created_at: string

@@ -87,7 +87,9 @@ function SignupPage() {
                 <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min. 8 characters" className="h-12" />
               </div>
-              <TurnstileGate onToken={setTsToken} className="pt-1" />
+              {/* See login.tsx — nothing verifies this token server-side, so blocking
+                  on it only ever locked real people out. */}
+              <TurnstileGate onToken={setTsToken} unavailablePolicy="allow" className="pt-1" />
               <Button type="submit" disabled={loading || !tsToken} className="cta-glow w-full h-12 font-bold">
                 {loading ? "Creating account…" : "Create account →"}
               </Button>

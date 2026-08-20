@@ -5,6 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/gardens";
 import { BookOpen } from "lucide-react";
+import { storeProductUrl } from "@/lib/domains";
 
 type Row = {
   slug: string;
@@ -86,10 +87,9 @@ export function DashboardProducts({ mode }: { mode: "free" | "paid" }) {
         {(q.data?.length ?? 0) > 0 && (
           <div className="grid gap-4 sm:grid-cols-2">
             {q.data!.map((p) => (
-              <Link
+              <a
                 key={p.slug}
-                to="/products/$slug"
-                params={{ slug: p.slug }}
+                href={storeProductUrl(p.slug)}
                 className="nx-card group !p-5 flex gap-4 items-start"
               >
                 {p.cover_image_url ? (
@@ -112,7 +112,7 @@ export function DashboardProducts({ mode }: { mode: "free" | "paid" }) {
                     {formatPrice(p.price_cents, p.currency, p.is_free, p.slug)}
                   </div>
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         )}

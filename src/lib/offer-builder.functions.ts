@@ -1,10 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHost } from "@tanstack/react-start/server";
 import { render } from "@react-email/components";
 import { randomUUID } from "crypto";
 import * as React from "react";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { groupForTool, assertGroupRouting } from "@/lib/mailerlite-groups";
 import { utmRawDataPatch } from "@/lib/utm";
 import { verifyTurnstile } from "@/lib/turnstile.server";
 import { getAnthropic, OFFER_MODEL } from "@/lib/anthropic";
@@ -24,7 +26,9 @@ async function emailOwnsFoundationKit(email: string): Promise<boolean> {
     .select("metadata")
     .ilike("email", email)
     .eq("status", "paid");
-  return (data ?? []).some((o) => KIT_OWNER_SLUGS.includes((o.metadata as { product_slug?: string } | null)?.product_slug ?? ""));
+  return (data ?? []).some((o) =>
+    KIT_OWNER_SLUGS.includes((o.metadata as { product_slug?: string } | null)?.product_slug ?? ""),
+  );
 }
 
 // ── The generated offer (what the model returns + what the UI renders) ──────
@@ -47,8 +51,17 @@ const OFFER_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: [
-    "offerName", "headline", "whoItsFor", "problemsSolved", "transformation",
-    "deliverables", "pricing", "positioning", "firstCTA", "thisWeekAction", "frameworkUsed",
+    "offerName",
+    "headline",
+    "whoItsFor",
+    "problemsSolved",
+    "transformation",
+    "deliverables",
+    "pricing",
+    "positioning",
+    "firstCTA",
+    "thisWeekAction",
+    "frameworkUsed",
   ],
   properties: {
     offerName: { type: "string" },
@@ -128,29 +141,32 @@ export type OfferInput = z.infer<typeof offerInputSchema>;
 
 export const buildOffer = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => offerInputSchema.parse(input))
-  .handler(async ({ data }): Promise<{ locked: true } | { locked: false; offer: GeneratedOffer }> => {
-    // 1. Bot gate (no-op in dev when TURNSTILE_SECRET_KEY is unset).
-    const ts = await verifyTurnstile(data.turnstileToken);
-    if (!ts.success && !ts.skipped) {
-      throw new Error("Verification failed. Please refresh and try again.");
-    }
+  .handler(
+    async ({ data }): Promise<{ locked: true } | { locked: false; offer: GeneratedOffer }> => {
+      // 1. Bot gate (no-op in dev when TURNSTILE_SECRET_KEY is unset).
+      const ts = await verifyTurnstile(data.turnstileToken, undefined, getRequestHost());
+      if (!ts.success && !ts.skipped) {
+        throw new Error("Verification failed. Please refresh and try again.");
+      }
 
-    // 1b. Payment gate — see FREE_LIMIT comment above.
-    const email = data.email.trim().toLowerCase();
-    const { count } = await (supabaseAdmin.from("offer_builder_leads" as any) as any)
-      .select("id", { count: "exact", head: true })
-      .eq("email", email);
-    if ((count ?? 0) >= FREE_LIMIT && !(await emailOwnsFoundationKit(email))) {
-      return { locked: true };
-    }
+      // 1b. Payment gate — see FREE_LIMIT comment above.
+      const email = data.email.trim().toLowerCase();
+      const { count } = await (supabaseAdmin.from("offer_builder_leads" as any) as any)
+        .select("id", { count: "exact", head: true })
+        .eq("email", email);
+      if ((count ?? 0) >= FREE_LIMIT && !(await emailOwnsFoundationKit(email))) {
+        return { locked: true };
+      }
 
-    // 2. Generate the offer with Claude (structured output → guaranteed JSON).
-    const expLabel =
-      data.experienceLevel === "starting" ? "just starting (no offer yet)"
-      : data.experienceLevel === "traction" ? "some traction (early sales/clients)"
-      : "established (selling already, wants to package better)";
+      // 2. Generate the offer with Claude (structured output → guaranteed JSON).
+      const expLabel =
+        data.experienceLevel === "starting"
+          ? "just starting (no offer yet)"
+          : data.experienceLevel === "traction"
+            ? "some traction (early sales/clients)"
+            : "established (selling already, wants to package better)";
 
-    const userPrompt = `Build a complete, sellable offer from this. Stay in NoChill's voice the whole way.
+      const userPrompt = `Build a complete, sellable offer from this. Stay in NoChill's voice the whole way.
 
 WHO THEY SERVE: ${data.icp === "called_expert" ? "Employed professional (Contentpreneur)" : "Knowledge Creator (Contentpreneur)"}
 ${icpProfile(data.icp)}
@@ -164,93 +180,102 @@ THEIR INPUTS:
 
 Build the offer: name it, write the one-line promise (headline), the exact who-it's-for, 3 problems it kills, the before→after transformation, 4–6 concrete deliverables, a USD price suggestion with a one-line rationale, the positioning/authority angle, a first CTA line, the single thing they must do this week, and which NOCHILL framework anchors it.`;
 
-    const client = getAnthropic();
-    const msg = await client.messages.create({
-      model: OFFER_MODEL,
-      max_tokens: 4000,
-      system: BRAND_SYSTEM,
-      messages: [{ role: "user", content: userPrompt }],
-      // output_config typing varies across SDK versions; the API (Opus 4.8) honours it.
-      // Spread an untyped extra so this compiles on any installed @anthropic-ai/sdk.
-      ...({ output_config: { format: { type: "json_schema", schema: OFFER_SCHEMA } } } as Record<string, unknown>),
-    });
-
-    const block = msg.content.find((b) => b.type === "text");
-    const raw = block && "text" in block ? block.text : "";
-    let offer: GeneratedOffer;
-    try {
-      offer = JSON.parse(raw) as GeneratedOffer;
-    } catch {
-      console.error("[offer-builder] JSON parse failed:", raw.slice(0, 400));
-      throw new Error("The builder hit a snag. Please try again.");
-    }
-
-    // 3. Capture the lead — non-fatal: never block the offer on a DB/marketing hiccup.
-    //    (Table cast as any so this compiles before the migration is applied.)
-    void (supabaseAdmin.from("offer_builder_leads" as any) as any)
-      .insert({
-        email: data.email,
-        name: data.name,
-        icp: data.icp,
-        expertise: data.expertise,
-        audience: data.audience,
-        transformation: data.transformation,
-        proof: data.proof || null,
-        experience_level: data.experienceLevel,
-        generated_offer: offer,
-      })
-      .then(({ error }: { error: unknown }) => {
-        if (error) console.error("[offer-builder] lead insert failed", error);
+      const client = getAnthropic();
+      const msg = await client.messages.create({
+        model: OFFER_MODEL,
+        max_tokens: 4000,
+        system: BRAND_SYSTEM,
+        messages: [{ role: "user", content: userPrompt }],
+        // output_config typing varies across SDK versions; the API (Opus 4.8) honours it.
+        // Spread an untyped extra so this compiles on any installed @anthropic-ai/sdk.
+        ...({ output_config: { format: { type: "json_schema", schema: OFFER_SCHEMA } } } as Record<
+          string,
+          unknown
+        >),
       });
 
-    // 3b. Also converge into the shared `subscribers` table (same as every
-    // other lead-magnet tool) so this tool's leads aren't only reachable via
-    // the bespoke offer_builder_leads table.
-    const nameParts = data.name.trim().split(/\s+/);
-    void supabaseAdmin.from("subscribers").upsert(
-      {
-        email,
-        first_name: nameParts[0] || null,
-        last_name: nameParts.slice(1).join(" ") || null,
-        source: "tool:offer-builder",
-        ...utmRawDataPatch(data),
-      },
-      { onConflict: "email", ignoreDuplicates: false },
-    );
+      const block = msg.content.find((b) => b.type === "text");
+      const raw = block && "text" in block ? block.text : "";
+      let offer: GeneratedOffer;
+      try {
+        offer = JSON.parse(raw) as GeneratedOffer;
+      } catch {
+        console.error("[offer-builder] JSON parse failed:", raw.slice(0, 400));
+        throw new Error("The builder hit a snag. Please try again.");
+      }
 
-    // 4. MailerLite — ICP 1 → professional/buyer nurture, ICP 2 → free-knowledge nurture.
-    void addToMailerLiteGroup(
-      data.email,
-      data.icp === "called_expert"
-        ? process.env.MAILERLITE_GROUP_ID_CALLED_EXPERT
-        : process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,
-      {
-        first_name: nameParts[0],
-        last_name: nameParts.slice(1).join(" ") || null,
-        custom: { icp: data.icp },
-      },
-    );
+      // 3. Capture the lead — non-fatal: never block the offer on a DB/marketing hiccup.
+      //    (Table cast as any so this compiles before the migration is applied.)
+      void (supabaseAdmin.from("offer_builder_leads" as any) as any)
+        .insert({
+          email: data.email,
+          name: data.name,
+          icp: data.icp,
+          expertise: data.expertise,
+          audience: data.audience,
+          transformation: data.transformation,
+          proof: data.proof || null,
+          experience_level: data.experienceLevel,
+          generated_offer: offer,
+        })
+        .then(({ error }: { error: unknown }) => {
+          if (error) console.error("[offer-builder] lead insert failed", error);
+        });
 
-    // 5. Email confirmation of the result — founder's explicit ask, same
-    // enqueue_email pattern every other tool uses.
-    const html = await render(React.createElement(OfferBuilderResultEmail, { firstName: nameParts[0], offer }));
-    const text = await render(React.createElement(OfferBuilderResultEmail, { firstName: nameParts[0], offer }), { plainText: true });
-    void supabaseAdmin.rpc("enqueue_email", {
-      queue_name: "transactional_emails",
-      payload: {
-        run_id: randomUUID(),
-        message_id: `offer-builder:${email}:${Date.now()}`,
-        to: email,
-        from: "CHKPLT <noreply@notify.chkplt.com>",
-        sender_domain: "notify.chkplt.com",
-        subject: `Your offer: ${offer.offerName}`,
-        html,
-        text,
-        purpose: "marketing",
-        label: "offer_builder_result",
-        queued_at: new Date().toISOString(),
-      },
-    });
+      // 3b. Also converge into the shared `subscribers` table (same as every
+      // other lead-magnet tool) so this tool's leads aren't only reachable via
+      // the bespoke offer_builder_leads table.
+      const nameParts = data.name.trim().split(/\s+/);
+      void supabaseAdmin.from("subscribers").upsert(
+        {
+          email,
+          first_name: nameParts[0] || null,
+          last_name: nameParts.slice(1).join(" ") || null,
+          source: "tool:offer-builder",
+          ...utmRawDataPatch(data),
+        },
+        { onConflict: "email", ignoreDuplicates: false },
+      );
 
-    return { locked: false, offer };
-  });
+      // 4. MailerLite — ICP 1 → professional/buyer nurture, ICP 2 → free-knowledge nurture.
+      await addToMailerLiteGroup(
+        data.email,
+        data.icp === "called_expert"
+          ? process.env.MAILERLITE_GROUP_ID_CALLED_EXPERT
+          : process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,
+        {
+          first_name: nameParts[0],
+          last_name: nameParts.slice(1).join(" ") || null,
+          custom: { icp: data.icp },
+        },
+      );
+
+      // 5. Email confirmation of the result — founder's explicit ask, same
+      // enqueue_email pattern every other tool uses.
+      const html = await render(
+        React.createElement(OfferBuilderResultEmail, { firstName: nameParts[0], offer }),
+      );
+      const text = await render(
+        React.createElement(OfferBuilderResultEmail, { firstName: nameParts[0], offer }),
+        { plainText: true },
+      );
+      void supabaseAdmin.rpc("enqueue_email", {
+        queue_name: "transactional_emails",
+        payload: {
+          run_id: randomUUID(),
+          message_id: `offer-builder:${email}:${Date.now()}`,
+          to: email,
+          from: "CHKPLT <noreply@notify.chkplt.com>",
+          sender_domain: "notify.chkplt.com",
+          subject: `Your offer: ${offer.offerName}`,
+          html,
+          text,
+          purpose: "marketing",
+          label: "offer_builder_result",
+          queued_at: new Date().toISOString(),
+        },
+      });
+
+      return { locked: false, offer };
+    },
+  );

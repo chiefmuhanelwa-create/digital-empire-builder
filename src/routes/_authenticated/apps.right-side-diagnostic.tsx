@@ -6,7 +6,7 @@ import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ArrowLeft, Compass } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/right-side-diagnostic")({
-  head: () => ({ meta: [{ title: "The Right Side Diagnostic — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "The Right Side Diagnostic — Contentpreneur Africa" }] }),
   component: RightSideDiagnostic,
 });
 
@@ -66,7 +66,7 @@ function RightSideDiagnostic() {
           <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
           <h2 className="mt-4 text-2xl">The Right Side Diagnostic is in the Foundation Kit.</h2>
           <p className="nx-body max-w-md mx-auto mt-2">See how exposed your business is to a platform ban — and how to move onto owned ground. Get the kit to unlock it.</p>
-          <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+          <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
       </main>
     </Shell>
@@ -79,18 +79,18 @@ function RightSideDiagnostic() {
 
         {step === "intro" && (
           <div className="mt-6">
-            <div className="rounded-2xl bg-[#0F172A] p-7 sm:p-10 text-white nx-hero-orb">
+            <div className="rounded-2xl bg-[var(--obsidian)] p-7 sm:p-10 text-white nx-hero-orb">
               <p className="nx-label !text-[var(--nx-gold-bright)]">Cast your net on the right side</p>
               <h1 className="text-white mt-3">Is your business built on rented land?</h1>
-              <p className="text-slate-300 mt-4 leading-relaxed">
+              <p className="text-[#C8C2B4] mt-4 leading-relaxed">
                 I had 780,000 followers. Gone overnight — one false claim. Then Google killed my AdSense: R180,000 a year, gone in a
                 notification. My income didn't drop to zero, because most of it sat on land I owned.
                 <strong className="text-[var(--nx-gold-bright)]"> This 8-question check shows how exposed you are right now.</strong>
               </p>
               <button onClick={() => { setStep("q"); setQIndex(0); }} className="cta-glow inline-flex items-center gap-2 mt-6">Start the diagnostic <ArrowRight className="size-4" /></button>
-              <p className="text-xs text-slate-400 mt-3">8 questions · 90 seconds</p>
+              <p className="text-xs text-[#9A9488] mt-3">8 questions · 90 seconds</p>
             </div>
-            <div className="grid grid-cols-3 gap-3 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
               {[["780K", "followers lost overnight"], ["R180K", "AdSense gone in a day"], ["R0", "what I'd have left without owned assets"]].map(([n, l]) => (
                 <div key={n} className="nx-card !p-4"><div className="font-display text-2xl text-[var(--nx-gold-deep)]">{n}</div><div className="text-xs text-[var(--text-dim)] mt-1">{l}</div></div>
               ))}
@@ -131,16 +131,16 @@ function RightSideDiagnostic() {
 
         {step === "result" && (
           <div className="mt-6">
-            <div className="rounded-2xl bg-[#0F172A] p-6 sm:p-8 text-white">
+            <div className="rounded-2xl bg-[var(--obsidian)] p-6 sm:p-8 text-white">
               <div className="flex flex-wrap items-center gap-6">
                 <div className="text-center">
-                  <div className="font-display text-5xl" style={{ color: tone === "good" ? "#4ADE80" : "var(--nx-gold-bright)" }}>{pct}%</div>
-                  <div className="text-[11px] uppercase tracking-wide text-slate-400 mt-1">you own</div>
+                  <div className="font-display text-4xl sm:text-5xl" style={{ color: tone === "good" ? "#4ADE80" : "var(--nx-gold-bright)" }}>{pct}%</div>
+                  <div className="text-[11px] uppercase tracking-wide text-[#9A9488] mt-1">you own</div>
                 </div>
                 <div className="flex-1 min-w-[230px]">
                   <p className="nx-label !text-[var(--nx-gold-bright)]">{vKicker}</p>
                   <h2 className="text-white text-2xl mt-1">{vTitle}</h2>
-                  <p className="text-slate-300 mt-2 text-sm leading-relaxed">{vText}</p>
+                  <p className="text-[#C8C2B4] mt-2 text-sm leading-relaxed">{vText}</p>
                 </div>
               </div>
             </div>
@@ -166,9 +166,9 @@ function RightSideDiagnostic() {
 
             <AiCoach tool="right-side" getPayload={() => JSON.stringify({ percentOwned: pct, areas: areaRows.map((a) => ({ area: a.label, status: a.tag })) })} />
 
-            <div className="mt-5 rounded-2xl bg-[#0F172A] p-6 text-center">
+            <div className="mt-5 rounded-2xl bg-[var(--obsidian)] p-6 text-center">
               <h3 className="text-white text-xl font-display">Get your Ownership Roadmap</h3>
-              <p className="text-slate-300 text-sm mt-1 max-w-md mx-auto">The step-by-step on moving each red area onto owned ground — the Accelerator builds it with you.</p>
+              <p className="text-[#C8C2B4] text-sm mt-1 max-w-md mx-auto">The step-by-step on moving each red area onto owned ground — the Accelerator builds it with you.</p>
               <Link to="/apply" className="cta-glow inline-flex items-center gap-2 mt-4">Apply for the Accelerator <ArrowRight className="size-4" /></Link>
             </div>
 

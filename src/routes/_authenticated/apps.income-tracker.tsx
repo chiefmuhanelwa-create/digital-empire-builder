@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { Lock, TrendingUp, TrendingDown, DollarSign, Download, Trash2, Pencil, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/income-tracker")({
-  head: () => ({ meta: [{ title: "Income Tracker — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Income Tracker — Contentpreneur Africa" }] }),
   component: IncomeTrackerPage,
 });
 
@@ -299,7 +299,7 @@ function Locked() {
           <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
           <h2 className="mt-4 text-2xl">Income Tracker is in the Foundation Kit.</h2>
           <p className="nx-body max-w-md mx-auto mt-2">Track every PAIDS stream in one place. Get the kit to unlock this and every interactive app.</p>
-          <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+          <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
       </main>
     </Shell>

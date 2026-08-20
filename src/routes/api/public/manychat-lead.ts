@@ -112,7 +112,7 @@ export const Route = createFileRoute("/api/public/manychat-lead")({
           );
           if (upsertErr) throw upsertErr;
 
-          void addToMailerLiteGroup(email, groupForSegment(data.segment), {
+          await addToMailerLiteGroup(email, groupForSegment(data.segment), {
             first_name: firstName,
             custom: {
               segment: data.segment,

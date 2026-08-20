@@ -110,7 +110,7 @@ function IncidentsPage() {
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
           Admin · Incidents
         </div>
-        <h1 className="mt-4 font-display text-5xl">The Watchman</h1>
+        <h1 className="mt-4 font-display text-4xl sm:text-5xl">The Watchman</h1>
         <p className="mt-4 text-sm text-muted-foreground max-w-2xl">
           Operational fractures caught the moment they happen. Every error
           reported through reportError() is journaled here for triage —

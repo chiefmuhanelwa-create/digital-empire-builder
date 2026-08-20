@@ -89,7 +89,7 @@ function CheckoutSuccess() {
         {reference && (q.isLoading || status === "pending" || status === undefined) && (
           <div className="text-center">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Confirming</div>
-            <h1 className="mt-4 font-display text-5xl">Verifying payment…</h1>
+            <h1 className="mt-4 font-display text-4xl sm:text-5xl">Verifying payment…</h1>
             <p className="mt-4 text-muted-foreground">Hold tight — Paystack is talking to us.</p>
             <div className="mt-8 inline-flex h-2 w-48 overflow-hidden bg-muted">
               <div className="h-full w-1/3 animate-pulse bg-banana" />
@@ -101,7 +101,7 @@ function CheckoutSuccess() {
           <>
             <div className="text-center">
               <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Confirmed</div>
-              <h1 className="mt-4 font-display text-5xl">Thank you.</h1>
+              <h1 className="mt-4 font-display text-4xl sm:text-5xl">Thank you.</h1>
               <p className="mt-4 text-muted-foreground">
                 Payment received
                 {q.data?.total_cents && q.data?.currency
@@ -182,7 +182,7 @@ function CheckoutSuccess() {
 
         {(status === "failed" || status === "cancelled") && (
           <div className="text-center">
-            <h1 className="font-display text-5xl">Payment {status}.</h1>
+            <h1 className="font-display text-4xl sm:text-5xl">Payment {status}.</h1>
             <p className="mt-4 text-muted-foreground">No charge was made. You can try again any time.</p>
             <Button asChild className="mt-8"><Link to="/products">Back to products</Link></Button>
           </div>

@@ -4,10 +4,11 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Lock, PlayCircle } from "lucide-react";
+import { storeProductUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/")({
   head: ({ params }) => ({
-    meta: [{ title: `${params.slug} — CHKPLT` }],
+    meta: [{ title: `${params.slug} — Contentpreneur Africa` }],
   }),
   component: CoursePage,
   errorComponent: ({ error, reset }) => {
@@ -188,7 +189,7 @@ function CoursePage() {
               You're previewing this course. Get access to unlock every lesson.
             </p>
             <Button asChild className="mt-4 bg-banana text-banana-foreground hover:bg-banana/90">
-              <Link to="/products/$slug" params={{ slug }}>Get access →</Link>
+              <a href={storeProductUrl(slug)}>Get access →</a>
             </Button>
           </div>
         )}

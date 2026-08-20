@@ -6,6 +6,13 @@ import { LayoutDashboard, GraduationCap, User, ShieldCheck, LogOut, MessageCircl
 // Secured member-portal chrome. Deliberately NOT the marketing header — no public
 // links, no "Get the Kit" CTA. The member area is a separate, signed-in space.
 // Exported as SiteHeader/SiteFooter so member routes only swap the import path.
+//
+// Branded "Contentpreneur Africa" since 2026-08-18, not CHKPLT: the whole member
+// area now lives on contentpreneur.africa and chkplt.com 301s member paths there
+// (src/server.ts). A buyer who reads "Contentpreneur Africa" on the ad, the
+// /foundation sales page and the receipt must not open their workspace and meet a
+// brand name they have never seen. CHKPLT is still the storefront — that chrome
+// lives in site-header.tsx and is unchanged.
 
 const navLink =
   "inline-flex items-center gap-1.5 text-[14px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-1 py-1";
@@ -21,15 +28,19 @@ export function SiteHeader() {
     "Member";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Logo → the member home (NOT the public site) */}
         <Link to="/dashboard" className="flex items-center gap-2 shrink-0">
-          <span className="font-display text-base sm:text-lg font-extrabold tracking-[0.18em] uppercase text-[var(--foreground)]">
-            CHKPLT
+          {/* "Contentpreneur Africa" is 3x the width the old "CHKPLT" wordmark
+              needed, so mobile drops the tracking and a size step (same treatment
+              contentpreneur-header.tsx already uses) rather than shoving the nav
+              off-screen. */}
+          <span className="font-display text-sm sm:text-lg font-extrabold tracking-[0.08em] sm:tracking-[0.18em] uppercase text-[var(--foreground)]">
+            Contentpreneur Africa
           </span>
           <span className="hidden sm:inline rounded-full bg-[var(--bg-card-hi)] px-2 py-0.5 text-[10px] font-bold tracking-[0.15em] uppercase text-[var(--nx-gold-text)]">
-            Members
+            Your Workspace
           </span>
         </Link>
 
@@ -38,7 +49,7 @@ export function SiteHeader() {
             <LayoutDashboard className="size-4" /> Dashboard
           </Link>
           <Link to="/learn" className={navLink} activeProps={navActive}>
-            <GraduationCap className="size-4" /> My Courses
+            <GraduationCap className="size-4" /> Learn
           </Link>
           <Link to="/account" className={navLink} activeProps={navActive}>
             <User className="size-4" /> Account
@@ -66,18 +77,18 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[#0F172A]">
+    <footer className="border-t border-[var(--border)] bg-[var(--obsidian)]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="font-display text-sm font-extrabold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
-            CHKPLT · Members
+            Contentpreneur Africa
           </div>
-          <p className="mt-1 text-xs text-slate-400">Your secured workspace. Build on land you own.</p>
+          <p className="mt-1 text-xs text-[#9A9488]">Turn what you know into income you own.</p>
         </div>
-        <div className="flex items-center gap-5 text-xs text-slate-400">
+        <div className="flex items-center gap-5 text-xs text-[#9A9488]">
           <Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
           <Link to="/account" className="hover:text-white transition-colors">Account</Link>
-          <span className="text-slate-600">© {new Date().getFullYear()} NOCHILL PTY LTD</span>
+          <span className="text-[#6E685C]">© {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07</span>
         </div>
       </div>
       <SupportChatButton />
@@ -93,7 +104,7 @@ function SupportChatButton() {
   const number = import.meta.env.VITE_WHATSAPP_SUPPORT_NUMBER as string | undefined;
   if (!number) return null;
 
-  const message = encodeURIComponent("Hey — I need help with my CHKPLT account.");
+  const message = encodeURIComponent("Hey — I need help with my Contentpreneur Africa workspace.");
   const href = `https://wa.me/${number}?text=${message}`;
 
   return (

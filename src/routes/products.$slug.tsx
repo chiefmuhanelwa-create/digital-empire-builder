@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import { getUtm } from "@/lib/utm";
 import { trackLead } from "@/lib/track";
 import { useCountry, shouldUseStripe } from "@/lib/currency";
 import { checkQualification } from "@/lib/qualification.functions";
-import { TurnstileGate } from "@/components/TurnstileGate";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import { toast } from "sonner";
 import { ProCohortBreakdown, VipTierBreakdown } from "@/components/PremiumProgramBreakdown";
 import { Lock, ShieldCheck, X, Mail, Download } from "lucide-react";
@@ -82,7 +82,7 @@ export const Route = createFileRoute("/products/$slug")({
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <div className="mx-auto max-w-3xl px-6 py-32 text-center">
-        <h1 className="font-display text-5xl">Product not found.</h1>
+        <h1 className="font-display text-4xl sm:text-5xl">Product not found.</h1>
         <Link to="/products" className="mt-6 inline-block text-banana">← Back to shop</Link>
       </div>
     </div>
@@ -324,6 +324,10 @@ function CheckoutModal({
   );
   const [whatsapp, setWhatsapp] = useState<string>("");
   const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
 
   const mut = useMutation({
     mutationFn: isSubscription ? initSub : useStripe ? initStripe : initCheckout,
@@ -331,6 +335,7 @@ function CheckoutModal({
       window.location.href = res.authorizationUrl;
     },
     onError: (e: any) => toast.error(e.message ?? "Could not start checkout"),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   function submit() {
@@ -409,7 +414,8 @@ function CheckoutModal({
           </div>
 
           <div className="mt-4">
-            <TurnstileGate onToken={setTsToken} />
+            {/* See foundation.tsx — a broken widget never blocks a payment. */}
+            <TurnstileGate ref={tsRef} onToken={setTsToken} unavailablePolicy="allow" />
           </div>
 
           <Button
@@ -619,6 +625,7 @@ function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: strin
   );
   const [phone, setPhone] = useState<string>("");
   const [tsToken, setTsToken] = useState<string | null>(null);
+  const tsRef = useRef<TurnstileGateHandle>(null);
 
   const mut = useMutation({
     mutationFn: initFn,
@@ -626,6 +633,7 @@ function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: strin
       window.location.href = res.authorizationUrl;
     },
     onError: (e: any) => toast.error(e.message ?? "Could not start checkout"),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   return (
@@ -647,7 +655,8 @@ function CheckoutForm({ product, priceLabel }: { product: any; priceLabel: strin
         </div>
       </div>
       <div className="mt-5">
-        <TurnstileGate onToken={setTsToken} />
+        {/* See foundation.tsx — a broken widget never blocks a payment. */}
+        <TurnstileGate ref={tsRef} onToken={setTsToken} unavailablePolicy="allow" />
       </div>
       <Button
         size="lg"

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestIP, getRequestHost} from "@tanstack/react-start/server";
 import { randomUUID } from "crypto";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
@@ -7,10 +8,17 @@ import {
   type RecommendationResult,
 } from "@/utils/evaluator";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { verifyTurnstile } from "@/lib/turnstile.server";
+import { reportError } from "@/lib/error-logger";
+import { MEMBER_DOMAIN } from "@/lib/domains";
 
 const SITE_NAME = "CHKPLT";
-const ROOT_DOMAIN = "chkplt.com";
 const SENDER_DOMAIN = "notify.chkplt.com";
+// Applicants arrive via contentpreneur.africa/apply. Both CTAs below now land on
+// that same domain: /signup moved there with the rest of the member area
+// (src/lib/domains.ts), and the Foundation Kit is SOLD at /foundation — the
+// chkplt.com/products/... page is the storefront listing, not the funnel page
+// this downsell is pointing someone at.
 
 function qualifiedHtml(name: string): string {
   return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#0F172A;color:#F8FAFC;padding:40px 32px;">
@@ -18,7 +26,7 @@ function qualifiedHtml(name: string): string {
 <h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">You're qualified, ${name}.</h1>
 <p style="font-size:16px;line-height:1.6;margin:0 0 16px;">Your stewardship audit passed. Your metrics validate entry into the 90-Day Contentpreneur Accelerator PRO.</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 32px;">One step left: create your account and we'll confirm your cohort start date.</p>
-<a href="https://${ROOT_DOMAIN}/signup" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Create Your Account</a>
+<a href="https://${MEMBER_DOMAIN}/signup" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:8px;">Create Your Account</a>
 <p style="font-size:13px;color:#94A3B8;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
 <p style="font-size:11px;color:#64748B;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
 </div>`;
@@ -28,10 +36,10 @@ function downsellHtml(name: string, focusPillars: string, targetModules: string)
   return `<div style="font-family:'Montserrat',Arial,sans-serif;max-width:600px;margin:0 auto;background:#0F172A;color:#F8FAFC;padding:40px 32px;">
 <p style="color:#EA580C;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin:0 0 24px;">CHKPLT · Stewardship Diagnostic</p>
 <h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.2;">Your results are in, ${name}.</h1>
-<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">You're not ready for the core programme yet — and that's not a failure. It means we caught your structural gap before you paid $499 for something you'd struggle to execute.</p>
+<p style="font-size:16px;line-height:1.6;margin:0 0 16px;">You're not ready for the core programme yet — and that's not a failure. It means we caught your structural gap before you paid $997 for something you'd struggle to execute.</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 8px;"><strong>Your immediate priority:</strong><br>${focusPillars}</p>
 <p style="font-size:16px;line-height:1.6;margin:0 0 32px;"><strong>What to study:</strong><br>${targetModules}</p>
-<a href="https://${ROOT_DOMAIN}/products/called-expert-foundation-kit" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:9999px;">Get the Foundation Kit</a>
+<a href="https://${MEMBER_DOMAIN}/foundation" style="display:inline-block;background:#F59E0B;color:#0F172A;font-weight:700;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;padding:16px 32px;text-decoration:none;border-radius:9999px;">Get the Foundation Kit</a>
 <p style="font-size:13px;color:#94A3B8;margin:40px 0 0;">— Ndivhuwo Muhanelwa, CHKPLT</p>
 <p style="font-size:11px;color:#64748B;margin:16px 0 0;">contentcreatorhub.online · @nochill_god</p>
 </div>`;
@@ -69,8 +77,8 @@ async function sendApplicationEmail(
     : "Your CHKPLT diagnostic results";
 
   const text = isQualified
-    ? `You're qualified. Create your account at https://${ROOT_DOMAIN}/signup`
-    : `Your results: ${recommendation.focusPillars}. Resources at https://${ROOT_DOMAIN}/products`;
+    ? `You're qualified. Create your account at https://${MEMBER_DOMAIN}/signup`
+    : `Your results: ${recommendation.focusPillars}. Start here: https://${MEMBER_DOMAIN}/foundation`;
 
   await supabaseAdmin.rpc("enqueue_email", {
     queue_name: "transactional_emails",
@@ -125,10 +133,58 @@ const applicationSchema = z.object({
 
 export type ApplicationInput = z.infer<typeof applicationSchema>;
 
+// The page has always rendered a Turnstile widget and disabled its submit button
+// until the widget produced a token — but the token was never sent here, and this
+// handler never verified one. Bot protection on the Accelerator application was
+// UI-only: a direct POST bypassed it completely, while a widget that merely failed
+// to load locked out every real applicant. Both halves fixed 2026-08-18.
+// `.optional()` because assertTurnstile is a documented no-op when
+// TURNSTILE_SECRET_KEY is unset (dev), and a missing token is rejected when it is.
+const submitSchema = applicationSchema.extend({
+  turnstileToken: z.string().max(2048).optional(),
+});
+
 export const submitApplication = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => applicationSchema.parse(input))
+  .inputValidator((input: unknown) => submitSchema.parse(input))
   .handler(
     async ({ data }): Promise<RecommendationResult & { applicationId: string }> => {
+      // Fails OPEN, same reasoning as checkout (checkout.functions.ts): this form is
+      // the front door to the R18,000 programme, so a broken challenge must never be
+      // able to close it. On 2026-08-19 Cloudflare returned 110200 on
+      // contentpreneur.africa and hard-failing here would have kept the founder's
+      // originally-reported bug alive. What a bot gets is one application row and one
+      // email — worth far less than a lost applicant. A failure is recorded as
+      // CRITICAL and stamped on the row, so it is auditable rather than invisible.
+      const ts = await verifyTurnstile(
+        data.turnstileToken,
+        getRequestIP({ xForwardedFor: true }) ?? undefined,
+        getRequestHost(),
+      );
+      const turnstileVerdict =
+        ts.success || ts.skipped
+          ? "verified"
+          : `unverified:${ts.errorCodes.join(",") || (data.turnstileToken ? "unknown" : "missing-token")}`;
+
+      if (turnstileVerdict !== "verified") {
+        await reportError(
+          new Error(
+            `Turnstile did not verify (${turnstileVerdict}) — application ALLOWED THROUGH so the applicant is not lost. Check the widget's allowed-hostnames list in Cloudflare.`,
+          ),
+          {
+            endpoint: "submitApplication:turnstile",
+            severity: "critical",
+            meta: { email: data.email, verdict: turnstileVerdict, failedOpen: true },
+          },
+        );
+      }
+
+      // Never let the captcha token reach `raw_answers` below — that column keeps
+      // the applicant's answers verbatim and is read back in admin. The verdict does
+      // go on the row, so an unverified application stays traceable after the
+      // incident is resolved.
+      const { turnstileToken: _turnstileToken, ...rawAnswers } = data;
+      const answers = { ...rawAnswers, _turnstile: turnstileVerdict };
+
       const recommendation = evaluateRecommendationTree({
         total_followers: data.total_followers,
         engagement_rate: data.engagement_rate,
@@ -158,7 +214,7 @@ export const submitApplication = createServerFn({ method: "POST" })
           determined_routing_status: recommendation.status,
           assigned_package_recommendation: recommendation.recommendedPackage,
           vulnerability_phase_tag: recommendation.vulnerabilityTag,
-          raw_answers: data,
+          raw_answers: answers,
         })
         .select("id")
         .single();
@@ -175,7 +231,7 @@ export const submitApplication = createServerFn({ method: "POST" })
 
       // Sync applicant to MailerLite — qualified → Contentpreneur buyer group, else → Knowledge Audit nurture.
       const nameParts = data.full_name.trim().split(/\s+/);
-      void addToMailerLiteGroup(
+      await addToMailerLiteGroup(
         data.email,
         recommendation.status === "QUALIFIED_FOR_CORE_PROGRAM"
           ? process.env.MAILERLITE_GROUP_ID_CALLED_EXPERT

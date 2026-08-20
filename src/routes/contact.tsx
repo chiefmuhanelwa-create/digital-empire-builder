@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { toast } from "sonner";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
-import { TurnstileGate } from "@/components/TurnstileGate";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import { submitContact } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
@@ -30,6 +30,10 @@ function ContactPage() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
 
   const fn = useServerFn(submitContact);
   const mut = useMutation({
@@ -38,6 +42,7 @@ function ContactPage() {
       setName(""); setEmail(""); setSubject(""); setMessage("");
     },
     onError: (e: Error) => toast.error(e.message ?? "Something went wrong. Try again."),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   return (
@@ -130,7 +135,7 @@ function ContactPage() {
               />
             </div>
 
-            <TurnstileGate onToken={setTsToken} />
+            <TurnstileGate ref={tsRef} onToken={setTsToken} />
 
             <Button
               type="submit"

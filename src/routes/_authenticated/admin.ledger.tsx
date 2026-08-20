@@ -106,7 +106,7 @@ function LedgerPage() {
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
           Admin · Audit Ledger
         </div>
-        <h1 className="mt-4 font-display text-5xl">Immutable Tax Trail</h1>
+        <h1 className="mt-4 font-display text-4xl sm:text-5xl">Immutable Tax Trail</h1>
         <p className="mt-4 text-sm text-muted-foreground max-w-2xl">
           Permanent, read-only record of every paid order. 15% VAT allocation,
           25% tax reserve, and net captured at the moment of confirmation.

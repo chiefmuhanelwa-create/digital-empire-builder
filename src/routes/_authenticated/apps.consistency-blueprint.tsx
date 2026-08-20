@@ -5,7 +5,7 @@ import { useKitAccess } from "@/lib/use-kit-access";
 import { Lock, Flame, Check, Clock, CalendarDays } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/consistency-blueprint")({
-  head: () => ({ meta: [{ title: "The 30-Day Consistency Blueprint — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "The 30-Day Consistency Blueprint — Contentpreneur Africa" }] }),
   component: ConsistencyBlueprint,
 });
 
@@ -146,7 +146,7 @@ function ConsistencyBlueprint() {
           <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
           <h2 className="mt-4 text-2xl">The Consistency Blueprint is in the Foundation Kit.</h2>
           <p className="nx-body max-w-md mx-auto mt-2">Build the habit that actually sticks — 30 days, no motivation required. Get the kit to unlock it.</p>
-          <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+          <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
       </main>
     </Shell>
@@ -161,11 +161,11 @@ function ConsistencyBlueprint() {
 
   return (
     <Shell>
-      <section className="border-b border-border bg-[#0F172A]">
+      <section className="border-b border-border bg-[var(--obsidian)]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 py-5 flex items-center justify-between gap-4">
           <div>
             <p className="nx-label !text-[var(--nx-gold-bright)]">30-Day Consistency Blueprint</p>
-            <p className="text-slate-300 text-sm mt-0.5">{m.started ? `Day ${m.currentDay} · ${m.doneCount}/30 done` : "Not started"}</p>
+            <p className="text-[#C8C2B4] text-sm mt-0.5">{m.started ? `Day ${m.currentDay} · ${m.doneCount}/30 done` : "Not started"}</p>
           </div>
           {m.started && <div className="flex items-center gap-1.5 text-[var(--nx-gold-bright)] font-display text-lg"><Flame className="size-5" />{m.streak}</div>}
         </div>
@@ -212,10 +212,10 @@ function ConsistencyBlueprint() {
                   </div>
                 )}
 
-                <div className={`mt-4 rounded-2xl p-6 ${m.todayItem?.danger ? "bg-[#3a1d14] text-white" : "bg-[#0F172A] text-white"}`}>
+                <div className={`mt-4 rounded-2xl p-6 ${m.todayItem?.danger ? "bg-[#3a1d14] text-white" : "bg-[var(--obsidian)] text-white"}`}>
                   <span className="nx-label !text-[var(--nx-gold-bright)]">Today's focus</span>
                   <h2 className="text-white text-2xl mt-1">{m.todayItem?.title}</h2>
-                  <p className="text-slate-300 mt-1">{m.todayItem?.text}</p>
+                  <p className="text-[#C8C2B4] mt-1">{m.todayItem?.text}</p>
                   {m.todayItem?.danger && <p className="text-[var(--nx-gold-bright)] text-sm mt-3">Day 12 is the graveyard. Most streaks die here. Do the 30 minutes anyway — even rough. Posting today is the whole game.</p>}
                 </div>
 
@@ -334,15 +334,15 @@ function ConsistencyBlueprint() {
         {/* ABOUT / REPORT */}
         {tab === "about" && (
           <div className="mt-5 space-y-5">
-            <div className="rounded-2xl bg-[#0F172A] p-6 sm:p-8 text-white text-center">
-              <div className="font-display text-5xl text-[var(--nx-gold-bright)]">{m.reportPct}%</div>
+            <div className="rounded-2xl bg-[var(--obsidian)] p-6 sm:p-8 text-white text-center">
+              <div className="font-display text-4xl sm:text-5xl text-[var(--nx-gold-bright)]">{m.reportPct}%</div>
               <p className="nx-label !text-[var(--nx-gold-bright)] mt-1">30 days complete</p>
               <h2 className="text-white text-2xl mt-3">{m.vTitle}</h2>
-              <p className="text-slate-300 mt-2 max-w-lg mx-auto">{m.vText}</p>
+              <p className="text-[#C8C2B4] mt-2 max-w-lg mx-auto">{m.vText}</p>
               <div className="grid grid-cols-3 gap-3 mt-6 text-left">
-                <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-400">Done</div><div className="font-display text-xl">{m.doneCount}/30</div></div>
-                <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-400">Longest streak</div><div className="font-display text-xl">{m.longestStreak}</div></div>
-                <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-slate-400">Wins logged</div><div className="font-display text-xl">{m.winsLogged}</div></div>
+                <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-[#9A9488]">Done</div><div className="font-display text-xl">{m.doneCount}/30</div></div>
+                <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-[#9A9488]">Longest streak</div><div className="font-display text-xl">{m.longestStreak}</div></div>
+                <div className="rounded-lg bg-white/5 p-3"><div className="text-[11px] uppercase tracking-wide text-[#9A9488]">Wins logged</div><div className="font-display text-xl">{m.winsLogged}</div></div>
               </div>
             </div>
 

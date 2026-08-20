@@ -4,9 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { getInnerCircleStatus } from "@/lib/inner-circle.functions";
 import { Users, Check, ArrowRight, CalendarClock, MessagesSquare, Vault } from "lucide-react";
+import { storeProductUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_authenticated/dashboard/inner-circle")({
-  head: () => ({ meta: [{ title: "Inner Circle — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Inner Circle — Contentpreneur Africa" }] }),
   component: InnerCircle,
 });
 
@@ -60,24 +61,24 @@ function InnerCircle() {
         {q.isLoading ? (
           <div className="mt-8 text-center text-muted-foreground">Checking your membership…</div>
         ) : active ? (
-          <div className="rounded-2xl bg-[#0F172A] p-6 sm:p-8 text-white mt-8">
+          <div className="rounded-2xl bg-[var(--obsidian)] p-6 sm:p-8 text-white mt-8">
             <div className="flex items-center gap-2"><Check className="size-5 text-[#4ADE80]" /><span className="nx-label !text-[var(--nx-gold-bright)]">Active member</span></div>
             <h2 className="text-white text-2xl mt-2">Your room</h2>
             <div className="mt-4 flex flex-wrap gap-3">
               {COMMUNITY_URL ? (
                 <a href={COMMUNITY_URL} target="_blank" rel="noopener noreferrer" className="cta-glow inline-flex items-center gap-2">Open the community <ArrowRight className="size-4" /></a>
               ) : (
-                <span className="text-sm text-slate-300">Your community invite is emailed to members — check your inbox.</span>
+                <span className="text-sm text-[#C8C2B4]">Your community invite is emailed to members — check your inbox.</span>
               )}
               {CALL_URL && <a href={CALL_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full border border-white/25 px-5 py-3 text-sm font-semibold hover:border-white/60">Join the next call</a>}
             </div>
-            <p className="text-xs text-slate-400 mt-4">{CALL_INFO}</p>
+            <p className="text-xs text-[#9A9488] mt-4">{CALL_INFO}</p>
           </div>
         ) : (
-          <div className="rounded-2xl bg-[#0F172A] p-6 sm:p-8 text-center text-white mt-8">
-            <div className="font-display text-4xl">$39<span className="text-slate-400 text-xl">/mo</span></div>
-            <p className="text-slate-300 mt-2 mb-5 max-w-md mx-auto">Cancel anytime. The recurring room that turns a one-afternoon plan into a real business.</p>
-            <a href="/products/called-expert-inner-circle" className="cta-glow inline-block">Join the Inner Circle</a>
+          <div className="rounded-2xl bg-[var(--obsidian)] p-6 sm:p-8 text-center text-white mt-8">
+            <div className="font-display text-4xl">$39<span className="text-[#9A9488] text-xl">/mo</span></div>
+            <p className="text-[#C8C2B4] mt-2 mb-5 max-w-md mx-auto">Cancel anytime. The recurring room that turns a one-afternoon plan into a real business.</p>
+            <a href={storeProductUrl("called-expert-inner-circle")} className="cta-glow inline-block">Join the Inner Circle</a>
           </div>
         )}
       </main>

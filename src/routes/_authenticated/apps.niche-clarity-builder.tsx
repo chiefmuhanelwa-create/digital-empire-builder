@@ -10,7 +10,7 @@ import { Lock, Copy, Check, Target, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/apps/niche-clarity-builder")({
-  head: () => ({ meta: [{ title: "Niche Clarity Builder — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Niche Clarity Builder — Contentpreneur Africa" }] }),
   component: NicheClarityBuilder,
 });
 
@@ -127,7 +127,7 @@ function NicheClarityBuilder() {
             <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
             <h2 className="mt-4 text-2xl">The Niche Clarity Builder is in the Foundation Kit.</h2>
             <p className="nx-body max-w-md mx-auto mt-2">Find your lane in one afternoon. Get the kit to unlock this and every interactive app.</p>
-            <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+            <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
           </div>
         </main>
         <SiteFooter />
@@ -174,15 +174,15 @@ function NicheClarityBuilder() {
 
         {/* Output */}
         <div className="space-y-5 lg:sticky lg:top-6 self-start">
-          <div className="rounded-2xl bg-[#0F172A] p-6 text-white">
+          <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-white">
             <div className="flex items-center justify-between">
               <p className="nx-label !text-[var(--nx-gold-bright)]">Your niche statement</p>
-              <span className="font-display text-3xl" style={{ color: toneColor[calc.tone] === "var(--text-subtle)" ? "#94A3B8" : "var(--nx-gold-bright)" }}>{calc.score}<span className="text-base text-slate-400">/100</span></span>
+              <span className="font-display text-3xl" style={{ color: toneColor[calc.tone] === "var(--text-subtle)" ? "#94A3B8" : "var(--nx-gold-bright)" }}>{calc.score}<span className="text-base text-[#9A9488]">/100</span></span>
             </div>
             <p className="mt-3 text-lg leading-relaxed">
               I help <Part v={f.who} ph="who you serve" /> go from <Part v={f.before} ph="their stuck point" /> to <Part v={f.after} ph="the outcome" />, using <Part v={f.edge} ph="your edge" />.
             </p>
-            <button onClick={copy} className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--nx-gold)] px-4 py-2 text-sm font-bold text-[#0F172A] hover:bg-[var(--nx-gold-deep)] transition-colors">
+            <button onClick={copy} className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--nx-gold)] px-4 py-2 text-sm font-bold text-[var(--foreground)] hover:bg-[var(--nx-gold-deep)] transition-colors">
               {copied ? <><Check className="size-4" /> Copied</> : <><Copy className="size-4" /> Copy statement</>}
             </button>
           </div>
@@ -226,5 +226,5 @@ function NicheClarityBuilder() {
 function Part({ v, ph }: { v: string; ph: string }) {
   const t = (v || "").trim();
   if (t) return <span className="text-[var(--nx-gold-bright)] font-semibold">{t}</span>;
-  return <span className="text-slate-500 border-b-2 border-dotted border-slate-600">{ph}</span>;
+  return <span className="text-[var(--text-subtle)] border-b-2 border-dotted border-[var(--border-mid)]">{ph}</span>;
 }

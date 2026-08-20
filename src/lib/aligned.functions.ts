@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestIP } from "@tanstack/react-start/server";
+import { getRequestIP, getRequestHost} from "@tanstack/react-start/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { assertTurnstile } from "./turnstile.server";
@@ -29,6 +29,7 @@ export const subscribeAlignedToolkit = createServerFn({ method: "POST" })
     await assertTurnstile(
       data.turnstileToken,
       getRequestIP({ xForwardedFor: true }) ?? undefined,
+      getRequestHost(),
     );
 
     const email = data.email.toLowerCase();
@@ -50,7 +51,7 @@ export const subscribeAlignedToolkit = createServerFn({ method: "POST" })
     if (error) throw new Error("Could not save your details. Please try again.");
 
     // Fire-and-forget — never block the buyer/lead on MailerLite.
-    void addToMailerLiteGroup(
+    await addToMailerLiteGroup(
       email,
       process.env.MAILERLITE_GROUP_ID_ALIGNED ??
         process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,

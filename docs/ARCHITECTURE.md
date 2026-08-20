@@ -44,13 +44,29 @@
 └───────────────────────┴───────────────────────────────────────┘
 ```
 
-Two live domains share this ONE Cloudflare Worker via path-specific routes (see §3):
-- **chkplt.com** — the full platform (marketplace, dashboard, LMS, admin).
-- **contentpreneur.africa** — a SEPARATE Next.js marketing site owns the homepage/`/about`,
-  but `/starterkit`, `/foundation`, `/accelerator`, `/apply`, `/checkout*`, `/contact`,
-  `/terms`, `/privacy`, `/refund-policy` are routed to THIS same Worker (Phase 2A/2C,
-  2026-07-28) so those flagship funnels run on the proven CHKPLT backend without a
-  separate checkout/auth/LMS rebuild.
+Two live domains share this ONE Cloudflare Worker via path-specific routes (see §3).
+The split is by JOB, not by codebase — see `src/lib/domains.ts`, which is the single
+source of truth in code:
+- **chkplt.com** — the storefront and back office: `/products`, `/cart`, `/search`,
+  `/tools`, `/admin` content, marketing pages.
+- **contentpreneur.africa** — the customer journey end to end. A SEPARATE Next.js
+  marketing site still owns the homepage and `/about`, but the funnels
+  (`/starterkit`, `/foundation`, `/accelerator`, `/apply`, `/creator-bundle`),
+  the transaction (`/checkout*`, `/_serverFn/*`) and — since **Phase 3, 2026-08-18**
+  — the whole signed-in **member workspace** (`/dashboard*`, `/apps/*`, `/learn*`,
+  `/account*`, `/login*`, `/signup*`, `/reset-password*`, `/admin*`) are routed to
+  THIS Worker.
+
+**Phase 3 (2026-08-18) — the member workspace moved to contentpreneur.africa.**
+Founder ruling: the Foundation Kit workspace lives under contentpreneur.africa, not
+chkplt.com. Before this, `/foundation` sold on that domain while
+`/dashboard/foundation-kit` existed only on chkplt.com — verified live,
+`contentpreneur.africa/dashboard/foundation-kit` HUNG and
+`contentpreneur.africa/login` 404'd, so every kit buyer met a second brand the
+moment they opened what they bought. `src/server.ts` now **301s** every member path
+arriving on chkplt.com to contentpreneur.africa, so the workspace has exactly one
+home. Sessions are per-domain cookies, so that redirect signs existing members out
+once — a known, accepted one-time cost of the ruling.
 
 ---
 
@@ -86,8 +102,22 @@ routes: [
   "contentpreneur.africa/foundation*"          → this Worker
   "contentpreneur.africa/accelerator*"         → this Worker
   "contentpreneur.africa/apply*"               → this Worker
+  "contentpreneur.africa/creator-bundle*"      → this Worker
+  // Phase 3, 2026-08-18 — the member workspace. Keep in sync BY HAND with
+  // MEMBER_PATH_PREFIXES in src/lib/domains.ts (Cloudflare route patterns are
+  // config and cannot read that array).
+  "contentpreneur.africa/dashboard*"           → this Worker (the Foundation Kit workspace)
+  "contentpreneur.africa/apps/*"               → this Worker (the 11 kit-gated tools)
+  "contentpreneur.africa/learn*"               → this Worker (LMS)
+  "contentpreneur.africa/account*"             → this Worker
+  "contentpreneur.africa/login*"               → this Worker
+  "contentpreneur.africa/signup*"              → this Worker
+  "contentpreneur.africa/reset-password*"      → this Worker
+  "contentpreneur.africa/admin*"               → this Worker (shares the same login)
   "contentpreneur.africa/assets/*"             → this Worker (Vite static assets for the above)
   "contentpreneur.africa/downloads/*"          → this Worker
+  "contentpreneur.africa/product-covers/*"     → this Worker
+  "contentpreneur.africa/_serverFn/*"          → this Worker (every form submit)
   "contentpreneur.africa/checkout*"            → this Worker (post-payment redirect target)
   "contentpreneur.africa/contact*"             → this Worker
   "contentpreneur.africa/terms*"               → this Worker
@@ -104,9 +134,11 @@ triggers.crons: [
 ]
 ```
 
-`src/server.ts` is the Worker entry: wraps the TanStack Start SSR handler, adds a
-branded 500 page for h3-swallowed SSR errors, sets `Cache-Control: no-cache,
-must-revalidate` on all HTML responses (fixed 2026-07-29 — without this, browsers
+`src/server.ts` is the Worker entry: **301s member paths off chkplt.com onto
+contentpreneur.africa** (`memberDomainRedirect`, GET/HEAD only — a 301 on a POST may
+be replayed as a GET and silently drop a form submit), wraps the TanStack Start SSR
+handler, adds a branded 500 page for h3-swallowed SSR errors, sets `Cache-Control:
+no-cache, must-revalidate` on all HTML responses (fixed 2026-07-29 — without this, browsers
 heuristically cached pages and made real deploys look like they "didn't take"), and
 exports `scheduled()` to route the two cron triggers above to `fx-sync.ts` /
 `email-queue.ts`.
@@ -131,13 +163,20 @@ exports `scheduled()` to route the two cron triggers above to `fx-sync.ts` /
 | `/starterkit`, `/foundation`, `/accelerator` | | contentpreneur.africa flagship funnels (routed here per §3), own `ContentpreneurHeader`/`Footer` |
 
 ### Authenticated (`_authenticated/` prefix — Supabase session required)
+
+**Served on contentpreneur.africa** since Phase 3 (2026-08-18); chkplt.com 301s these
+paths there. In-page links out to the storefront must therefore be ABSOLUTE — use
+`storeProductUrl()` from `src/lib/domains.ts`, because a relative `/products/...` link
+404s on this domain. The one exception is the Foundation Kit, whose sales page
+`/foundation` is a route in this app and resolves on both hosts.
+
 | Route | Purpose |
 |---|---|
 | `/dashboard`, `/account` | Member home, profile/password |
 | `/dashboard/products/free`, `/dashboard/products/paid` | Owned-products views |
 | `/dashboard/foundation-kit`, `/dashboard/inner-circle`, `/dashboard/community` | Program-specific member views |
 | `/learn`, `/learn/$slug`, `/learn/$slug/$lessonSlug` | LMS — course list, modules, lessons |
-| `/apps/*` (10 routes) | Interactive member tools — 4E calendar, DARES model, income tracker, niche-clarity builder, MS×TS×SS, PAIDS auditor, consistency blueprint, first-income planner, right-side diagnostic, seeds-pipeline |
+| `/apps/*` (**11** routes) | Interactive member tools, all gated on `useKitAccess` — 4E calendar, DARES model, income tracker, niche-clarity builder, knowledge audit, MS×TS×SS, PAIDS auditor, consistency blueprint, first-income planner, right-side diagnostic, seeds-pipeline. This count is what the Foundation Kit sales copy claims; if a tool is added or gated differently, the copy in `/foundation` and the product's `benefits` must move with it. |
 
 ### Admin (admin role via `has_role()` RPC)
 | Route | Purpose |
@@ -343,6 +382,33 @@ key) without needing to fake a webhook signature.
 
 ## 8. Payment Flow
 
+### Turnstile on checkout FAILS OPEN (2026-08-18)
+
+`CHECKOUT_FAILS_OPEN = true` in `checkout.functions.ts`. All three entry points
+(`initializeCheckout`, `initializeStripeCheckout`, `initializeSubscription`) treat
+Turnstile as a **signal**: a failed or missing token logs a **critical** incident,
+stamps `orders.metadata.turnstile = "unverified:<reason>"`, and lets the buyer through.
+
+Why: a blocked checkout is a certain lost sale (two real named buyers were refused
+before this changed — see `Learnings.md` 2026-08-18). What a hard gate prevents is a bot
+creating one pending-order row and one provider init call — no credits spent, no email,
+no file served, and no money moves without a real card on the provider's hosted page.
+Cloudflare's WAF is already in front of the Worker.
+
+Endpoints that spend something on an attacker's behalf still fail CLOSED:
+`generateHooks` (Anthropic credits), `buildOffer`, `/contact`, `/apply`.
+
+The client half matters too: with the submit button gated on a token, a widget that
+cannot run means the request never reaches the server and this policy never applies. So
+`TurnstileGate` takes `unavailablePolicy` — `"allow"` (the 5 checkout gates) emits a
+`TURNSTILE_WIDGET_UNAVAILABLE` sentinel so the button works; `"block"` (default) keeps
+the button disabled. **The sentinel is not a bypass** — siteverify rejects it like any
+bad token, so fail-closed endpoints still refuse it. An 8s watchdog covers the case with
+no callback at all (script blocked by an ad blocker/proxy).
+
+Flip `CHECKOUT_FAILS_OPEN` to false to restore hard-failing. It is one line, and a
+deliberate decision.
+
 ### Paystack (ZAR)
 ```
 Buy now / Cart checkout → initializeCheckout(productSlug, bumpSlugs?, email, turnstileToken)
@@ -395,6 +461,12 @@ checkout, if `reusable`), no redirect needed.
 - The header's manual currency switcher (§6) lets a shopper override geo-detection for
   both display and payment rail — separate mechanism from the marketing-price system
   above, and does not affect what a locked product's ZAR charge actually is.
+- **`formatPrice()` needs BOTH `slug` and `country`, and fails quietly without them.**
+  Dropping `slug` skips the `USD_DISPLAY` marketing price; dropping `country` never
+  takes the ZA branch. `/foundation` was calling it with neither and rendered **"$94"**
+  — R1,565.03 mechanically divided by `ZAR_PER_USD` — to every visitor, South Africans
+  included, who were then charged in rand. Fixed 2026-08-18. Any new call site passes
+  all five arguments.
 
 ---
 
@@ -478,6 +550,69 @@ for every server-only value in `.env.example`.
 
 ## 13. Known Gaps / Flagged Items (keep current — remove once resolved)
 
+- **Two manual dashboard steps are REQUIRED before the Phase 3 domain move works**
+  (code is deployed, these are config outside the repo):
+  1. **Supabase → Authentication → URL Configuration.** Add
+     `https://contentpreneur.africa/**` to Redirect URLs. Post-purchase magic links
+     and `/login` now target that host; until it is allowlisted, Supabase refuses the
+     redirect and a paying buyer cannot sign in. (Magic-link tokens arrive in the URL
+     *fragment*, which a 301 strips — that is why the link is generated on the
+     destination domain rather than relying on the chkplt.com redirect.)
+  *(As of 2026-08-18 step 2 no longer blocks CHECKOUT — those three endpoints fail open,
+  see §8. It still blocks `/apply`, `/login`, `/signup` and the AI tools, which fail
+  closed by design.)*
+  2. **Cloudflare → Turnstile → the widget used by `TURNSTILE_SITE_KEY`.** Add
+     `contentpreneur.africa` to its allowed hostnames. This is not optional and it
+     is not only about the new routes: the founder reported 2026-08-18 that the
+     Turnstile widget on the **Accelerator application** (`/apply`, served on
+     contentpreneur.africa since Phase 2A) does not work. A widget on a hostname
+     that is not on its allow-list returns error **110200** and never issues a
+     token, and every form in this app disables its submit button until a token
+     arrives — so `/apply`, `/foundation`, `/login` and `/signup` are all
+     unsubmittable on that domain until this field is set. `TurnstileGate` now
+     renders the error code and a retry instead of failing silently, so the
+     diagnosis is visible on the page itself.
+- **~45% of Creator Bundle leads never receive the bundle.** `CREATOR BUNDLE LEADS` has
+  23 active and **19 unconfirmed**. `/creator-bundle` is a MailerLite embedded form
+  (slug `BPvaab`) and delivery is entirely MailerLite's — so double opt-in is a hard
+  gate: no confirmation click means the "Creator Bundle Welcome" automation never fires
+  and the lead gets nothing, ever. `StarterKit Leads` is 7 active / 4 unconfirmed.
+  Not fixable in this repo, and NOT to be flipped unilaterally — double opt-in is a
+  consent/deliverability decision. Needs a founder call: turn it off for the magnet
+  forms, or fix why the confirmation email isn't being clicked.
+- **A MailerLite group ID in the Cloudflare env is dead.** `addToMailerLiteGroup` 422s on
+  group `190855179540628547` ("The selected groups.0 is invalid") — confirmed
+  non-existent via the MailerLite API. It is `MAILERLITE_GROUP_ID_CALLED_EXPERT` or
+  `MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT`; almost certainly the former, since no
+  group of that name exists in the account. Used by BOTH `offer-builder.functions.ts`
+  and `apply.functions.ts`, so qualified Accelerator applicants are not being synced.
+  Leads are still safe — they are written to `subscribers` before the ESP call — but
+  they never enter a nurture sequence. **Founder must re-point the env var.** Live group
+  IDs: CHKPLT BUYERS `190855383448815273` · Knowledge Audit `190855293404448728` ·
+  StarterKit Leads `194182161960535616` · CREATOR BUNDLE LEADS `190074355106973432`.
+- `MAILERLITE_GROUP_ID_BUYERS` points at a group literally *named*
+  `"MAILERLITE_GROUP_ID_BUYERS"` (`193225326306788715`, 7 subs) while the real
+  `CHKPLT BUYERS` group has 1. Flagged 2026-08-13, still open — needs a founder decision
+  on merging before re-pointing.
+- **Turnstile is still UI-only on `/login` and `/signup`.** Both render the widget and
+  gate their submit button on a token, but authentication goes straight to Supabase —
+  nothing ever calls `verifyTurnstile`. Closing this means enabling Supabase's own
+  CAPTCHA protection (dashboard setting + the same secret), not app code.
+- **`starterkit.functions.ts` and `media-kit.functions.ts` have no Turnstile at all** —
+  public email-capture endpoints with no bot protection and no widget on the page. A
+  free lead magnet is a list-poisoning target; adding a challenge to it is a conversion
+  trade-off, so it is flagged rather than changed.
+- `sendOpsAlert` only emails on `severity: "critical"` — 7 of ~30 `reportError` call
+  sites. Everything else lands in `incidents` silently and is only ever seen if someone
+  opens `/admin/incidents`. Deliberate (see the comment in `error-logger.ts`), but it
+  means a high-volume "error" like a failing checkout guard can run for weeks unnoticed.
+- The `/apply` diagnostic emails (`src/lib/apply.functions.ts`) still render as CHKPLT
+  — brand bar, sign-off, footer — even though `/apply` is served on
+  contentpreneur.africa and both their CTAs now point there. Links are correct;
+  the branding is a founder copy decision, not a code one.
+- The Foundation Kit's order bump (`called-expert-foundation-kit-bonus`, R290.42, live
+  and published) is not offered anywhere in the funnel — `/foundation`'s `BuyForm`
+  never passes `bumpSlugs`. A published product with no surface to buy it from.
 - Cart checkout is capped at 4 paid items per order (1 main + 3 bumps) — it reuses the
   order-bump mechanism rather than a rebuilt multi-item checkout backend. Fine for a
   digital-info-product catalog; would need real schema work for a larger per-order

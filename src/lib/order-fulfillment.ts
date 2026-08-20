@@ -5,6 +5,8 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { OrderReceiptEmail } from "@/lib/email-templates/order-receipt";
 import { reportError } from "@/lib/error-logger";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { BUYERS_GROUP } from "@/lib/mailerlite-groups";
+import { MEMBER_DOMAIN } from "@/lib/domains";
 
 // Shared post-payment fulfillment for BOTH payment rails (Paystack + Stripe).
 // A provider webhook is responsible for verifying the signature, logging the
@@ -16,6 +18,16 @@ const SITE_NAME = "CHKPLT";
 const ROOT_DOMAIN = "chkplt.com";
 // Product slugs whose purchase unlocks the Foundation Kit workspace.
 const KIT_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
+
+// The signed-in workspace lives on contentpreneur.africa (see src/lib/domains.ts),
+// NOT on ROOT_DOMAIN. Every link in this receipt that lands a buyer in their
+// account must use MEMBER_DOMAIN directly.
+//
+// This matters most for the magic link. Supabase returns the session in the URL
+// FRAGMENT (#access_token=...), and a fragment is never sent to a server — so a
+// magic link pointed at chkplt.com would hit the 301 in src/server.ts and arrive
+// on contentpreneur.africa with the token stripped, i.e. not signed in, with no
+// error to explain it. Generate it on the destination domain in the first place.
 const SENDER_DOMAIN = "notify.chkplt.com";
 // Must be Resend-verified. notify.chkplt.com is verified; bare chkplt.com is NOT,
 // so receipts bounced with "domain is not verified".
@@ -107,7 +119,8 @@ async function ensureBuyerUserId(
           .eq("email", email)
           .maybeSingle();
         userId = p2?.id ?? null;
-        if (!userId) await reportError(error, { endpoint: "order-fulfillment:createUser", meta: { email } });
+        if (!userId)
+          await reportError(error, { endpoint: "order-fulfillment:createUser", meta: { email } });
       }
     } catch (err) {
       await reportError(err, { endpoint: "order-fulfillment:createUser", meta: { email } });
@@ -165,7 +178,8 @@ async function sendOrderReceipt(
   // a receipt email the moment it lands.
   const downloadItems = await Promise.all(
     (items ?? []).map(async (i) => {
-      const path = (i.products as { slug: string; download_path: string | null } | null)?.download_path;
+      const path = (i.products as { slug: string; download_path: string | null } | null)
+        ?.download_path;
       let downloadUrl: string | null = null;
       if (path) {
         const { data: signed } = await supabaseAdmin.storage
@@ -182,13 +196,17 @@ async function sendOrderReceipt(
     }),
   );
 
-  const dashboardUrl = `https://${ROOT_DOMAIN}${opts?.dashboardPath ?? "/dashboard"}`;
+  const dashboardUrl = `https://${MEMBER_DOMAIN}${opts?.dashboardPath ?? "/dashboard"}`;
+  // Kit buyers bought on contentpreneur.africa and open their workspace there —
+  // the receipt must not be the first place a second brand name appears. Every
+  // other order still reads as CHKPLT, which is where it was actually bought.
+  const isKitOrder = opts?.hasKit ?? false;
   const emailProps = {
-    siteName: SITE_NAME,
-    siteUrl: `https://${ROOT_DOMAIN}`,
+    siteName: isKitOrder ? "Contentpreneur Africa" : SITE_NAME,
+    siteUrl: isKitOrder ? `https://${MEMBER_DOMAIN}` : `https://${ROOT_DOMAIN}`,
     dashboardUrl,
     actionUrl: opts?.actionUrl ?? null,
-    loginUrl: `https://${ROOT_DOMAIN}/login`,
+    loginUrl: `https://${MEMBER_DOMAIN}/login`,
     hasKit: opts?.hasKit ?? false,
     customerName: order.customer_name,
     customerEmail: order.email,
@@ -197,7 +215,9 @@ async function sendOrderReceipt(
     total: formatMoney(order.total_cents, order.currency),
   };
   const html = await render(React.createElement(OrderReceiptEmail, emailProps));
-  const text = await render(React.createElement(OrderReceiptEmail, emailProps), { plainText: true });
+  const text = await render(React.createElement(OrderReceiptEmail, emailProps), {
+    plainText: true,
+  });
 
   const { error } = await supabaseAdmin.rpc("enqueue_email", {
     queue_name: "transactional_emails",
@@ -302,17 +322,15 @@ export async function fulfillPaidOrder(
   const userId = await ensureBuyerUserId(email, order.customer_name, subscriberId);
 
   for (const item of items ?? []) {
-    await supabaseAdmin
-      .from("product_grants")
-      .upsert(
-        {
-          product_id: item.product_id,
-          subscriber_id: subscriberId,
-          user_id: userId,
-          order_id: order.id,
-        },
-        { onConflict: "product_id,subscriber_id", ignoreDuplicates: true },
-      );
+    await supabaseAdmin.from("product_grants").upsert(
+      {
+        product_id: item.product_id,
+        subscriber_id: subscriberId,
+        user_id: userId,
+        order_id: order.id,
+      },
+      { onConflict: "product_id,subscriber_id", ignoreDuplicates: true },
+    );
   }
 
   // Does this order unlock the Foundation Kit? Route onboarding straight there.
@@ -327,9 +345,11 @@ export async function fulfillPaidOrder(
     const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
       type: "magiclink",
       email,
-      options: { redirectTo: `https://${ROOT_DOMAIN}${dashboardPath}` },
+      options: { redirectTo: `https://${MEMBER_DOMAIN}${dashboardPath}` },
     });
-    actionUrl = (linkData as { properties?: { action_link?: string } } | null)?.properties?.action_link ?? null;
+    actionUrl =
+      (linkData as { properties?: { action_link?: string } } | null)?.properties?.action_link ??
+      null;
   } catch (err) {
     await reportError(err, { endpoint: "order-fulfillment:generateLink", meta: { email } });
   }
@@ -346,5 +366,6 @@ export async function fulfillPaidOrder(
   }
 
   // Sync buyer to MailerLite (fire-and-forget — never blocks receipt)
-  void addToMailerLiteGroup(email, process.env.MAILERLITE_GROUP_ID_BUYERS, { first_name, last_name });
+  // Real customers only — reached after payment has settled.
+  await addToMailerLiteGroup(email, BUYERS_GROUP.id, { first_name, last_name });
 }

@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestIP } from "@tanstack/react-start/server";
+import { getRequestIP, getRequestHost} from "@tanstack/react-start/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { assertTurnstile } from "./turnstile.server";
@@ -20,6 +20,7 @@ export const submitContact = createServerFn({ method: "POST" })
     await assertTurnstile(
       data.turnstileToken,
       getRequestIP({ xForwardedFor: true }) ?? undefined,
+      getRequestHost(),
     );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

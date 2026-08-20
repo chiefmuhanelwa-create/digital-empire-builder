@@ -14,7 +14,7 @@ import { ProCohortBreakdown } from "@/components/PremiumProgramBreakdown";
 export const Route = createFileRoute("/accelerator")({
   head: () => ({
     meta: [
-      { title: "Contentpreneur Accelerator — $499 — Contentpreneur Africa" },
+      { title: "Contentpreneur Accelerator — $997 — Contentpreneur Africa" },
       {
         name: "description",
         content:
@@ -31,7 +31,7 @@ function AcceleratorPage() {
       <ContentpreneurHeader />
 
       <section className="mx-auto max-w-2xl px-6 pt-20 pb-16 text-center">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">The Flagship · $499</div>
+        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">The Flagship · $997</div>
         <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">Become A Contentpreneur.</h1>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
           Turn your expertise into assets, audience, income and ownership. Not another course — the full
@@ -83,7 +83,7 @@ function AcceleratorPage() {
             to="/apply"
             className="mt-10 inline-flex items-center justify-center rounded-md bg-banana px-8 py-4 font-display text-lg text-banana-foreground hover:bg-banana/90 transition-colors"
           >
-            Apply Now — $499 →
+            Apply Now — $997 →
           </Link>
         </div>
       </section>

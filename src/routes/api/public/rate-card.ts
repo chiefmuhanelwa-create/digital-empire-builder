@@ -20,6 +20,7 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
 import { reportError } from "@/lib/error-logger";
+import { groupForTool, assertGroupRouting } from "@/lib/mailerlite-groups";
 import { generateRateCardPDF } from "@/lib/rate-card-pdf";
 import { RateCardResultEmail } from "@/lib/email-templates/rate-card-result";
 
@@ -44,11 +45,15 @@ const bodySchema = z.object({
   }),
 });
 
-// The tool is served same-origin from chkplt.com/tools/rate-card/, so browsers
-// always send an Origin on this POST. Anything else is not our own page.
-const ALLOWED_ORIGINS = new Set([
+// Origins we EXPECT. Anything else is logged, not blocked — see below.
+const KNOWN_ORIGINS = new Set([
   "https://chkplt.com",
   "https://www.chkplt.com",
+  // The site currently answers on plain http too, so these are real traffic,
+  // not anomalies worth flagging.
+  "http://chkplt.com",
+  "http://www.chkplt.com",
+  "https://contentpreneur.africa",
   "http://localhost:3000",
   "http://localhost:5173",
 ]);
@@ -57,9 +62,18 @@ export const Route = createFileRoute("/api/public/rate-card")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        // 2026-08-13: this used to 403 any origin outside a 4-item allowlist.
+        // A real creator hit "Forbidden" — he opened the link from an Instagram
+        // DM, and Meta's in-app browser posts with `Origin: null`. Confirmed
+        // against production: `Origin: null` → 403, no origin at all → 200.
+        // So the check was blocking the single most important traffic source
+        // this business has (DM links) while stopping no actual attacker: an
+        // Origin header is trivially forged by any script, so it only ever
+        // filtered real browsers. Log the unexpected origin and carry on; the
+        // real control for abuse here is rate limiting, not this.
         const origin = request.headers.get("Origin");
-        if (origin && !ALLOWED_ORIGINS.has(origin)) {
-          return Response.json({ ok: false, error: "Forbidden" }, { status: 403 });
+        if (origin && !KNOWN_ORIGINS.has(origin)) {
+          console.warn("[rate-card] unexpected origin (allowed):", origin);
         }
 
         let json: unknown;
@@ -101,22 +115,14 @@ export const Route = createFileRoute("/api/public/rate-card")({
           );
           if (upsertErr) throw upsertErr;
 
-          const groupId = process.env.MAILERLITE_GROUP_ID_RATE_CARD;
-          if (!groupId) {
-            // Loud, not silent — the exact failure mode that lost every prior lead.
-            await reportError(
-              new Error(
-                "MAILERLITE_GROUP_ID_RATE_CARD is not set — rate-card leads are not syncing",
-              ),
-              {
-                endpoint: "rate-card",
-                severity: "warning",
-                meta: { email },
-              },
-            );
-          } else {
-            void addToMailerLiteGroup(email, groupId, { first_name: firstName });
-          }
+          // Group comes from the code map, not a secret — see
+          // src/lib/mailerlite-groups.ts for why.
+          const group = groupForTool("rate-card");
+          assertGroupRouting("rate-card", group.id);
+          // Awaited, not fire-and-forget: on Workers an unawaited promise can be
+          // cancelled the moment the Response returns.
+          await addToMailerLiteGroup(email, group.id, { first_name: firstName });
+          console.log(`[rate-card] lead -> ${group.name} (${group.id})`);
 
           const pdf = await generateRateCardPDF({ ...rateData, brand });
           const pdfBase64 = Buffer.from(pdf).toString("base64");

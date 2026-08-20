@@ -1,16 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { ArrowRight, ArrowLeft, Loader2, Sparkles, Check } from "lucide-react";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { TurnstileGate } from "@/components/TurnstileGate";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import { buildOffer, type GeneratedOffer } from "@/lib/offer-builder.functions";
 import { trackLead } from "@/lib/track";
 import { getUtm } from "@/lib/utm";
+import { useToolView } from "@/lib/tool-analytics";
 
 export const Route = createFileRoute("/offer-builder")({
   head: () => ({
@@ -71,10 +72,15 @@ const TA_CLASS =
   "w-full min-h-[88px] border border-[#d0c8bc] bg-white rounded-md px-3 py-2 text-[15px] text-[#0F172A] focus:border-[#F59E0B] focus:outline-none focus:ring-0 resize-y";
 
 function OfferBuilderPage() {
+  useToolView("offer-builder");
   const build = useServerFn(buildOffer);
   const [step, setStep] = useState(0);
   const [fields, setFields] = useState<Fields>(INITIAL);
   const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [offer, setOffer] = useState<GeneratedOffer | null>(null);
@@ -122,6 +128,8 @@ function OfferBuilderPage() {
       setError((e as Error).message ?? "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
+      // Spent token — swap it for a fresh one so a retry after an error works.
+      tsRef.current?.reset();
     }
   }
 
@@ -294,7 +302,7 @@ function OfferBuilderPage() {
                         className="h-12 border-[#d0c8bc] bg-white focus:border-[#F59E0B] focus:ring-0"
                       />
                     </Field>
-                    <TurnstileGate onToken={setTsToken} className="pt-1" />
+                    <TurnstileGate ref={tsRef} onToken={setTsToken} className="pt-1" />
                   </>
                 )}
               </div>

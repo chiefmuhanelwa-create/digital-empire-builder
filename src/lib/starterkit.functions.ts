@@ -45,7 +45,7 @@ export const claimStarterKit = createServerFn({ method: "POST" })
       await reportError(subErr, { endpoint: "claimStarterKit", meta: { email } });
     }
 
-    void addToMailerLiteGroup(email, process.env.MAILERLITE_GROUP_ID_STARTER_KIT, {
+    await addToMailerLiteGroup(email, process.env.MAILERLITE_GROUP_ID_STARTER_KIT, {
       first_name: firstName,
       last_name: nameParts.slice(1).join(" ") || null,
     });

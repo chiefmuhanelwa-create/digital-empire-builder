@@ -6,7 +6,7 @@ import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, Gauge } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/ms-ts-ss")({
-  head: () => ({ meta: [{ title: "MS×TS×SS Readiness — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "MS×TS×SS Readiness — Contentpreneur Africa" }] }),
   component: MsTsSs,
 });
 
@@ -81,12 +81,12 @@ function MsTsSs() {
           })}
         </div>
 
-        <div className="rounded-2xl bg-[#0F172A] p-6 text-white text-center mt-8">
-          <div className="font-display text-2xl">{v.ms} × {v.ts} × {v.ss} = <span className="text-[var(--nx-gold-bright)]">{r.product}</span><span className="text-slate-400 text-lg"> / 1000</span></div>
-          <div className="font-display text-5xl mt-2" style={{ color: r.tone === "good" ? "#4ADE80" : "var(--nx-gold-bright)" }}>{r.pct}%</div>
+        <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-white text-center mt-8">
+          <div className="font-display text-2xl">{v.ms} × {v.ts} × {v.ss} = <span className="text-[var(--nx-gold-bright)]">{r.product}</span><span className="text-[#9A9488] text-lg"> / 1000</span></div>
+          <div className="font-display text-4xl sm:text-5xl mt-2" style={{ color: r.tone === "good" ? "#4ADE80" : "var(--nx-gold-bright)" }}>{r.pct}%</div>
           <p className="nx-label !text-[var(--nx-gold-bright)] mt-1">Readiness</p>
           <h2 className="text-white text-2xl mt-3">{r.title}</h2>
-          <p className="text-slate-300 mt-2 max-w-lg mx-auto">{r.text}</p>
+          <p className="text-[#C8C2B4] mt-2 max-w-lg mx-auto">{r.text}</p>
         </div>
 
         <div className="nx-card !p-5 mt-5">
@@ -111,7 +111,7 @@ function MsTsSs() {
             <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
             <h2 className="mt-4 text-2xl">This is Step 1 of the Clarity System.</h2>
             <p className="nx-body max-w-md mx-auto mt-2">Get the Foundation Kit to unlock the full 7-step system.</p>
-            <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+            <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
           </div>
         </main>
       </Shell>

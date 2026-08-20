@@ -44,9 +44,12 @@ export const GARDEN_ORDER: Garden[] = ["deshe", "esev", "etz_pri", "devarim"];
 // USD_DISPLAY holds clean marketing prices for the headline products; any other
 // ZAR product is auto-converted to whole USD via ZAR_PER_USD below.
 //
-// LIVE conversion: the daily Cloudflare cron `sync-fx` (src/lib/fx-sync.ts) pulls
-// the real USD→ZAR rate and rewrites each USD_DISPLAY product's price_cents so the
-// ZAR charge always tracks the fixed USD price. Nothing here is hardwired anymore.
+// ⚠️ THE FX CRON IS GONE (removed 2026-08-14). This map NO LONGER rewrites any
+// product's price_cents — it is display-only, plus the amount Stripe charges
+// international buyers via resolveUsdCents(). Being listed here is therefore
+// safe: it does not hand a product's ZAR price over to automation. The older
+// note below, warning that adding a slug exposes it to the cron, is kept for
+// history but no longer applies.
 //
 // ZAR_PER_USD below is ONLY the display fallback for ad-hoc ZAR products that aren't
 // in USD_DISPLAY (and for SSR before the first cron run). Keep it roughly current.
@@ -58,7 +61,13 @@ export const USD_DISPLAY: Record<string, number> = {
   "called-expert-foundations": 29700,     // $297 (charged ~R5,500)
   "called-expert-facilitator": 400000,    // $4,000 (charged R75,000)
   "called-expert-inner-circle": 2900,     // $29/mo (charged R540/mo) — DRIFT: dashboard.inner-circle.tsx:38,78 hardcodes "$39/mo" instead of reading this value. Not resolved here — no source establishes which number is the actual intended price (Paystack plan PLN_4oafnq18t7e36gl's real billing amount isn't visible from code); needs a founder/ops decision, not a guess.
-  "contentpreneur-90day-cohort": 49900,   // $499 flat (charged ~R8,270 @ 16.58) — Contentpreneur Accelerator, was $970/R18,000, reprice 2026-07-27
+  // Founder ruling 2026-08-19: the ladder is $97 → $997 → $2,997. Everything
+  // else becomes an order bump or a downsell, not a rung.
+  // USD is the source of truth; the ZAR in price_cents is derived at 16.13 —
+  // the rate the live Foundation Kit already implies (R1,565.03 ÷ $97) — so
+  // repricing these two moves nothing else.
+  "contentpreneur-90day-cohort": 99700,   // $997 (charged R16,081.61) — was $499, reprice 2026-08-19
+  "contentpreneur-vip-tier": 299700,      // $2,997 (charged R48,341.61) — new tier 2026-08-19
   "creator-swipe-vault": 1700,            // $17 order bump (charged R290)
   "asset-accelerator": 19700,             // $197 1-click upsell (charged R3,600)
   "personal-brand-30-days": 4900,         // $49 video course (charged R899)
@@ -70,13 +79,12 @@ export const USD_DISPLAY: Record<string, number> = {
   // marketing price. 23 published products had this gap (most pre-dating this
   // session's imports, not just the new ones) — every one below gets a clean,
   // deliberate USD price for international buyers instead of an accidental one.
-  // NOTE 2026-07-29 — the 7 slugs below (30-day-content-calendar,
-  // african-creator-growth, influencers-code-ebook, monetise-your-expertise,
-  // niche-clarity-workbook, paids-framework-workbook, what-to-post) were
-  // REMOVED from this map on founder instruction: prices are locked as
-  // manually set in the admin panel, and must NOT be touched by the daily
-  // FX-sync cron (which rewrites price_cents for every slug present here).
-  // Do not re-add them without explicit founder sign-off.
+  // NOTE 2026-07-29 — 7 slugs (30-day-content-calendar, african-creator-growth,
+  // influencers-code-ebook, monetise-your-expertise, niche-clarity-workbook,
+  // paids-framework-workbook, what-to-post) were REMOVED from this map so the
+  // daily FX-sync cron could not rewrite their manually-set ZAR prices.
+  // SUPERSEDED 2026-08-19: that cron no longer exists, and the founder gave
+  // explicit sign-off to price them in USD. They are re-added at the bottom.
   "90-day-creator-blueprint": 1800,        // $18 (R299)
   "called-expert-foundation-kit-bonus": 1800, // $18 (R299)
   "caption-formula": 900,                  // $9  (R149)
@@ -109,30 +117,44 @@ export const USD_DISPLAY: Record<string, number> = {
   "whatsapp-scripts": 1200,
   "creator-loa": 1200,
   "imposter-syndrome-fix": 1200,           // $12 (R199)
-  "first-brand-deal-script": 900,          // $9  (R149)
-  "sars-creator-income": 900,              // $9  (R149)
+  "first-brand-deal-script": 1200,         // $12 (R199.99) — was $9/R149; ZAR moved, USD had not. Realigned 2026-08-19
+  "sars-creator-income": 2400,             // $24 (R399.99) — was $9/R149; international buyers were paying 62% under. Realigned 2026-08-19
   "content-creator-starter-system": 1800,  // $18 (R299)
+
+  // Added 2026-08-19 on founder ruling "start from 12 usd for all at 200 — then
+  // increase as they go up", i.e. anchor R200 = $12 (R16.67/$1) and scale.
+  // These 7 had been REMOVED from this map to shield them from the daily
+  // FX-sync cron. That cron was deleted 2026-08-14, so the reason is gone — and
+  // while absent they rendered an auto-converted number that drifted with
+  // ZAR_PER_USD instead of a price anyone chose.
+  "paids-framework-workbook": 5400,        // $54 (R899)
+  "30-day-content-calendar": 1200,         // $12 (R199)
+  "african-creator-growth": 1200,          // $12 (R199)
+  "niche-clarity-workbook": 1200,          // $12 (R199)
+  "monetise-your-expertise": 900,          // $9  (R149)
+  "what-to-post": 900,                     // $9  (R149)
+  "influencers-code-ebook": 900,           // $9  (R149)
 };
 
-// Display: South African buyers see the real ZAR they'll be charged (no exchange-
-// rate math next to local social proof); everyone else sees the clean USD price.
+// Display: ONE price globally, in USD — local and international alike (founder
+// ruling 2026-08-19). South African buyers still get CHARGED in ZAR, because
+// Paystack cannot bill USD on this account: initializing a USD transaction
+// returns "Currency not supported by merchant" (verified live 2026-08-19), and
+// Paystack does not auto-convert. So USD is the number on the page, ZAR is the
+// number on the card, and every buy button says "billed in ZAR at checkout" so
+// that is never a surprise.
+//
+// `country` is retained: it still routes the payment RAIL (shouldUseStripe) and
+// is accepted here so existing call sites keep compiling, but it no longer
+// changes the displayed currency.
 export function formatPrice(
   cents: number,
   currency: string,
   isFree?: boolean,
   slug?: string,
-  country?: string | null,
+  _country?: string | null,
 ) {
   if (isFree || cents === 0) return "Free";
-
-  // ── South Africa: render native ZAR ──────────────────────────────────────
-  if (country === "ZA") {
-    // ZAR-native product: `cents` IS the Paystack charge (fx-synced to the USD price).
-    // USD-native product: convert to ZAR for display.
-    const zarCents =
-      currency === "ZAR" ? cents : Math.round((cents / 100) * ZAR_PER_USD) * 100;
-    return `R${(zarCents / 100).toLocaleString("en-ZA", { maximumFractionDigits: 0 })}`;
-  }
 
   // Resolve a USD-cents value: explicit marketing override → native USD → convert ZAR.
   let usdCents: number | null = null;

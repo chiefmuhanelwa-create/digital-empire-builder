@@ -3,6 +3,7 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
+import { groupForTool, assertGroupRouting } from "@/lib/mailerlite-groups";
 import { utmRawDataPatch } from "@/lib/utm";
 
 const GARDEN = z.enum(["deshe", "esev", "etz_pri", "devarim"]);
@@ -10,7 +11,11 @@ const STATUS = z.enum(["draft", "published", "archived"]);
 
 const ProductInput = z.object({
   id: z.string().uuid().optional(),
-  slug: z.string().min(1).max(120).regex(/^[a-z0-9-]+$/, "lowercase, numbers, dashes"),
+  slug: z
+    .string()
+    .min(1)
+    .max(120)
+    .regex(/^[a-z0-9-]+$/, "lowercase, numbers, dashes"),
   title: z.string().min(1).max(200),
   tagline: z.string().max(200).nullable().optional(),
   description: z.string().max(4000).nullable().optional(),
@@ -78,7 +83,9 @@ export const adminProductStats = createServerFn({ method: "GET" })
     const mailerlite = {
       apiKeyConfigured: !!process.env.MAILERLITE_API_KEY,
       groups: {
-        buyers: !!process.env.MAILERLITE_GROUP_ID_BUYERS,
+        // Routing now lives in code (src/lib/mailerlite-groups.ts), so these
+        // are configured by construction rather than by an env var being set.
+        buyers: true,
         starterKit: !!process.env.MAILERLITE_GROUP_ID_STARTER_KIT,
         calledExpert: !!process.env.MAILERLITE_GROUP_ID_CALLED_EXPERT,
         freeKnowledgeAudit: !!process.env.MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT,
@@ -115,10 +122,7 @@ export const adminUpsertProduct = createServerFn({ method: "POST" })
       show_in_marketplace: data.show_in_marketplace,
     };
     if (data.id) {
-      const { error } = await supabaseAdmin
-        .from("products")
-        .update(payload)
-        .eq("id", data.id);
+      const { error } = await supabaseAdmin.from("products").update(payload).eq("id", data.id);
       if (error) throw new Error(error.message);
       return { id: data.id };
     }
@@ -134,10 +138,12 @@ export const adminUpsertProduct = createServerFn({ method: "POST" })
 export const adminToggleStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) =>
-    z.object({
-      id: z.string().uuid(),
-      status: STATUS,
-    }).parse(input),
+    z
+      .object({
+        id: z.string().uuid(),
+        status: STATUS,
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -152,10 +158,12 @@ export const adminToggleStatus = createServerFn({ method: "POST" })
 export const adminToggleMarketplaceVisibility = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) =>
-    z.object({
-      id: z.string().uuid(),
-      show_in_marketplace: z.boolean(),
-    }).parse(input),
+    z
+      .object({
+        id: z.string().uuid(),
+        show_in_marketplace: z.boolean(),
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
@@ -172,10 +180,7 @@ export const adminDeleteProduct = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
-    const { error } = await supabaseAdmin
-      .from("products")
-      .delete()
-      .eq("id", data.id);
+    const { error } = await supabaseAdmin.from("products").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -184,27 +189,29 @@ export const adminDeleteProduct = createServerFn({ method: "POST" })
 export const adminUploadFile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) =>
-    z.object({
-      bucket: z.enum(["product-files", "product-covers"]),
-      path: z.string().min(1).max(300).regex(/^[a-zA-Z0-9._\-\/]+$/),
-      contentType: z.string().min(1).max(100),
-      base64: z.string().min(1).max(40_000_000), // ~30MB binary
-    }).parse(input),
+    z
+      .object({
+        bucket: z.enum(["product-files", "product-covers"]),
+        path: z
+          .string()
+          .min(1)
+          .max(300)
+          .regex(/^[a-zA-Z0-9._\-\/]+$/),
+        contentType: z.string().min(1).max(100),
+        base64: z.string().min(1).max(40_000_000), // ~30MB binary
+      })
+      .parse(input),
   )
   .handler(async ({ data, context }) => {
     await ensureAdmin(context.userId);
     const bytes = Buffer.from(data.base64, "base64");
-    const { error } = await supabaseAdmin.storage
-      .from(data.bucket)
-      .upload(data.path, bytes, {
-        contentType: data.contentType,
-        upsert: true,
-      });
+    const { error } = await supabaseAdmin.storage.from(data.bucket).upload(data.path, bytes, {
+      contentType: data.contentType,
+      upsert: true,
+    });
     if (error) throw new Error(error.message);
     if (data.bucket === "product-covers") {
-      const { data: pub } = supabaseAdmin.storage
-        .from(data.bucket)
-        .getPublicUrl(data.path);
+      const { data: pub } = supabaseAdmin.storage.from(data.bucket).getPublicUrl(data.path);
       return { path: data.path, url: pub.publicUrl };
     }
     return { path: data.path, url: null };
@@ -215,11 +222,13 @@ export const adminUploadFile = createServerFn({ method: "POST" })
 // (b) caller provides the paystack reference of a paid order containing the product.
 export const getDownloadUrl = createServerFn({ method: "POST" })
   .inputValidator((input) =>
-    z.object({
-      productSlug: z.string().min(1).max(120),
-      reference: z.string().max(120).optional(),
-      authToken: z.string().max(2000).optional(),
-    }).parse(input),
+    z
+      .object({
+        productSlug: z.string().min(1).max(120),
+        reference: z.string().max(120).optional(),
+        authToken: z.string().max(2000).optional(),
+      })
+      .parse(input),
   )
   .handler(async ({ data }) => {
     const { data: product, error: pErr } = await supabaseAdmin
@@ -283,14 +292,16 @@ export const getDownloadUrl = createServerFn({ method: "POST" })
 // requiring is_free = true server-side, not just trusting the client.
 export const claimFreeProduct = createServerFn({ method: "POST" })
   .inputValidator((input) =>
-    z.object({
-      productSlug: z.string().min(1).max(120),
-      email: z.string().email().max(255),
-      fullName: z.string().max(200).optional(),
-      utmSource: z.string().max(120).optional(),
-      utmMedium: z.string().max(120).optional(),
-      utmCampaign: z.string().max(120).optional(),
-    }).parse(input),
+    z
+      .object({
+        productSlug: z.string().min(1).max(120),
+        email: z.string().email().max(255),
+        fullName: z.string().max(200).optional(),
+        utmSource: z.string().max(120).optional(),
+        utmMedium: z.string().max(120).optional(),
+        utmCampaign: z.string().max(120).optional(),
+      })
+      .parse(input),
   )
   .handler(async ({ data }) => {
     const { data: product, error: pErr } = await supabaseAdmin
@@ -318,7 +329,10 @@ export const claimFreeProduct = createServerFn({ method: "POST" })
       .single();
     if (subErr) console.error("[claimFreeProduct] subscriber upsert", subErr);
 
-    void addToMailerLiteGroup(data.email, process.env.MAILERLITE_GROUP_ID_BUYERS, {
+    // A free claim is a lead, not a buyer — see src/lib/mailerlite-groups.ts.
+    const freeGroup = groupForTool("free-product");
+    assertGroupRouting("free-product", freeGroup.id);
+    await addToMailerLiteGroup(data.email, freeGroup.id, {
       first_name: data.fullName ?? null,
     });
 
@@ -345,13 +359,15 @@ export const myPurchases = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
     const { data, error } = await supabase
       .from("product_grants")
-      .select(`
+      .select(
+        `
         granted_at,
         revoked_at,
         product:products (
           id, slug, title, tagline, cover_image_url, download_path, garden
         )
-      `)
+      `,
+      )
       .eq("user_id", userId)
       .is("revoked_at", null)
       .order("granted_at", { ascending: false });
@@ -362,9 +378,7 @@ export const myPurchases = createServerFn({ method: "GET" })
 // Signed download URL for a signed-in user with a grant.
 export const getMyDownloadUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
-    z.object({ productSlug: z.string().min(1).max(120) }).parse(input),
-  )
+  .inputValidator((input) => z.object({ productSlug: z.string().min(1).max(120) }).parse(input))
   .handler(async ({ data, context }) => {
     const { userId } = context;
     const { data: product, error: pErr } = await supabaseAdmin
@@ -416,10 +430,16 @@ export const getKitFileUrl = createServerFn({ method: "POST" })
     if (!file) throw new Error("Unknown kit file.");
     const { userId } = context;
 
-    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", { _user_id: userId, _role: "admin" });
+    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
     let allowed = !!isAdmin;
     if (!allowed) {
-      const { data: kits } = await supabaseAdmin.from("products").select("id").in("slug", KIT_OWNER_SLUGS);
+      const { data: kits } = await supabaseAdmin
+        .from("products")
+        .select("id")
+        .in("slug", KIT_OWNER_SLUGS);
       const ids = (kits ?? []).map((k) => k.id);
       if (ids.length) {
         const { data: grant } = await supabaseAdmin
@@ -451,10 +471,7 @@ export const claimMyGrants = createServerFn({ method: "POST" })
     const email = (context.claims as { email?: string } | undefined)?.email?.toLowerCase();
     if (!email) return { linked: 0 };
 
-    const { data: subs } = await supabaseAdmin
-      .from("subscribers")
-      .select("id")
-      .eq("email", email);
+    const { data: subs } = await supabaseAdmin.from("subscribers").select("id").eq("email", email);
     const subIds = (subs ?? []).map((s) => s.id);
     if (!subIds.length) return { linked: 0 };
 

@@ -19,6 +19,7 @@ import {
 import { GARDENS, formatPrice, type Garden } from "@/lib/gardens";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, BookOpen, Mail, CheckCircle2, XCircle } from "lucide-react";
+import { storeProductUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_authenticated/admin/products")({
   head: () => ({ meta: [{ title: "Products — Admin" }] }),
@@ -166,7 +167,7 @@ function AdminProducts() {
       <section className="mx-auto max-w-7xl px-6 pt-16 pb-24">
         <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Admin</div>
         <div className="mt-4 flex items-end justify-between gap-6 flex-wrap">
-          <h1 className="font-display text-5xl">Products</h1>
+          <h1 className="font-display text-4xl sm:text-5xl">Products</h1>
           <Button
             onClick={() => setEditing(emptyProduct())}
             className="bg-banana text-banana-foreground hover:bg-banana/90"
@@ -249,13 +250,12 @@ function AdminProducts() {
               className="grid grid-cols-12 gap-2 border-b border-border/60 px-4 py-3 text-sm items-center min-w-[760px]"
             >
               <div className="col-span-3">
-                <Link
-                  to="/products/$slug"
-                  params={{ slug: p.slug }}
+                <a
+                  href={storeProductUrl(p.slug)}
                   className="hover:text-banana"
                 >
                   {p.title}
-                </Link>
+                </a>
                 <div className="font-mono text-[10px] text-muted-foreground">{p.slug}</div>
               </div>
               <div className="col-span-1 text-muted-foreground">

@@ -8,7 +8,7 @@ import { BookOpen, ArrowRight, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/learn/")({
-  head: () => ({ meta: [{ title: "My Courses — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "My Courses — Contentpreneur Africa" }] }),
   component: LearnIndex,
 });
 

@@ -103,7 +103,7 @@ function CurriculumAdmin() {
           ← Dashboard
         </Link>
         <div className="mt-6 font-mono text-xs tracking-[0.25em] uppercase text-banana">Admin · Curriculum</div>
-        <h1 className="mt-3 font-display text-5xl">{data.product.title}</h1>
+        <h1 className="mt-3 font-display text-4xl sm:text-5xl">{data.product.title}</h1>
 
         <div className="mt-10 flex gap-2 items-end">
           <div className="flex-1">

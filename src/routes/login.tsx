@@ -79,7 +79,12 @@ function LoginPage() {
                 </div>
                 <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="h-12" />
               </div>
-              <TurnstileGate onToken={setTsToken} className="pt-1" />
+              {/* "allow": nothing on the server ever verifies this token — Supabase
+                  owns authentication and its own rate limiting. So the widget here is
+                  decorative, and letting it disable the Sign in button bought zero
+                  protection while taking sign-in down completely when Cloudflare
+                  returned 110200 on this hostname (2026-08-19, live). */}
+              <TurnstileGate onToken={setTsToken} unavailablePolicy="allow" className="pt-1" />
               <Button type="submit" disabled={loading || !tsToken} className="cta-glow w-full h-12 font-bold">
                 {loading ? "Signing in…" : "Sign in →"}
               </Button>

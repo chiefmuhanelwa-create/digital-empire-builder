@@ -11,13 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TaxGuideRouteImport } from './routes/tax-guide'
+import { Route as TaxRouteImport } from './routes/tax'
 import { Route as StarterkitRouteImport } from './routes/starterkit'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SarsCalculatorRouteImport } from './routes/sars-calculator'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RentedRouteImport } from './routes/rented'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as RateCardRouteImport } from './routes/rate-card'
+import { Route as ProvisionalTaxRouteImport } from './routes/provisional-tax'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OfferBuilderRouteImport } from './routes/offer-builder'
 import { Route as NicheClarityRouteImport } from './routes/niche-clarity'
@@ -44,8 +48,10 @@ import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedLearnIndexRouteImport } from './routes/_authenticated/learn.index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as ApiPublicToolEventRouteImport } from './routes/api/public/tool-event'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApiPublicRateCardRouteImport } from './routes/api/public/rate-card'
+import { Route as ApiPublicProvisionalTaxRouteImport } from './routes/api/public/provisional-tax'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiPublicManychatLeadRouteImport } from './routes/api/public/manychat-lead'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
@@ -53,17 +59,24 @@ import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardInnerCircleRouteImport } from './routes/_authenticated/dashboard.inner-circle'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
 import { Route as AuthenticatedDashboardCommunityRouteImport } from './routes/_authenticated/dashboard.community'
+import { Route as AuthenticatedAppsTheSendRouteImport } from './routes/_authenticated/apps.the-send'
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
+import { Route as AuthenticatedAppsSaleScriptsRouteImport } from './routes/_authenticated/apps.sale-scripts'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
+import { Route as AuthenticatedAppsOfferBlueprintRouteImport } from './routes/_authenticated/apps.offer-blueprint'
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
 import { Route as AuthenticatedAppsMsTsSsRouteImport } from './routes/_authenticated/apps.ms-ts-ss'
+import { Route as AuthenticatedAppsMoneySplitRouteImport } from './routes/_authenticated/apps.money-split'
+import { Route as AuthenticatedAppsLeadMagnetRouteImport } from './routes/_authenticated/apps.lead-magnet'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
 import { Route as AuthenticatedAppsIncomeTrackerRouteImport } from './routes/_authenticated/apps.income-tracker'
 import { Route as AuthenticatedAppsFirstIncomePlannerRouteImport } from './routes/_authenticated/apps.first-income-planner'
+import { Route as AuthenticatedAppsFirstFiveEmailsRouteImport } from './routes/_authenticated/apps.first-five-emails'
 import { Route as AuthenticatedAppsDaresAssetModelRouteImport } from './routes/_authenticated/apps.dares-asset-model'
 import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
 import { Route as AuthenticatedApps4eContentCalendarRouteImport } from './routes/_authenticated/apps.4e-content-calendar'
+import { Route as AuthenticatedAdminToolsRouteImport } from './routes/_authenticated/admin.tools'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
@@ -86,6 +99,16 @@ const ToolsRoute = ToolsRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaxGuideRoute = TaxGuideRouteImport.update({
+  id: '/tax-guide',
+  path: '/tax-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaxRoute = TaxRouteImport.update({
+  id: '/tax',
+  path: '/tax',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StarterkitRoute = StarterkitRouteImport.update({
@@ -113,6 +136,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RentedRoute = RentedRouteImport.update({
+  id: '/rented',
+  path: '/rented',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
   id: '/refund-policy',
   path: '/refund-policy',
@@ -121,6 +149,11 @@ const RefundPolicyRoute = RefundPolicyRouteImport.update({
 const RateCardRoute = RateCardRouteImport.update({
   id: '/rate-card',
   path: '/rate-card',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProvisionalTaxRoute = ProvisionalTaxRouteImport.update({
+  id: '/provisional-tax',
+  path: '/provisional-tax',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -253,6 +286,11 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const ApiPublicToolEventRoute = ApiPublicToolEventRouteImport.update({
+  id: '/api/public/tool-event',
+  path: '/api/public/tool-event',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   id: '/api/public/stripe-webhook',
   path: '/api/public/stripe-webhook',
@@ -261,6 +299,11 @@ const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
 const ApiPublicRateCardRoute = ApiPublicRateCardRouteImport.update({
   id: '/api/public/rate-card',
   path: '/api/public/rate-card',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicProvisionalTaxRoute = ApiPublicProvisionalTaxRouteImport.update({
+  id: '/api/public/provisional-tax',
+  path: '/api/public/provisional-tax',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaystackWebhookRoute =
@@ -302,10 +345,22 @@ const AuthenticatedDashboardCommunityRoute =
     path: '/community',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedAppsTheSendRoute =
+  AuthenticatedAppsTheSendRouteImport.update({
+    id: '/apps/the-send',
+    path: '/apps/the-send',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsSeedsPipelineRoute =
   AuthenticatedAppsSeedsPipelineRouteImport.update({
     id: '/apps/seeds-pipeline',
     path: '/apps/seeds-pipeline',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsSaleScriptsRoute =
+  AuthenticatedAppsSaleScriptsRouteImport.update({
+    id: '/apps/sale-scripts',
+    path: '/apps/sale-scripts',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAppsRightSideDiagnosticRoute =
@@ -320,6 +375,12 @@ const AuthenticatedAppsPaidsAuditorRoute =
     path: '/apps/paids-auditor',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsOfferBlueprintRoute =
+  AuthenticatedAppsOfferBlueprintRouteImport.update({
+    id: '/apps/offer-blueprint',
+    path: '/apps/offer-blueprint',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsNicheClarityBuilderRoute =
   AuthenticatedAppsNicheClarityBuilderRouteImport.update({
     id: '/apps/niche-clarity-builder',
@@ -331,6 +392,18 @@ const AuthenticatedAppsMsTsSsRoute = AuthenticatedAppsMsTsSsRouteImport.update({
   path: '/apps/ms-ts-ss',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAppsMoneySplitRoute =
+  AuthenticatedAppsMoneySplitRouteImport.update({
+    id: '/apps/money-split',
+    path: '/apps/money-split',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsLeadMagnetRoute =
+  AuthenticatedAppsLeadMagnetRouteImport.update({
+    id: '/apps/lead-magnet',
+    path: '/apps/lead-magnet',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsKnowledgeAuditRoute =
   AuthenticatedAppsKnowledgeAuditRouteImport.update({
     id: '/apps/knowledge-audit',
@@ -347,6 +420,12 @@ const AuthenticatedAppsFirstIncomePlannerRoute =
   AuthenticatedAppsFirstIncomePlannerRouteImport.update({
     id: '/apps/first-income-planner',
     path: '/apps/first-income-planner',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsFirstFiveEmailsRoute =
+  AuthenticatedAppsFirstFiveEmailsRouteImport.update({
+    id: '/apps/first-five-emails',
+    path: '/apps/first-five-emails',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAppsDaresAssetModelRoute =
@@ -367,6 +446,11 @@ const AuthenticatedApps4eContentCalendarRoute =
     path: '/apps/4e-content-calendar',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminToolsRoute = AuthenticatedAdminToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminProductsRoute =
   AuthenticatedAdminProductsRouteImport.update({
     id: '/products',
@@ -459,13 +543,17 @@ export interface FileRoutesByFullPath {
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
+  '/provisional-tax': typeof ProvisionalTaxRoute
   '/rate-card': typeof RateCardRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/rented': typeof RentedRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/starterkit': typeof StarterkitRoute
+  '/tax': typeof TaxRoute
+  '/tax-guide': typeof TaxGuideRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -480,17 +568,24 @@ export interface FileRoutesByFullPath {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/admin/tools': typeof AuthenticatedAdminToolsRoute
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
+  '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
+  '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
+  '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
+  '/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
@@ -498,8 +593,10 @@ export interface FileRoutesByFullPath {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/provisional-tax': typeof ApiPublicProvisionalTaxRoute
   '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/tool-event': typeof ApiPublicToolEventRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/learn/': typeof AuthenticatedLearnIndexRoute
@@ -528,13 +625,17 @@ export interface FileRoutesByTo {
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
+  '/provisional-tax': typeof ProvisionalTaxRoute
   '/rate-card': typeof RateCardRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/rented': typeof RentedRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/starterkit': typeof StarterkitRoute
+  '/tax': typeof TaxRoute
+  '/tax-guide': typeof TaxGuideRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -546,25 +647,34 @@ export interface FileRoutesByTo {
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/admin/tools': typeof AuthenticatedAdminToolsRoute
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
+  '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
+  '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
+  '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
+  '/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/provisional-tax': typeof ApiPublicProvisionalTaxRoute
   '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/tool-event': typeof ApiPublicToolEventRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/learn': typeof AuthenticatedLearnIndexRoute
@@ -595,13 +705,17 @@ export interface FileRoutesById {
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
   '/privacy': typeof PrivacyRoute
+  '/provisional-tax': typeof ProvisionalTaxRoute
   '/rate-card': typeof RateCardRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/rented': typeof RentedRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sars-calculator': typeof SarsCalculatorRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/starterkit': typeof StarterkitRoute
+  '/tax': typeof TaxRoute
+  '/tax-guide': typeof TaxGuideRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -616,17 +730,24 @@ export interface FileRoutesById {
   '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
+  '/_authenticated/admin/tools': typeof AuthenticatedAdminToolsRoute
   '/_authenticated/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/_authenticated/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/_authenticated/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/_authenticated/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/_authenticated/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
+  '/_authenticated/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/_authenticated/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/_authenticated/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
+  '/_authenticated/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
+  '/_authenticated/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
+  '/_authenticated/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/_authenticated/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/_authenticated/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
@@ -634,8 +755,10 @@ export interface FileRoutesById {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/provisional-tax': typeof ApiPublicProvisionalTaxRoute
   '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/tool-event': typeof ApiPublicToolEventRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/learn/': typeof AuthenticatedLearnIndexRoute
@@ -666,13 +789,17 @@ export interface FileRouteTypes {
     | '/niche-clarity'
     | '/offer-builder'
     | '/privacy'
+    | '/provisional-tax'
     | '/rate-card'
     | '/refund-policy'
+    | '/rented'
     | '/reset-password'
     | '/sars-calculator'
     | '/search'
     | '/signup'
     | '/starterkit'
+    | '/tax'
+    | '/tax-guide'
     | '/terms'
     | '/tools'
     | '/account'
@@ -687,17 +814,24 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/admin/tools'
     | '/apps/4e-content-calendar'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
+    | '/apps/first-five-emails'
     | '/apps/first-income-planner'
     | '/apps/income-tracker'
     | '/apps/knowledge-audit'
+    | '/apps/lead-magnet'
+    | '/apps/money-split'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
+    | '/apps/offer-blueprint'
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
+    | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
+    | '/apps/the-send'
     | '/dashboard/community'
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
@@ -705,8 +839,10 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/provisional-tax'
     | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
+    | '/api/public/tool-event'
     | '/admin/'
     | '/dashboard/'
     | '/learn/'
@@ -735,13 +871,17 @@ export interface FileRouteTypes {
     | '/niche-clarity'
     | '/offer-builder'
     | '/privacy'
+    | '/provisional-tax'
     | '/rate-card'
     | '/refund-policy'
+    | '/rented'
     | '/reset-password'
     | '/sars-calculator'
     | '/search'
     | '/signup'
     | '/starterkit'
+    | '/tax'
+    | '/tax-guide'
     | '/terms'
     | '/tools'
     | '/account'
@@ -753,25 +893,34 @@ export interface FileRouteTypes {
     | '/admin/incidents'
     | '/admin/ledger'
     | '/admin/products'
+    | '/admin/tools'
     | '/apps/4e-content-calendar'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
+    | '/apps/first-five-emails'
     | '/apps/first-income-planner'
     | '/apps/income-tracker'
     | '/apps/knowledge-audit'
+    | '/apps/lead-magnet'
+    | '/apps/money-split'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
+    | '/apps/offer-blueprint'
     | '/apps/paids-auditor'
     | '/apps/right-side-diagnostic'
+    | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
+    | '/apps/the-send'
     | '/dashboard/community'
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/provisional-tax'
     | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
+    | '/api/public/tool-event'
     | '/admin'
     | '/dashboard'
     | '/learn'
@@ -801,13 +950,17 @@ export interface FileRouteTypes {
     | '/niche-clarity'
     | '/offer-builder'
     | '/privacy'
+    | '/provisional-tax'
     | '/rate-card'
     | '/refund-policy'
+    | '/rented'
     | '/reset-password'
     | '/sars-calculator'
     | '/search'
     | '/signup'
     | '/starterkit'
+    | '/tax'
+    | '/tax-guide'
     | '/terms'
     | '/tools'
     | '/_authenticated/account'
@@ -822,17 +975,24 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/incidents'
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
+    | '/_authenticated/admin/tools'
     | '/_authenticated/apps/4e-content-calendar'
     | '/_authenticated/apps/consistency-blueprint'
     | '/_authenticated/apps/dares-asset-model'
+    | '/_authenticated/apps/first-five-emails'
     | '/_authenticated/apps/first-income-planner'
     | '/_authenticated/apps/income-tracker'
     | '/_authenticated/apps/knowledge-audit'
+    | '/_authenticated/apps/lead-magnet'
+    | '/_authenticated/apps/money-split'
     | '/_authenticated/apps/ms-ts-ss'
     | '/_authenticated/apps/niche-clarity-builder'
+    | '/_authenticated/apps/offer-blueprint'
     | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/apps/right-side-diagnostic'
+    | '/_authenticated/apps/sale-scripts'
     | '/_authenticated/apps/seeds-pipeline'
+    | '/_authenticated/apps/the-send'
     | '/_authenticated/dashboard/community'
     | '/_authenticated/dashboard/foundation-kit'
     | '/_authenticated/dashboard/inner-circle'
@@ -840,8 +1000,10 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/provisional-tax'
     | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
+    | '/api/public/tool-event'
     | '/_authenticated/admin/'
     | '/_authenticated/dashboard/'
     | '/_authenticated/learn/'
@@ -872,13 +1034,17 @@ export interface RootRouteChildren {
   NicheClarityRoute: typeof NicheClarityRoute
   OfferBuilderRoute: typeof OfferBuilderRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProvisionalTaxRoute: typeof ProvisionalTaxRoute
   RateCardRoute: typeof RateCardRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  RentedRoute: typeof RentedRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SarsCalculatorRoute: typeof SarsCalculatorRoute
   SearchRoute: typeof SearchRoute
   SignupRoute: typeof SignupRoute
   StarterkitRoute: typeof StarterkitRoute
+  TaxRoute: typeof TaxRoute
+  TaxGuideRoute: typeof TaxGuideRoute
   TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
@@ -887,8 +1053,10 @@ export interface RootRouteChildren {
   ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
   ApiPublicManychatLeadRoute: typeof ApiPublicManychatLeadRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ApiPublicProvisionalTaxRoute: typeof ApiPublicProvisionalTaxRoute
   ApiPublicRateCardRoute: typeof ApiPublicRateCardRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
+  ApiPublicToolEventRoute: typeof ApiPublicToolEventRoute
   ApiEmailAuthPreviewRoute: typeof ApiEmailAuthPreviewRoute
   ApiEmailAuthWebhookRoute: typeof ApiEmailAuthWebhookRoute
   ApiEmailQueueProcessRoute: typeof ApiEmailQueueProcessRoute
@@ -908,6 +1076,20 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tax-guide': {
+      id: '/tax-guide'
+      path: '/tax-guide'
+      fullPath: '/tax-guide'
+      preLoaderRoute: typeof TaxGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tax': {
+      id: '/tax'
+      path: '/tax'
+      fullPath: '/tax'
+      preLoaderRoute: typeof TaxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/starterkit': {
@@ -945,6 +1127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rented': {
+      id: '/rented'
+      path: '/rented'
+      fullPath: '/rented'
+      preLoaderRoute: typeof RentedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/refund-policy': {
       id: '/refund-policy'
       path: '/refund-policy'
@@ -957,6 +1146,13 @@ declare module '@tanstack/react-router' {
       path: '/rate-card'
       fullPath: '/rate-card'
       preLoaderRoute: typeof RateCardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/provisional-tax': {
+      id: '/provisional-tax'
+      path: '/provisional-tax'
+      fullPath: '/provisional-tax'
+      preLoaderRoute: typeof ProvisionalTaxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -1141,6 +1337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/api/public/tool-event': {
+      id: '/api/public/tool-event'
+      path: '/api/public/tool-event'
+      fullPath: '/api/public/tool-event'
+      preLoaderRoute: typeof ApiPublicToolEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/stripe-webhook': {
       id: '/api/public/stripe-webhook'
       path: '/api/public/stripe-webhook'
@@ -1153,6 +1356,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/rate-card'
       fullPath: '/api/public/rate-card'
       preLoaderRoute: typeof ApiPublicRateCardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/provisional-tax': {
+      id: '/api/public/provisional-tax'
+      path: '/api/public/provisional-tax'
+      fullPath: '/api/public/provisional-tax'
+      preLoaderRoute: typeof ApiPublicProvisionalTaxRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/paystack-webhook': {
@@ -1204,11 +1414,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardCommunityRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/apps/the-send': {
+      id: '/_authenticated/apps/the-send'
+      path: '/apps/the-send'
+      fullPath: '/apps/the-send'
+      preLoaderRoute: typeof AuthenticatedAppsTheSendRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/seeds-pipeline': {
       id: '/_authenticated/apps/seeds-pipeline'
       path: '/apps/seeds-pipeline'
       fullPath: '/apps/seeds-pipeline'
       preLoaderRoute: typeof AuthenticatedAppsSeedsPipelineRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/sale-scripts': {
+      id: '/_authenticated/apps/sale-scripts'
+      path: '/apps/sale-scripts'
+      fullPath: '/apps/sale-scripts'
+      preLoaderRoute: typeof AuthenticatedAppsSaleScriptsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/apps/right-side-diagnostic': {
@@ -1225,6 +1449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsPaidsAuditorRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/offer-blueprint': {
+      id: '/_authenticated/apps/offer-blueprint'
+      path: '/apps/offer-blueprint'
+      fullPath: '/apps/offer-blueprint'
+      preLoaderRoute: typeof AuthenticatedAppsOfferBlueprintRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/niche-clarity-builder': {
       id: '/_authenticated/apps/niche-clarity-builder'
       path: '/apps/niche-clarity-builder'
@@ -1237,6 +1468,20 @@ declare module '@tanstack/react-router' {
       path: '/apps/ms-ts-ss'
       fullPath: '/apps/ms-ts-ss'
       preLoaderRoute: typeof AuthenticatedAppsMsTsSsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/money-split': {
+      id: '/_authenticated/apps/money-split'
+      path: '/apps/money-split'
+      fullPath: '/apps/money-split'
+      preLoaderRoute: typeof AuthenticatedAppsMoneySplitRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/lead-magnet': {
+      id: '/_authenticated/apps/lead-magnet'
+      path: '/apps/lead-magnet'
+      fullPath: '/apps/lead-magnet'
+      preLoaderRoute: typeof AuthenticatedAppsLeadMagnetRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/apps/knowledge-audit': {
@@ -1260,6 +1505,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsFirstIncomePlannerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/first-five-emails': {
+      id: '/_authenticated/apps/first-five-emails'
+      path: '/apps/first-five-emails'
+      fullPath: '/apps/first-five-emails'
+      preLoaderRoute: typeof AuthenticatedAppsFirstFiveEmailsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/dares-asset-model': {
       id: '/_authenticated/apps/dares-asset-model'
       path: '/apps/dares-asset-model'
@@ -1280,6 +1532,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/apps/4e-content-calendar'
       preLoaderRoute: typeof AuthenticatedApps4eContentCalendarRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/tools': {
+      id: '/_authenticated/admin/tools'
+      path: '/tools'
+      fullPath: '/admin/tools'
+      preLoaderRoute: typeof AuthenticatedAdminToolsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/products': {
       id: '/_authenticated/admin/products'
@@ -1381,6 +1640,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminIncidentsRoute: typeof AuthenticatedAdminIncidentsRoute
   AuthenticatedAdminLedgerRoute: typeof AuthenticatedAdminLedgerRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
+  AuthenticatedAdminToolsRoute: typeof AuthenticatedAdminToolsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminCurriculumProductSlugRoute: typeof AuthenticatedAdminCurriculumProductSlugRoute
 }
@@ -1391,6 +1651,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminIncidentsRoute: AuthenticatedAdminIncidentsRoute,
   AuthenticatedAdminLedgerRoute: AuthenticatedAdminLedgerRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
+  AuthenticatedAdminToolsRoute: AuthenticatedAdminToolsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminCurriculumProductSlugRoute:
     AuthenticatedAdminCurriculumProductSlugRoute,
@@ -1465,14 +1726,20 @@ interface AuthenticatedRouteChildren {
   AuthenticatedApps4eContentCalendarRoute: typeof AuthenticatedApps4eContentCalendarRoute
   AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
   AuthenticatedAppsDaresAssetModelRoute: typeof AuthenticatedAppsDaresAssetModelRoute
+  AuthenticatedAppsFirstFiveEmailsRoute: typeof AuthenticatedAppsFirstFiveEmailsRoute
   AuthenticatedAppsFirstIncomePlannerRoute: typeof AuthenticatedAppsFirstIncomePlannerRoute
   AuthenticatedAppsIncomeTrackerRoute: typeof AuthenticatedAppsIncomeTrackerRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
+  AuthenticatedAppsLeadMagnetRoute: typeof AuthenticatedAppsLeadMagnetRoute
+  AuthenticatedAppsMoneySplitRoute: typeof AuthenticatedAppsMoneySplitRoute
   AuthenticatedAppsMsTsSsRoute: typeof AuthenticatedAppsMsTsSsRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
+  AuthenticatedAppsOfferBlueprintRoute: typeof AuthenticatedAppsOfferBlueprintRoute
   AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
   AuthenticatedAppsRightSideDiagnosticRoute: typeof AuthenticatedAppsRightSideDiagnosticRoute
+  AuthenticatedAppsSaleScriptsRoute: typeof AuthenticatedAppsSaleScriptsRoute
   AuthenticatedAppsSeedsPipelineRoute: typeof AuthenticatedAppsSeedsPipelineRoute
+  AuthenticatedAppsTheSendRoute: typeof AuthenticatedAppsTheSendRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -1485,17 +1752,23 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsConsistencyBlueprintRoute:
     AuthenticatedAppsConsistencyBlueprintRoute,
   AuthenticatedAppsDaresAssetModelRoute: AuthenticatedAppsDaresAssetModelRoute,
+  AuthenticatedAppsFirstFiveEmailsRoute: AuthenticatedAppsFirstFiveEmailsRoute,
   AuthenticatedAppsFirstIncomePlannerRoute:
     AuthenticatedAppsFirstIncomePlannerRoute,
   AuthenticatedAppsIncomeTrackerRoute: AuthenticatedAppsIncomeTrackerRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
+  AuthenticatedAppsLeadMagnetRoute: AuthenticatedAppsLeadMagnetRoute,
+  AuthenticatedAppsMoneySplitRoute: AuthenticatedAppsMoneySplitRoute,
   AuthenticatedAppsMsTsSsRoute: AuthenticatedAppsMsTsSsRoute,
   AuthenticatedAppsNicheClarityBuilderRoute:
     AuthenticatedAppsNicheClarityBuilderRoute,
+  AuthenticatedAppsOfferBlueprintRoute: AuthenticatedAppsOfferBlueprintRoute,
   AuthenticatedAppsPaidsAuditorRoute: AuthenticatedAppsPaidsAuditorRoute,
   AuthenticatedAppsRightSideDiagnosticRoute:
     AuthenticatedAppsRightSideDiagnosticRoute,
+  AuthenticatedAppsSaleScriptsRoute: AuthenticatedAppsSaleScriptsRoute,
   AuthenticatedAppsSeedsPipelineRoute: AuthenticatedAppsSeedsPipelineRoute,
+  AuthenticatedAppsTheSendRoute: AuthenticatedAppsTheSendRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -1519,13 +1792,17 @@ const rootRouteChildren: RootRouteChildren = {
   NicheClarityRoute: NicheClarityRoute,
   OfferBuilderRoute: OfferBuilderRoute,
   PrivacyRoute: PrivacyRoute,
+  ProvisionalTaxRoute: ProvisionalTaxRoute,
   RateCardRoute: RateCardRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  RentedRoute: RentedRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SarsCalculatorRoute: SarsCalculatorRoute,
   SearchRoute: SearchRoute,
   SignupRoute: SignupRoute,
   StarterkitRoute: StarterkitRoute,
+  TaxRoute: TaxRoute,
+  TaxGuideRoute: TaxGuideRoute,
   TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
@@ -1534,8 +1811,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCronSyncFxRoute: ApiCronSyncFxRoute,
   ApiPublicManychatLeadRoute: ApiPublicManychatLeadRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ApiPublicProvisionalTaxRoute: ApiPublicProvisionalTaxRoute,
   ApiPublicRateCardRoute: ApiPublicRateCardRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
+  ApiPublicToolEventRoute: ApiPublicToolEventRoute,
   ApiEmailAuthPreviewRoute: ApiEmailAuthPreviewRoute,
   ApiEmailAuthWebhookRoute: ApiEmailAuthWebhookRoute,
   ApiEmailQueueProcessRoute: ApiEmailQueueProcessRoute,

@@ -48,8 +48,8 @@ export const RateCardResultEmail = ({
         </Heading>
         <Text style={emailStyles.text}>
           Your rate card is attached. Forward the PDF straight to any brand you're pitching — your
-          rate is built on real South African CPM benchmarks{platform ? ` for ${platform}` : ""}.
-          When they push back on your price, that document is your evidence.
+          rate is built on real African CPM benchmarks{platform ? ` for ${platform}` : ""}. When
+          they push back on your price, that document is your evidence.
         </Text>
         {brand ? (
           <Text style={{ fontSize: "13px", color: SLATE_500, margin: "0 0 16px" }}>

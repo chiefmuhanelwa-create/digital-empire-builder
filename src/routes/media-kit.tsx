@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { emailMediaKit } from "@/lib/media-kit.functions";
 import { getUtm } from "@/lib/utm";
+import { useToolView } from "@/lib/tool-analytics";
 
 export const Route = createFileRoute("/media-kit")({
   head: () => ({
@@ -67,6 +68,7 @@ const TA =
   "w-full min-h-[72px] border border-[#d0c8bc] bg-white rounded-md px-3 py-2 text-sm text-[#0F172A] focus:border-[#F59E0B] focus:outline-none focus:ring-0 resize-y";
 
 function MediaKitPage() {
+  useToolView("media-kit");
   const [k, setK] = useState<Kit>(INITIAL);
   const [recipientEmail, setRecipientEmail] = useState("");
   const [sent, setSent] = useState(false);

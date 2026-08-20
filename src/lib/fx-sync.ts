@@ -50,6 +50,22 @@ export type FxSyncResult = {
 };
 
 export async function syncFxRates(): Promise<FxSyncResult> {
+  // DISABLED BY DEFAULT (2026-08-14). This job rewrites price_cents on ~34
+  // products every time it runs, so prices drifted daily with the rand and a
+  // creator could see a different number today than yesterday. The cron trigger
+  // is gone from wrangler.jsonc, and this guard means the manual endpoint
+  // (POST /api/cron/sync-fx) cannot silently restart it either.
+  //
+  // To deliberately re-enable: set FX_SYNC_ENABLED=true as a Worker secret.
+  // Understand before you do that prices WILL move on their own again.
+  if (process.env.FX_SYNC_ENABLED !== "true") {
+    return {
+      ok: false,
+      error:
+        "FX sync is disabled: prices are fixed and only change when a human changes them. Set FX_SYNC_ENABLED=true to re-enable.",
+    };
+  }
+
   const rate = await fetchUsdZarRate();
   if (rate == null) return { ok: false, error: "Could not fetch a live USD→ZAR rate." };
 

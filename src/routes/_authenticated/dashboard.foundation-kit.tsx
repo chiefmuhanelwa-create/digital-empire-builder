@@ -14,9 +14,13 @@ import { Lock, ArrowRight, Check, Download, PlayCircle, Sparkles } from "lucide-
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")({
-  head: () => ({ meta: [{ title: "Your Clarity System — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Your Clarity System — Contentpreneur Africa" }] }),
   component: ClaritySystem,
 });
+
+// The course seeded against the kit product — /learn keys courses by PRODUCT slug,
+// so this is the kit's own slug, not a separate course id.
+const KIT_COURSE_SLUG = "called-expert-foundation-kit";
 
 // PDFs that exist in storage. (All 7 workbooks generated + uploaded in Phase 3.)
 const AVAILABLE_PDFS = new Set([
@@ -74,7 +78,7 @@ function ClaritySystem() {
             <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
             <h2 className="mt-4 text-2xl">Your Clarity System is for kit owners.</h2>
             <p className="nx-body max-w-md mx-auto mt-2">7 guided steps — watch, do the tool, take the next action — from confused to a clear plan.</p>
-            <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+            <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
           </div>
         </main>
       </Shell>
@@ -110,6 +114,52 @@ function ClaritySystem() {
           </p>
         </div>
 
+        {/* THE SPINE. Deliberately above the 7 steps, because it is what the
+            other tools read from — the rate card is titled with their buyer, the
+            invoice line item is their output, Day 7 of the calendar names their
+            offer. Answered once here, the rest of the kit stops asking. */}
+        <Link
+          to="/apps/offer-blueprint"
+          className="block rounded-2xl bg-[var(--obsidian)] p-5 sm:p-6 text-white group"
+        >
+          <div className="flex items-start gap-4">
+            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--nx-gold)]">
+              <Sparkles className="size-5 text-[var(--foreground)]" />
+            </span>
+            <div className="flex-1 min-w-0">
+              <span className="nx-label block text-[var(--nx-gold-bright)]">Start here · the spine</span>
+              <span className="font-display text-xl block mt-0.5">The Offer Blueprint</span>
+              <span className="text-sm text-[#C8C2B4] block mt-1">
+                What is the one thing somebody can buy from you this month? One honest hour here and
+                your rate card, your invoice, your content calendar and your emails fill themselves in.
+              </span>
+            </div>
+            <ArrowRight className="size-5 shrink-0 text-[#9A9488] group-hover:text-white transition-colors" />
+          </div>
+        </Link>
+
+        {/* The 10-video course ships with the kit but lived only under /learn —
+            a buyer who never opened the courses tab never knew they owned it. */}
+        <Link
+          to="/learn/$slug"
+          params={{ slug: KIT_COURSE_SLUG }}
+          className="nx-card !p-5 flex items-center gap-4 group"
+        >
+          <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--obsidian)]">
+            <PlayCircle className="size-5 text-[var(--nx-gold-bright)]" />
+          </span>
+          <span className="flex-1 min-w-0">
+            <span className="nx-label block">Included with your kit</span>
+            <span className="font-display text-lg block group-hover:text-[var(--nx-gold-text)] transition-colors">
+              Introduction to Personal Branding
+            </span>
+            <span className="text-sm text-[var(--text-dim)] block">
+              10 short videos — what a personal brand is, through to building your first online asset.
+            </span>
+          </span>
+          <ArrowRight className="size-5 shrink-0 text-[var(--text-subtle)] group-hover:text-[var(--nx-gold-text)] transition-colors" />
+        </Link>
+
         {CLARITY_STEPS.map((step) => {
           const done = !!progress[step.n];
           const isNext = step.n === next;
@@ -117,7 +167,7 @@ function ClaritySystem() {
             <div key={step.n} className={`rounded-2xl border bg-white overflow-hidden ${isNext ? "border-[var(--nx-gold)] ring-2 ring-[var(--nx-gold)]/20" : "border-[var(--border)]"}`}>
               <div className="p-5 sm:p-6">
                 <div className="flex items-start gap-4">
-                  <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-display text-lg ${done ? "bg-[#15803D] text-white" : "bg-[#0F172A] text-[var(--nx-gold-bright)]"}`}>
+                  <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-display text-lg ${done ? "bg-[#15803D] text-white" : "bg-[var(--obsidian)] text-[var(--nx-gold-bright)]"}`}>
                     {done ? <Check className="size-5" /> : step.n}
                   </span>
                   <div className="flex-1 min-w-0">
@@ -152,7 +202,7 @@ function ClaritySystem() {
                       {t.soon ? (
                         <span className="inline-block rounded-full bg-[var(--bg-card-hi)] px-3 py-1.5 text-xs font-semibold text-[var(--text-subtle)]">{t.name} · coming soon</span>
                       ) : t.route ? (
-                        <a href={t.route} className="inline-flex items-center gap-1.5 rounded-full bg-[#0F172A] text-white px-4 py-2 text-sm font-semibold hover:bg-[#1E293B] transition-colors">
+                        <a href={t.route} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--obsidian)] text-white px-4 py-2 text-sm font-semibold hover:bg-[#2A2A2A] transition-colors">
                           {t.name} <ArrowRight className="size-4" />
                         </a>
                       ) : null}
@@ -182,23 +232,23 @@ function ClaritySystem() {
         })}
 
         {/* Your Clarity Plan / finish */}
-        <div className="rounded-2xl bg-[#0F172A] p-6 sm:p-8 text-center">
+        <div className="rounded-2xl bg-[var(--obsidian)] p-6 sm:p-8 text-center">
           {allDone ? (
             <>
               <Sparkles className="size-7 text-[var(--nx-gold-bright)] mx-auto" />
               <h2 className="text-white text-2xl mt-3">You've got your clarity. Now execute it.</h2>
-              <p className="text-slate-300 max-w-lg mx-auto mt-2 mb-5">All 7 steps done — you have a plan. The 90-Day Accelerator walks you through doing it, with coaching at every stage.</p>
+              <p className="text-[#C8C2B4] max-w-lg mx-auto mt-2 mb-5">All 7 steps done — you have a plan. The 90-Day Accelerator walks you through doing it, with coaching at every stage.</p>
             </>
           ) : (
             <>
               <PlayCircle className="size-7 text-[var(--nx-gold-bright)] mx-auto" />
               <h2 className="text-white text-2xl mt-3">{next <= CLARITY_TOTAL ? `Up next — Step ${next}` : "Keep going"}</h2>
-              <p className="text-slate-300 max-w-lg mx-auto mt-2 mb-5">{next <= CLARITY_TOTAL ? CLARITY_STEPS[next - 1].nextAction : "Finish your remaining steps to unlock your full plan."}</p>
+              <p className="text-[#C8C2B4] max-w-lg mx-auto mt-2 mb-5">{next <= CLARITY_TOTAL ? CLARITY_STEPS[next - 1].nextAction : "Finish your remaining steps to unlock your full plan."}</p>
             </>
           )}
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button onClick={runPlan} disabled={planMut.isPending}
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--nx-gold)] px-5 py-3 text-sm font-bold text-[#0F172A] hover:bg-[var(--nx-gold-deep)] transition-colors disabled:opacity-50">
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--nx-gold)] px-5 py-3 text-sm font-bold text-[var(--foreground)] hover:bg-[var(--nx-gold-deep)] transition-colors disabled:opacity-50">
               <Sparkles className="size-4" /> {planMut.isPending ? "Building your plan…" : planMut.data ? "Rebuild my Clarity Plan" : "Build my Clarity Plan"}
             </button>
             <Link to="/apply" className="inline-flex items-center rounded-full border border-white/25 px-5 py-3 text-sm font-semibold text-white hover:border-white/60 transition-colors">Apply for the Accelerator</Link>
@@ -220,6 +270,63 @@ function ClaritySystem() {
             <div className="mt-4 text-[15px] text-[var(--text-body)] leading-relaxed whitespace-pre-line">{planMut.data.plan}</div>
           </div>
         )}
+
+        {/* The build-out tools. These sit between the spine and the send: the
+            magnet fills the tank, the emails work it, the scripts handle what
+            comes back. Each one reads the offer written in Tool 01 — none of
+            them asks for it again. */}
+        <div>
+          <h2 className="text-xl mb-1">Build it out</h2>
+          <p className="nx-body mb-4">
+            Each of these is written from the offer you already wrote. Nothing asks you twice.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {[
+              { to: "/apps/lead-magnet" as const, n: "04", t: "River, Fish, Tank",
+                d: "Build the one thing that moves people off a platform you rent onto a list you own." },
+              { to: "/apps/first-five-emails" as const, n: "06", t: "The First Five Emails",
+                d: "What to send once they are in the tank — deliver, teach, prove, ask." },
+              { to: "/apps/sale-scripts" as const, n: "07", t: "The First Sale Scripts",
+                d: "The four things you will hear back, and exactly what to say to each." },
+              { to: "/apps/money-split" as const, n: "08", t: "The Money Split",
+                d: "The 35% Rule, and what makes an invoice one a finance department can actually pay." },
+            ].map((x) => (
+              <Link key={x.to} to={x.to} className="nx-card !p-5 flex flex-col group">
+                <span className="nx-label">Tool {x.n}</span>
+                <span className="font-display text-lg mt-0.5 group-hover:text-[var(--nx-gold-text)] transition-colors">
+                  {x.t}
+                </span>
+                <span className="text-sm text-[var(--text-dim)] mt-1 flex-1">{x.d}</span>
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[var(--nx-gold-text)]">
+                  Open <ArrowRight className="size-3.5" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* The closer. Everything above is apparatus — this is the only tool in
+            the kit that produces money, and it is the step people skip. */}
+        <Link
+          to="/apps/the-send"
+          className="block rounded-2xl border-2 border-[var(--nx-gold)] bg-[var(--bg-surface)] p-5 sm:p-6 group"
+        >
+          <div className="flex items-start gap-4">
+            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--obsidian)]">
+              <ArrowRight className="size-5 text-[var(--nx-gold-bright)]" />
+            </span>
+            <div className="flex-1 min-w-0">
+              <span className="nx-label block">Tool 10 · last</span>
+              <span className="font-display text-xl block mt-0.5 group-hover:text-[var(--nx-gold-text)] transition-colors">
+                The Send
+              </span>
+              <span className="text-sm text-[var(--text-dim)] block mt-1">
+                Have you actually told anybody? One person, one channel, one date. Nothing in this
+                kit counts until this is done.
+              </span>
+            </div>
+          </div>
+        </Link>
 
         {/* Bonuses */}
         <div>

@@ -12,9 +12,10 @@ import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
 import { CLARITY_STEPS, CLARITY_TOTAL, readClarityProgress, nextClarityStep } from "@/lib/clarity-system";
 import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles, Compass, Users } from "lucide-react";
 import { toast } from "sonner";
+import { storeProductUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
-  head: () => ({ meta: [{ title: "Dashboard — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — Contentpreneur Africa" }] }),
   component: Dashboard,
 });
 
@@ -101,7 +102,7 @@ function Dashboard() {
 
         {/* Continue your Clarity System — the primary next action */}
         {hasKit && (
-          <Link to="/dashboard/foundation-kit" className="block rounded-2xl bg-[#0F172A] p-5 sm:p-7 group">
+          <Link to="/dashboard/foundation-kit" className="block rounded-2xl bg-[var(--obsidian)] p-5 sm:p-7 group">
             <div className="flex items-center gap-4">
               <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[var(--nx-gold-bright)]"><Compass className="size-6" /></span>
               <div className="flex-1 min-w-0">
@@ -109,16 +110,16 @@ function Dashboard() {
                 {clarity.next <= CLARITY_TOTAL ? (
                   <>
                     <div className="font-display text-xl text-white mt-0.5">Continue — Step {clarity.next}: {CLARITY_STEPS[clarity.next - 1].title}</div>
-                    <p className="text-sm text-slate-300">{CLARITY_STEPS[clarity.next - 1].nextAction}</p>
+                    <p className="text-sm text-[#C8C2B4]">{CLARITY_STEPS[clarity.next - 1].nextAction}</p>
                   </>
                 ) : (
                   <>
                     <div className="font-display text-xl text-white mt-0.5">All 7 steps done — you have your plan.</div>
-                    <p className="text-sm text-slate-300">Open your kit to review your Clarity Plan, then apply for the Accelerator to execute it.</p>
+                    <p className="text-sm text-[#C8C2B4]">Open your kit to review your Clarity Plan, then apply for the Accelerator to execute it.</p>
                   </>
                 )}
               </div>
-              <ArrowRight className="size-5 text-slate-400 group-hover:text-white transition-colors shrink-0" />
+              <ArrowRight className="size-5 text-[#9A9488] group-hover:text-white transition-colors shrink-0" />
             </div>
           </Link>
         )}
@@ -192,11 +193,11 @@ function Dashboard() {
             <p className="text-sm text-muted-foreground mb-5">The next steps that build on what you already have.</p>
             <div className="grid sm:grid-cols-3 gap-4">
               {recommended.map((p) => (
-                <Link key={p.slug} to="/products/$slug" params={{ slug: p.slug }} className="nx-card !p-5 flex flex-col group">
+                <a key={p.slug} href={storeProductUrl(p.slug)} className="nx-card !p-5 flex flex-col group">
                   <div className="font-display text-lg group-hover:text-banana transition-colors">{p.title}</div>
                   {p.tagline && <p className="text-sm text-muted-foreground mt-1 flex-1">{p.tagline}</p>}
                   <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[var(--nx-gold-text)]">See details <ArrowRight className="size-4" /></span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>

@@ -4,6 +4,747 @@ The living record of what was discovered, what broke, what was corrected, and wh
 
 ---
 
+## 2026-08-19 — full front/back audit of both domains
+
+No headless browser available (Playwright dropped macOS 13), so this was static analysis
++ live HTTP + provider APIs rather than clicking. Stated plainly rather than implied.
+
+**Clean:** zero dead buttons (both candidates were false positives — `GoldButton` spreads
+`{...props}`); one dead internal link only; **zero** links that 404 on the domain serving
+them (the class that broke the `/apply` downsell is now absent); every public route 200 on
+both hosts, with the only non-200s being intended 301/307s; both webhooks reject an
+unsigned POST with 401; **no secrets in any client bundle** — the single `MAILERLITE_API`
+hit is the literal string in an admin error message, not a value.
+
+**Stripe webhook is correct** (`checkout.session.completed` + `charge.refunded`, exactly
+what the handler switches on) — but **two other systems subscribe to the same Stripe
+account** on the same event: a different Supabase project
+(`piwrkzczjgsdofmqwbxq`, not this one) and `contentpreneurhub.online`. Every CHKPLT
+Stripe sale therefore also fires into two unrelated apps.
+
+**The find worth the whole audit — subscriptions are billed at prices nobody displays.**
+`gardens.ts` carried a note saying the Inner Circle's real price "isn't visible from
+code… needs a founder decision, not a guess." It is visible: `GET /plan` on Paystack
+returns it.
+
+| product | Paystack actually bills | ≈USD | displayed | DB row |
+|---|---|---|---|---|
+| Inner Circle (`PLN_4oafnq18t7e36gl`) | **R540.00/mo** | $32 | **$39** own page, **$29** dashboard | R467.89 |
+| Community (`PLN_wl68lf4ll6evdnz`) | **R199.00/mo** | $12 | **$19/mo** | — |
+
+Three numbers for one product, none of which is what the card is charged. A subscriber
+clicks a $29 link and lands on a $39 page and is then billed ~$32. The DB row is R72/mo
+adrift from the plan that actually takes the money.
+
+**The lesson: "not derivable from code" is a claim to test, not inherit.** That comment
+had been carried forward as settled for weeks. One authenticated GET dissolved it. Any
+time a note says a fact is unobtainable, check whether the provider simply has an
+endpoint for it.
+
+Also: two duplicate `Hooks Generator Unlimited` plans (R49) exist on Paystack.
+
+---
+
+## 2026-08-19 — DEPLOYED: USD pricing + $97/$997/$2,997 ladder (version `92396643-345c-49ff-bf75-85240ca8b84c`)
+
+Migration run by the founder, then deployed. **Verified the migration had actually
+landed before shipping the code that depends on it** — a REST query confirmed
+`contentpreneur-90day-cohort` at `price_cents: 1608161` — rather than trusting "deploy"
+to mean it had been run. Getting that order wrong in either direction is a real money
+bug: code-only means the page says $997 while Paystack charges R8,051; migration-only
+means the page says $499 while the card is charged R16,081.
+
+Post-deploy checks: `99700` and `299700` present in the shipped bundles,
+`paids-framework-workbook: 5400` and `sars-creator-income: 2400` present,
+`CurrencySwitcher` absent from every bundle, all pages 200.
+
+**`contentpreneur-vip-tier` could not be verified via anon REST** — it is `draft`, and
+RLS filters anon reads to published rows only. Not a failure, just genuinely unverifiable
+from this side; the earlier products query returning 23 rows all `published` is what
+established that RLS shape. Confirm it in the SQL editor if it matters before publishing.
+
+---
+
+## 2026-08-19 — chkplt.com now prices entirely in USD; rands only at the Paystack gate
+
+Founder ruling: every product displays USD, rands appear only at the conversion gate
+(Paystack checkout). `formatPrice` already returns USD for all products after the ladder
+reprice; this pass removed what still leaked rands.
+
+**Killed the "ZAR ▼" currency switcher** (`site-header.tsx`). It had quietly become the
+worst kind of control: since `formatPrice` no longer varies by geo, picking "ZAR"
+changed **no price on the page** — but it *did* still set country to "ZA" and therefore
+reroute the buyer from Stripe to Paystack. **A control that appears to change the display
+but actually changes the payment processor is worse than no control.** Geo still picks
+the rail; the buyer is simply no longer asked.
+
+**Two rand leaks and two stale copy figures:**
+- `tax-guide.tsx` advertised "R199 value" on a USD store → `$12 value`
+- `niche-clarity.tsx` main price called `formatPrice` **without the slug** — the same
+  defect that made `/foundation` render "$94". Its meta also claimed "$16" while R199
+  actually converts to $12, so the page title and the price on the page disagreed.
+  Both fixed.
+- `apply.tsx` still referenced "the R18,000 programme" in a comment → `$997`
+
+**Known and deliberate, worth not mistaking for a bug later:** 7 published products are
+absent from `USD_DISPLAY` (`paids-framework-workbook`, `30-day-content-calendar`,
+`african-creator-growth`, `niche-clarity-workbook`, `monetise-your-expertise`,
+`what-to-post`, `influencers-code-ebook`). They were removed on an earlier founder
+instruction to shield them from the FX-sync cron — a cron that has since been disabled,
+so the original reason no longer exists. They still render USD, just auto-converted at
+`ZAR_PER_USD` rather than a chosen marketing price: $12, $9 … and **$54** for the R899
+PAIDS workbook, which is the one that reads like an accident. Needs a founder price, not
+a guess.
+
+Order totals and `compare_at_price_cents` also render auto-converted — a subtotal has no
+single slug to look up, so that one is structural rather than an oversight.
+
+---
+
+## 2026-08-19 — ladder repriced $97 / $997 / $2,997, and the USD-on-Paystack trap
+
+Founder ruling: Foundation $97 → Accelerator PRO $997 → VIP $2,997, everything else
+demoted to order bumps and downsells.
+
+**The instruction contained a false premise, and testing it is what saved the checkout.**
+He said: *"use usd for local and it will change to zar on paystack."* Paystack does not
+do that. Probed the live account directly rather than arguing from the code comment:
+
+```
+POST /transaction/initialize  currency=USD  → status:false  "Currency not supported by merchant"
+POST /transaction/initialize  currency=ZAR  → status:true   "Authorization URL created"
+```
+
+Had the products been switched to `currency = 'USD'`, **every South African checkout
+would have failed at the payment step** — the identical class of silent sales-killer
+this whole session existed to remove. `initialize` charges nothing, so this probe is
+free and non-destructive. **When an instruction rests on a platform behaving a certain
+way, spend one API call confirming it behaves that way.**
+
+The intent still lands, because it was a DISPLAY decision misexpressed as a currency
+decision: `formatPrice` now renders USD for everyone (the ZA branch removed — reversing
+the same morning's "show SA buyers R1,565" call, on his instruction), while `price_cents`
+stays ZAR because that is what actually gets charged. USD on the page, ZAR on the card,
+"billed in ZAR at checkout" under the button.
+
+ZAR derived at **16.13** — the rate the live Foundation Kit already implies
+(R1,565.03 ÷ $97) — chosen so repricing PRO and VIP moves nothing else on the store.
+PRO R16,081.61, VIP R48,341.61.
+
+**VIP slug is `contentpreneur-vip-tier` on purpose:** `products.$slug.tsx` already
+rendered `<VipTierBreakdown />` for exactly that slug, and no product carried it — a
+finished component that had never once been reachable. Created as `status = 'draft'` and
+`requires_application = true`: a $2,997 done-with-you tier should not be self-serve
+checkout-able before delivery capacity is confirmed.
+
+**Deploy order matters here.** Code and migration must land together — USD_DISPLAY is
+what Stripe charges international buyers, `price_cents` is what Paystack charges local
+ones. Deploy alone = display $997 / charge R8,051. Migration alone = display $499 /
+charge R16,081.
+
+---
+
+## 2026-08-19 — 360 audit: payments work, DELIVERY is where the money leaks
+
+**The headline correction I had to make on myself mid-audit.** I found the 18 Aug
+R10.99 Paystack payment, searched Gmail, found no receipt, and concluded fulfilment
+never ran. Wrong. The buyer email was `muhanelwa.ndivhuwo@gmail.com`; the connected
+mailbox is `chiefmuhanelwa@gmail.com` — **a different inbox**. The real evidence was in
+MailerLite: that subscriber's `updated_at` is `2026-08-18 14:54:43`, two seconds after
+the payment, and he is in `CHKPLT BUYERS`. Fulfilment ran fine.
+**Absence of evidence in a mailbox you don't own is not evidence of absence.** Check for
+the side effect in a system you CAN read.
+
+**Payments are healthy.** Paystack `sk_live_` valid (ZAR). Stripe `sk_live_` valid,
+`charges_enabled` and `payouts_enabled` true. Webhook endpoint live and correctly 401s an
+unsigned POST. 12 successful Paystack payments all-time, but **only one ever came through
+CHKPLT** (`chkplt_…`, 18 Aug); the other 11 are old Paystack-link / store references.
+
+**Delivery is the actual problem. Five ways a buyer can pay and get nothing or the wrong
+thing:**
+
+| Product | Price | Fault |
+|---|---|---|
+| `called-expert-foundations` | R4,792 | published, NOT application-gated, no `download_path`, **no modules, no lessons** — buys nothing |
+| `asset-accelerator` (1-click upsell) | R3,600 | delivers `monetise-your-expertise.pdf` — a different, R149 product |
+| `creator-swipe-vault` (order bump) | R290 | delivers `what-to-post.pdf` — a different product |
+| `called-expert-foundation-kit-bonus` | R290 | promises "3 PDF tools", `download_path` is NULL |
+| `first-brand-deal-script` | — | `download_path` is a `https://drive.google.com/...` URL, but every call site does `storage.createSignedUrl(download_path)` **unconditionally** — no `http` branch anywhere, so it signs a nonexistent object key |
+
+The two shared-file rows are the "STAND-IN PDFs" flagged in the old test plan and never
+swapped. **A stand-in asset that ships to production is indistinguishable from a bug —
+the only thing separating them is whether anyone remembers.**
+
+**Lead capture: two dead MailerLite group IDs still in the Worker env.**
+`MAILERLITE_GROUP_ID_CALLED_EXPERT` = `190855179540628547` (confirmed non-existent, hits
+`/apply` + offer-builder) and `MAILERLITE_GROUP_ID_ALIGNED` = `191381371543881241`
+(confirmed non-existent, hits `/align-accelerate-excel`, falls back to
+`FREE_KNOWLEDGE_AUDIT`). Leads are **not lost** — every path writes to Supabase
+`subscribers` before calling MailerLite — but they never enter a nurture sequence.
+Tool routing itself is sound: a prior session moved those ids out of secrets and into
+`src/lib/mailerlite-groups.ts` precisely because a write-only secret cannot be read back
+to catch a wrong value.
+
+**Could NOT verify from here, and said so rather than assumed:** whether the 14 PDFs
+actually exist in the private `product-files` bucket (anon gets `NoSuchBucket`, which is
+correct for a private bucket and tells you nothing about contents); `orders`,
+`incidents`, `product_grants` (admin-only RLS); Paystack's configured webhook URL (not
+exposed by its API — though fulfilment running proves it is pointed correctly).
+
+All 12 key public routes return 200. Foundation Kit counts verified against code:
+7 `CLARITY_STEPS`, 11 kit-gated `apps.*`, 10 `KIT_FILES`, 10 lessons — matching the sales
+page exactly.
+
+---
+
+## 2026-08-19 — the 33 are IN the automation and the bundle has actually landed
+
+Founder's call: drop the standalone recovery campaign, put them through the real Creator
+Bundle sequence instead. Done, and verified by numbers rather than by assumption:
+
+```
+Itu                          sent 0 → 1
+CREATOR BUNDLE LEADS  sent_count  124 → 157   (exactly +33)
+                      unconfirmed  19 → 0
+automation active runs        18 → 51
+```
+
+**The misreading that nearly cost the whole thing.** `subscribers_in_queue_count: 18`
+looked like 18 stranded people waiting to be released. It was not. Pulling the activity
+detail showed those 18 were **confirmed subscribers mid-flow** — one sampled row had
+already completed "your bundle is inside" on 13 Aug, "why your posts do not sell" on 15
+Aug, and was scheduled for the last email on 19 Aug.
+
+The real finding: **a subscriber who is unconfirmed when they join the trigger group
+never enters the automation at all.** They do not queue, they are simply absent. So no
+amount of waiting would ever have delivered to the 33, and the earlier plan of "wait and
+see if the queue drains" was waiting for something that could not happen.
+`qualified_subscribers_count` moving 4 → 5 after activating Itu was the honest signal;
+the queue count was noise.
+
+**How to get someone into a `repeatable: false` automation they never entered:** remove
+them from the trigger group, then re-add. The re-add fires `subscriber_joins_group` and
+they enter at step 1. `repeatable: false` only blocks people who ALREADY went through —
+confirmed here by checking `status=canceled` activity first (1 unrelated row from 12 Aug),
+so there was no prior run to collide with. Both legs ran as 33-request batches, 33/33.
+
+**Check before firing any re-trigger: does the automation's first email duplicate
+something already scheduled?** It did — the standalone 08:30 campaign delivered the same
+bundle. That campaign was deleted first. Firing the trigger with it still live would have
+sent the same link twice inside eight hours.
+
+Cost accepted knowingly by the founder: the trigger fires immediately, so the email went
+out ~00:33 SAST instead of the 08:30 slot, and the apology copy written to the email
+skill was dropped in favour of the existing sequence.
+
+`RESEND — NEVER DELIVERED (AUG 2026)` (group `196186638257227303`) is kept as the audit
+trail of exactly who was recovered.
+
+---
+
+## 2026-08-19 — ⚠️ MailerLite `update_campaign` SILENTLY WIDENS THE AUDIENCE TO EVERYONE
+
+The single most dangerous thing found this session. Recording it in full because it
+would have sent a "you asked for this and I never sent it" apology to the entire list.
+
+A recovery campaign was created correctly scoped to a 33-person group
+(`recipients_count: 33`, `all_active_subscribers: false`). Calling `update_campaign` to
+tweak the copy produced:
+
+```
+filter:                 []          (was: in_any groups [recovery group])
+all_active_subscribers: true        (was: false)
+recipients_count:       132         (was: 33)
+```
+
+**`update_campaign` has no `groups` parameter, and omitting it does not preserve the
+existing audience — it resets it to ALL ACTIVE SUBSCRIBERS.** It also silently ignored
+the new `content` and kept the old body, so the call did the one thing that was
+dangerous and none of the things that were asked for.
+
+**Rule: never `update_campaign` a scoped campaign. Delete it and re-create with
+`create_campaign`, which does accept `groups`.** Then re-read it with `get_campaign` and
+assert `recipients_count` and `all_active_subscribers` before anyone is allowed to press
+send.
+
+**The general lesson, which is the one worth carrying beyond MailerLite:** a partial
+update on an API that does not accept a field may not leave that field alone — it may
+reset it to the permissive default. **Audience, permissions and visibility fields are
+exactly where that default is most expensive.** After any update to something with a
+blast radius, re-read the object and verify the blast radius specifically, not just the
+field you meant to change.
+
+Also verified before shipping the link (each of these is a way this recovery could have
+silently failed a second time):
+- Drive folder permissions are `{"role":"reader","type":"anyone"}` — no access requests
+- The folder actually contains the two PDFs (`niche-clarity-workbook.pdf`,
+  `paids-workbook.pdf`), matching the original email's "two workbooks" claim
+
+---
+
+## 2026-08-19 — 33 stranded leads recovered from `unconfirmed` (not 19 — the group count hid two thirds of them)
+
+Founder switched double opt-in off and asked for a way to resend to everyone who never
+confirmed. **Switching it off only changes NEW signups — everyone already stuck stays
+stuck**, which is the whole trap.
+
+**The count was wrong in the obvious place.** `CREATOR BUNDLE LEADS` showed 19
+unconfirmed, so that looked like the job. Querying subscribers **account-wide** by
+`status=unconfirmed` returned **33**, spanning every form back to 4 July. Every single
+one had `sent: 0` — they had received nothing, ever, from any list. **Check the account,
+not the group: a per-group counter only ever tells you about that group.**
+
+**The mechanism.** Unconfirmed subscribers cannot receive anything — not automations,
+not campaigns. So activating them is not one of the options, it is the **precondition
+for every option**. That reframing is what made this safe to do without waiting: no
+matter which delivery route ends up working, the flip has to happen first.
+
+- The MCP `update_subscriber` has no `status` parameter. `add_subscriber` does, and is an
+  upsert on `POST api/subscribers` — that is the way in.
+- Tested on ONE first (Itu), verified name, phone and group membership all survived and
+  `qualified_subscribers_count` on the automation moved 4 → 5, then batched the other 32
+  via `batch_requests`. 32/32 returned 200.
+- Result: account-wide `status=unconfirmed` now returns `[]`; the group went 23 → 42
+  active.
+
+**Still open at time of writing:** `sent_count` on the group has not moved, so MailerLite
+has not yet released the queued automation emails. `subscribers_in_queue_count` was 18
+before the flip. Whether MailerLite retroactively delivers a queued automation email to a
+subscriber who becomes active later is **not something to assume** — if it does not fire,
+the guaranteed path is a one-off campaign to these people. Do not send both, or they get
+the bundle twice.
+
+**Deliverability caveat worth carrying:** 33 addresses that never confirmed, some six
+weeks cold, all mailed at once is a bounce/complaint risk. They came from a real form
+with names and phone numbers attached (not scraped), which is the mitigating factor —
+but any recovery email must open by naming exactly what and when they signed up for, or
+the older ones will read it as spam.
+
+---
+
+## 2026-08-19 — product-copy migration APPLIED, after a Postgres string-literal bug
+
+`20260818090000_fix_foundation_kit_copy.sql` ran; verified live via REST — `format`,
+`description`, `benefits` (6 entries) and the course summary all updated;
+`price_cents` (156503 ZAR) and `title` untouched as intended.
+
+**The bug worth remembering.** The first version used `E'…'` literals on consecutive
+lines to build the long text. Postgres concatenates adjacent string literals separated by
+a newline — but **only the FIRST may carry the `E` prefix**. Repeating `E'…'` on
+continuation lines is a syntax error (42601), pointing at the second E-line.
+
+My pre-flight check had counted quote parity and declared it balanced. **Quote parity
+proves nothing about literal-concatenation rules** — the file was perfectly balanced and
+still would not parse. Rewrote with **dollar quoting (`$$…$$`)**, which takes real
+newlines verbatim, needs no escaping, and makes apostrophes and embedded double quotes
+(the JSON in `benefits`) safe by construction. **For any multi-line or
+punctuation-heavy SQL string, reach for `$$…$$` first — not quoted concatenation, and
+not `E'…'`.**
+
+Also: the Supabase SQL editor reports "Success. No rows returned" for an `UPDATE`. That
+is not a warning and not a no-op — it just means no result set. Verify writes by
+selecting the row back, never by reading that message.
+
+---
+
+## 2026-08-19 — Turnstile keys re-pointed on the Worker
+
+Founder supplied the widget's key pair. Site key `0x4AAAAAAEUreW6sAGh0iD-Y`, secret ends
+`...Gq3dbE` (secret value is NOT recorded here — it lives only in the Worker).
+
+**Validated the secret before touching production, without a browser and without any
+dashboard access:** POST the secret to `siteverify` with a junk `response`. The error
+code discriminates cleanly —
+
+- `invalid-input-secret` → the secret itself is wrong/dead
+- `invalid-input-response` → **the secret is valid**, only the response was junk
+
+Got `invalid-input-response`, so the pair is live. **Useful trick: siteverify is a free
+validity check on a Turnstile secret, no widget and no browser required.**
+
+`wrangler secret list` shows names only — values are write-only, so there is no way to
+diff the deployed key against a supplied one. The only way to guarantee they match is to
+set them, which is what was done (`wrangler secret put` for both). Secrets apply
+immediately; no redeploy needed.
+
+**This narrows 110200 to exactly two possibilities**, and one page reload separates them:
+- widget now loads clean → the Worker had been running a DIFFERENT widget's keys all
+  along, which is why editing hostnames in the dashboard appeared to do nothing
+- still 110200 → keys were already correct, and this specific widget genuinely lacks
+  `contentpreneur.africa` in its hostname list
+
+Safe to try either way, and that is the point of the work that went before it: with
+checkout, `/apply`, `/login` and `/signup` all failing open, a wrong Turnstile key can no
+longer take anything down. **Making the system safe to experiment on came first; the
+experiment came second.**
+
+---
+
+## 2026-08-19 (post-deploy) — the fail-open PROVED itself, and then caused a sign-in outage I had to fix in the same hour
+
+Version `29dd22a5-d05e-4b53-89b6-16e4a41723e3`.
+
+**The proof, from a real click by the founder on the live site** — worth quoting because
+it is the whole design working in one trace:
+
+```
+widget:  Turnstile error 110200  → "Security check didn't load — you can carry on regardless."
+                                   "This domain (contentpreneur.africa) is not on the
+                                    Turnstile widget's allowed-hostnames list."
+server:  reason: "invalid-input-response",  failedOpen: true
+         "checkout was ALLOWED THROUGH so the sale is not lost"
+```
+
+Client named the exact cause, button stayed usable, server allowed the sale and paged
+the founder. Itu's wall is gone.
+
+**But the same trace proved the Cloudflare hostname field had NOT taken effect** — 110200
+is Cloudflare refusing the domain. And that exposed a regression I had shipped: with the
+member area now on contentpreneur.africa and `chkplt.com/login` 301ing there,
+`/login`, `/signup` and `/apply` all fail CLOSED, so **email sign-in was down on both
+domains at once.** (Google OAuth survived — it never required a token.)
+
+**The lesson, and it is about deploy sequencing, not about Turnstile.** I flagged the
+dashboard field as a prerequisite and the founder confirmed doing it — and it still did
+not take. *A prerequisite you cannot verify yourself is not a prerequisite, it is a
+hope.* I had no way to check the widget's hostname list (no Cloudflare API token) and no
+headless browser to load the page, so "it's done" went unverified straight into a deploy
+that depended on it. **When a deploy depends on external state you cannot read, either
+build the code so it does not depend on that state, or do not ship the dependent part.**
+
+Fixed by removing the dependency entirely:
+- `/login`, `/signup` → `unavailablePolicy="allow"`. **Zero security lost**: nothing
+  server-side ever verified those tokens — Supabase owns authentication and its own rate
+  limiting. The widget there was decorative, so blocking on it bought nothing and could
+  take sign-in down. This one is not a trade-off; it was strictly a liability.
+- `/apply` → fails open like checkout, with a `critical` incident and the verdict
+  stamped into `raw_answers._turnstile`. A bot costs one row and one email; a closed
+  door costs an applicant to an R18,000 programme.
+
+Still hard-closed, correctly: `generateHooks` (Anthropic credits), `buildOffer`,
+`/contact` — there a bot spends something of yours.
+
+**The founder should still fix the hostname list.** Fail-open keeps the money flowing;
+it does not restore the protection. Every unverified request now pages him, which is the
+correct pressure to keep it from being ignored.
+
+---
+
+## 2026-08-19 — DEPLOYED (version `556d8760-6a9f-4141-a078-5a31437d763e`)
+
+Founder set both dashboard fields (Turnstile hostname + Supabase redirect URL), then
+authorised the deploy. `npm run build && npx wrangler deploy`, 120 assets uploaded, 22
+routes registered.
+
+**Verified live by request:**
+
+```
+contentpreneur.africa/dashboard/foundation-kit  200   (was: HUNG)
+contentpreneur.africa/login                     200   (was: 404)
+contentpreneur.africa/apps/paids-auditor        200
+contentpreneur.africa/learn  /account  /apply   200
+chkplt.com/dashboard/foundation-kit  → 301 → contentpreneur.africa/…
+chkplt.com/login /account /learn /apps/* → 301 → contentpreneur.africa/…
+chkplt.com/  /products  /cart  /tools  /foundation → 200, NOT redirected
+```
+
+The redirect boundary is exactly the member area; the storefront is untouched.
+
+**NOT verified end-to-end, and worth being precise about why.** A raw `curl` against
+`/_serverFn/<id>` with plain JSON returns a masked 500 (`Seroval Error (step: 3)`) and
+writes no incident — TanStack Start serialises server-function arguments as a seroval
+stream, so a hand-rolled JSON body is rejected during DESERIALISATION, before the
+handler runs. **That 500 is not evidence about the handler; it is evidence the probe
+never reached it.** Playwright cannot install Chromium on macOS 13, so there is no
+headless browser here either. Confirmed instead that the shipped bundles contain the
+new code paths (`ALLOWED THROUGH`, `widget-unavailable`, `unverified:`, `no-response`).
+The real test is one click in a real browser, by a human.
+
+**Lesson worth keeping:** an opaque 500 from an endpoint whose wire format you have not
+matched tells you nothing about that endpoint's logic. Check for the SIDE EFFECT the
+code path would have produced — here, a `critical` incident row and an alert email.
+Neither appeared, which is what proved the request died in transport rather than in the
+handler.
+
+---
+
+## 2026-08-18 (fourth pass) — checkout now fails OPEN, and what Itu actually got: nothing
+
+Founder asked for a guarantee: nobody hits Itu's wall again. A code fix plus a
+dashboard field the founder still has to set is not a guarantee, so the trade had to
+change.
+
+**Itu's full journey, reconstructed from MailerLite + incidents:**
+
+```
+10:28:30  fills the MailerLite embedded form on /creator-bundle
+          → status "unconfirmed", opted_in_at null, sent: 0
+          → double opt-in never confirmed, so "Creator Bundle Welcome"
+            (enabled, 7 steps) NEVER FIRED. He got no bundle.
+12:29:06  comes back two hours later and tries to BUY
+12:29:12  again
+12:29:15  again — three clicks in nine seconds, all refused by Turnstile
+```
+
+He handed over an email AND a phone number and left with **nothing** — not the free
+bundle, not the paid product. Two failures stacked; either one alone would have cost
+the sale.
+
+**The second leak, which is bigger by volume:** `CREATOR BUNDLE LEADS` has 23 active
+and **19 unconfirmed** — 45% of signups are in Itu's exact state. `/creator-bundle` is
+a MailerLite embedded form (slug `BPvaab`) and the file says it out loud: "Delivery of
+the actual bundle is entirely MailerLite's responsibility." So double opt-in is a hard
+gate on the lead magnet — no confirm, no delivery, no nurture, ever. Not fixable in
+this repo, and **not something to flip unilaterally** (double opt-in is a
+deliverability/consent decision). Flagged with the number attached.
+
+**The posture change: Turnstile on checkout is now a SIGNAL, not a GATE.**
+`CHECKOUT_FAILS_OPEN = true` in `checkout.functions.ts`. A failed or missing token
+records a **critical** incident (so it emails, instead of joining the 10 rows that sat
+unread for three weeks), stamps `metadata.turnstile = "unverified:<reason>"` on the
+order, and **lets the buyer through**.
+
+The asymmetry is the whole argument, and it is worth writing down because the instinct
+is to keep the gate: a blocked checkout is a **certain** lost sale. What the gate
+prevents is a bot creating one pending-order row and one provider init call — no AI
+credits, no email, no file served, and **no money moves without a real card on the
+provider's own hosted page**. Cloudflare's WAF is already in front of the Worker.
+Deliberately NOT applied to `generateHooks` (Anthropic credits), `buildOffer`,
+`/contact`, `/apply` — those still fail closed, because there the attacker spends
+something of yours. **Fail open where failure costs you a sale; fail closed where
+failure costs you a resource.**
+
+**Server-side fail-open is not enough on its own — the client was also hiding the
+request.** With the button gated on `!tsToken`, a widget that can't run means the
+request never leaves the browser and the server's policy never gets consulted. So
+`TurnstileGate` gained `unavailablePolicy`:
+- `"block"` (default) — emit null, button stays disabled. For fail-closed endpoints.
+- `"allow"` — emit the `TURNSTILE_WIDGET_UNAVAILABLE` sentinel so the button works and
+  the SERVER decides. Set on all 5 checkout gates.
+
+**The sentinel is not a bypass**, and that distinction is the design: siteverify
+rejects it like any other bad token, so every fail-closed endpoint still refuses it.
+All it does is stop the client from making the security decision. **Security policy
+belongs in exactly one place per endpoint — the server. The client's only job is to not
+suppress the request.**
+
+**Third hole, the one with no callback at all:** if `challenges.cloudflare.com` never
+loads — ad blocker, tracker-blocking DNS, corporate proxy, dead mobile connection —
+`onError` never fires, because there is no widget to fire it. The form would sit
+disabled forever with nothing on screen. Added an 8-second watchdog that emits the
+sentinel if the widget has produced nothing. It reads `solvedRef` (a ref, not state) so
+it cannot clobber a token that already arrived, and it is self-correcting — a real
+token arriving at 11s overwrites the sentinel, which is why 8s is safe instead of
+having to guess a worst-case slow-3G load. Relevant to this exact buyer: Itu was on a
+South African mobile IP.
+
+**Traced against Itu's scenario, all four paths now complete the sale:** hostname not
+allow-listed (110200 → sentinel → server fails open → Paystack); script blocked (no
+callback → watchdog → same); retry after a transient failure (`onSettled` reset → fresh
+token); bot with no token (critical alert, pending row, no money moves).
+
+---
+
+## 2026-08-18 (third pass) — the incidents confirmed it: 2 real buyers turned away, plus a token-reuse bug and a dead MailerLite group
+
+Founder pasted `/admin/incidents`. Every prediction from the second pass held, and the
+rows carried more than confirmation.
+
+**The blocked buyers, cross-referenced against MailerLite:**
+
+| Email | Attempts | When | Who they are |
+|---|---|---|---|
+| `iikhune32@icloud.com` | **3 in 9 seconds** | 18 Aug 12:29 | "Itu", phone 060 505 0229, joined CREATOR BUNDLE LEADS **that morning at 10:28** |
+| `trerulagantse@gmail.com` | 1 | 15 Aug 16:38 | "Rerulagantse", StarterKit Leads — confirmed opt-in 16:20, tried to buy **18 minutes later** |
+| `dream@gmail.com` | 4 | 13 Aug 03:37 | not a subscriber — throwaway/test |
+| `pipeline-test@nochill.co.za` | 2 | 29 Jul | founder's own test |
+
+Rerulagantse's row is the whole funnel working perfectly and dying at the till: free
+Starter Kit → confirm → buy, eighteen minutes end to end, blocked at the last step.
+**Three clicks in nine seconds is what a real person does when a button does nothing.**
+
+**New bug #1 — the token is single-use and nothing reset it.** Three
+`generateHooks:turnstile` rows on 29 Jul, same topic ("pricing brand deals"), 45s apart.
+The hook generator can be run repeatedly, its button was gated on `!valid ||
+mut.isPending` — **not on having a token at all** — and it re-sent the same `tsToken`
+every run. Cloudflare consumes a token on first siteverify and rejects re-use as
+`timeout-or-duplicate`. So run #1 succeeded (no incident) and every retry after it
+failed. The same shape explains Itu's three attempts: without a reset, retry #2 is
+doomed even when the original failure was transient. Fixed by giving `TurnstileGate` a
+`reset()` imperative handle and calling it from `onSettled` (or `finally`) on all 9
+forms, plus adding `!tsToken` to three submit buttons that never checked for one.
+
+**New bug #2 — a dead MailerLite group, logged at a severity that never alerts.**
+`addToMailerLiteGroup` 422'd on group `190855179540628547`; the MailerLite API confirms
+it does not exist. It is one of `MAILERLITE_GROUP_ID_CALLED_EXPERT` /
+`MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT` (Cloudflare env, not readable from here) —
+**almost certainly CALLED_EXPERT, because no group with that name exists in the account
+at all.** Used by BOTH `offer-builder.functions.ts` and `apply.functions.ts`, so
+qualified Accelerator applicants are not being synced either.
+
+**The severity lesson:** a 4xx "invalid group" is not a warning, it is permanent
+misconfiguration — every lead down that path fails forever until a human edits an env
+var. At `severity: "warning"` `sendOpsAlert` never fires, so it just accumulated
+silently. `mailerlite.ts` now splits config failures (4xx except 408/429) → `critical`
+with a per-group endpoint (`addToMailerLiteGroup:invalid-group:<id>`, so the 15-minute
+dedup is per broken group and the alert subject names it) from transient ones (5xx/429/
+network) → still `warning`. **Choose severity by whether a human must act, not by how
+bad it sounds.**
+
+**Also visible in the same MailerLite listing, still unfixed:**
+`MAILERLITE_GROUP_ID_BUYERS` points at a group literally *named*
+`"MAILERLITE_GROUP_ID_BUYERS"` (7 subs) while the real `CHKPLT BUYERS` group
+(`190855383448815273`) has 1. Same bug, logged 2026-08-13, still open.
+`Knowledge Audit` (`190855293404448728`) has 0 subscribers.
+
+**MailerLite as forensics:** the incidents table gives you an email; the ESP gives you a
+name, a phone number, a signup source and a timestamp. Cross-referencing turned four
+anonymous error rows into two named, warm, callable people and two false positives.
+Do that before writing anything off as noise.
+
+---
+
+## 2026-08-18 (same day, second pass) — Turnstile was decorative in three places and load-bearing in two; checkout was silently unbuyable
+
+Triggered by the founder reporting "the cloudflare is not working" on the Accelerator
+application form. Auditing that turned up a whole class of the same defect.
+
+**The audit — every public form, three columns that must agree:**
+
+| Page | Renders widget | Sends token | Server verifies | State |
+|---|---|---|---|---|
+| `/apply` | yes | **no** | **no** | theatre + dead form |
+| `/foundation` | **no** | **no** | yes | **unbuyable** |
+| `/niche-clarity` | **no** | **no** | yes | **unbuyable** |
+| `/cart`, `/contact`, `/products/$slug`, `/hook-generator`, `/offer-builder`, `/align-accelerate-excel` | yes | yes | yes | correct |
+| `/login`, `/signup` | yes | n/a | n/a (Supabase) | decorative |
+| `/starterkit`, `/media-kit` | no | no | no | unprotected |
+
+- **`/apply` failed in BOTH directions at once, from one missing field.** The button was
+  gated on `tsToken !== null` but the token was never put in the submit payload, and
+  `submitApplication` never called `assertTurnstile`. So a direct POST bypassed the
+  challenge entirely (violating CLAUDE.md rule 4), while a widget that merely *failed to
+  load* — which is what the founder is seeing — locked out every real applicant with a
+  permanently greyed-out button and no message. **A challenge you gate the UI on but
+  never verify is the worst of both worlds: no security, full friction.**
+- **`/foundation` and `/niche-clarity` are the mirror image.** Both call
+  `initializeCheckout`, whose FIRST statement is `assertTurnstile(data.turnstileToken)`
+  — and neither rendered a widget or sent a token. With `TURNSTILE_SECRET_KEY` set,
+  every single purchase attempt dies on "Verification failed — please refresh the page
+  and try again." `foundation.tsx` inherited this by being copied from
+  `niche-clarity.tsx`'s "proven BuyForm pattern". **A pattern copied from a page that
+  was never actually transacted through propagates a bug with a reassuring name.**
+- **Corroborating evidence from Gmail, not from the code:** in 60 days
+  `notify.chkplt.com` has sent the founder 2 manual test alerts, 1 rate-card PDF (his
+  own 13 Aug test) and 5 password resets. **Zero order receipts.** Consistent with a
+  checkout that has never completed — and with `docs/TOMORROW-TEST-PLAN.md` still
+  listing "one real end-to-end test purchase" as open.
+- **Where the incidents almost certainly come from:** each of the three Turnstile guards
+  in `checkout.functions.ts` wraps its failure in
+  `reportError(err, { endpoint: "initializeCheckout:turnstile", meta: { email } })` at
+  the DEFAULT "error" severity. So every blocked purchase writes an incident row *with
+  the would-be buyer's email in `meta`* and never alerts anyone —
+  `sendOpsAlert` only emails on `critical` (7 of ~30 call sites). Those rows are a
+  recoverable-leads list, not just noise.
+- **`TurnstileGate` now explains itself.** `onError` used to do nothing but
+  `onToken(null)` — a dead form with no cause on screen. It now surfaces the Cloudflare
+  error code, maps the `1102xx` family to "this hostname is not on the widget's
+  allow-list" naming the actual hostname, and offers a Try-again that remounts the
+  widget (Turnstile does not retry itself once errored). **Silent security failures are
+  indistinguishable from broken software to the person in front of them.**
+- **Deploy order is now a hard prerequisite, not a nicety.** Wiring the gate into
+  `/foundation` means that if `contentpreneur.africa` is not on the Turnstile widget's
+  hostname list, checkout blocks at the *button* instead of at the server. Same
+  outcome (no sale), but it means the Cloudflare dashboard field must be set BEFORE
+  this deploys.
+
+**Could not verify from here, stated as inference not fact:** the incidents table is
+admin-only RLS and there is no service-role key in local `.env`, so the rows were never
+read — anon returns `[]` whether or not it is empty. A headless-browser check of the
+live widget was also impossible (Playwright dropped Chromium support for macOS 13).
+The 110200 diagnosis rests on the founder's own report plus the code path, not on a
+captured error code.
+
+---
+
+## 2026-08-18 — the Foundation Kit workspace moved to contentpreneur.africa; two live copy/price bugs fixed
+
+**The gap, verified live before touching anything (curl, not assumption):**
+
+```
+contentpreneur.africa/foundation                 200
+contentpreneur.africa/dashboard/foundation-kit   HUNG (no Worker owned it)
+contentpreneur.africa/login                      404
+chkplt.com/dashboard/foundation-kit              200
+```
+
+A buyer bought on one brand and could only open what they bought on another. The
+hang (not a 404) is the tell: `contentpreneur-africa-site/wrangler.jsonc` had its
+wildcard narrowed to `/`, `/about*`, `/_next/*` on 2026-08-02, so member paths
+matched **no Worker on either zone**.
+
+- **Cloudflare route patterns are config, not code.** `wrangler.jsonc` gained 8
+  member-path entries; `src/lib/domains.ts` holds `MEMBER_PATH_PREFIXES` for the
+  runtime 301. **The two lists cannot read each other and must be edited together** —
+  that is written into both files, because a member route added to one and not the
+  other either 404s or fails to redirect, with nothing to catch it.
+- **`Response.redirect(url, 301)` on GET/HEAD only.** A 301 on a POST is allowed to be
+  replayed as a GET, which silently drops a form submission. TanStack server functions
+  POST to `/_serverFn/*` (not a member path), so they were never at risk — but the
+  guard is there so a future member path can't become one.
+- **A 301 strips the URL fragment, and Supabase returns the session IN the fragment**
+  (`#access_token=…`). A post-purchase magic link pointed at chkplt.com would have
+  bounced to contentpreneur.africa with the token gone — arriving *not signed in*, with
+  no error explaining why. `order-fulfillment.ts` now generates the link on
+  `MEMBER_DOMAIN` directly. **Never let an auth callback pass through a redirect.**
+- **Per-domain session cookies mean this move signs existing members out once.** Raised
+  as the explicit trade-off; the founder chose the single-home redirect over
+  dual-domain anyway. Not a bug — a known cost.
+- **Relative links are domain-agnostic; that cuts both ways.** 12 "Get the Kit" CTAs
+  pointed at `/products/called-expert-foundation-kit`, which does not exist on
+  contentpreneur.africa. Repointed to `/foundation` — a real route in this app, so it
+  resolves on **both** hosts. The genuinely storefront-only links now go through
+  `storeProductUrl()`, which returns absolute chkplt.com in prod and stays relative in
+  dev so localhost never bounces to production.
+
+**Two live bugs found by reading the DATABASE, not the migrations:**
+
+1. **`/foundation` was showing "$94".** `formatPrice(cents, currency, isFree, slug, country)`
+   was called with only the first three. No `slug` → skips the `USD_DISPLAY` marketing
+   price ($97). No `country` → never takes the ZA branch. So the live R1,565.03 was
+   mechanically divided by `ZAR_PER_USD` and rendered as `$94` to everyone, South
+   Africans included, who are then charged in rand. **A function with optional
+   arguments that silently degrades instead of throwing is a live-revenue hazard** —
+   the page looked fine and had been wrong for weeks.
+2. **The product copy described a product that no longer exists.** The row still carried
+   the 2026-06-17 seed text: "six workbooks… in one download", `format` = "6 PDF
+   workbooks". But `20260626013917` set `download_path = NULL` and moved delivery into
+   the workspace. Real contents, each one *counted* rather than estimated: 7 steps
+   (`CLARITY_STEPS`), **11** kit-gated tools (`apps.*.tsx` with `useKitAccess`), 10 PDFs
+   (`AVAILABLE_PDFS`), 10 video lessons (confirmed by querying `lessons`). The sales
+   page claimed 9 tools and never mentioned the course at all.
+
+**The migrations lie; the database is the source of truth.** `20260617230000` sets the
+kit to `USD 9700`. The live row is `ZAR 156503`. Titles in the seed say "Called
+Expert"; live they say "Contentpreneur". **Every conclusion in this session that came
+from a migration file had to be re-checked against a REST query before it was safe to
+act on** — including the "currency mismatch" I initially flagged from the seeds, which
+does not exist live (both rows are ZAR).
+
+**Verification:** `npx tsc --noEmit` clean, `npm run build` clean, and the built
+`worker-entry-*.js` inspected to confirm `MEMBER_PATH_PREFIXES` and the production
+branch of `import.meta.env.DEV` both compiled through correctly. The repo is
+pre-existing lint-dirty (826 prettier errors across the member area) — changed files
+were linted with `prettier/prettier` off to separate signal from that noise.
+
+**Blocked on the founder (config outside this repo, cannot be done from code):**
+Supabase Auth must allowlist `https://contentpreneur.africa/**` as a redirect URL, and
+the Turnstile widget must add `contentpreneur.africa` as an allowed hostname. Until
+both are set, a paying buyer cannot sign in on the new domain. Logged in
+`docs/ARCHITECTURE.md` §13.
+
+---
+
 ## 2026-08-13 — the Rate Card tool was leaking 100% of its leads; whole flow moved onto CHKPLT
 
 - **The bug, in one line:** `/rate-card` is an iframe of a verbatim tool copy (`public/tools/rate-card/index.html`) whose form POSTed to `https://nochill-rate-card.vercel.app/api/send-rate-card` — a *different project* (`product-lab/web-tools/rate-card-calculator`). That endpoint mailed the PDF fine via Zoho SMTP, then subscribed the lead to MailerLite group `189168267230709259` **inside a `.catch(() => {})`**. That group had been deleted. Verified live: the MailerLite API returns `Resource does not exist` for it. So MailerLite 422'd every call, the empty catch ate the error, and **every lead this tool ever collected was discarded**. The creator got their PDF; the list got nothing. Zero of the 77 account subscribers are attributable to the tool.
@@ -15,6 +756,101 @@ The living record of what was discovered, what broke, what was corrected, and wh
 - New MailerLite group **`RATE CARD LEADS` = `195639769718327259`** (env `MAILERLITE_GROUP_ID_RATE_CARD`). Also noticed: `MAILERLITE_GROUP_ID_BUYERS` points at a group literally *named* `"MAILERLITE_GROUP_ID_BUYERS"` (7 subs) while a real `CHKPLT BUYERS` group sits empty at 0 — the env var's name was pasted in as the group name. Not fixed this session; needs a founder decision on merging.
 - The old Vercel app now 307-redirects `/` → `https://chkplt.com/rate-card` (`vercel.json`), and its API's group + upsell were fixed too as a belt-and-braces measure for anyone deep-linking the cached page. **Needs a Vercel redeploy to take effect.**
 - Same session: `first-brand-deal-script`'s live `description` was still leaking an internal migration note (third instance of this bug — see 2026-07-29 entries). Fixed in `20260813120000_fix_first_brand_deal_script_copy.sql`, plus a POSSESS-in-ICP-2 tagline and a `benefits` list that described contents the actual PDF doesn't have. Re-swept all 23 published products: no other leaks.
+- **CONFIRMED LIVE (01:01 SAST):** founder ran a real submission through the deployed tool. `chiefmuhanelwa@gmail.com` landed in `RATE CARD LEADS` and the PDF email arrived. First lead this tool has ever captured. The Resend **attachment** passthrough also worked on its first production execution.
+- **`void addToMailerLiteGroup(...)` is unsafe on Cloudflare Workers.** An unawaited promise can be cancelled the moment the `Response` returns — non-deterministic silent lead loss, i.e. the exact bug this endpoint exists to prevent. Changed to `await` in `rate-card.ts` (the helper swallows its own errors, so awaiting can never fail the request; costs ~200ms). **`manychat-lead.ts` and the other tool functions still use `void` and should be reviewed the same way** — DM_LEADS having 31 subscribers means it *usually* works, not that it always will.
+
+### The three iframe bugs on `/rate-card` — and one wrong diagnosis worth remembering
+
+All three came from the same root: the tool is iframed and sized to its own full content, so **the frame never scrolls and `100vh` inside it resolves to the frame's own height.**
+
+1. **I first diagnosed the height bug as a runaway ResizeObserver feedback loop. That was wrong** — proven wrong by actually harnessing old-vs-new logic in headless Chromium at iPhone 13 size, where the old code settled in 3 updates. The real mechanism is a **ratchet**: with `body{min-height:100vh}`, `body.scrollHeight` can never report less than the height already applied, so the frame only ever grows. Measured: after calculating, real content was 2812px but the frame stayed pinned at 3730px — **~900px of dead white space** under the results. Fix: inject `body{min-height:0}` into the frame on load. **Lesson: build the harness and measure before writing the explanation into a code comment — a plausible mechanism is not a verified one.**
+2. **`window.scrollTo({top:0})` inside the frame is a silent no-op** (lines 937/945 of the tool, on every screen switch). The user hit Calculate and stayed wherever they'd scrolled to in the form — landing mid-tool with the results above them. Fix: the tool `postMessage`s the parent; `rate-card.tsx` scrolls the real page, offset by the **measured** `SiteHeader` height (it's `sticky top-0`, so scrolling to the raw frame top buries the results). Verified: scrollY 1800 → 36, frame top 72px vs a 64px header.
+3. Added `scrolling="no"` (frame is always full height, and it can otherwise swallow touch scrolls on iOS) and rAF + 8px hysteresis on the resize (3 updates → 1).
+
+### Tax funnel step 2: /tax-guide landing page (MailerLite embed DkGjRH)
+
+Funnel is: `/provisional-tax` (no email) → `/tax-guide` (email) → `sars-creator-income` (paid). Built the middle step reusing the existing `MailerLiteEmbedForm` component, same pattern as `/creator-bundle` and `/starterkit`. Verified in a real browser that MailerLite resolves the slug to a live form (`jsonp/2399736/forms/DkGjRH` → form id 195711925104936067) and loads webforms.min.js — i.e. the form is genuinely active, not a dead slug.
+
+⚠️ **Trade-off recorded, not resolved:** a MailerLite EMBED means the lead lands in MailerLite only. It does NOT hit our own `subscribers` table, so `/admin/tools` cannot show leads or a conversion rate for this page, and if the form or its automation is ever deleted the leads have nowhere to land — the same third-party-single-point-of-failure that cost every rate-card lead. The native alternative (own endpoint → `subscribers` first → MailerLite → Resend, as used by rate-card and provisional-tax) is strictly more robust. Founder chose the embed; documented here so the choice is visible.
+
+Also fixed the last outstanding TypeScript error in the repo (`MailerLiteEmbedForm.tsx` cast `window.ml` through undefined; now reads the just-assigned `w.ml`). **`npx tsc --noEmit` is now fully clean for the first time this session.**
+
+### Pre-launch verification for the tax video — what is and is not proven
+
+Verified against PRODUCTION, not code:
+- ✅ Lead-magnet half works: `RATE CARD LEADS` **19 subscribers** (82% open), `TAX LEADS` **1** — real capture since the fixes. `/provisional-tax`, `/tax`, both endpoints live. `MAILERLITE_GROUP_ID_TAX`, `RESEND_API_KEY`, `PAYSTACK_SECRET_KEY`, `STRIPE_SECRET_KEY` all present as Worker secrets.
+- ⚠️ Payment half is coded and was proven end-to-end in June — **but with a TEST Paystack key**, and Learnings' own note says "remember to swap back to live before real selling". The Worker secret is write-only so the deployed mode is unknowable from here. **Fix is to overwrite rather than investigate:** pipe `PAYSTACK_LIVE_SECRET_KEY` from `.env` into `wrangler secret put PAYSTACK_SECRET_KEY`.
+- ⚠️ Could NOT verify `sars-creator-income.pdf` exists in the private `product-files` bucket — a private bucket returns "Bucket not found" to anon whether or not the file is there, so that probe proves nothing. Missing file → buyer pays and sees "No download available".
+- ⚠️ No real (non-test) purchase has ever completed; `docs/TOMORROW-TEST-PLAN.md` section C is still unticked.
+
+**Lesson: "the code is wired end to end" and "money has actually moved end to end" are different claims. Only the second one is safe to launch on.**
+
+### Swept the whole codebase for the two bug classes this session kept surfacing
+
+Rather than fix each instance as it appeared, went looking for every occurrence:
+
+1. **Unsanitised user input reaching pdf-lib.** `rate-card-pdf.ts` drew `creatorName` raw — an Arabic, Amharic or Tifinagh name would have thrown inside pdf-lib and 500'd **live rate-card delivery**, which is running and taking real traffic. Extracted the sanitiser into `src/lib/pdf-text.ts` (`pdfSafe` / `pdfSafeName`) and routed BOTH generators through it at the drawText level so no caller can bypass it. Verified against 7 name classes (Latin, Arabic, Amharic, Tifinagh, accented, emoji+typography, entirely-non-Latin): all produce valid PDFs, none throw. `pdfSafeName` falls back to "Creator" when sanitising leaves nothing, so a wholly non-Latin name renders a name rather than a blank.
+2. **`void addToMailerLiteGroup(...)` in 9 places** — apply, media-kit, products, hook-generator, aligned, order-fulfillment, offer-builder, starterkit, manychat-lead. On Workers an unawaited promise can be cancelled when the Response returns, so every one of those was a non-deterministic lead drop. All now awaited; all 9 were already in async contexts so it compiled clean.
+
+Also: added the provisional tax tool to `src/lib/tools.ts` (it existed but nothing linked to it — same discoverability miss as `/admin/tools`), and cross-linked `/sars-calculator` → `/provisional-tax` so the two tax tools read as a pair (habit vs exact figure) instead of duplicates.
+
+**Lesson: when a bug class shows up twice, grep for the third. Both of these were found by searching, not by a report.**
+
+### Provisional tax calculator built for the tax video — and a near-miss on the tax table
+
+Founder is posting a tax/SARS video with DM keyword TAX. Discovery first:
+- **`contentpreneurship.com` is NOT ours** — it 302s to `skool.com/contentpreneurship`, someone else's community. Ours is **`contentprenuership.com`** (misspelled: "prenue"), Vercel project **`sales-copy`**, branded *CreatorKit*. A domain you cannot say on camera is not a CTA. All its tools (`/dashboard/provisional-tax-calculator`, `/checklist`, etc.) are **ungated with zero email capture** — same leak as the rate card, different site.
+- Decision: send tax traffic to chkplt.com, and **build the real provisional tax calculator there** (the existing `/sars-calculator` is only a flat 25% reserve rule of thumb).
+
+**⚠️ THE NEAR-MISS.** I compared CreatorKit's calculator against the bracket table printed on its own page and concluded it under-stated tax by R585–R1 855, and said so. **I was wrong.** The founder sent the SARS source, which showed the **2027 year of assessment** (1 Mar 2026 – 28 Feb 2027) is in effect: brackets start at R245 100, primary rebate **R17 820**, threshold **R99 000**. Their engine uses those — it reproduces its output at 7 sampled incomes **exactly**. What is stale is the bracket table *displayed beneath* the calculator (the superseded 2026 one). **Lesson: when your reference disagrees with a working production tool, suspect your reference before the tool — and for anything regulatory, go to the primary source FIRST, not to a competitor's implementation.** I had also asked which table to use and would have shipped the wrong year had the founder not sent the link.
+
+Built on chkplt.com:
+- `src/lib/provisional-tax-engine.ts` — the 2027 SARS table isolated in ONE clearly-marked block (everything else is derived arithmetic). Verified three ways: bases chain (0.18 × 245 100 = 44 118 → … → 666 339), threshold × 18% === rebate exactly, and it reproduces CreatorKit's live output at all 7 probes.
+- `provisional-tax-pdf.ts`, delivery email, `/api/public/provisional-tax` (lead → own DB first, MailerLite **awaited**, then queued email + PDF), `/provisional-tax` page with the 15-item compliance checklist, and a **`/tax` alias** because a video CTA has to be sayable.
+- MailerLite group **TAX LEADS = `195704432781952522`** (env `MAILERLITE_GROUP_ID_TAX`).
+
+**pdf-lib standard fonts THROW on any character outside WinAnsi** — a creator with an Arabic, Amharic or Tifinagh name would have 500'd the whole endpoint. Now every string routes through a `safe()` sanitiser before being drawn. **The rate-card PDF has the same exposure and should get the same treatment.**
+
+Checklist deadline dates on the source tool were all expired (31 Aug 2025, 28 Feb 2026, 20 Jan 2026). Replaced with the recurring pattern ("By 31 August", "By the last day of February") rather than hard-coded years that silently go stale.
+
+### The first three tracked events exposed two bugs — read your own data early
+
+The moment `tool_events` existed, 3 real rows arrived and both of these were visible in them:
+- **`session_id` was NULL on every row.** `crypto.randomUUID()` is **secure-context only**, and `meta.origin` showed `http://chkplt.com` — the site answers on plain http with **no redirect to https** (`curl -o /dev/null -w "%{http_code}" http://chkplt.com/rate-card` → 200, no Location). On http the call throws, my try/catch swallowed it, and every session id came back null. Fixed with a cascade: `randomUUID` → `getRandomValues` (works on http) → `Math.random`. An anonymous visitor counter never needed cryptographic randomness. Verified by stubbing `randomUUID` to undefined: all 3 events now share one id.
+- **The dashboard would have reported 0 visitors and 0 completions** against those 3 events, because `uniq()` counted `new Set(rows.filter(e => e.session_id))` — silently discarding every session-less row. Now counts distinct sessions PLUS session-less rows individually. **Any "unique X" metric needs an explicit decision about null keys, or it under-reports invisibly.**
+
+**Lesson: look at the first rows a new analytics table receives, individually, before trusting any aggregate built on top of them.** Both bugs were obvious in 3 raw rows and would have been invisible in the dashboard — which would just have shown zeroes and been read as "no traffic yet".
+
+⚠️ **Open, not fixed by code:** chkplt.com serves over plain HTTP. Creators are submitting email addresses unencrypted. Proper fix is the Cloudflare **SSL/TLS → Edge Certificates → Always Use HTTPS** toggle, not application code.
+
+### Rate Card formula — verification method (re-runnable)
+
+Founder asked for proof the maths is still the researched original after the native rebuild. Method, in order of strength — reuse this whenever a calculation engine is ported:
+1. **Constant diff** — parse every numeric literal out of `git show HEAD:public/tools/rate-card/index.html` and out of `rate-card-engine.ts`, compare as floats not strings (prettier rewrites `1.00`→`1.0`, which looks like a diff and is not one).
+2. **Formula-step diff** — whitespace-squash both function bodies and assert each arithmetic expression appears in both. All 18 steps confirmed present. ⚠️ My first version of this checker stripped whitespace BEFORE matching `const`, so it reported every step MISSING in *both* files and printed "FORMULA DIVERGED" — a checker bug, not a finding. **If a verification says everything failed including the control, suspect the verifier.**
+3. **300 randomised end-to-end cases** through the ORIGINAL tool (recovered from git, served locally) vs the new engine, seeded so both runs get identical inputs. 300/300 bit-identical, largest difference across 13 fields × 300 cases = 0. Coverage: 8 niches, 5/5 content types, 7/7 platforms, 5/5 add-ons.
+4. **Live production spot-check** — drove chkplt.com/rate-card itself: R37 747 / R32 085 / R43 409 / R24 255, matching the original exactly.
+
+Currency conversion is display-only (engine computes in ZAR, `formatCurrency` converts at render), so it cannot move the underlying maths.
+
+**Calibration note, recorded not acted on:** against the founder's own verified deals the tool's outputs run 3–39× high (Capitec R10,500/Reel vs tool R43,860 at ~100K views; SA Tourism R1,000/deliverable vs R38,834; Savanna R25,000/mo vs R78,948). Founder's decision: **leave the researched constants exactly as built.** Flagged the sharpest risk for the record — the "Floor rate · never go below this" label sits ~4× above a real Capitec offer, so a creator following it literally could decline a genuine deal. No change made.
+
+### Tools Hub: first-party analytics, and the Rate Card rebuilt native
+
+- **"How many visited / how many calculated" was unanswerable — nothing recorded it.** `track.ts` only wraps FB Pixel + GA (no Pixel is running), `tool_submissions` is written by the hook generator alone, and no page view was stored anywhere. Built `tool_events` (view/start/complete/lead, anonymous per-tab session id), a public `/api/public/tool-event` beacon (slug + event allowlist, origin check, **service-role writes — an anon insert policy would let anyone forge funnel numbers**), a `useToolView` hook wired into all 7 native tools + the hub, and `/admin/tools` joining events + `subscribers.source` + `email_send_log`. **Confirmed again: a hand-written migration needs the table hand-added to `src/integrations/supabase/types.ts` or every query is a type error.**
+- **Rate Card rebuilt as a native React page**; the iframe and its copied HTML are deleted. Maths extracted to `src/lib/rate-card-engine.ts` and **diffed against the original across 5 cases before switching** — identical to floating-point precision, including no-platform and sub-1000-follower edges. Verified again in a real browser: same example → R37 747.
+- **`documentElement.scrollWidth` does NOT detect clipped overflow.** My first mobile check passed while the add-on cards were visibly sliced off on a real phone, because the offending element sat inside an `overflow-hidden` ancestor (`ToolCanvas`) — the page never widened, the content was just cut. **Check each element's right edge against the viewport instead.** Root cause was a flex text column with `min-w-0` but no `flex-1`, so it sized to content instead of shrinking.
+- **Rebuilding a tool silently drops features unless you diff against the original.** The first native pass quietly lost SIX: CPM-vs-CPE comparison, negotiation strategy, strategic insights, benchmark bars, the full line-by-line breakdown, and the USD equivalent. Recovered the old file with `git show HEAD:<path>` and restored all of them. **Lesson: when replacing a working tool, enumerate its features from the source first and check them off — "it calculates the same number" is not parity.**
+- Restored the original's **three-screen flow** (form → calculating → results). Appending results below the form buried the payoff and left no way back to the inputs. The calculating screen narrates the creator's **real intermediate values** (niche CPM, tier multiplier, platform weighting, CPM vs CPE) rather than showing a fake spinner — it earns the ~1.7s beat and teaches the method the creator will later argue to the brand. Respects `prefers-reduced-motion`.
+- **The local vite dev server wedged repeatedly** (`Network connection lost` / `retryable: true` in the workers runner, then hanging indefinitely). Working path: `npm run build` then `npx wrangler dev --local` and test against that — the production artifact, and more faithful anyway.
+- **Brand divergence flagged, not fixed:** the tools now use the canonical brand (Cream #FAF7F0 / Charcoal #1C1C1C / Heritage Gold #C9A84C) per the brand guidelines and the Contentpreneur carousels. The rest of chkplt.com is amber #F59E0B on white/slate — which is why the rate-card email renders orange. Tokens live in `src/components/tools/premium.tsx` if the site follows.
+
+### Currencies: 11 → 42, plus two real correctness bugs
+
+- Extended to **every African currency — 42 codes covering all 54 countries** (XOF = 8 West African states, XAF = 6 Central African). All 42 were verified present in the `open.er-api.com` USD feed *before* being listed, so none silently falls back.
+- **The emailed PDF was always in rands.** `sendRateCard` hardcoded `zar=n=>'R '+…` and skipped conversion entirely — so a creator who picked naira saw naira on screen and then received a PDF quoting rands. That PDF is the document they forward to a brand. Now uses `fmtC()`.
+- **A missing rate silently produced ~84× wrong numbers.** `liveRates[code] || zarRate` fell back to the *rand* rate while still printing the foreign symbol — `₦ 37 747` for what was really R37 747. Fires whenever the rate API is slow or down, which is also the first paint. Now `canConvert()` gates it: stays in rands and shows `⚠️ Live rate for NGN unavailable — showing rands`, and re-renders once real rates arrive. **Lesson: a currency fallback must never keep the symbol of the currency it failed to convert to.**
+- Verified live: R37 747 → ₦3 181 310 · KSh302 263 · ₵27 086 · E£117 436 · CFA1 330 206 · ZiG62 149.
 
 ---
 

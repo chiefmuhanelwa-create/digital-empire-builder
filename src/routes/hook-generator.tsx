@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, Sparkles, Copy, Check, RotateCcw, Flame, Lock, Mail } from "lucide-react";
@@ -9,9 +9,10 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { TurnstileGate } from "@/components/TurnstileGate";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import { generateHooks } from "@/lib/hook-generator.functions";
 import { getUtm } from "@/lib/utm";
+import { useToolView } from "@/lib/tool-analytics";
 
 export const Route = createFileRoute("/hook-generator")({
   head: () => ({
@@ -47,6 +48,7 @@ const LABEL = "font-display text-[#0F172A] text-sm font-bold leading-snug block 
 const HINT = "text-[#555] text-xs mb-2";
 
 function HookGeneratorPage() {
+  useToolView("hook-generator");
   const [t, setT] = useState("");
   const [a, setA] = useState("");
   const [ang, setAng] = useState("");
@@ -54,6 +56,10 @@ function HookGeneratorPage() {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
   const [hooks, setHooks] = useState<Hook[] | null>(null);
   const [locked, setLocked] = useState(false);
 
@@ -65,6 +71,7 @@ function HookGeneratorPage() {
       else setHooks(res.hooks);
     },
     onError: (e: Error) => toast.error(e.message),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   const valid = t.trim().length >= 2 && a.trim().length >= 2 && /\S+@\S+\.\S+/.test(email);
@@ -152,11 +159,11 @@ function HookGeneratorPage() {
               </div>
             </div>
 
-            <TurnstileGate onToken={setTsToken} />
+            <TurnstileGate ref={tsRef} onToken={setTsToken} />
 
             <Button
               type="button"
-              disabled={!valid || mut.isPending}
+              disabled={!valid || !tsToken || mut.isPending}
               onClick={generate}
               className="w-full bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm py-3 h-auto disabled:opacity-40"
             >

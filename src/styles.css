@@ -596,3 +596,86 @@ label {
 .bg-\[\#1E293B\] .nx-label,
 .bg-\[\#1C1C1C\] .nx-label,
 .bg-\[\#111111\] .nx-label { color: var(--nx-gold-bright); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTENTPRENEUR AFRICA — member workspace theme
+   ═══════════════════════════════════════════════════════════════════════════
+
+   The signed-in workspace moved to contentpreneur.africa (2026-08-18) but kept
+   wearing CHKPLT's skin, because it is literally the same components. Two
+   brands rendering identically is worse than either one alone: the buyer who
+   paid Contentpreneur Africa opens their kit and cannot tell whose product it
+   is.
+
+   These are the CANONICAL Contentpreneur Africa tokens — the same four colours
+   used on contentpreneur.africa itself (see that repo's tailwind.config.ts),
+   which trace back to the Brand Identity section of CLAUDE.md. Not invented
+   here, and not to be re-invented elsewhere:
+
+       Heritage Gold  #C9A84C      Charcoal   #1C1C1C
+       Tool Black     #111111      Cream      #FAF7F0
+
+   CHKPLT stays amber (#F59E0B) on slate (#0F172A) with white. That is the
+   STOREFRONT identity and it is deliberately untouched.
+
+   Applied once, on the _authenticated layout, so every member route re-skins
+   without editing twenty files. Token NAMES are unchanged on purpose — the
+   --nx-gold-* names read as amber-ish, but renaming them across the app would
+   be a large diff for zero user-visible gain. */
+
+.theme-contentpreneur {
+  /* Ground: cream, not white. This is the single biggest visual tell between
+     the two brands and costs nothing to apply. */
+  --background:        #FAF7F0;   /* Cream    */
+  --foreground:        #1C1C1C;   /* Charcoal */
+  --obsidian:          #111111;   /* Tool Black — dark panels */
+
+  --bg-surface:        #F3EEE2;
+  --bg-card:           #FFFFFF;   /* cards stay white ON cream for separation */
+  --bg-card-hi:        #EBE4D4;
+  --bg-card-raised:    #FFFFFF;
+  --card:              #FFFFFF;
+  --card-foreground:   #1C1C1C;
+  --popover:           #FFFFFF;
+  --popover-foreground:#1C1C1C;
+
+  --text-body:         #33302A;
+  --text-dim:          #5C564B;
+  --text-subtle:       #8A8275;
+
+  /* Heritage Gold replaces amber throughout. --nx-gold-text is the darkened
+     variant that clears AA on cream — the raw #C9A84C does not, and gold text
+     that fails contrast is the classic way a premium palette turns unreadable. */
+  --nx-gold:           #C9A84C;
+  --nx-gold-mid:       #D6BC68;
+  --nx-gold-bright:    #E0C77E;   /* for use on charcoal / tool-black panels */
+  --nx-gold-deep:      #A88A34;   /* hover / pressed */
+  --nx-gold-text:      #8A6D1F;   /* AA on cream and on white */
+
+  --primary:           var(--nx-gold);
+  --banana:            var(--nx-gold);
+  --banana-foreground: #111111;
+  --accent:            var(--bg-card-hi);
+  --ring:              var(--nx-gold);
+
+  --border:            #E4DBC8;
+  --border-mid:        #D3C6AB;
+  --border-hover:      var(--nx-gold-deep);
+  --input:             #D3C6AB;
+
+  --muted:             var(--bg-card-hi);
+  --muted-foreground:  var(--text-dim);
+
+  --secondary:         var(--bg-card-hi);
+  --secondary-foreground: #1C1C1C;
+
+  /* Lato is the Contentpreneur Africa body face; Montserrat already matches. */
+  --font-sans: "Lato", "Inter", -apple-system, ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Dark panels inside the workspace: charcoal, not slate-900. Components carry a
+   hardcoded #0F172A in a few places for historical reasons — this class is the
+   supported way to opt a panel into the brand's dark surface instead. */
+.theme-contentpreneur .nx-ink {
+  background-color: #1C1C1C;
+}

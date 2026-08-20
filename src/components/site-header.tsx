@@ -5,50 +5,21 @@ import { Search, ShoppingBag, User } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/lib/cart";
-import { useCurrencyOverride } from "@/lib/currency";
 
 const navLink =
   "text-[15px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-1 py-1";
 const navActive = { className: "text-[var(--foreground)] font-semibold" };
 
-// Mirrors the real store's top-left "ZAR ▼" switcher — lets a shopper
-// manually pick their billing currency instead of trusting geo-detection
-// (useful for anyone browsing on a VPN, or who just prefers USD pricing).
-function CurrencySwitcher() {
-  const { override, setOverride } = useCurrencyOverride();
-  const [open, setOpen] = useState(false);
-  const label = override ?? "ZAR";
-
-  return (
-    <div className="relative shrink-0">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        onBlur={() => setTimeout(() => setOpen(false), 150)}
-        className="flex items-center gap-1 text-[13px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors"
-      >
-        {label} <span className="text-[10px]">▼</span>
-      </button>
-      {open && (
-        <div className="absolute left-0 top-full z-50 mt-2 w-32 rounded-md border border-[var(--border)] bg-white py-1 shadow-lg">
-          {(["ZAR", "USD"] as const).map((c) => (
-            <button
-              key={c}
-              onMouseDown={() => {
-                setOverride(c);
-                setOpen(false);
-              }}
-              className={`block w-full px-3 py-1.5 text-left text-[13px] hover:bg-[#f5f5f5] ${
-                label === c ? "font-semibold text-[#000]" : "text-[#666]"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+// The "ZAR ▼" currency switcher was REMOVED 2026-08-19 (founder ruling: chkplt.com
+// prices entirely in USD, rands appear only at the Paystack conversion gate).
+//
+// It had become actively misleading: formatPrice now renders USD for every
+// product regardless of geo, so a control labelled "ZAR" changed no price on the
+// page. What it still silently changed was the payment RAIL — picking ZAR forced
+// country "ZA" and therefore Paystack. A switcher that appears to set the display
+// currency but actually reroutes the payment processor is worse than no switcher.
+//
+// Geo still picks the rail (shouldUseStripe); the buyer just is not asked to.
 
 function HeaderIcons() {
   const { user } = useAuth();
@@ -105,7 +76,6 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur">
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <CurrencySwitcher />
 
         <Link
           to="/"

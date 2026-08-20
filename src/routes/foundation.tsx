@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/contentpreneur-header";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/foundation")({
       {
         name: "description",
         content:
-          "The 7-step interactive Clarity System, 9 diagnostic tools, and 10 workbooks that take you from having expertise to running a real plan.",
+          "The 7-step interactive Clarity System, 11 diagnostic tools, 10 workbooks and a 10-video course that take you from having expertise to running a real plan.",
       },
     ],
   }),
@@ -47,7 +48,16 @@ function FoundationPage() {
       return data;
     },
   });
-  const priceLabel = product ? formatPrice(product.price_cents, product.currency, product.is_free) : "$97";
+  // formatPrice NEEDS the slug and the buyer's country. Without them (the bug
+  // this replaces) it fell through to the generic ZAR→USD conversion and
+  // rendered "$94" — the raw R1,565 divided by the fallback rate — to everyone,
+  // including South Africans, who are then charged in rand by Paystack.
+  //   • slug    → USD_DISPLAY's clean marketing price, $97, for international.
+  //   • country → "ZA" renders the actual rand amount the card will be debited.
+  const country = useCountry();
+  const priceLabel = product
+    ? formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country)
+    : "$97";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -58,8 +68,8 @@ function FoundationPage() {
         <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">Now I Know What To Do.</h1>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
           The Foundation Kit turns clarity into a real, working system — the 7-step interactive Clarity System,
-          9 diagnostic tools, and 10 workbooks that take you from "I have expertise" to "I have a plan I'm
-          actually running."
+          11 diagnostic tools, 10 workbooks and a 10-video course that take you from "I have expertise" to
+          "I have a plan I'm actually running."
         </p>
         <a
           href="#buy"
@@ -87,21 +97,26 @@ function FoundationPage() {
 
       <section className="mx-auto max-w-2xl px-6 py-16 text-center">
         <h2 className="font-display text-3xl">What's Inside</h2>
-        <div className="mt-8 grid gap-4 text-left sm:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-4 text-left sm:grid-cols-4">
           <div className="border border-border bg-background p-6">
             <div className="font-display text-2xl font-black text-banana">7</div>
             <div className="mt-1 text-sm font-bold">Step Clarity System</div>
             <p className="mt-2 text-xs text-muted-foreground">An interactive walkthrough, not a static PDF.</p>
           </div>
           <div className="border border-border bg-background p-6">
-            <div className="font-display text-2xl font-black text-banana">9</div>
+            <div className="font-display text-2xl font-black text-banana">11</div>
             <div className="mt-1 text-sm font-bold">Interactive Tools</div>
-            <p className="mt-2 text-xs text-muted-foreground">Auto-scored diagnostics — positioning, offer, audience.</p>
+            <p className="mt-2 text-xs text-muted-foreground">Auto-scored diagnostics — positioning, offer, audience, income.</p>
           </div>
           <div className="border border-border bg-background p-6">
             <div className="font-display text-2xl font-black text-banana">10</div>
             <div className="mt-1 text-sm font-bold">PDFs</div>
             <p className="mt-2 text-xs text-muted-foreground">Workbook, framework cards, templates, content calendar.</p>
+          </div>
+          <div className="border border-border bg-background p-6">
+            <div className="font-display text-2xl font-black text-banana">10</div>
+            <div className="mt-1 text-sm font-bold">Video Lessons</div>
+            <p className="mt-2 text-xs text-muted-foreground">Introduction to Personal Branding — included, not an upsell.</p>
           </div>
         </div>
       </section>
@@ -133,6 +148,16 @@ function BuyForm({ priceLabel, disabled }: { priceLabel: string; disabled: boole
   const initStripeFn = useServerFn(initializeStripeCheckout);
   const [email, setEmail] = useState<string>(user?.email ?? "");
   const [fullName, setFullName] = useState<string>((user?.user_metadata?.full_name as string) ?? "");
+  // initializeCheckout/initializeStripeCheckout BOTH call assertTurnstile as their
+  // first statement. This form never rendered a widget and never sent a token, so
+  // with TURNSTILE_SECRET_KEY set in production every purchase attempt died on
+  // "Verification failed — please refresh the page and try again." Ported from the
+  // pattern products.$slug.tsx and cart.tsx already use correctly.
+  const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
 
   const mut = useMutation({
     mutationFn: useStripe ? initStripeFn : initFn,
@@ -140,6 +165,7 @@ function BuyForm({ priceLabel, disabled }: { priceLabel: string; disabled: boole
       window.location.href = res.authorizationUrl;
     },
     onError: (e: Error) => toast.error(e.message ?? "Could not start checkout"),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   return (
@@ -154,10 +180,22 @@ function BuyForm({ priceLabel, disabled }: { priceLabel: string; disabled: boole
           <Input value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" placeholder="Optional" />
         </div>
       </div>
+      {/* "allow": a widget that cannot load must never be the reason a sale is
+          lost. The server still verifies and alerts — see checkTurnstileForCheckout. */}
+      <TurnstileGate ref={tsRef} onToken={setTsToken} unavailablePolicy="allow" className="mt-5" />
       <Button
         size="lg"
-        disabled={!email || mut.isPending || disabled}
-        onClick={() => mut.mutate({ data: { productSlug: SLUG, email, fullName: fullName || undefined } })}
+        disabled={!email || !tsToken || mut.isPending || disabled}
+        onClick={() =>
+          mut.mutate({
+            data: {
+              productSlug: SLUG,
+              email,
+              fullName: fullName || undefined,
+              turnstileToken: tsToken ?? undefined,
+            },
+          })
+        }
         className="mt-6 w-full bg-banana text-banana-foreground hover:bg-banana/90"
       >
         {mut.isPending ? "Starting…" : `Get Instant Access — ${priceLabel} →`}

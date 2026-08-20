@@ -6,7 +6,7 @@ import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, Boxes } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/dares-asset-model")({
-  head: () => ({ meta: [{ title: "DARES Asset Model — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "DARES Asset Model — Contentpreneur Africa" }] }),
   component: DaresAssetModel,
 });
 
@@ -83,10 +83,10 @@ function DaresAssetModel() {
           ))}
         </div>
 
-        <div className="rounded-2xl bg-[#0F172A] p-6 text-center mt-8">
-          <div className="font-display text-5xl" style={{ color: r.tone === "good" ? "#4ADE80" : "var(--nx-gold-bright)" }}>{r.score}<span className="text-slate-400 text-xl">/10</span></div>
+        <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-center mt-8">
+          <div className="font-display text-4xl sm:text-5xl" style={{ color: r.tone === "good" ? "#4ADE80" : "var(--nx-gold-bright)" }}>{r.score}<span className="text-[#9A9488] text-xl">/10</span></div>
           <h2 className="text-white text-2xl mt-2">{r.title}</h2>
-          <p className="text-slate-300 mt-2 max-w-lg mx-auto">Lowest: <strong style={{ color: "var(--nx-gold-bright)" }}>{r.weakest.name}</strong> — {r.weakest.lift}</p>
+          <p className="text-[#C8C2B4] mt-2 max-w-lg mx-auto">Lowest: <strong style={{ color: "var(--nx-gold-bright)" }}>{r.weakest.name}</strong> — {r.weakest.lift}</p>
         </div>
 
         <AiCoach tool="dares-asset-model" getPayload={() => JSON.stringify({ idea, scores: v })} />
@@ -108,7 +108,7 @@ function Locked() {
         <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
         <h2 className="mt-4 text-2xl">This is Step 6 of the Clarity System.</h2>
         <p className="nx-body max-w-md mx-auto mt-2">Get the Foundation Kit to unlock the DARES Asset Model and the full 7-step system.</p>
-        <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+        <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
       </div>
     </main>
   );

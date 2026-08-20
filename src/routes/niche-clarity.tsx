@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -13,23 +13,25 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { initializeCheckout } from "@/lib/checkout.functions";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import { formatPrice } from "@/lib/gardens";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Check, Sparkles } from "lucide-react";
+import { useToolView } from "@/lib/tool-analytics";
 
 const SLUG = "niche-clarity-workbook";
 
 export const Route = createFileRoute("/niche-clarity")({
   head: () => ({
     meta: [
-      { title: "Niche Clarity Workbook — $16 — CHKPLT" },
+      { title: "Niche Clarity Workbook — $12 — CHKPLT" },
       {
         name: "description",
         content:
-          "Stop guessing what to post. In a single afternoon, lock in the one niche that fits your story, your skills, and your calling — for $16.",
+          "Stop guessing what to post. In a single afternoon, lock in the one niche that fits your story, your skills, and your calling — for $12.",
       },
-      { property: "og:title", content: "Niche Clarity Workbook — $16" },
+      { property: "og:title", content: "Niche Clarity Workbook — $12" },
       {
         property: "og:description",
         content:
@@ -41,6 +43,7 @@ export const Route = createFileRoute("/niche-clarity")({
 });
 
 function NicheClarityPage() {
+  useToolView("niche-clarity");
   const { data: product } = useQuery({
     queryKey: ["product", SLUG],
     queryFn: async () => {
@@ -55,8 +58,8 @@ function NicheClarityPage() {
   });
 
   const priceLabel = product
-    ? formatPrice(product.price_cents, product.currency, product.is_free)
-    : "$16";
+    ? formatPrice(product.price_cents, product.currency, product.is_free, product.slug)
+    : "$12";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -221,7 +224,7 @@ function NicheClarityPage() {
         <div className="mx-auto max-w-2xl px-6 py-20">
           <div className="text-center">
             <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">Get instant access</div>
-            <h2 className="mt-3 font-display text-5xl">Lock in your niche today.</h2>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl">Lock in your niche today.</h2>
             <p className="mt-4 text-muted-foreground">
               One-time payment. Lifetime access. No upsells unless you want them.
             </p>
@@ -250,6 +253,13 @@ function BuyForm({ priceLabel, disabled }: { priceLabel: string; disabled: boole
   const [fullName, setFullName] = useState<string>(
     (user?.user_metadata?.full_name as string) ?? "",
   );
+  // Same defect as foundation.tsx (which copied this form): initializeCheckout
+  // asserts Turnstile first, and nothing here produced a token. Fixed 2026-08-18.
+  const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
 
   const mut = useMutation({
     mutationFn: initFn,
@@ -257,6 +267,7 @@ function BuyForm({ priceLabel, disabled }: { priceLabel: string; disabled: boole
       window.location.href = res.authorizationUrl;
     },
     onError: (e: Error) => toast.error(e.message ?? "Could not start checkout"),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   return (
@@ -286,15 +297,18 @@ function BuyForm({ priceLabel, disabled }: { priceLabel: string; disabled: boole
           />
         </div>
       </div>
+      {/* See foundation.tsx — a broken widget never blocks a payment. */}
+      <TurnstileGate ref={tsRef} onToken={setTsToken} unavailablePolicy="allow" className="mt-5" />
       <Button
         size="lg"
-        disabled={!email || mut.isPending || disabled}
+        disabled={!email || !tsToken || mut.isPending || disabled}
         onClick={() =>
           mut.mutate({
             data: {
               productSlug: SLUG,
               email,
               fullName: fullName || undefined,
+              turnstileToken: tsToken ?? undefined,
             },
           })
         }

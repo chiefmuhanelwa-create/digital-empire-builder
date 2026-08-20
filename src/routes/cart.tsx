@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -17,7 +17,7 @@ import { useCountry, shouldUseStripe } from "@/lib/currency";
 import { initializeCheckout, initializeStripeCheckout } from "@/lib/checkout.functions";
 import { getUtm } from "@/lib/utm";
 import { trackLead } from "@/lib/track";
-import { TurnstileGate } from "@/components/TurnstileGate";
+import { TurnstileGate, type TurnstileGateHandle } from "@/components/TurnstileGate";
 import type { Tables } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/cart")({
@@ -193,6 +193,10 @@ function CartCheckout({ items, subtotalCents }: { items: Tables<"products">[]; s
   const [fullName, setFullName] = useState((user?.user_metadata?.full_name as string) ?? "");
   const [whatsapp, setWhatsapp] = useState("");
   const [tsToken, setTsToken] = useState<string | null>(null);
+  // A Turnstile token is single-use — reset after EVERY attempt so a retry
+  // (or a second run of this tool) gets a fresh one instead of re-sending a
+  // spent token, which Cloudflare rejects as `timeout-or-duplicate`.
+  const tsRef = useRef<TurnstileGateHandle>(null);
 
   const priceLabel = formatPrice(subtotalCents, items[0]?.currency ?? "ZAR", false, undefined, country);
 
@@ -202,6 +206,7 @@ function CartCheckout({ items, subtotalCents }: { items: Tables<"products">[]; s
       window.location.href = res.authorizationUrl;
     },
     onError: (e: any) => toast.error(e.message ?? "Could not start checkout"),
+    onSettled: () => tsRef.current?.reset(),
   });
 
   if (!open) {
@@ -258,11 +263,12 @@ function CartCheckout({ items, subtotalCents }: { items: Tables<"products">[]; s
         </div>
       </div>
       <div className="mt-4">
-        <TurnstileGate onToken={setTsToken} />
+        {/* See foundation.tsx — a broken widget never blocks a payment. */}
+        <TurnstileGate ref={tsRef} onToken={setTsToken} unavailablePolicy="allow" />
       </div>
       <Button
         size="lg"
-        disabled={mut.isPending}
+        disabled={!tsToken || mut.isPending}
         onClick={submit}
         className="mt-4 w-full text-white"
         style={{ backgroundColor: "sienna" }}

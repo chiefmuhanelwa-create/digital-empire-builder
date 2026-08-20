@@ -181,7 +181,7 @@ export function ProCohortBreakdown() {
       <dl className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-px bg-border border border-border">
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Investment</dt>
-          <dd className="mt-2 text-sm">$499 once-off · billed in ZAR</dd>
+          <dd className="mt-2 text-sm">$997 once-off · billed in ZAR</dd>
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Capacity</dt>
@@ -212,7 +212,7 @@ export function VipTierBreakdown() {
       <dl className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-px bg-border border border-border">
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Investment</dt>
-          <dd className="mt-2 text-sm">$2,430 once-off · billed in ZAR.</dd>
+          <dd className="mt-2 text-sm">$2,997 once-off · billed in ZAR.</dd>
         </div>
         <div className="bg-background p-5">
           <dt className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground">Capacity</dt>

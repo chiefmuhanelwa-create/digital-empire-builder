@@ -6,7 +6,7 @@ import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/knowledge-audit")({
-  head: () => ({ meta: [{ title: "The Knowledge Audit — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "The Knowledge Audit — Contentpreneur Africa" }] }),
   component: KnowledgeAudit,
 });
 
@@ -138,11 +138,11 @@ function KnowledgeAudit() {
         {step === "result" && (
           <div className="mt-6">
             <button onClick={() => setStep("rate")} className="inline-flex items-center gap-1 text-sm text-[var(--text-dim)] hover:text-foreground"><ArrowLeft className="size-4" /> Edit ratings</button>
-            <div className="rounded-2xl bg-[#0F172A] p-6 text-white text-center mt-4">
-              <div className="font-display text-5xl text-[var(--nx-gold-bright)]">{res.pct}%</div>
+            <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-white text-center mt-4">
+              <div className="font-display text-4xl sm:text-5xl text-[var(--nx-gold-bright)]">{res.pct}%</div>
               <p className="nx-label !text-[var(--nx-gold-bright)] mt-1">Your readiness</p>
               <h2 className="text-white text-2xl mt-3">{res.title}</h2>
-              <p className="text-slate-300 mt-2 max-w-lg mx-auto">{res.text}</p>
+              <p className="text-[#C8C2B4] mt-2 max-w-lg mx-auto">{res.text}</p>
             </div>
 
             <div className="nx-card !p-5 mt-5">
@@ -205,7 +205,7 @@ function Locked() {
           <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
           <h2 className="mt-4 text-2xl">The Knowledge Audit is in the Foundation Kit.</h2>
           <p className="nx-body max-w-md mx-auto mt-2">Find the product hiding in your expertise. Get the kit to unlock this and every interactive app.</p>
-          <a href="/products/called-expert-foundation-kit" className="cta-glow inline-block mt-6">Get the Kit</a>
+          <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
       </main>
     </Shell>

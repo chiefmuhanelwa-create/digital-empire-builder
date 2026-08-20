@@ -12,7 +12,7 @@ import { requestAccountDeletion } from "@/lib/account.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/account")({
-  head: () => ({ meta: [{ title: "Your account — CHKPLT" }] }),
+  head: () => ({ meta: [{ title: "Your account — Contentpreneur Africa" }] }),
   component: AccountPage,
 });
 
