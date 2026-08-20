@@ -362,10 +362,13 @@ function Results({
         </h2>
         <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-neutral-700">
           I earned from content for years and declared nothing — not because I was hiding, because
-          nobody taught me. Then the assessment came. I came forward, corrected it properly, and
-          SARS waived <strong>R45,705</strong> in penalties. The final debt was{" "}
-          <strong>R162,174</strong>, paid off at about R17,000 a month. It was survivable. Ignorance
-          is what's expensive — and you're reading this before your letter arrives.
+          nobody taught me. Then the assessment came: <strong>R207,879</strong>, for tax I had
+          already spent. I came forward and corrected it properly rather than hiding, and that
+          decision is the only reason this is a story and not a catastrophe.
+        </p>
+        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-neutral-700">
+          I am still carrying it. That is the point. Ignorance is what's expensive — and you're
+          reading this before your letter arrives.
         </p>
         <Link
           to="/products/$slug"

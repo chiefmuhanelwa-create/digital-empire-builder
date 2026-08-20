@@ -258,14 +258,13 @@ function TaxGuidePage() {
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-white/75">
               I earned from content for years and declared nothing — not because I was hiding,
-              because nobody taught me. Then the assessment came. I came forward, took proper
-              advice, corrected it through eFiling and objected to the penalties. SARS waived{" "}
-              <strong className="text-white">R45,705</strong>. The final debt came down to{" "}
-              <strong className="text-white">R162,174</strong>, paid off at about R17,000 a month.
+              because nobody taught me. Then the assessment came:{" "}
+              <strong className="text-white">R207,879</strong>, for tax I had already spent. I came
+              forward and took proper advice rather than hiding.
             </p>
             <p className="mt-3 text-[15px] leading-relaxed text-white/75">
-              It was survivable. Ignorance is what's expensive — and you're reading this before your
-              letter arrives.
+              I am still carrying it. That is exactly why I am telling you now — ignorance is what's
+              expensive, and you're reading this before your letter arrives.
             </p>
           </div>
         </section>

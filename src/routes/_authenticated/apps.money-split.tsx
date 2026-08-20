@@ -22,9 +22,15 @@ export const Route = createFileRoute("/_authenticated/apps/money-split")({
 // 10% back into the business, 65% actually yours. A creator who reserves 25% and
 // spends the rest still has nothing to reinvest.
 //
-// PROOF FIGURES ARE FIXED AND VERIFIED. R207,879.20 assessed · R45,705.06 waived
-// · R162,174.14 paid over eleven months. Never R285,000 (unverified) and never
-// R207,869 (a transcription error that circulated for a while).
+// PROOF FIGURES. R207,879.20 assessed — that is the ONLY figure that survives
+// both versions of this story on record, so it is the only one this page states.
+// Never R285,000 (unverified) and never R207,869 (a transcription error).
+//
+// DO NOT REINSTATE A REPAYMENT CLAIM. Founder correction 2026-08-20: no payments
+// have started. The earlier copy said the debt was paid off over eleven months —
+// it was not. PROOF.md independently bans that claim and the final-debt figure.
+// The lesson here is the reserve rule, not a repayment success story, and it is
+// stronger for being unfinished: the debt is still being carried.
 //
 // NO IDENTIFIERS. No SARS reference, no VDP number, no practitioner's name — the
 // story teaches without them, and publishing them into a customer-facing tool
@@ -133,10 +139,8 @@ function MoneySplit() {
             spent.
           </p>
           <p className="text-[#C8C2B4] mt-2 leading-relaxed">
-            I filed amended returns rather than hiding. They waived{" "}
-            <strong className="text-white">R45,705.06</strong> in penalties. I paid the remaining{" "}
-            <strong className="text-white">R162,174.14</strong> over eleven months, while still
-            running everything else.
+            I came forward and corrected it rather than hiding. I am still carrying that debt today
+            — it did not disappear, and no amount of working harder afterwards made it cheaper.
           </p>
           <p className="text-[#C8C2B4] mt-3 leading-relaxed">
             Not one rand of that was unaffordable at the time it was earned. It only became
