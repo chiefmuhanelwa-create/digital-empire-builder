@@ -29,6 +29,12 @@ export const TOOL_GROUPS = {
   // Claiming a FREE product also wrote to the buyers group. Someone who took
   // something free is a lead, not a customer.
   "free-product": { id: "195733205035255288", name: "TOOL LEADS" },
+  // The public Positioning Brief. Shares TOOL LEADS rather than getting its own
+  // group: a new group is only worth creating when it will be segmented on, and
+  // nothing is segmented on tool-of-origin today. `source` on `subscribers`
+  // already records which tool produced the lead, in our own database, where it
+  // can be read back — unlike a MailerLite group id, which cannot.
+  positioning: { id: "195733205035255288", name: "TOOL LEADS" },
 } as const;
 
 // Paying customers only, written by order fulfilment after money has moved.

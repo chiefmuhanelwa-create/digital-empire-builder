@@ -92,7 +92,13 @@
     // wildcard silently swallowed it; once that wildcard was narrowed (see
     // contentpreneur-africa-site/wrangler.jsonc, same date) it matched nothing
     // on either Worker at all, causing the hang instead of a 404.
-    { "pattern": "contentpreneur.africa/_serverFn/*", "zone_name": "contentpreneur.africa" }
+    { "pattern": "contentpreneur.africa/_serverFn/*", "zone_name": "contentpreneur.africa" },
+    // Public tools live on this domain and POST to their own API route on the
+    // same origin. There is no wildcard here — every path is explicit — so a
+    // new public tool needs BOTH lines or it repeats the _serverFn failure
+    // above: the page 404s, or the page loads and the submit hangs forever.
+    { "pattern": "contentpreneur.africa/positioning*", "zone_name": "contentpreneur.africa" },
+    { "pattern": "contentpreneur.africa/api/*", "zone_name": "contentpreneur.africa" }
   ],
   "triggers": {
     // "* * * * *" every minute → drain the transactional/auth email queue (Resend).

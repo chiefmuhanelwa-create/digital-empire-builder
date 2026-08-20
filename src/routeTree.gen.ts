@@ -23,6 +23,7 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as RateCardRouteImport } from './routes/rate-card'
 import { Route as ProvisionalTaxRouteImport } from './routes/provisional-tax'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PositioningRouteImport } from './routes/positioning'
 import { Route as OfferBuilderRouteImport } from './routes/offer-builder'
 import { Route as NicheClarityRouteImport } from './routes/niche-clarity'
 import { Route as MediaKitRouteImport } from './routes/media-kit'
@@ -52,6 +53,7 @@ import { Route as ApiPublicToolEventRouteImport } from './routes/api/public/tool
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApiPublicRateCardRouteImport } from './routes/api/public/rate-card'
 import { Route as ApiPublicProvisionalTaxRouteImport } from './routes/api/public/provisional-tax'
+import { Route as ApiPublicPositioningRouteImport } from './routes/api/public/positioning'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiPublicManychatLeadRouteImport } from './routes/api/public/manychat-lead'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
@@ -165,6 +167,11 @@ const ProvisionalTaxRoute = ProvisionalTaxRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PositioningRoute = PositioningRouteImport.update({
+  id: '/positioning',
+  path: '/positioning',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OfferBuilderRoute = OfferBuilderRouteImport.update({
@@ -310,6 +317,11 @@ const ApiPublicRateCardRoute = ApiPublicRateCardRouteImport.update({
 const ApiPublicProvisionalTaxRoute = ApiPublicProvisionalTaxRouteImport.update({
   id: '/api/public/provisional-tax',
   path: '/api/public/provisional-tax',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPositioningRoute = ApiPublicPositioningRouteImport.update({
+  id: '/api/public/positioning',
+  path: '/api/public/positioning',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaystackWebhookRoute =
@@ -584,6 +596,7 @@ export interface FileRoutesByFullPath {
   '/media-kit': typeof MediaKitRoute
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
+  '/positioning': typeof PositioningRoute
   '/privacy': typeof PrivacyRoute
   '/provisional-tax': typeof ProvisionalTaxRoute
   '/rate-card': typeof RateCardRoute
@@ -641,6 +654,7 @@ export interface FileRoutesByFullPath {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/positioning': typeof ApiPublicPositioningRoute
   '/api/public/provisional-tax': typeof ApiPublicProvisionalTaxRoute
   '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -672,6 +686,7 @@ export interface FileRoutesByTo {
   '/media-kit': typeof MediaKitRoute
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
+  '/positioning': typeof PositioningRoute
   '/privacy': typeof PrivacyRoute
   '/provisional-tax': typeof ProvisionalTaxRoute
   '/rate-card': typeof RateCardRoute
@@ -725,6 +740,7 @@ export interface FileRoutesByTo {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/positioning': typeof ApiPublicPositioningRoute
   '/api/public/provisional-tax': typeof ApiPublicProvisionalTaxRoute
   '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -758,6 +774,7 @@ export interface FileRoutesById {
   '/media-kit': typeof MediaKitRoute
   '/niche-clarity': typeof NicheClarityRoute
   '/offer-builder': typeof OfferBuilderRoute
+  '/positioning': typeof PositioningRoute
   '/privacy': typeof PrivacyRoute
   '/provisional-tax': typeof ProvisionalTaxRoute
   '/rate-card': typeof RateCardRoute
@@ -815,6 +832,7 @@ export interface FileRoutesById {
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/positioning': typeof ApiPublicPositioningRoute
   '/api/public/provisional-tax': typeof ApiPublicProvisionalTaxRoute
   '/api/public/rate-card': typeof ApiPublicRateCardRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
@@ -848,6 +866,7 @@ export interface FileRouteTypes {
     | '/media-kit'
     | '/niche-clarity'
     | '/offer-builder'
+    | '/positioning'
     | '/privacy'
     | '/provisional-tax'
     | '/rate-card'
@@ -905,6 +924,7 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/positioning'
     | '/api/public/provisional-tax'
     | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
@@ -936,6 +956,7 @@ export interface FileRouteTypes {
     | '/media-kit'
     | '/niche-clarity'
     | '/offer-builder'
+    | '/positioning'
     | '/privacy'
     | '/provisional-tax'
     | '/rate-card'
@@ -989,6 +1010,7 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/positioning'
     | '/api/public/provisional-tax'
     | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
@@ -1021,6 +1043,7 @@ export interface FileRouteTypes {
     | '/media-kit'
     | '/niche-clarity'
     | '/offer-builder'
+    | '/positioning'
     | '/privacy'
     | '/provisional-tax'
     | '/rate-card'
@@ -1078,6 +1101,7 @@ export interface FileRouteTypes {
     | '/api/cron/sync-fx'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
+    | '/api/public/positioning'
     | '/api/public/provisional-tax'
     | '/api/public/rate-card'
     | '/api/public/stripe-webhook'
@@ -1111,6 +1135,7 @@ export interface RootRouteChildren {
   MediaKitRoute: typeof MediaKitRoute
   NicheClarityRoute: typeof NicheClarityRoute
   OfferBuilderRoute: typeof OfferBuilderRoute
+  PositioningRoute: typeof PositioningRoute
   PrivacyRoute: typeof PrivacyRoute
   ProvisionalTaxRoute: typeof ProvisionalTaxRoute
   RateCardRoute: typeof RateCardRoute
@@ -1131,6 +1156,7 @@ export interface RootRouteChildren {
   ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
   ApiPublicManychatLeadRoute: typeof ApiPublicManychatLeadRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ApiPublicPositioningRoute: typeof ApiPublicPositioningRoute
   ApiPublicProvisionalTaxRoute: typeof ApiPublicProvisionalTaxRoute
   ApiPublicRateCardRoute: typeof ApiPublicRateCardRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
@@ -1238,6 +1264,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/positioning': {
+      id: '/positioning'
+      path: '/positioning'
+      fullPath: '/positioning'
+      preLoaderRoute: typeof PositioningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/offer-builder': {
@@ -1441,6 +1474,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/provisional-tax'
       fullPath: '/api/public/provisional-tax'
       preLoaderRoute: typeof ApiPublicProvisionalTaxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/positioning': {
+      id: '/api/public/positioning'
+      path: '/api/public/positioning'
+      fullPath: '/api/public/positioning'
+      preLoaderRoute: typeof ApiPublicPositioningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/paystack-webhook': {
@@ -1923,6 +1963,7 @@ const rootRouteChildren: RootRouteChildren = {
   MediaKitRoute: MediaKitRoute,
   NicheClarityRoute: NicheClarityRoute,
   OfferBuilderRoute: OfferBuilderRoute,
+  PositioningRoute: PositioningRoute,
   PrivacyRoute: PrivacyRoute,
   ProvisionalTaxRoute: ProvisionalTaxRoute,
   RateCardRoute: RateCardRoute,
@@ -1943,6 +1984,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCronSyncFxRoute: ApiCronSyncFxRoute,
   ApiPublicManychatLeadRoute: ApiPublicManychatLeadRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ApiPublicPositioningRoute: ApiPublicPositioningRoute,
   ApiPublicProvisionalTaxRoute: ApiPublicProvisionalTaxRoute,
   ApiPublicRateCardRoute: ApiPublicRateCardRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
