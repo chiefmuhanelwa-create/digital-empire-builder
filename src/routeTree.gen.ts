@@ -64,6 +64,7 @@ import { Route as AuthenticatedDashboardCommunityRouteImport } from './routes/_a
 import { Route as AuthenticatedAppsYourAlgorithmRouteImport } from './routes/_authenticated/apps.your-algorithm'
 import { Route as AuthenticatedAppsVoicePrintRouteImport } from './routes/_authenticated/apps.voice-print'
 import { Route as AuthenticatedAppsTheSendRouteImport } from './routes/_authenticated/apps.the-send'
+import { Route as AuthenticatedAppsTheLeakRouteImport } from './routes/_authenticated/apps.the-leak'
 import { Route as AuthenticatedAppsTheLadderRouteImport } from './routes/_authenticated/apps.the-ladder'
 import { Route as AuthenticatedAppsTeleprompterRouteImport } from './routes/_authenticated/apps.teleprompter'
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
@@ -381,6 +382,12 @@ const AuthenticatedAppsTheSendRoute =
     path: '/apps/the-send',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsTheLeakRoute =
+  AuthenticatedAppsTheLeakRouteImport.update({
+    id: '/apps/the-leak',
+    path: '/apps/the-leak',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsTheLadderRoute =
   AuthenticatedAppsTheLadderRouteImport.update({
     id: '/apps/the-ladder',
@@ -644,6 +651,7 @@ export interface FileRoutesByFullPath {
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/apps/teleprompter': typeof AuthenticatedAppsTeleprompterRoute
   '/apps/the-ladder': typeof AuthenticatedAppsTheLadderRoute
+  '/apps/the-leak': typeof AuthenticatedAppsTheLeakRoute
   '/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/apps/voice-print': typeof AuthenticatedAppsVoicePrintRoute
   '/apps/your-algorithm': typeof AuthenticatedAppsYourAlgorithmRoute
@@ -731,6 +739,7 @@ export interface FileRoutesByTo {
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/apps/teleprompter': typeof AuthenticatedAppsTeleprompterRoute
   '/apps/the-ladder': typeof AuthenticatedAppsTheLadderRoute
+  '/apps/the-leak': typeof AuthenticatedAppsTheLeakRoute
   '/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/apps/voice-print': typeof AuthenticatedAppsVoicePrintRoute
   '/apps/your-algorithm': typeof AuthenticatedAppsYourAlgorithmRoute
@@ -822,6 +831,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/_authenticated/apps/teleprompter': typeof AuthenticatedAppsTeleprompterRoute
   '/_authenticated/apps/the-ladder': typeof AuthenticatedAppsTheLadderRoute
+  '/_authenticated/apps/the-leak': typeof AuthenticatedAppsTheLeakRoute
   '/_authenticated/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/_authenticated/apps/voice-print': typeof AuthenticatedAppsVoicePrintRoute
   '/_authenticated/apps/your-algorithm': typeof AuthenticatedAppsYourAlgorithmRoute
@@ -914,6 +924,7 @@ export interface FileRouteTypes {
     | '/apps/seeds-pipeline'
     | '/apps/teleprompter'
     | '/apps/the-ladder'
+    | '/apps/the-leak'
     | '/apps/the-send'
     | '/apps/voice-print'
     | '/apps/your-algorithm'
@@ -1001,6 +1012,7 @@ export interface FileRouteTypes {
     | '/apps/seeds-pipeline'
     | '/apps/teleprompter'
     | '/apps/the-ladder'
+    | '/apps/the-leak'
     | '/apps/the-send'
     | '/apps/voice-print'
     | '/apps/your-algorithm'
@@ -1091,6 +1103,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/seeds-pipeline'
     | '/_authenticated/apps/teleprompter'
     | '/_authenticated/apps/the-ladder'
+    | '/_authenticated/apps/the-leak'
     | '/_authenticated/apps/the-send'
     | '/_authenticated/apps/voice-print'
     | '/_authenticated/apps/your-algorithm'
@@ -1553,6 +1566,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsTheSendRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/the-leak': {
+      id: '/_authenticated/apps/the-leak'
+      path: '/apps/the-leak'
+      fullPath: '/apps/the-leak'
+      preLoaderRoute: typeof AuthenticatedAppsTheLeakRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/the-ladder': {
       id: '/_authenticated/apps/the-ladder'
       path: '/apps/the-ladder'
@@ -1903,6 +1923,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsSeedsPipelineRoute: typeof AuthenticatedAppsSeedsPipelineRoute
   AuthenticatedAppsTeleprompterRoute: typeof AuthenticatedAppsTeleprompterRoute
   AuthenticatedAppsTheLadderRoute: typeof AuthenticatedAppsTheLadderRoute
+  AuthenticatedAppsTheLeakRoute: typeof AuthenticatedAppsTheLeakRoute
   AuthenticatedAppsTheSendRoute: typeof AuthenticatedAppsTheSendRoute
   AuthenticatedAppsVoicePrintRoute: typeof AuthenticatedAppsVoicePrintRoute
   AuthenticatedAppsYourAlgorithmRoute: typeof AuthenticatedAppsYourAlgorithmRoute
@@ -1938,6 +1959,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsSeedsPipelineRoute: AuthenticatedAppsSeedsPipelineRoute,
   AuthenticatedAppsTeleprompterRoute: AuthenticatedAppsTeleprompterRoute,
   AuthenticatedAppsTheLadderRoute: AuthenticatedAppsTheLadderRoute,
+  AuthenticatedAppsTheLeakRoute: AuthenticatedAppsTheLeakRoute,
   AuthenticatedAppsTheSendRoute: AuthenticatedAppsTheSendRoute,
   AuthenticatedAppsVoicePrintRoute: AuthenticatedAppsVoicePrintRoute,
   AuthenticatedAppsYourAlgorithmRoute: AuthenticatedAppsYourAlgorithmRoute,

@@ -555,6 +555,30 @@ export type Database = {
         }
         Relationships: []
       }
+      leak_audits: {
+        Row: {
+          annual_value_cents: number
+          basis: Json
+          items: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          annual_value_cents?: number
+          basis?: Json
+          items?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          annual_value_cents?: number
+          basis?: Json
+          items?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       niche_clarity_progress: {
         Row: {
           fields: Json
