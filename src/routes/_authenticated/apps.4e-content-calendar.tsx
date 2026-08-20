@@ -79,17 +79,64 @@ function FourECalendar() {
     try { localStorage.setItem(KEY, JSON.stringify({ who, topic, pain, after })); } catch { /* ignore */ }
   }, [who, topic, pain, after]);
 
+  // THE GENERATOR USED TO BREAK ITS OWN FRAMEWORK.
+  //
+  // It rotated Educate/Entertain/Encourage evenly with an Earn every tenth day,
+  // producing 30/30/30/10 — while 4E Evolution specifies 35/30/20/15. So the
+  // tool taught one ratio and handed out a calendar built on another, and
+  // over-weighted Encourage while under-weighting the only category that asks
+  // for money.
+  //
+  // Now it builds to the real ratio, and spreads each type with a largest-
+  // remainder walk so the Earn days land evenly instead of clumping.
+  const MIX: Record<TypeKey, number> = { Educate: 35, Entertain: 30, Encourage: 20, Earn: 15 };
+
   const days = useMemo(() => {
     const W = who.trim() || "your people", T = topic.trim() || "your topic", P = pain.trim() || "where they're stuck", A = after.trim() || "where they want to be";
-    const cycle: TypeKey[] = ["Educate", "Entertain", "Encourage"];
-    let ci = 0; const counters: Record<TypeKey, number> = { Educate: 0, Entertain: 0, Encourage: 0, Earn: 0 };
-    return Array.from({ length: 30 }, (_, idx) => {
-      const day = idx + 1;
-      const type: TypeKey = day % 10 === 0 ? "Earn" : cycle[ci++ % 3];
-      const prompt = pick(BANK[type], counters[type]++, W, T, P, A);
-      return { day, type, prompt };
+    const N = 30;
+
+    // Target counts, largest-remainder rounded so they sum to exactly 30.
+    const exact = (Object.keys(MIX) as TypeKey[]).map((k) => ({ k, raw: (MIX[k] / 100) * N }));
+    const counts: Record<TypeKey, number> = { Educate: 0, Entertain: 0, Encourage: 0, Earn: 0 };
+    let assigned = 0;
+    exact.forEach((e) => { counts[e.k] = Math.floor(e.raw); assigned += counts[e.k]; });
+    exact.sort((a, b) => (b.raw % 1) - (a.raw % 1)).forEach((e) => {
+      if (assigned < N) { counts[e.k]++; assigned++; }
     });
+
+    // Spread by smallest running ratio — keeps each type evenly distributed
+    // across the month rather than bunched at the end.
+    const remaining = { ...counts };
+    const placed: Record<TypeKey, number> = { Educate: 0, Entertain: 0, Encourage: 0, Earn: 0 };
+    const order: TypeKey[] = [];
+    for (let i = 0; i < N; i++) {
+      let best: TypeKey | null = null, bestScore = Infinity;
+      (Object.keys(remaining) as TypeKey[]).forEach((k) => {
+        if (remaining[k] <= 0) return;
+        const score = (placed[k] + 0.5) / (counts[k] || 1);
+        if (score < bestScore) { bestScore = score; best = k; }
+      });
+      const chosen = (best ?? "Educate") as TypeKey;
+      order.push(chosen); remaining[chosen]--; placed[chosen]++;
+    }
+
+    const used: Record<TypeKey, number> = { Educate: 0, Entertain: 0, Encourage: 0, Earn: 0 };
+    return order.map((type, idx) => ({
+      day: idx + 1,
+      type,
+      prompt: pick(BANK[type], used[type]++, W, T, P, A),
+    }));
   }, [who, topic, pain, after]);
+
+  // What the month actually is, against what 4E says it should be.
+  const mixCheck = useMemo(() => {
+    const total = days.length || 1;
+    return (Object.keys(MIX) as TypeKey[]).map((k) => {
+      const n = days.filter((d) => d.type === k).length;
+      const pct = Math.round((n / total) * 100);
+      return { type: k, n, pct, target: MIX[k], drift: pct - MIX[k] };
+    });
+  }, [days]);
 
   if (loading) return <Shell><div className="py-24 text-center text-muted-foreground">Loading…</div></Shell>;
   if (!access) return <Shell><Locked /></Shell>;
@@ -103,8 +150,8 @@ function FourECalendar() {
             <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)]"><CalendarDays className="h-5 w-5" /></span>
             <p className="nx-label">Step 3 · 4E Content Calendar</p>
           </div>
-          <h1 className="mt-3">30 days, planned. 9 Educate · 9 Entertain · 9 Encourage · 3 Earn.</h1>
-          <p className="nx-body max-w-2xl mt-3">The 27 value posts earn the right for the 3 that sell. Fill the four boxes — your month builds itself.</p>
+          <h1 className="mt-3">30 days, planned. 11 Educate · 9 Entertain · 6 Encourage · 4 Earn.</h1>
+          <p className="nx-body max-w-2xl mt-3">The 26 value posts earn the right for the 4 that sell. That split is 4E Evolution exactly &mdash; 35/30/20/15 &mdash; not an even rotation. Fill the four boxes and your month builds itself.</p>
         </div>
       </section>
 
@@ -127,6 +174,30 @@ function FourECalendar() {
           <button onClick={() => window.print()} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--text-dim)] hover:text-foreground">
             <RefreshCw className="size-4" /> Print / save
           </button>
+        </div>
+
+        {/* The month against the framework it claims to follow. */}
+        <div className="nx-card !p-5 mb-4">
+          <p className="nx-label">Your month, against 4E</p>
+          <div className="space-y-2.5 mt-3">
+            {mixCheck.map((m) => (
+              <div key={m.type} className="flex items-center gap-3">
+                <span className="w-24 shrink-0 text-sm font-bold" style={{ color: TONE[m.type] }}>{m.type}</span>
+                <span className="flex-1 h-2 rounded-full bg-[var(--bg-surface)] overflow-hidden relative">
+                  <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${m.pct}%`, background: TONE[m.type] }} />
+                  <span className="absolute inset-y-[-3px] w-px bg-[var(--text-subtle)]" style={{ left: `${m.target}%` }} title={`4E target ${m.target}%`} />
+                </span>
+                <span className="w-20 shrink-0 text-right font-mono text-xs tabular-nums text-[var(--text-dim)]">
+                  {m.n} · {m.pct}%
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--text-subtle)] mt-3 leading-relaxed">
+            The thin line on each bar is the 4E target — Educate 35, Entertain 30, Encourage 20,
+            Earn 15. Earn is the one people cut first and the only one that asks for money; three
+            Earn days in thirty is why a month of good content produces nothing.
+          </p>
         </div>
 
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">

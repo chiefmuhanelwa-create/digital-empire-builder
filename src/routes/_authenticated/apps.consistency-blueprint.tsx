@@ -135,7 +135,62 @@ function ConsistencyBlueprint() {
     const todayDone = !!(currentDay && data.days[currentDay]?.done);
     const evidence = PROGRAM.filter((p) => data.days[p.n]?.win).map((p) => ({ n: p.n, win: data.days[p.n].win }));
 
-    return { started, currentDay, doneCount, streak, longestStreak, winsLogged, reportPct, vTitle, vText, yesterdayWin, todayItem, todayDone, evidence };
+    // WHERE THEY STOP — the only finding worth reporting.
+    //
+    // Counting completed days told them what they already knew. Nobody quits a
+    // 30-day programme at random: they quit at a specific point, and it is
+    // almost always the same point every time. Naming it turns "I am bad at
+    // consistency" — which is not actionable — into "you stop on day four", or
+    // "every miss is a Monday", which is.
+    const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const elapsed = Math.max(0, Math.min(30, currentDay - 1));
+    const missed: number[] = [];
+    for (let n = 1; n <= elapsed; n++) if (!data.days[n]?.done) missed.push(n);
+
+    // First break after any run — the wall they keep hitting.
+    let firstBreak: number | null = null;
+    for (let n = 1; n <= elapsed; n++) {
+      if (!data.days[n]?.done) { firstBreak = n; break; }
+    }
+
+    // Weekday clustering, only meaningful once there are enough misses.
+    let weekdayPattern: { day: string; count: number } | null = null;
+    if (started && missed.length >= 3) {
+      const start = new Date(data.startDate + "T00:00:00");
+      const tally: Record<number, number> = {};
+      missed.forEach((n) => {
+        const d = new Date(start);
+        d.setDate(d.getDate() + (n - 1));
+        tally[d.getDay()] = (tally[d.getDay()] ?? 0) + 1;
+      });
+      const [topDay, topCount] = Object.entries(tally).sort((a, b) => b[1] - a[1])[0] ?? [];
+      // A real pattern, not noise: at least a third of misses on one weekday.
+      if (topCount && topCount >= Math.max(2, Math.ceil(missed.length / 3))) {
+        weekdayPattern = { day: WEEKDAYS[Number(topDay)], count: topCount };
+      }
+    }
+
+    let dropOff: { title: string; body: string } | null = null;
+    if (started && elapsed >= 3 && missed.length > 0) {
+      if (weekdayPattern) {
+        dropOff = {
+          title: `You stop on ${weekdayPattern.day}s.`,
+          body: `${weekdayPattern.count} of your ${missed.length} missed days fall on a ${weekdayPattern.day}. That is not willpower — it is a scheduling collision. Move the work to a different hour on ${weekdayPattern.day}s, or decide in advance that ${weekdayPattern.day} is the rest day and stop counting it as a failure.`,
+        };
+      } else if (firstBreak && firstBreak <= 5 && longestStreak <= 4) {
+        dropOff = {
+          title: `You stop around day ${firstBreak}.`,
+          body: `Your longest run is ${longestStreak} day${longestStreak === 1 ? "" : "s"}. The first week is the only part that runs on enthusiasm, and it always runs out — that is what it is for. What carries you past it is a smaller daily commitment, not more resolve. Halve what you have promised yourself and try again.`,
+        };
+      } else if (missed.length >= 3) {
+        dropOff = {
+          title: `${missed.length} missed days, longest run ${longestStreak}.`,
+          body: `The misses are spread rather than clustered, which usually means the daily task is too big rather than badly timed. Cut it to the smallest version that still counts — one post, not a batch — and protect the streak instead of the output.`,
+        };
+      }
+    }
+
+    return { started, currentDay, doneCount, streak, longestStreak, winsLogged, reportPct, vTitle, vText, yesterdayWin, todayItem, todayDone, evidence, missed, dropOff };
   }, [data]);
 
   if (loading) return <Shell><div className="py-24 text-center text-muted-foreground">Loading…</div></Shell>;
@@ -204,6 +259,19 @@ function ConsistencyBlueprint() {
                   <div className="nx-card !p-4"><div className="flex items-center gap-2 text-[var(--text-dim)] text-xs"><Clock className="size-4" /> Lock time</div><div className="font-display text-lg mt-1">{data.setup.lockTime || "—"}</div></div>
                   <div className="nx-card !p-4"><div className="text-[var(--text-dim)] text-xs">Your minimum</div><div className="font-display text-lg mt-1">{data.setup.minSession || "—"}</div></div>
                 </div>
+
+                {m.dropOff && (
+                  <div className="mt-4 rounded-xl border-2 border-[#EA580C] bg-[#EA580C]/5 p-5">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#9A3412]">
+                      Your pattern
+                    </p>
+                    <h2 className="font-display text-xl text-[#9A3412] mt-1">{m.dropOff.title}</h2>
+                    <p className="text-sm text-[#7C2D12] mt-2 leading-relaxed">{m.dropOff.body}</p>
+                    <p className="text-xs text-[#9A3412]/80 mt-3">
+                      Nobody quits at random. Knowing the day beats trying harder on all of them.
+                    </p>
+                  </div>
+                )}
 
                 {m.yesterdayWin && (
                   <div className="mt-4 rounded-xl border-l-4 border-[var(--nx-gold)] bg-[var(--bg-surface)] px-4 py-3">

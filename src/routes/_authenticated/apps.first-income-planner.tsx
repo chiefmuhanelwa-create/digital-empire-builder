@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { Lock, ArrowRight, Target } from "lucide-react";
+import { readOffer } from "@/lib/offer-spine";
 
 export const Route = createFileRoute("/_authenticated/apps/first-income-planner")({
   head: () => ({ meta: [{ title: "90-Day First Income Planner — Contentpreneur Africa" }] }),
@@ -27,6 +28,42 @@ function FirstIncomePlanner() {
 
   const doneCount = useMemo(() => PHASES.filter((p) => d.done[p.k]).length, [d.done]);
 
+  // A target with no arithmetic under it is a wish. This works backwards from
+  // the number they typed to the number of conversations a week it actually
+  // takes — which is the only part of a 90-day plan anyone can act on, and the
+  // part nobody does because it is the part that can disappoint you.
+  const [price, setPrice] = useState<number | null>(null);
+  useEffect(() => { setPrice(readOffer().price); }, []);
+
+  const maths = useMemo(() => {
+    const target = Number(String(d.target).replace(/[^\d]/g, "")) || 0;
+    if (!target || !price || price <= 0) return null;
+
+    const sales = Math.ceil(target / price);
+    // 20% is a generous close rate for a considered purchase at this price; the
+    // point is not precision, it is that the number of conversations is roughly
+    // five times the number of sales and nobody expects that.
+    const CLOSE_RATE = 0.2;
+    const conversations = Math.ceil(sales / CLOSE_RATE);
+    // Roughly one real conversation per 15 people who engage with a piece.
+    const engagements = conversations * 15;
+    const weeks = 13; // 90 days
+    const perWeek = Math.ceil(conversations / weeks);
+
+    let verdict: string;
+    if (sales <= 3) {
+      verdict = `${sales} sale${sales === 1 ? "" : "s"} in ninety days. That is not a marketing problem — it is ${sales} conversation${sales === 1 ? "" : "s"} that go well. Stop planning and go and have the first one.`;
+    } else if (perWeek <= 3) {
+      verdict = `About ${perWeek} real conversation${perWeek === 1 ? "" : "s"} a week. That is genuinely doable around a full-time job, which is why this target is the right size.`;
+    } else if (perWeek <= 8) {
+      verdict = `About ${perWeek} conversations a week. Reachable, but only with a system — this is the point where posting when you feel like it stops working.`;
+    } else {
+      verdict = `About ${perWeek} conversations a week around your job. Be honest about whether that is a plan or a fantasy. Either raise your price so each sale carries more, or move the target — those are the only two levers.`;
+    }
+
+    return { target, price, sales, conversations, engagements, perWeek, verdict };
+  }, [d.target, price]);
+
   if (loading) return <Shell><div className="py-24 text-center text-muted-foreground">Loading…</div></Shell>;
   if (!access) return <Shell><Locked /></Shell>;
 
@@ -48,6 +85,38 @@ function FirstIncomePlanner() {
         <label className="block text-sm font-semibold mb-1">Your 90-day income target (be specific)</label>
         <input value={d.target} onChange={(e) => save({ ...d, target: e.target.value })} placeholder="e.g. R10,000 from a R499 mini-course"
           className="w-full rounded-xl border border-[var(--input)] bg-white px-4 py-2.5 text-[15px] outline-none focus:border-[var(--ring)] focus:ring-2 focus:ring-[var(--ring)]/30 mb-4" />
+        {maths ? (
+          <div className="rounded-2xl bg-[var(--obsidian)] p-6 mb-6">
+            <p className="nx-label !text-[var(--nx-gold-bright)]">What that target actually means</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+              {[
+                [maths.sales, "sales"],
+                [maths.conversations, "real conversations"],
+                [maths.perWeek, "a week"],
+                [`R${maths.price.toLocaleString("en-ZA")}`, "your price"],
+              ].map(([n, l]) => (
+                <div key={String(l)}>
+                  <span className="block font-display text-2xl text-white tabular-nums">{n}</span>
+                  <span className="block text-xs text-[#8F887A] leading-tight mt-0.5">{l}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[#C8C2B4] text-sm mt-5 leading-relaxed">{maths.verdict}</p>
+            <p className="text-[#8F887A] text-xs mt-3 leading-relaxed">
+              Working backwards at a 20% close rate — generous for a considered purchase. The exact
+              figures matter less than the shape: conversations are roughly five times sales, and
+              almost nobody plans for that.
+            </p>
+          </div>
+        ) : (
+          <div className="nx-card !p-4 mb-6">
+            <p className="text-sm text-[var(--text-dim)]">
+              Set a price in the Offer Blueprint and this turns your target into the number of
+              conversations a week it actually takes.
+            </p>
+          </div>
+        )}
+
         <label className="block text-sm font-semibold mb-1">Why it matters (your fuel)</label>
         <textarea value={d.why} onChange={(e) => save({ ...d, why: e.target.value })} rows={2} placeholder="The reason you'll show up on the hard days"
           className="w-full rounded-xl border border-[var(--input)] bg-white px-4 py-2.5 text-[15px] outline-none focus:border-[var(--ring)] focus:ring-2 focus:ring-[var(--ring)]/30 mb-8 resize-none" />

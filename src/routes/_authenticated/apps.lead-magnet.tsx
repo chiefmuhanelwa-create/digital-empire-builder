@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import {
@@ -45,6 +45,61 @@ function LeadMagnet() {
   const spec = shapeByKey(magnet.shape);
   const ready = isOfferComplete(offer);
   const optIn = optInLine(offer, magnet);
+
+  // ADJACENCY CHECK — the thing this tool was missing.
+  //
+  // It was a shape picker: choose a format, get a title. But the format is not
+  // what decides whether a magnet works. What decides it is whether the magnet
+  // solves a problem ADJACENT to the paid offer.
+  //
+  // A magnet that solves an unrelated problem attracts the wrong people, and a
+  // list of the wrong people is worse than no list — it costs money to hold,
+  // it makes every open rate look like a failure, and it convinces the owner
+  // that email does not work for them.
+  //
+  // The check is lexical overlap between the magnet's own words and the offer's
+  // "from" (the problem being solved) and "who". Crude on purpose: it is a
+  // prompt to think, not a verdict, and it says so.
+  const adjacency = useMemo(() => {
+    const title = magnet.title.trim();
+    if (!title || !offer.from.trim()) return null;
+
+    const STOP = new Set(["the","a","an","and","or","to","of","for","in","on","with","your","you","their","they","how","what","why","when","that","this","is","are","it","from","at","by","get","one","five","ten"]);
+    const tok = (t: string) => new Set(
+      t.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/)
+        .filter((w) => w.length > 2 && !STOP.has(w)),
+    );
+
+    const m = tok(`${title} ${magnet.points.join(" ")}`);
+    const problem = tok(offer.from);
+    const who = tok(offer.who);
+
+    const hitsProblem = [...problem].filter((w) => m.has(w));
+    const hitsWho = [...who].filter((w) => m.has(w));
+
+    if (hitsProblem.length === 0 && hitsWho.length === 0) {
+      return {
+        ok: false,
+        title: "This magnet may be attracting the wrong people.",
+        body: `Nothing in it shares language with the problem your offer solves — “${offer.from.trim()}”. A magnet that solves an unrelated problem still gets downloads; the people it collects just never buy, and a list of the wrong people is worse than no list at all.`,
+        fix: "Rewrite it so it solves the FIRST step of the same problem your paid offer finishes. Same road, earlier on it.",
+      };
+    }
+    if (hitsProblem.length === 0) {
+      return {
+        ok: false,
+        title: "Right audience, wrong problem.",
+        body: "It speaks to the people you help, but not to the thing you actually fix. They will join for one reason and be sold on another, which is where trust goes.",
+        fix: `Point it at “${offer.from.trim()}” — the state your paid offer moves them out of.`,
+      };
+    }
+    return {
+      ok: true,
+      title: "This sits on the road to your offer.",
+      body: `It shares ground with the problem you charge to solve, so the people it collects are the people your offer is for. That is the whole test — the format matters far less than this does.`,
+      fix: null,
+    };
+  }, [magnet.title, magnet.points, offer.from, offer.who]);
 
   const choose = (k: MagnetShape) => {
     const s = shapeByKey(k)!;
@@ -217,6 +272,27 @@ function LeadMagnet() {
                 </button>
               </div>
             </div>
+
+            {adjacency && (
+              <div className={`rounded-2xl border-2 p-5 mb-4 ${adjacency.ok ? "border-[#2A6B4C] bg-[#2A6B4C]/5" : "border-[#EA580C] bg-[#EA580C]/5"}`}>
+                <p className={`text-[11px] font-bold uppercase tracking-wider ${adjacency.ok ? "text-[#1F5B41]" : "text-[#9A3412]"}`}>
+                  The only test that matters
+                </p>
+                <h3 className={`font-display text-lg mt-1 ${adjacency.ok ? "text-[#1F5B41]" : "text-[#9A3412]"}`}>
+                  {adjacency.title}
+                </h3>
+                <p className={`text-sm mt-2 leading-relaxed ${adjacency.ok ? "text-[#24614A]" : "text-[#7C2D12]"}`}>
+                  {adjacency.body}
+                </p>
+                {adjacency.fix && (
+                  <p className="text-sm text-[#7C2D12] mt-2 leading-relaxed"><strong>Fix:</strong> {adjacency.fix}</p>
+                )}
+                <p className={`text-xs mt-3 ${adjacency.ok ? "text-[#1F5B41]/75" : "text-[#9A3412]/75"}`}>
+                  Checked by comparing your magnet's words against the problem in your offer. Crude
+                  on purpose &mdash; it is a prompt to think, not a verdict.
+                </p>
+              </div>
+            )}
 
             {optIn && (
               <div className="nx-card !p-6">
