@@ -4,6 +4,7 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ArrowLeft, Compass } from "lucide-react";
+import { diagnose, survivalLine } from "@/lib/right-side-engine";
 
 export const Route = createFileRoute("/_authenticated/apps/right-side-diagnostic")({
   head: () => ({ meta: [{ title: "The Right Side Diagnostic — Contentpreneur Africa" }] }),
@@ -58,20 +59,29 @@ function RightSideDiagnostic() {
     else setQIndex(qIndex + 1);
   };
 
-  const raw = QUESTIONS.reduce((s, q) => s + (answers[q.id] ?? 0), 0);
-  const pct = Math.round((raw / (QUESTIONS.length * 2)) * 100);
-  let tone: "warn" | "mustard" | "good", vKicker: string, vTitle: string, vText: string;
-  if (pct <= 33) { tone = "warn"; vKicker = "You are a tenant"; vTitle = "You're renting almost everything"; vText = "Right now you're one platform decision away from zero — exactly where I was before I lost 780K followers. Every red area below moves onto owned ground faster than you think. Start with an email list this week."; }
-  else if (pct <= 66) { tone = "mustard"; vKicker = "One foot on owned ground"; vTitle = "You've started — but you're still exposed"; vText = "You'd survive a platform loss, but it would hurt. Close the amber and red gaps below and you turn a potential disaster into a speed bump. Owning the channel is the difference."; }
-  else { tone = "good"; vKicker = "You own your business"; vTitle = "You're building on land you own"; vText = "If a platform vanished tomorrow, most of this survives — that's the whole game. Keep widening your PAIDS spread and feeding the assets you control."; }
+  // Weighted by consequence, not summed. A missing email list and an unbacked-up
+  // back catalogue are not the same risk, and the old flat sum priced them the
+  // same. See lib/right-side-engine.ts.
+  const dx = diagnose(answers);
+  const pct = dx.ownership;
+  const tone: "warn" | "mustard" | "good" =
+    dx.band === "rented" ? "warn" : dx.band === "owned" || dx.band === "building" ? "good" : "mustard";
+  const vKicker =
+    dx.band === "rented" ? "You are a tenant"
+    : dx.band === "exposed" ? "One foot on owned ground"
+    : dx.band === "building" ? "The foundation is real"
+    : "You own your business";
+  const vTitle = dx.headline;
+  const vText = dx.body;
 
   const toneHex: Record<string, string> = { warn: "var(--nx-orange-deep)", mustard: "var(--nx-gold-deep)", good: "#15803D" };
-  const areaRows = QUESTIONS.map((q) => {
-    const v = answers[q.id];
-    if (v === 2) return { label: q.area, color: "#15803D", tag: "Owned" };
-    if (v === 1) return { label: q.area, color: "var(--nx-gold-deep)", tag: "Exposed" };
-    return { label: q.area, color: "var(--nx-orange-deep)", tag: "Rented" };
-  });
+  // Ordered by exposure now, not by question order — the thing that would break
+  // first sits at the top where it belongs.
+  const areaRows = dx.results.map((r) => ({
+    label: r.area.area,
+    color: r.status === "owned" ? "#15803D" : r.status === "exposed" ? "var(--nx-gold-deep)" : "var(--nx-orange-deep)",
+    tag: r.status === "owned" ? "Owned" : r.status === "exposed" ? "Exposed" : "Rented",
+  }));
 
   if (loading) return <Shell><div className="py-24 text-center text-muted-foreground">Loading…</div></Shell>;
   if (!access) return (
@@ -160,9 +170,43 @@ function RightSideDiagnostic() {
               </div>
             </div>
 
+            {/* The survival number — a different question to ownership, and the
+                one people actually feel. Built only from the four areas that
+                decide what is left the morning after an account disappears. */}
+            <div className="nx-card !p-6 mt-5">
+              <p className="nx-label">The stress test</p>
+              <div className="flex items-baseline gap-3 mt-1">
+                <span className="font-display text-4xl tabular-nums" style={{ color: dx.survival <= 45 ? "var(--nx-orange-deep)" : dx.survival <= 70 ? "var(--nx-gold-deep)" : "#15803D" }}>
+                  {dx.survival}%
+                </span>
+                <span className="text-sm text-[var(--text-dim)]">of this survives losing your biggest platform</span>
+              </div>
+              <p className="nx-body mt-3">{survivalLine(dx.survival)}</p>
+            </div>
+
+            {/* The real output. A total tells them a mood; this tells them what
+                to do on Monday. */}
+            {dx.weakest && (
+              <div className="rounded-2xl border-2 border-[#EA580C] bg-[#EA580C]/5 p-6 mt-5">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#9A3412]">
+                  Fix this one first
+                </p>
+                <h2 className="font-display text-2xl text-[#9A3412] mt-1">{dx.weakest.area.area}</h2>
+                <p className="text-sm text-[#7C2D12] mt-3 leading-relaxed">{dx.weakest.area.consequence}</p>
+                <div className="mt-4 rounded-lg bg-white/60 px-4 py-3">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#9A3412]">The move</span>
+                  <p className="text-sm text-[#7C2D12] mt-1">{dx.weakest.area.move}</p>
+                </div>
+                <p className="text-xs text-[#9A3412]/80 mt-3">
+                  Chosen by consequence, not by score — this is the area where a gap costs you most,
+                  which is not always the area where you scored lowest.
+                </p>
+              </div>
+            )}
+
             <div className="nx-card !p-5 mt-5">
               <p className="font-display text-base">Where you stand, area by area</p>
-              <p className="text-xs text-[var(--text-dim)] mt-0.5 mb-4">Green is owned ground. Amber is exposed. Red is rented — fix these first.</p>
+              <p className="text-xs text-[var(--text-dim)] mt-0.5 mb-4">Ordered by what a gap actually costs you — most exposed at the top. Green is owned ground. Amber is exposed. Red is rented.</p>
               <div className="flex flex-col gap-3">
                 {areaRows.map((a) => (
                   <div key={a.label} className="flex items-center gap-3">

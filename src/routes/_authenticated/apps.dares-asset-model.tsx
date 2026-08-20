@@ -30,14 +30,52 @@ function DaresAssetModel() {
   const persist = (idea: string, v: Vals) => { try { localStorage.setItem(KEY, JSON.stringify({ idea, v })); } catch { /* ignore */ } };
   const setScore = (k: string, val: number) => { const nv = { ...v, [k]: val }; setV(nv); persist(idea, nv); };
 
+  // DARES IS NOT ADDITIVE, AND SUMMING IT LIED.
+  //
+  // The old version added five 0-2 answers into a score out of ten. That let
+  // something Digital, Evergreen and Scalable but with zero Automation score
+  // 6/10 and read as "good idea, sharpen it" — when in fact it is a job. You
+  // deliver it by hand every time, forever, and no amount of the other three
+  // fixes that.
+  //
+  // Automated and Scalable are GATES, not points. If either is zero, the thing
+  // cannot run without the person, and that is the entire question DARES asks.
+  // Everything else can be improved later; these two decide the category.
   const r = useMemo(() => {
-    const score = DIMS.reduce((s, d) => s + (v[d.k] ?? 0), 0); // 0..10
-    const weakest = [...DIMS].sort((a, b) => (v[a.k] ?? 0) - (v[b.k] ?? 0))[0];
-    let title: string, tone: "danger" | "warn" | "good";
-    if (score <= 4) { tone = "danger"; title = "That's a job, not an asset"; }
-    else if (score <= 7) { tone = "warn"; title = "Good idea — sharpen it into an asset"; }
+    const raw = DIMS.reduce((s, d) => s + (v[d.k] ?? 0), 0); // 0..10, for display only
+    const answered = DIMS.filter((d) => v[d.k] !== undefined).length;
+    const auto = v["a"] ?? 0;
+    const scale = v["s"] ?? 0;
+    const gateFailed = answered === DIMS.length && (auto === 0 || scale === 0);
+
+    // Weakest by gate first, then by raw score — so a zero on Automated always
+    // outranks a zero on Evergreen, which is recoverable.
+    const weakest = [...DIMS].sort((a, b) => {
+      const gate = (k: string) => (k === "a" || k === "s" ? 0 : 1);
+      const av = v[a.k] ?? 0, bv = v[b.k] ?? 0;
+      if (av !== bv) return av - bv;
+      return gate(a.k) - gate(b.k);
+    })[0];
+
+    let title: string, tone: "danger" | "warn" | "good", note: string | null = null;
+
+    if (gateFailed) {
+      tone = "danger";
+      const which = auto === 0 && scale === 0 ? "Automated and Scalable" : auto === 0 ? "Automated" : "Scalable";
+      title = "That's a job, not an asset";
+      note = `${which} is at zero, and that decides it on its own — the other answers cannot rescue it. ` +
+        (auto === 0
+          ? "If you hand-deliver every sale, you own a role, not an asset. "
+          : "") +
+        (scale === 0
+          ? "If the hundredth buyer costs you the same work as the first, there is no leverage in it. "
+          : "") +
+        "Fix this one thing and the same idea becomes an asset without changing what it is.";
+    } else if (raw <= 4) { tone = "danger"; title = "That's a job, not an asset"; }
+    else if (raw <= 7) { tone = "warn"; title = "Good idea — sharpen it into an asset"; }
     else { tone = "good"; title = "This is a real asset — build it"; }
-    return { score, weakest, title, tone };
+
+    return { score: raw, weakest, title, tone, note, gateFailed };
   }, [v]);
   const toneColor = { danger: "var(--nx-orange-deep)", warn: "var(--nx-gold-deep)", good: "#15803D" }[r.tone];
 
@@ -86,7 +124,18 @@ function DaresAssetModel() {
         <div className="rounded-2xl bg-[var(--obsidian)] p-6 text-center mt-8">
           <div className="font-display text-4xl sm:text-5xl" style={{ color: r.tone === "good" ? "#4ADE80" : "var(--nx-gold-bright)" }}>{r.score}<span className="text-[#9A9488] text-xl">/10</span></div>
           <h2 className="text-white text-2xl mt-2">{r.title}</h2>
-          <p className="text-[#C8C2B4] mt-2 max-w-lg mx-auto">Lowest: <strong style={{ color: "var(--nx-gold-bright)" }}>{r.weakest.name}</strong> — {r.weakest.lift}</p>
+          {r.note ? (
+            <p className="text-[#C8C2B4] mt-3 max-w-xl mx-auto text-sm leading-relaxed">{r.note}</p>
+          ) : (
+            <p className="text-[#C8C2B4] mt-2 max-w-lg mx-auto">Lowest: <strong style={{ color: "var(--nx-gold-bright)" }}>{r.weakest.name}</strong> — {r.weakest.lift}</p>
+          )}
+          {r.gateFailed && (
+            <p className="text-[#9A9488] text-xs mt-4 max-w-xl mx-auto leading-relaxed">
+              Your raw total is {r.score} out of 10. It is shown for reference only — DARES does not
+              add up. Two of the five decide whether this runs without you, and a strong score
+              everywhere else cannot outvote them.
+            </p>
+          )}
         </div>
 
         <AiCoach tool="dares-asset-model" getPayload={() => JSON.stringify({ idea, scores: v })} />
