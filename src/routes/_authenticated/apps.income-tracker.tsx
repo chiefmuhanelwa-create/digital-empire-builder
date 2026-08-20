@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Lock, TrendingUp, TrendingDown, DollarSign, Download, Trash2, Pencil, Plus } from "lucide-react";
+import { INCOME_CATEGORIES as PAIDS_INCOME_CATEGORIES } from "@/lib/paids-mapping";
 
 export const Route = createFileRoute("/_authenticated/apps/income-tracker")({
   head: () => ({ meta: [{ title: "Income Tracker — Contentpreneur Africa" }] }),
@@ -28,7 +29,11 @@ type Transaction = {
   date: string;
 };
 
-const INCOME_CATEGORIES = ["Brand Deal", "Sponsored Post", "Affiliate", "Ad Revenue", "Consulting", "Product Sale", "Other Income"];
+// Categories come from the shared PAIDS map so the Auditor can roll these up
+// without a second vocabulary drifting out of sync. "Membership / Subscription"
+// was added there: without it, recurring income had nowhere to land and the
+// Information stream read zero no matter how much a buyer logged.
+const INCOME_CATEGORIES = [...PAIDS_INCOME_CATEGORIES];
 const EXPENSE_CATEGORIES = ["Equipment", "Software", "Marketing", "Travel", "Office", "Education", "Other Expense"];
 
 function rand(n: number) {

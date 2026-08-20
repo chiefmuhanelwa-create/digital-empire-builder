@@ -33,6 +33,20 @@ function TheLeak() {
   const [saving, setSaving] = useState<"idle" | "saving" | "saved">("idle");
   const dirty = useRef(false);
 
+  // The Knowledge Audit already asked "what do people ask your advice on for
+  // free?" — which is this tool's entire subject. Reading it means the buyer
+  // does not answer the same question twice, and it makes the connection
+  // between the two tools visible: the thing they are asked for constantly IS
+  // the leak, and it is also their first product.
+  const [asked, setAsked] = useState<string>("");
+  useEffect(() => {
+    try {
+      const ka = JSON.parse(localStorage.getItem("nochill-knowledge-v1") || "null");
+      const v = (ka?.fields?.ask ?? "").toString().trim();
+      if (v) setAsked(v);
+    } catch { /* ignore */ }
+  }, []);
+
   // Load from the server, not from this browser.
   useEffect(() => {
     getFn()
@@ -182,6 +196,23 @@ function TheLeak() {
             Rough numbers. Under-counting is the norm here — if you are unsure between two figures,
             take the higher one, because you are almost certainly still low.
           </p>
+
+          {asked && !items.some((i) => i.label === asked) && (
+            <div className="mt-4 rounded-xl border border-[var(--nx-gold)]/40 bg-[var(--bg-surface)] p-4">
+              <p className="nx-label">From your Knowledge Audit</p>
+              <p className="text-sm text-[var(--text-body)] mt-1">
+                You said people already ask you about <strong>{asked}</strong>. That is almost
+                certainly your biggest line here — and it is also your first product, because the
+                demand is already proven.
+              </p>
+              <button
+                onClick={() => mutate(() => setItems([...items, { ...newItem("brain-pick"), label: asked }]))}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[var(--obsidian)] px-4 py-2 text-xs font-bold text-white hover:opacity-90 transition-opacity"
+              >
+                <Plus className="size-3.5" /> Add it as a leak
+              </button>
+            </div>
+          )}
 
           <div className="flex flex-wrap gap-2 mt-4">
             {KINDS.map((k) => (

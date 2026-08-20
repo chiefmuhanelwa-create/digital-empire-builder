@@ -4,6 +4,9 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ShieldAlert } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { listIncomeTransactions } from "@/lib/income-tracker.functions";
+import { rollUp, STREAM_NAMES, type TxLike } from "@/lib/paids-mapping";
 
 export const Route = createFileRoute("/_authenticated/apps/paids-auditor")({
   head: () => ({ meta: [{ title: "PAIDS Income-Stream Auditor — Contentpreneur Africa" }] }),
@@ -41,12 +44,39 @@ function PaidsAuditor() {
   const { access, loading } = useKitAccess();
   const [amounts, setAmounts] = useState<Amounts>(EMPTY);
 
+  // Pulled from the Income Tracker rather than typed again. The Tracker already
+  // holds every transaction tagged by category; asking a buyer to re-key their
+  // own income is how twenty-four tools end up feeling like twenty-four quizzes.
+  const listFn = useServerFn(listIncomeTransactions);
+  const [pull, setPull] = useState<{ state: "idle" | "loading" | "done" | "empty"; counted: number; unmapped: number; since: string | null }>(
+    { state: "idle", counted: 0, unmapped: 0, since: null },
+  );
+
   useEffect(() => {
     try {
       const r = JSON.parse(localStorage.getItem(KEY) || "null");
       if (r && typeof r === "object") setAmounts({ ...EMPTY, ...r });
     } catch { /* ignore */ }
   }, []);
+
+  const pullFromTracker = async () => {
+    setPull((p) => ({ ...p, state: "loading" }));
+    try {
+      const res = await listFn({ data: { type: "income" } });
+      const tx = ((res as { transactions?: TxLike[] })?.transactions ?? []) as TxLike[];
+      const { totals, unmapped, counted, since } = rollUp(tx, 12);
+      if (counted === 0) { setPull({ state: "empty", counted: 0, unmapped: 0, since: null }); return; }
+      const next: Amounts = { ...EMPTY };
+      (Object.keys(totals) as (keyof typeof totals)[]).forEach((k) => {
+        next[k as Sid] = String(Math.round(totals[k]));
+      });
+      setAmounts(next);
+      try { localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* ignore */ }
+      setPull({ state: "done", counted, unmapped, since });
+    } catch {
+      setPull({ state: "idle", counted: 0, unmapped: 0, since: null });
+    }
+  };
 
   const set = (id: Sid, v: string) => {
     const next = { ...amounts, [id]: v.replace(/[^\d]/g, "") };
@@ -131,6 +161,54 @@ function PaidsAuditor() {
         <div className="lg:col-span-3 space-y-3">
           <p className="font-display text-lg">Your five streams</p>
           <p className="text-sm text-[var(--text-dim)] mb-2">Average monthly income per stream. Leave a stream at zero if you're not earning from it yet — that's the gap.</p>
+
+          {/* Pull from the Income Tracker rather than asking again. */}
+          <div className="rounded-xl border border-[var(--nx-gold)]/40 bg-[var(--bg-surface)] p-4">
+            {pull.state === "done" ? (
+              <>
+                <p className="text-sm font-bold text-[var(--text-body)]">
+                  Filled from {pull.counted} transaction{pull.counted === 1 ? "" : "s"} in your Income Tracker.
+                </p>
+                <p className="text-xs text-[var(--text-dim)] mt-1">
+                  Last 12 months{pull.since ? `, from ${pull.since}` : ""}. Expenses excluded — this measures where
+                  revenue comes from, not what it cost.
+                </p>
+                {pull.unmapped > 0 && (
+                  <p className="text-xs text-[#B4650F] mt-2">
+                    R{Math.round(pull.unmapped).toLocaleString("en-ZA")} sits under “Other Income” and has not been
+                    placed. Guessing a stream for it would skew the score — re-tag it in the Tracker, or add it below
+                    by hand.
+                  </p>
+                )}
+              </>
+            ) : pull.state === "empty" ? (
+              <>
+                <p className="text-sm font-bold text-[var(--text-body)]">Nothing logged yet.</p>
+                <p className="text-xs text-[var(--text-dim)] mt-1">
+                  Log a few months in the Income Tracker and this fills itself. Until then, type your averages below.
+                </p>
+                <Link to="/apps/income-tracker" className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-[var(--nx-gold-text)] hover:underline">
+                  Open the Income Tracker <ArrowRight className="size-3.5" />
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className="text-sm font-bold text-[var(--text-body)]">You have already logged this.</p>
+                <p className="text-xs text-[var(--text-dim)] mt-1">
+                  Your Income Tracker holds every transaction tagged by category. Pull the last twelve months in
+                  instead of typing it again.
+                </p>
+                <button
+                  onClick={() => void pullFromTracker()}
+                  disabled={pull.state === "loading"}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[var(--obsidian)] px-4 py-2 text-xs font-bold text-white disabled:opacity-50 hover:opacity-90 transition-opacity"
+                >
+                  {pull.state === "loading" ? "Pulling…" : "Pull from my Income Tracker"}
+                </button>
+              </>
+            )}
+          </div>
+
           {r.rows.map((s) => (
             <div key={s.id} className="nx-card !p-4 flex items-center gap-4">
               <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)] font-display text-lg">{s.letter}</span>
