@@ -22,8 +22,18 @@
 --
 -- All proof figures below are from the verified table only. The source PDF's
 -- internal numbers (Samsung R45K, "R100,000 deals") are NOT verified and are
--- deliberately not used — R350 first deal and the Savanna R25,000/month × 4
--- retainer are.
+-- deliberately not used.
+--
+-- CORRECTED 2026-08-20 BEFORE THIS EVER RAN. The original copy led with the
+-- R350 first brand deal. PROOF.md bans that figure: the published book states
+-- it two incompatible ways — R350 CASH to 500,000+ people in one passage, and
+-- R350 WORTH OF PRODUCTS to 30,000 followers in another. It cannot be used.
+--
+-- Replaced with the confirmed consequence, which is the stronger line anyway:
+-- R132,500 lost by undercharging across the first 50 deals against a R3,000
+-- market rate. Leading with the loss sells a pitching product better than
+-- leading with the first fee ever did. The Savanna retainer is untouched — it
+-- is 5-source verified.
 -- =============================================================================
 
 update public.products set
@@ -33,7 +43,7 @@ update public.products set
 
   long_description = 'For years I opened every pitch with "I''m a creator with X followers." That''s a CV nobody asked for. No wonder I got ghosted.
 
-My first brand deal in 2017 paid R350 for one post to 500,000+ followers. The second, that same month, paid R750. Nothing about my audience changed after that — my pitch did. The same skill later turned into a R25,000-a-month Savanna retainer, four months straight. R100,000 that paid off my car debt.
+Across my first fifty brand deals I undercharged so badly it cost me R132,500 — the market rate was R3,000 and I was taking whatever was offered, because I didn''t know there was a number to ask for. Nothing about my audience changed after that. My pitch did. The same skill later turned into a R25,000-a-month Savanna retainer, four months straight. R100,000 that paid off my car debt.
 
 Discovery is a myth. Pitching is the job. Most creators either pitch too low and get underpaid, or never pitch at all and earn nothing. This removes both problems — the exact scripts I wish I''d had in 2016, every one under 150 words, because brands reply to clear pitches, not long ones.
 

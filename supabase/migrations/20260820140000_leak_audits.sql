@@ -28,6 +28,7 @@ create table if not exists public.leak_audits (
 
 alter table public.leak_audits enable row level security;
 
+drop policy if exists "Users manage own leak audit" on public.leak_audits;
 create policy "Users manage own leak audit"
   on public.leak_audits for all
   using (auth.uid() = user_id)

@@ -44,6 +44,7 @@ alter table public.tool_events enable row level security;
 -- Writes come from the public tool-event endpoint via the service-role client,
 -- which bypasses RLS — so no anon insert policy (an anon insert policy would
 -- let anyone forge arbitrary funnel numbers straight into the dashboard).
+drop policy if exists "Admins can read tool events" on public.tool_events;
 create policy "Admins can read tool events"
   on public.tool_events for select
   using (has_role(auth.uid(), 'admin'));

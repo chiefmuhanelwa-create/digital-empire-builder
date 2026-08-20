@@ -28,6 +28,7 @@ alter table public.kit_workspace enable row level security;
 -- Writes go through server functions on the service-role client, but the
 -- policy is still correct-by-construction: a user may only ever touch their
 -- own row. This is the table that holds a buyer's actual work.
+drop policy if exists "Users manage own kit workspace" on public.kit_workspace;
 create policy "Users manage own kit workspace"
   on public.kit_workspace for all
   using (auth.uid() = user_id)
