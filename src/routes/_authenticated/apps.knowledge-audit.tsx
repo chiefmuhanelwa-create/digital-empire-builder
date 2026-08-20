@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { AiCoach } from "@/components/ai-coach";
@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/apps/knowledge-audit")({
   head: () => ({ meta: [{ title: "The Knowledge Audit — Contentpreneur Africa" }] }),
   component: KnowledgeAudit,
 });
+
+const KEY = "nochill-knowledge-v1";
 
 type Step = "intro" | "capture" | "rate" | "result";
 type Fields = { ask: string; skill: string; problem: string };
@@ -44,6 +46,26 @@ function KnowledgeAudit() {
   const [ms, setMs] = useState(5);
   const [ts, setTs] = useState(5);
   const [ss, setSs] = useState(5);
+
+  // This tool used to keep everything in component state, so the Clarity Plan —
+  // which reads KEY off localStorage — never saw a Knowledge Audit answer and
+  // silently built the plan from seven tools instead of eight.
+  useEffect(() => {
+    try {
+      const r = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (r) {
+        setFields({ ask: "", skill: "", problem: "", ...r.fields });
+        if (typeof r.ms === "number") setMs(r.ms);
+        if (typeof r.ts === "number") setTs(r.ts);
+        if (typeof r.ss === "number") setSs(r.ss);
+      }
+    } catch { /* ignore */ }
+  }, []);
+  useEffect(() => {
+    const empty = !fields.ask && !fields.skill && !fields.problem;
+    if (empty) return; // don't write a blank record over a real one on first paint
+    try { localStorage.setItem(KEY, JSON.stringify({ fields, ms, ts, ss })); } catch { /* ignore */ }
+  }, [fields, ms, ts, ss]);
 
   const res = useMemo(() => {
     const product = ms * ts * ss;

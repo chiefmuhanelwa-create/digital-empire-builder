@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { AiCoach } from "@/components/ai-coach";
@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/apps/right-side-diagnostic
   head: () => ({ meta: [{ title: "The Right Side Diagnostic — Contentpreneur Africa" }] }),
   component: RightSideDiagnostic,
 });
+
+const KEY = "nochill-rightside-v1";
 
 type Q = { id: string; kicker: string; text: string; area: string; options: { label: string; pts: number }[] };
 const QUESTIONS: Q[] = [
@@ -35,6 +37,19 @@ function RightSideDiagnostic() {
   const [step, setStep] = useState<"intro" | "q" | "result">("intro");
   const [qIndex, setQIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
+
+  // Persisted so the Clarity Plan can read it. Without this the dashboard asked
+  // for "nochill-rightside-v1" and always got nothing back.
+  useEffect(() => {
+    try {
+      const r = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (r && typeof r === "object") setAnswers(r);
+    } catch { /* ignore */ }
+  }, []);
+  useEffect(() => {
+    if (!Object.keys(answers).length) return;
+    try { localStorage.setItem(KEY, JSON.stringify(answers)); } catch { /* ignore */ }
+  }, [answers]);
 
   const choose = (qid: string, pts: number) => {
     const next = { ...answers, [qid]: pts };
