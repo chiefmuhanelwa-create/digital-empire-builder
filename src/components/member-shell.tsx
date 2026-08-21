@@ -14,9 +14,13 @@ import { LayoutDashboard, GraduationCap, User, ShieldCheck, LogOut, MessageCircl
 // brand name they have never seen. CHKPLT is still the storefront — that chrome
 // lives in site-header.tsx and is unchanged.
 
+// Nav targets are 16px semibold with real padding, not 14px medium in a mid
+// grey. Founder feedback: "navigation buttons are all over and not visible."
+// They are also now a rounded hit area rather than bare text, so on a phone
+// there is something to actually aim at.
 const navLink =
-  "inline-flex items-center gap-1.5 text-[14px] font-medium text-[var(--text-dim)] hover:text-[var(--foreground)] transition-colors px-1 py-1";
-const navActive = { className: "text-[var(--foreground)] font-semibold" };
+  "inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-[16px] font-semibold text-[var(--text-dim)] hover:text-[var(--foreground)] hover:bg-[var(--bg-surface)] transition-colors";
+const navActive = { className: "text-[var(--nx-gold-text)] bg-[var(--bg-surface)] font-bold" };
 
 export function SiteHeader() {
   const { user, signOut } = useAuth();
@@ -28,18 +32,21 @@ export function SiteHeader() {
     "Member";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]">
+      <div className="mx-auto flex h-[68px] max-w-5xl items-center justify-between gap-4 px-5">
         {/* Logo → the member home (NOT the public site) */}
         <Link to="/dashboard" className="flex items-center gap-2 shrink-0">
           {/* "Contentpreneur Africa" is 3x the width the old "CHKPLT" wordmark
               needed, so mobile drops the tracking and a size step (same treatment
               contentpreneur-header.tsx already uses) rather than shoving the nav
               off-screen. */}
-          <span className="font-display text-sm sm:text-lg font-extrabold tracking-[0.08em] sm:tracking-[0.18em] uppercase text-[var(--foreground)]">
-            Contentpreneur Africa
+          <span
+            className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg text-[15px] font-black text-white"
+            style={{ background: "var(--nx-gold)" }}
+          >
+            C
           </span>
-          <span className="hidden sm:inline rounded-full bg-[var(--bg-card-hi)] px-2 py-0.5 text-[10px] font-bold tracking-[0.15em] uppercase text-[var(--nx-gold-text)]">
+          <span className="text-[16px] font-bold text-[var(--foreground)]">
             Your Workspace
           </span>
         </Link>
@@ -77,18 +84,18 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--obsidian)]">
+    <footer className="border-t border-[var(--border)] bg-[var(--background)]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="font-display text-sm font-extrabold tracking-[0.18em] uppercase text-[var(--nx-gold-bright)]">
-            Contentpreneur Africa
-          </div>
-          <p className="mt-1 text-xs text-[#9A9488]">Turn what you know into income you own.</p>
+          <div className="text-[15px] font-bold text-[var(--foreground)]">Contentpreneur Africa</div>
+          <p className="mt-1 text-[14px] text-[var(--text-subtle)]">
+            Your work saves automatically and follows you between devices.
+          </p>
         </div>
-        <div className="flex items-center gap-5 text-xs text-[#9A9488]">
-          <Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
-          <Link to="/account" className="hover:text-white transition-colors">Account</Link>
-          <span className="text-[#6E685C]">© {new Date().getFullYear()} NOCHILL PTY LTD · Reg 2016/507839/07</span>
+        <div className="flex items-center gap-5 text-[14px] text-[var(--text-subtle)]">
+          <Link to="/dashboard/foundation-kit" className="font-semibold text-[var(--nx-gold-text)]">All tools</Link>
+          <Link to="/account" className="hover:text-[var(--foreground)] transition-colors">Account</Link>
+          <span>© {new Date().getFullYear()} NOCHILL PTY LTD</span>
         </div>
       </div>
       <SupportChatButton />

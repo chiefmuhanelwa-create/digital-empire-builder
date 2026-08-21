@@ -105,8 +105,8 @@ function TheLeak() {
       {/* ── hero: state the problem before asking for anything */}
       <section className="border-b border-border bg-[var(--obsidian)]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-12 pb-11">
-          <Link to="/dashboard/foundation-kit" className="text-sm font-semibold text-[var(--nx-gold-bright)] hover:underline">
-            ← Your Clarity System
+          <Link to="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">
+            ← All tools
           </Link>
           <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--nx-gold-bright)] mt-5">
             Stage 2 · The audit nobody runs

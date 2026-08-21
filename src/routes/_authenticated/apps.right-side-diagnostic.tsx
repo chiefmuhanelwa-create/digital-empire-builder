@@ -100,7 +100,7 @@ function RightSideDiagnostic() {
   return (
     <Shell>
       <main className="mx-auto max-w-2xl px-4 sm:px-6 py-10">
-        <a href="/dashboard/foundation-kit" className="text-sm font-semibold text-[var(--nx-gold-text)] hover:underline">← Back to Foundation Kit</a>
+        <a href="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">← All tools</a>
 
         {step === "intro" && (
           <div className="mt-6">

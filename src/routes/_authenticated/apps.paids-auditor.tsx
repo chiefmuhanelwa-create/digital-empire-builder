@@ -143,7 +143,7 @@ function PaidsAuditor() {
     <Shell>
       <section className="nx-hero-orb border-b border-border">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-10 pb-8">
-          <a href="/dashboard/foundation-kit" className="text-sm font-semibold text-[var(--nx-gold-text)] hover:underline">← Back to Foundation Kit</a>
+          <a href="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">← All tools</a>
           <div className="flex items-center gap-3 mt-4">
             <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)] font-display text-lg">P</span>
             <p className="nx-label">PAIDS Income-Stream Auditor</p>

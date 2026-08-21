@@ -99,8 +99,8 @@ function SaleScripts() {
     <Shell>
       <section className="nx-hero-orb border-b border-border">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-10 pb-7">
-          <Link to="/dashboard/foundation-kit" className="text-sm font-semibold text-[var(--nx-gold-text)] hover:underline">
-            ← Your Clarity System
+          <Link to="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">
+            ← All tools
           </Link>
           <p className="nx-label mt-4">Tool 07 · used live</p>
           <h1 className="mt-2">What to say when they push back.</h1>

@@ -624,53 +624,119 @@ label {
    be a large diff for zero user-visible gain. */
 
 .theme-contentpreneur {
-  /* Ground: cream, not white. This is the single biggest visual tell between
-     the two brands and costs nothing to apply. */
-  --background:        #FAF7F0;   /* Cream    */
-  --foreground:        #1C1C1C;   /* Charcoal */
-  --obsidian:          #111111;   /* Tool Black — dark panels */
+  /* ─────────────────────────────────────────────────────────────────────────
+     THE WORKSPACE PALETTE — white, black, one blue.
+     Founder direction 2026-08-21: "use light colors, white background, blue
+     and black font."
 
-  --bg-surface:        #F3EEE2;
-  --bg-card:           #FFFFFF;   /* cards stay white ON cream for separation */
-  --bg-card-hi:        #EBE4D4;
+     Every one of the 24 tools reads these tokens, so this block is the whole
+     restyle. Changing a tool file to hardcode a colour defeats it — if a new
+     colour is needed, add a token here.
+
+     Gold is not deleted, it is REMAPPED. The tools reference --nx-gold* in
+     roughly 400 places; renaming those would be a 24-file diff with nothing to
+     show for it. Pointing the gold tokens at the blue scale restyles all of
+     them at once and keeps a single source of truth.
+     ───────────────────────────────────────────────────────────────────────── */
+
+  --background:        #FFFFFF;
+  --foreground:        #111318;   /* near-black, very slightly blue */
+  /* Dark call-out panels. Tools put white text on this, so it MUST stay dark —
+     a light value here makes every dark panel unreadable in one stroke. */
+  --obsidian:          #111318;
+
+  --bg-surface:        #F4F6FA;   /* the one tint, cool not warm */
+  --bg-card:           #FFFFFF;
+  --bg-card-hi:        #EDF1F8;
   --bg-card-raised:    #FFFFFF;
   --card:              #FFFFFF;
-  --card-foreground:   #1C1C1C;
+  --card-foreground:   #111318;
   --popover:           #FFFFFF;
-  --popover-foreground:#1C1C1C;
+  --popover-foreground:#111318;
 
-  --text-body:         #33302A;
-  --text-dim:          #5C564B;
-  --text-subtle:       #8A8275;
+  /* Text: three steps, all AA or better on white. No mid-greys. */
+  --text-body:         #3C424D;
+  --text-dim:          #545B68;
+  --text-subtle:       #697082;
 
-  /* Heritage Gold replaces amber throughout. --nx-gold-text is the darkened
-     variant that clears AA on cream — the raw #C9A84C does not, and gold text
-     that fails contrast is the classic way a premium palette turns unreadable. */
-  --nx-gold:           #C9A84C;
-  --nx-gold-mid:       #D6BC68;
-  --nx-gold-bright:    #E0C77E;   /* for use on charcoal / tool-black panels */
-  --nx-gold-deep:      #A88A34;   /* hover / pressed */
-  --nx-gold-text:      #8A6D1F;   /* AA on cream and on white */
+  /* THE BLUE. --nx-gold-text is the variant that must clear AA on white, so it
+     is the darkest; --nx-gold-bright is for use ON the dark panels, so it must
+     be light enough to read there. Same contract the gold scale had. */
+  --nx-gold:           #1A4FD6;   /* the blue itself — buttons, accents */
+  --nx-gold-mid:       #4571E2;
+  --nx-gold-bright:    #8FB0F5;   /* on #111318 panels only */
+  --nx-gold-deep:      #123BA6;   /* hover / pressed */
+  --nx-gold-text:      #123BA6;   /* AA on white */
 
   --primary:           var(--nx-gold);
   --banana:            var(--nx-gold);
-  --banana-foreground: #111111;
+  --banana-foreground: #FFFFFF;
   --accent:            var(--bg-card-hi);
   --ring:              var(--nx-gold);
 
-  --border:            #E4DBC8;
-  --border-mid:        #D3C6AB;
-  --border-hover:      var(--nx-gold-deep);
-  --input:             #D3C6AB;
+  --border:            #E2E5EB;
+  --border-mid:        #CDD3DD;
+  --border-hover:      var(--nx-gold);
+  --input:             #CDD3DD;
 
-  --muted:             var(--bg-card-hi);
+  --muted:             var(--bg-surface);
   --muted-foreground:  var(--text-dim);
 
-  --secondary:         var(--bg-card-hi);
-  --secondary-foreground: #1C1C1C;
+  --secondary:         var(--bg-surface);
+  --secondary-foreground: #111318;
 
-  /* Lato is the Contentpreneur Africa body face; Montserrat already matches. */
   --font-sans: "Lato", "Inter", -apple-system, ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Legibility inside the workspace.
+   Founder feedback: "words too small, some not visible enough". These raise the
+   floor globally rather than tool by tool. */
+.theme-contentpreneur .nx-body {
+  font-size: 17px;
+  line-height: 1.68;
+  color: var(--text-body);
+}
+.theme-contentpreneur .nx-label {
+  /* Was 12px uppercase with 0.18em tracking — technically present, practically
+     unreadable. Sentence case, larger, and no longer shouting. */
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--nx-gold-text);
+}
+.theme-contentpreneur .nx-card {
+  border-radius: 14px;
+  padding: 24px 26px;
+  box-shadow: none;               /* flat on white reads cleaner than a glow */
+}
+.theme-contentpreneur .cta-glow {
+  background: var(--nx-gold);
+  color: #FFFFFF !important;
+  border-radius: 12px;            /* pills read as marketing; this is a tool */
+  box-shadow: none;
+  font-size: 16px;
+  padding: 13px 26px;
+}
+.theme-contentpreneur .cta-glow:hover {
+  background: var(--nx-gold-deep);
+  box-shadow: none;
+  transform: none;
+}
+/* The decorative radial bloom behind tool headers. Warm and gold on cream; on
+   white it just makes the top of every page look smudged. */
+.theme-contentpreneur .nx-hero-orb::before {
+  display: none;
+}
+/* Small text anywhere in the workspace has a floor. 10-11px labels were the
+   single most common complaint. */
+.theme-contentpreneur .text-xs {
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.theme-contentpreneur .text-\[11px\],
+.theme-contentpreneur .text-\[10px\] {
+  font-size: 13px;
 }
 
 /* Dark panels inside the workspace: charcoal, not slate-900. Components carry a

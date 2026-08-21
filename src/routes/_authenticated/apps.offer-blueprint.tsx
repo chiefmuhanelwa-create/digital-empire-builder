@@ -210,7 +210,7 @@ function OfferBlueprint() {
               disabled={step === 0}
               className="text-sm font-semibold text-[var(--text-dim)] disabled:opacity-30"
             >
-              ← Back
+              ← All tools
             </button>
             {step < STEPS.length - 1 ? (
               <button
@@ -361,8 +361,8 @@ function Header({ pct }: { pct: number }) {
   return (
     <section className="nx-hero-orb border-b border-border">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-10 pb-7">
-        <Link to="/dashboard/foundation-kit" className="text-sm font-semibold text-[var(--nx-gold-text)] hover:underline">
-          ← Your Clarity System
+        <Link to="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">
+          ← All tools
         </Link>
         <p className="nx-label mt-4">Tool 01 · The spine</p>
         <h1 className="mt-2">The Offer Blueprint</h1>
