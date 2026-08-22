@@ -76,12 +76,12 @@ function Workspace() {
         <section>
           <p className="text-[15px] font-semibold" style={{ color: BLUE }}>Your Foundation Kit</p>
           <h1 className="mt-2 text-[30px] sm:text-[38px] font-black leading-[1.1]" style={{ color: INK }}>
-            Six steps. You finish with a priced offer and the words to sell it.
+            Five steps, ending the day somebody pays you.
           </h1>
           <p className="mt-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-            Not twenty-four things to work out. One path, in order — each step takes an evening and
-            hands you something you can point at. Your answers carry forward, so you never type the
-            same thing twice.
+            Not twenty-four things to work out. One path, in order — name what you know, count what
+            you have given away, package it, price it, and send it to one person. Everything else in
+            here is for after that. No delivery, no business.
           </p>
         </section>
 
@@ -109,7 +109,7 @@ function Workspace() {
         ) : (
           <section className="mt-7 rounded-2xl p-6" style={{ background: TINT, border: `1px solid ${LINE}` }}>
             <h2 className="text-[26px] font-black leading-tight" style={{ color: INK }}>
-              You have been through all six steps.
+              You have been through all five steps.
             </h2>
             <p className="mt-2 text-[17px]" style={{ color: BODY }}>
               Come back to any of them whenever the answer changes. They keep what you wrote.

@@ -280,6 +280,17 @@ function TheSend() {
             <p className="text-[#9A9488] text-xs mt-3">Name the person and the channel first.</p>
           )}
         </div>
+        <div className="mt-8 rounded-xl p-5" style={{ border: "1px solid #E2E5EB" }}>
+          <p className="text-[16px] font-bold" style={{ color: "#111318" }}>If they push back</p>
+          <p className="mt-1.5 text-[16px] leading-relaxed" style={{ color: "#3C424D" }}>
+            You will hear one of four things. They are written out, with your own price already in
+            them — read them the moment a reply lands, not before.
+          </p>
+          <a href="/apps/sale-scripts" className="mt-3 inline-flex items-center gap-1.5 text-[15px] font-semibold"
+             style={{ color: "#1A4FD6", textDecoration: "none" }}>
+            Open the Sale Scripts →
+          </a>
+        </div>
         <ToolFooter slug="the-send" youNowHave="one offer actually sent to one named person — and their answer, recorded." />
       </main>
     </Shell>

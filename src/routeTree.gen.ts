@@ -70,6 +70,7 @@ import { Route as AuthenticatedAppsTeleprompterRouteImport } from './routes/_aut
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
 import { Route as AuthenticatedAppsSaleScriptsRouteImport } from './routes/_authenticated/apps.sale-scripts'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
+import { Route as AuthenticatedAppsPriceDecisionRouteImport } from './routes/_authenticated/apps.price-decision'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
 import { Route as AuthenticatedAppsOfferBlueprintRouteImport } from './routes/_authenticated/apps.offer-blueprint'
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
@@ -418,6 +419,12 @@ const AuthenticatedAppsRightSideDiagnosticRoute =
     path: '/apps/right-side-diagnostic',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsPriceDecisionRoute =
+  AuthenticatedAppsPriceDecisionRouteImport.update({
+    id: '/apps/price-decision',
+    path: '/apps/price-decision',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsPaidsAuditorRoute =
   AuthenticatedAppsPaidsAuditorRouteImport.update({
     id: '/apps/paids-auditor',
@@ -646,6 +653,7 @@ export interface FileRoutesByFullPath {
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
+  '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -734,6 +742,7 @@ export interface FileRoutesByTo {
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
+  '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -826,6 +835,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/_authenticated/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
+  '/_authenticated/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/_authenticated/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -919,6 +929,7 @@ export interface FileRouteTypes {
     | '/apps/niche-clarity-builder'
     | '/apps/offer-blueprint'
     | '/apps/paids-auditor'
+    | '/apps/price-decision'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
@@ -1007,6 +1018,7 @@ export interface FileRouteTypes {
     | '/apps/niche-clarity-builder'
     | '/apps/offer-blueprint'
     | '/apps/paids-auditor'
+    | '/apps/price-decision'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
@@ -1098,6 +1110,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/niche-clarity-builder'
     | '/_authenticated/apps/offer-blueprint'
     | '/_authenticated/apps/paids-auditor'
+    | '/_authenticated/apps/price-decision'
     | '/_authenticated/apps/right-side-diagnostic'
     | '/_authenticated/apps/sale-scripts'
     | '/_authenticated/apps/seeds-pipeline'
@@ -1608,6 +1621,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsRightSideDiagnosticRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/price-decision': {
+      id: '/_authenticated/apps/price-decision'
+      path: '/apps/price-decision'
+      fullPath: '/apps/price-decision'
+      preLoaderRoute: typeof AuthenticatedAppsPriceDecisionRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/paids-auditor': {
       id: '/_authenticated/apps/paids-auditor'
       path: '/apps/paids-auditor'
@@ -1918,6 +1938,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
   AuthenticatedAppsOfferBlueprintRoute: typeof AuthenticatedAppsOfferBlueprintRoute
   AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
+  AuthenticatedAppsPriceDecisionRoute: typeof AuthenticatedAppsPriceDecisionRoute
   AuthenticatedAppsRightSideDiagnosticRoute: typeof AuthenticatedAppsRightSideDiagnosticRoute
   AuthenticatedAppsSaleScriptsRoute: typeof AuthenticatedAppsSaleScriptsRoute
   AuthenticatedAppsSeedsPipelineRoute: typeof AuthenticatedAppsSeedsPipelineRoute
@@ -1953,6 +1974,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedAppsNicheClarityBuilderRoute,
   AuthenticatedAppsOfferBlueprintRoute: AuthenticatedAppsOfferBlueprintRoute,
   AuthenticatedAppsPaidsAuditorRoute: AuthenticatedAppsPaidsAuditorRoute,
+  AuthenticatedAppsPriceDecisionRoute: AuthenticatedAppsPriceDecisionRoute,
   AuthenticatedAppsRightSideDiagnosticRoute:
     AuthenticatedAppsRightSideDiagnosticRoute,
   AuthenticatedAppsSaleScriptsRoute: AuthenticatedAppsSaleScriptsRoute,
