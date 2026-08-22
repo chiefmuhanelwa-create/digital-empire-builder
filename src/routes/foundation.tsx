@@ -116,15 +116,18 @@ function FoundationFunnel() {
           <Reveal>
             <Eyebrow>Five evenings · you finish with a price</Eyebrow>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
-              You are <span className="grad-gold">the free option.</span>
+              Stop being <span className="grad-gold">the cheapest expert in the room.</span>
             </h1>
-            <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl leading-relaxed text-slate-300">
-              In your field, in your circle, in that WhatsApp group — you are the one people go to
-              when they do not want to pay for it.
+            <p className="mx-auto mt-7 max-w-2xl text-xl sm:text-2xl font-bold leading-snug text-white">
+              Your knowledge has never had a price.
             </p>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
-              You did not choose that. It happened one “don't worry about it” at a time, and you have
-              said it again since you started reading this page.
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">
+              Not once, in all these years. Not because it is not worth one — because nobody has ever
+              made you sit down and set it.
+            </p>
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">
+              So you became the person people go to when they would rather not pay. You did not choose
+              that. It happened one “don't worry about it” at a time.
             </p>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
               You are not missing knowledge. You are missing a structure to put around it.
