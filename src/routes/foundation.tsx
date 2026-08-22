@@ -3,9 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/gardens";
 import { useCountry } from "@/lib/currency";
+import { useServerFn } from "@tanstack/react-start";
 import {
-  Reveal, Orbs, Eyebrow, CTA, GlassCard, StepCard, Contrast, PriceAnchor, FunnelNav, FunnelFooter,
+  Reveal, Orbs, Eyebrow, CTA, GlassCard, StepCard, Contrast, PriceAnchor,
+  FoundingBanner, PriceComparison, FunnelNav, FunnelFooter,
 } from "@/components/funnel";
+import { paidUnitsForSlug } from "@/lib/products.functions";
+import { FOUNDATION_FOUNDING, foundingState, foundingLine, ONGOING_COST } from "@/lib/launch-offer";
 import { Check, Clock } from "lucide-react";
 
 // THE FOUNDATION KIT FUNNEL — contentpreneur.africa/foundation
@@ -68,6 +72,17 @@ export const Route = createFileRoute("/foundation")({
 
 function FoundationFunnel() {
   const country = useCountry();
+
+  // Real paid units. If this query fails the counter renders nothing at all
+  // rather than a plausible-looking number — see src/lib/launch-offer.ts.
+  const unitsFn = useServerFn(paidUnitsForSlug);
+  const { data: unitsRes } = useQuery({
+    queryKey: ["paid-units", SLUG],
+    queryFn: () => unitsFn({ data: { slug: SLUG } }),
+    staleTime: 60_000,
+  });
+  const founding = foundingState(unitsRes?.units ?? null, FOUNDATION_FOUNDING);
+  const foundingText = FOUNDATION_FOUNDING.active ? foundingLine(founding) : null;
   const { data: product } = useQuery({
     queryKey: ["product", SLUG],
     queryFn: async () => {
@@ -114,6 +129,15 @@ function FoundationFunnel() {
             <div className="mt-10 flex justify-center">
               <CTA to={CTA_TO} sub={TRUST}>{BUY}</CTA>
             </div>
+            {foundingText && (
+              <div className="mt-8">
+                <FoundingBanner
+                  line={foundingText}
+                  reason={FOUNDATION_FOUNDING.reason}
+                  after={FOUNDATION_FOUNDING.afterPriceLabel}
+                />
+              </div>
+            )}
           </Reveal>
         </div>
       </section>
@@ -413,11 +437,31 @@ function FoundationFunnel() {
             </GlassCard>
           </Reveal>
 
+          {/* Comparison anchored on the reader's OWN numbers first — those are
+              facts they can check in their own head. The outside price is a
+              hedged range, because we cannot receipt what somebody else charges. */}
           <Reveal delay={140}>
-            <p className="mt-8 text-center leading-relaxed text-slate-400">
-              You have already spent far more than this on the qualifications that made you good at the
-              thing. <span className="text-white">This is the first money you would spend on being paid for it.</span>
-            </p>
+            <div className="mt-12">
+              <h3 className="text-center text-2xl font-black">Put it next to what you already spend</h3>
+              <div className="mt-7">
+                <PriceComparison
+                  price={priceLabel}
+                  priceNote="Once. Yours for good."
+                  rows={[
+                    { label: "The qualification that made you good at this", amount: "You know", note: "Years, and considerably more than this" },
+                    { label: "One hour with a consultant who would answer this for you", amount: "Typically more", note: "And you would still have to do the work afterwards" },
+                    { label: "The course you bought last year", amount: "More", note: "Be honest about whether you finished it" },
+                    { label: "What you gave away last month", amount: "More", note: "Step two makes you add this up. It is the number that decides it." },
+                    { label: "Your first sale, if it is R2,500", amount: "Pays this back once", note: "At R9,000 it pays for itself six times before lunch" },
+                  ]}
+                />
+              </div>
+              <p className="mt-8 text-center leading-relaxed text-slate-400">
+                You have already spent far more than this on the qualifications that made you good at
+                the thing.{" "}
+                <span className="text-white">This is the first money you would spend on being paid for it.</span>
+              </p>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -471,6 +515,7 @@ function FoundationFunnel() {
             <p className="mt-6 text-lg leading-relaxed text-slate-300">
               You already know they will. The only question is whether you have a number by then.
             </p>
+            <p className="mx-auto mt-5 max-w-xl text-slate-400">{ONGOING_COST}</p>
             <div className="mt-9 flex justify-center">
               <CTA to={CTA_TO} sub={TRUST}>{BUY}</CTA>
             </div>

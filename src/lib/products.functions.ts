@@ -484,3 +484,31 @@ export const claimMyGrants = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { linked: (linked ?? []).length };
   });
+
+/**
+ * How many paid units of a product exist. PUBLIC and unauthenticated on purpose
+ * — it drives the founding-places counter on the sales pages, and a counter
+ * that cannot load must show nothing rather than a guess.
+ *
+ * Returns only a count. No customer data crosses this boundary.
+ */
+export const paidUnitsForSlug = createServerFn({ method: "POST" })
+  .inputValidator((input) => z.object({ slug: z.string().min(1).max(120) }).parse(input))
+  .handler(async ({ data }) => {
+    const { data: product } = await supabaseAdmin
+      .from("products")
+      .select("id")
+      .eq("slug", data.slug)
+      .maybeSingle();
+    if (!product) return { units: null as number | null };
+
+    const { data: rows, error } = await supabaseAdmin
+      .from("order_items")
+      .select("quantity, orders!inner(status)")
+      .eq("product_id", product.id)
+      .eq("orders.status", "paid");
+    // A failed count must not become a fabricated one.
+    if (error) return { units: null as number | null };
+
+    return { units: (rows ?? []).reduce((n, r) => n + (r.quantity ?? 1), 0) };
+  });

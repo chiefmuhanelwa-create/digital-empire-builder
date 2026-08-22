@@ -336,3 +336,82 @@ export function PriceAnchor({ anchor, price, note }: { anchor: string; price: st
     </div>
   );
 }
+
+/**
+ * THE FOUNDING BANNER — a counter that cannot lie.
+ *
+ * `left` comes from real paid orders (see paidUnitsForSlug). When the count is
+ * unavailable this renders NOTHING rather than a plausible number, and when the
+ * cap is reached it renders nothing either, because the offer is genuinely over.
+ * There is no timer, because a timer that resets is the single clearest signal
+ * to a professional buyer that nothing else on the page is true.
+ */
+export function FoundingBanner({ line, reason, after }: { line: string | null; reason: string; after: string }) {
+  if (!line) return null;
+  return (
+    <div
+      className="mx-auto flex max-w-2xl flex-col items-center gap-2 rounded-2xl px-6 py-5 text-center"
+      style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.35)" }}
+    >
+      <div className="flex items-center gap-2.5">
+        <span className="relative flex size-2.5">
+          <span className="absolute inline-flex size-full animate-ping rounded-full bg-amber-400 opacity-60" />
+          <span className="relative inline-flex size-2.5 rounded-full bg-amber-400" />
+        </span>
+        <span className="text-sm font-black uppercase tracking-wide text-amber-300">{line}</span>
+      </div>
+      <p className="text-sm leading-relaxed text-slate-300">{reason}</p>
+      <p className="text-sm text-slate-400">
+        After that it is <strong className="text-white">{after}</strong>, and it stays there.
+      </p>
+    </div>
+  );
+}
+
+/**
+ * PRICE COMPARISON.
+ *
+ * Anchored on the reader's OWN numbers wherever possible — what their hour is
+ * worth, what one sale would be, what they gave away last month. Those are facts
+ * they can check in their own head, which is the only kind of comparison that
+ * survives an auditor reading it.
+ *
+ * Where an outside price is used it is a range and it is hedged, because we
+ * cannot receipt what somebody else charges.
+ */
+export function PriceComparison({
+  rows, price, priceNote,
+}: {
+  rows: { label: string; amount: string; note?: string }[];
+  price: string;
+  priceNote: string;
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse text-left">
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.label} className="border-b border-white/10">
+              <td className="py-4 pr-4 align-top">
+                <div className="text-slate-300">{r.label}</div>
+                {r.note && <div className="mt-0.5 text-sm text-slate-500">{r.note}</div>}
+              </td>
+              <td className="py-4 text-right align-top whitespace-nowrap font-bold text-slate-400 tabular-nums">
+                {r.amount}
+              </td>
+            </tr>
+          ))}
+          <tr style={{ background: "rgba(251,191,36,0.07)" }}>
+            <td className="rounded-l-xl py-5 pl-4 pr-4 align-middle">
+              <div className="font-black text-white">This</div>
+              <div className="mt-0.5 text-sm text-slate-400">{priceNote}</div>
+            </td>
+            <td className="rounded-r-xl py-5 pr-4 text-right align-middle whitespace-nowrap text-2xl font-black grad-gold tabular-nums">
+              {price}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}

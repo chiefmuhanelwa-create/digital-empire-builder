@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Reveal, Orbs, Eyebrow, CTA, GlassCard, FunnelNav, FunnelFooter } from "@/components/funnel";
+import { Reveal, Orbs, Eyebrow, CTA, GlassCard, PriceComparison, FunnelNav, FunnelFooter } from "@/components/funnel";
 import { STAGES } from "@/lib/accelerator-stages";
 import { ShieldCheck } from "lucide-react";
 
@@ -246,14 +246,22 @@ function AcceleratorFunnel() {
                 <div className="text-6xl font-black grad-gold">$997</div>
                 <div className="mt-2 text-slate-400">Billed in ZAR · or two payments</div>
               </div>
-              <ul className="mt-9 space-y-3 border-t border-white/10 pt-8 text-slate-300">
-                <li>· One month of a business coach who has never run a business</li>
-                <li>· Less than a single postgraduate module</li>
-                <li className="text-white">
-                  · One corporate training day at a proper rate pays for it. One keynote pays for it.
-                  One retainer client pays for it four times over.
-                </li>
-              </ul>
+              {/* Anchored on their own numbers. A keynote fee and a training day
+                  are figures this buyer already knows, which is what makes the
+                  comparison checkable rather than persuasive. */}
+              <div className="mt-9 border-t border-white/10 pt-8">
+                <PriceComparison
+                  price="$997"
+                  priceNote="Once. Seven stages, every tool, no expiry."
+                  rows={[
+                    { label: "One postgraduate module", amount: "More", note: "And it does not end in an income" },
+                    { label: "A month of a business coach", amount: "Comparable", note: "Ask whether they have run one" },
+                    { label: "One corporate training day, at a proper rate", amount: "Pays for this", note: "You already know your own number here" },
+                    { label: "One keynote, paid instead of free", amount: "Pays for this", note: "You have given away more than one" },
+                    { label: "One retainer client", amount: "Pays for it four times", note: "Stage 5 is where retainers come from" },
+                  ]}
+                />
+              </div>
               <p className="mt-7 text-lg leading-relaxed text-white">
                 You have spent more than this on qualifications. This is the one that makes them earn.
               </p>
@@ -299,6 +307,18 @@ function AcceleratorFunnel() {
             </div>
             <p className="mt-8 text-xl font-bold text-white">
               Applications are read by a person. Not everyone gets in.
+            </p>
+            {/* The limit here is real and it is founder time — it is not a seat
+                count, because no cohort has run and inventing one would be the
+                exact thing this buyer checks. */}
+            <p className="mt-5 leading-relaxed text-slate-400">
+              I read them myself, which is the actual limit. When there are more than I can get
+              through properly, applications close until I have. That is not a marketing device —
+              it is arithmetic, and it is the same reason the gates work.
+            </p>
+            <p className="mt-5 leading-relaxed text-slate-400">
+              Waiting does not make this cheaper. It makes the three years in the section above
+              start later.
             </p>
           </Reveal>
         </div>
