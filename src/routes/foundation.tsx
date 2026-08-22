@@ -312,7 +312,7 @@ function FoundationFunnel() {
             />
             <StepCard
               n={2} title="Count what it has cost you" badge="The hard one"
-              body="What giving it away has cost, in rand. It works out your hourly rate from what your own profession actually pays someone with your qualification, then counts the hours you have handed over. Most people stop reading their own answer halfway down."
+              body="What giving it away has cost you, as an amount of money rather than a feeling. It works out your hourly rate from what your own profession actually pays someone with your qualification, then counts the hours you have handed over. Most people stop reading their own answer halfway down."
               accent="#f59e0b" delay={60}
             />
             <StepCard
@@ -452,7 +452,7 @@ function FoundationFunnel() {
                     { label: "One hour with a consultant who would answer this for you", amount: "Typically more", note: "And you would still have to do the work afterwards" },
                     { label: "The course you bought last year", amount: "More", note: "Be honest about whether you finished it" },
                     { label: "What you gave away last month", amount: "More", note: "Step two makes you add this up. It is the number that decides it." },
-                    { label: "Your first sale, if it is R2,500", amount: "Pays this back once", note: "At R9,000 it pays for itself six times before lunch" },
+                    { label: "Your first sale, if it is $150", amount: "Pays this back once", note: "At $500 it has paid for itself five times before lunch" },
                   ]}
                 />
               </div>

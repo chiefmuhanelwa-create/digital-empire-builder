@@ -166,7 +166,7 @@ function FoundationCheckout() {
 
           <p className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-400">
             <Lock className="size-3.5" />
-            Secure checkout · {useStripe ? "USD via Stripe" : "ZAR via Paystack"}
+            Secure checkout via {useStripe ? "Stripe" : "Paystack"} · charged in your local currency
           </p>
         </div>
 

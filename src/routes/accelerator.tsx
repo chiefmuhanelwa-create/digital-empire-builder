@@ -190,7 +190,7 @@ function AcceleratorFunnel() {
           </Reveal>
           <div className="mt-12 grid gap-5 sm:grid-cols-2">
             {[
-              ["You stay the bottleneck", "Every rand requires you in a conversation. Your income has a hard ceiling and it is your calendar."],
+              ["You stay the bottleneck", "Every dollar requires you in a conversation. Your income has a hard ceiling and it is your calendar."],
               ["One morning can still take it all", "No list. Your entire audience sits on a platform whose terms can change without warning. Ask me what that morning feels like."],
               ["Your best asset keeps depreciating", "The book, the talks, the frameworks — they earn nothing while you keep making new things instead of monetising what already exists."],
               ["SARS accrues quietly", "Undeclared side income does not disappear. It waits, and it grows. Mine reached R207,879.20 while I felt successful."],
@@ -244,7 +244,7 @@ function AcceleratorFunnel() {
             <GlassCard className="p-8 sm:p-12">
               <div className="text-center">
                 <div className="text-6xl font-black grad-gold">$997</div>
-                <div className="mt-2 text-slate-400">Billed in ZAR · or two payments</div>
+                <div className="mt-2 text-slate-400">One payment, or two · charged in your local currency</div>
               </div>
               {/* Anchored on their own numbers. A keynote fee and a training day
                   are figures this buyer already knows, which is what makes the
