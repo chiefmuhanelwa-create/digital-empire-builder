@@ -116,12 +116,16 @@ function FoundationFunnel() {
           <Reveal>
             <Eyebrow>Five evenings · you finish with a price</Eyebrow>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
-              You know more than <span className="grad-gold">you are paid for.</span>
+              You already know what you would charge. You have never{" "}
+              <span className="grad-gold">said it out loud.</span>
             </h1>
             <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl leading-relaxed text-slate-300">
-              People come to you. They have come to you for years. You help, because that is who you
-              are — and then it ends there, every time, because there is no price and there was never
-              going to be one.
+              The number has been in your head for months. Then somebody asks, and you hear yourself
+              say “don't worry about it” before you have decided anything.
+            </p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
+              You tell yourself you will charge the next one. You have been telling yourself that for
+              a while now.
             </p>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
               You are not missing knowledge. You are missing a structure to put around it.
@@ -205,10 +209,11 @@ function FoundationFunnel() {
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <h2 className="text-center text-3xl sm:text-4xl font-black leading-tight">
-              One of these is <span className="grad-gold">you</span>
+              You are stuck in one of <span className="grad-gold">three places</span>
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-center text-slate-400">
-              Three people wrote to me. I have kept their words exactly and left their names out.
+              Three people described theirs to me in the last few months. Their words, their names
+              left out. You will recognise one of them as yours.
             </p>
           </Reveal>
 
@@ -321,7 +326,7 @@ function FoundationFunnel() {
               accent="#3b82f6" delay={120}
             />
             <StepCard
-              n={4} title="Decide what to charge — and whether you are ready" badge="Kea's question"
+              n={4} title="Decide what to charge — and whether you are ready" badge="The question nobody answers"
               body="Two questions, in that order, because answering the first one with a number is why most advice fails here. First: are you ready? Four things you can check, not feel."
               points={[
                 "Has more than one person asked you for this?",

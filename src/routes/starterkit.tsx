@@ -67,18 +67,20 @@ function StarterKitFunnel() {
           <Reveal>
             <Eyebrow>Free · 8 worksheets · about 90 minutes</Eyebrow>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
-              “I'm not sure how to put that in <span className="grad-gold">one sentence.</span>”
+              Somebody asks what you do. You listen to yourself{" "}
+              <span className="grad-gold">answer it badly.</span>
             </h1>
             <p className="mt-7 text-lg sm:text-xl leading-relaxed text-slate-300">
-              An academic support advisor wrote that to me. Two of the students she helped won
-              scholarships. Strangers pass her personal number around. She has never charged anybody.
+              Again. You start with your job title, then you add something, then you add something
+              else, and by the end you are watching their face and you know you have lost them.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-slate-300">
-              She knows the work. She just cannot say what it is.
+              You have done this hundreds of times. You have never once walked away happy with how it
+              came out.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-white">
-              If you have ever been asked what you do and heard yourself waffle — this is that, and
-              this kit is the fix.
+              It is not that you do not know. It is that nobody ever made you put it into one
+              sentence.
             </p>
           </Reveal>
 

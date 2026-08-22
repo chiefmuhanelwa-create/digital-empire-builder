@@ -51,21 +51,28 @@ function AcceleratorFunnel() {
           <Reveal>
             <Eyebrow tint="#60a5fa">The flagship · $997 · application required</Eyebrow>
             <h1 className="mt-6 text-3xl sm:text-5xl md:text-6xl font-black leading-[1.08]">
-              “I am not starting from zero, but I do feel like I need{" "}
-              <span className="grad-gold">direction.</span>”
+              You are not a beginner. That is what makes this so{" "}
+              <span className="grad-gold">frustrating.</span>
             </h1>
             <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl leading-relaxed text-slate-300">
-              A finance leader wrote that. Fifteen years of seniority. A published book. An audience of
-              professionals and executives.
+              Years of seniority. A qualification people respect. Maybe a book, or the talks everybody
+              keeps asking you to give. You have sold something once, by hand, to somebody you already
+              knew.
             </p>
-            <blockquote className="mx-auto mt-7 max-w-2xl border-l-2 border-amber-400 pl-6 text-left text-xl sm:text-2xl font-bold leading-snug">
-              “I published my first book a few years ago, although I did not actively promote it.”
-            </blockquote>
-            <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-white">
-              A book. Sold. Earning nothing. Not one email address captured from anybody who read it.
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
+              And you still cannot point at the thing that turns any of it into money that arrives
+              whether or not you are in the room.
+            </p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white">
+              A finance leader put it to me like this:{" "}
+              <span className="italic">
+                “I am not starting from zero, but I do feel like I need direction.”
+              </span>{" "}
+              She has a book that sold and earns nothing — “although I did not actively promote it” —
+              and not one email address from anybody who read it.
             </p>
             <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-400">
-              That is not a beginner's problem. It is what happens when someone builds every part of a
+              That is not a beginner's problem. It is what happens when you build every part of a
               business except the part where value changes hands and money moves.
             </p>
             <div className="mt-10 flex justify-center">
