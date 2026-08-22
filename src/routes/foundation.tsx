@@ -116,16 +116,15 @@ function FoundationFunnel() {
           <Reveal>
             <Eyebrow>Five evenings · you finish with a price</Eyebrow>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
-              You already know what you would charge. You have never{" "}
-              <span className="grad-gold">said it out loud.</span>
+              You are <span className="grad-gold">the free option.</span>
             </h1>
             <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl leading-relaxed text-slate-300">
-              The number has been in your head for months. Then somebody asks, and you hear yourself
-              say “don't worry about it” before you have decided anything.
+              In your field, in your circle, in that WhatsApp group — you are the one people go to
+              when they do not want to pay for it.
             </p>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-300">
-              You tell yourself you will charge the next one. You have been telling yourself that for
-              a while now.
+              You did not choose that. It happened one “don't worry about it” at a time, and you have
+              said it again since you started reading this page.
             </p>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
               You are not missing knowledge. You are missing a structure to put around it.
