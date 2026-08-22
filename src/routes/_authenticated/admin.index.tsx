@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/admin-shell";
-import { Package, Users, Upload, Receipt, AlertCircle, BarChart3, ArrowRight } from "lucide-react";
+import { Package, Users, Upload, Receipt, AlertCircle, BarChart3, ArrowRight, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({ meta: [{ title: "Admin — CHKPLT" }] }),
@@ -50,6 +50,12 @@ const GROUPS = [
         Icon: BarChart3,
         label: "Tools insights",
         sub: "Visitors, completions, leads & results delivered per tool",
+      },
+      {
+        to: "/admin/kit-health",
+        Icon: ShieldCheck,
+        label: "Kit delivery health",
+        sub: "Does everything the Foundation Kit promises actually reach the buyer?",
       },
     ],
   },

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { pathTools } from "@/lib/kit-catalog";
 import {
   Body,
   Button,
@@ -12,6 +13,9 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+
+// Generated once per render from the single source of truth.
+const PATH = pathTools();
 
 interface OrderReceiptItem {
   title: string;
@@ -112,13 +116,35 @@ export const OrderReceiptEmail = ({
 
             <Hr style={hr} />
 
+            {/* THE FIRST INSTRUCTION A BUYER EVER RECEIVES, and until 2026-08-22
+                it described a product that no longer existed: "7 steps", a
+                "2-minute Readiness Scorecard", "Lock Your Niche". The path had
+                been rebuilt twice underneath it.
+
+                So it is no longer written by hand. It is generated from
+                kit-catalog.ts — the same source the workspace renders from —
+                which means the email cannot drift from the product again. */}
             {hasKit ? (
               <>
                 <Heading as="h2" style={h2}>Here's how to start</Heading>
-                <Text style={step}><strong>1.</strong> Tap "Open {place}" above — you'll land signed in.</Text>
-                <Text style={step}><strong>2.</strong> Start at Step 1 — the <strong>2-minute Readiness Scorecard</strong>.</Text>
-                <Text style={step}><strong>3.</strong> Work through the 7 steps — each hands you a finished result (start with <strong>Lock Your Niche</strong>).</Text>
-                <Text style={step}><strong>4.</strong> Download each result as you go — you'll finish with your personalised plan.</Text>
+                <Text style={step}>
+                  <strong>1.</strong> Tap "Open {place}" above — you'll land signed in.
+                </Text>
+                <Text style={step}>
+                  <strong>2.</strong> Start at step 1, <strong>{PATH[0]?.name}</strong>. It takes an
+                  evening and it hands you something you can point at.
+                </Text>
+                <Text style={step}>
+                  <strong>3.</strong> Work through all {PATH.length} in order:{" "}
+                  {PATH.map((t) => t.name).join(" → ")}.
+                </Text>
+                <Text style={step}>
+                  <strong>4.</strong> Your answers save as you go, so you can start on your phone and
+                  finish on a laptop. Nothing needs typing twice.
+                </Text>
+                <Text style={step}>
+                  It ends the day somebody pays you. That is the whole point of it.
+                </Text>
                 <Hr style={hr} />
               </>
             ) : null}

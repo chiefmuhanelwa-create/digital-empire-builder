@@ -408,7 +408,7 @@ export const getMyDownloadUrl = createServerFn({ method: "POST" })
 // ── Foundation Kit per-framework downloads ───────────────────────────────────
 // Whitelist of kit deliverable files in product-files (key → filename). Add an
 // entry as each framework's fillable PDF is uploaded.
-const KIT_FILES: Record<string, string> = {
+export const KIT_FILES: Record<string, string> = {
   "niche-clarity": "niche-clarity-workbook.pdf",
   paids: "paids-framework-workbook.pdf",
   "ms-ts-ss": "ms-ts-ss-workbook.pdf",
@@ -420,7 +420,15 @@ const KIT_FILES: Record<string, string> = {
   "cheat-sheet": "called-expert-cheat-sheet.pdf",
   "30-day-tracker": "30-day-accountability-tracker.pdf",
 };
-const KIT_OWNER_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
+// Who may download a kit workbook. THE ACCELERATOR WAS MISSING, so a $997 buyer
+// got "You don't have access to the Foundation Kit" on every single PDF — the
+// same failure class already fixed in use-kit-access.ts for the tool routes.
+// A higher tier must never contain less than the one below it.
+export const KIT_OWNER_SLUGS = [
+  "called-expert-foundation-kit",
+  "called-expert-starter-bundle",
+  "contentpreneur-90day-cohort",
+];
 
 export const getKitFileUrl = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

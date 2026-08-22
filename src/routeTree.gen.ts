@@ -93,6 +93,7 @@ import { Route as AuthenticatedApps4eContentCalendarRouteImport } from './routes
 import { Route as AuthenticatedAdminToolsRouteImport } from './routes/_authenticated/admin.tools'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminLedgerRouteImport } from './routes/_authenticated/admin.ledger'
+import { Route as AuthenticatedAdminKitHealthRouteImport } from './routes/_authenticated/admin.kit-health'
 import { Route as AuthenticatedAdminIncidentsRouteImport } from './routes/_authenticated/admin.incidents'
 import { Route as AuthenticatedAdminImportContactsRouteImport } from './routes/_authenticated/admin.import-contacts'
 import { Route as AuthenticatedAdminContactsRouteImport } from './routes/_authenticated/admin.contacts'
@@ -558,6 +559,12 @@ const AuthenticatedAdminLedgerRoute =
     path: '/ledger',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminKitHealthRoute =
+  AuthenticatedAdminKitHealthRouteImport.update({
+    id: '/kit-health',
+    path: '/kit-health',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminIncidentsRoute =
   AuthenticatedAdminIncidentsRouteImport.update({
     id: '/incidents',
@@ -663,6 +670,7 @@ export interface FileRoutesByFullPath {
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
+  '/admin/kit-health': typeof AuthenticatedAdminKitHealthRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/tools': typeof AuthenticatedAdminToolsRoute
@@ -756,6 +764,7 @@ export interface FileRoutesByTo {
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
   '/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
+  '/admin/kit-health': typeof AuthenticatedAdminKitHealthRoute
   '/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/tools': typeof AuthenticatedAdminToolsRoute
@@ -853,6 +862,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/_authenticated/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
   '/_authenticated/admin/incidents': typeof AuthenticatedAdminIncidentsRoute
+  '/_authenticated/admin/kit-health': typeof AuthenticatedAdminKitHealthRoute
   '/_authenticated/admin/ledger': typeof AuthenticatedAdminLedgerRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/admin/tools': typeof AuthenticatedAdminToolsRoute
@@ -951,6 +961,7 @@ export interface FileRouteTypes {
     | '/admin/contacts'
     | '/admin/import-contacts'
     | '/admin/incidents'
+    | '/admin/kit-health'
     | '/admin/ledger'
     | '/admin/products'
     | '/admin/tools'
@@ -1044,6 +1055,7 @@ export interface FileRouteTypes {
     | '/admin/contacts'
     | '/admin/import-contacts'
     | '/admin/incidents'
+    | '/admin/kit-health'
     | '/admin/ledger'
     | '/admin/products'
     | '/admin/tools'
@@ -1140,6 +1152,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/contacts'
     | '/_authenticated/admin/import-contacts'
     | '/_authenticated/admin/incidents'
+    | '/_authenticated/admin/kit-health'
     | '/_authenticated/admin/ledger'
     | '/_authenticated/admin/products'
     | '/_authenticated/admin/tools'
@@ -1834,6 +1847,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminLedgerRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/kit-health': {
+      id: '/_authenticated/admin/kit-health'
+      path: '/kit-health'
+      fullPath: '/admin/kit-health'
+      preLoaderRoute: typeof AuthenticatedAdminKitHealthRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/incidents': {
       id: '/_authenticated/admin/incidents'
       path: '/incidents'
@@ -1918,6 +1938,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminContactsRoute: typeof AuthenticatedAdminContactsRoute
   AuthenticatedAdminImportContactsRoute: typeof AuthenticatedAdminImportContactsRoute
   AuthenticatedAdminIncidentsRoute: typeof AuthenticatedAdminIncidentsRoute
+  AuthenticatedAdminKitHealthRoute: typeof AuthenticatedAdminKitHealthRoute
   AuthenticatedAdminLedgerRoute: typeof AuthenticatedAdminLedgerRoute
   AuthenticatedAdminProductsRoute: typeof AuthenticatedAdminProductsRoute
   AuthenticatedAdminToolsRoute: typeof AuthenticatedAdminToolsRoute
@@ -1929,6 +1950,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminContactsRoute: AuthenticatedAdminContactsRoute,
   AuthenticatedAdminImportContactsRoute: AuthenticatedAdminImportContactsRoute,
   AuthenticatedAdminIncidentsRoute: AuthenticatedAdminIncidentsRoute,
+  AuthenticatedAdminKitHealthRoute: AuthenticatedAdminKitHealthRoute,
   AuthenticatedAdminLedgerRoute: AuthenticatedAdminLedgerRoute,
   AuthenticatedAdminProductsRoute: AuthenticatedAdminProductsRoute,
   AuthenticatedAdminToolsRoute: AuthenticatedAdminToolsRoute,
