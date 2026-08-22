@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { OrderReceiptEmail } from "@/lib/email-templates/order-receipt";
 import { reportError } from "@/lib/error-logger";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
-import { BUYERS_GROUP } from "@/lib/mailerlite-groups";
+import { BUYERS_GROUP, buyerGroupForProduct } from "@/lib/mailerlite-groups";
 import { MEMBER_DOMAIN } from "@/lib/domains";
 
 // Shared post-payment fulfillment for BOTH payment rails (Paystack + Stripe).
@@ -379,7 +379,16 @@ export async function fulfillPaidOrder(
     await reportError(err, { endpoint: "order-fulfillment:sendOrderReceipt", orderId: order.id });
   }
 
-  // Sync buyer to MailerLite (fire-and-forget — never blocks receipt)
+  // Sync buyer to MailerLite (fire-and-forget — never blocks receipt).
   // Real customers only — reached after payment has settled.
-  await addToMailerLiteGroup(email, BUYERS_GROUP.id, { first_name, last_name });
+  //
+  // Routed per product so a Foundation Kit buyer can eventually receive a
+  // Foundation Kit sequence rather than whatever the shared buyers list sends.
+  // PRODUCT_BUYER_GROUPS is empty today, so this resolves to BUYERS_GROUP and
+  // behaviour is byte-identical until a product is explicitly given its own.
+  const buyerSlug = (items ?? []).find(
+    (i: { products: { slug: string } | null }) => i.products,
+  )?.products?.slug;
+  const group = buyerGroupForProduct(buyerSlug);
+  await addToMailerLiteGroup(email, group.id, { first_name, last_name });
 }

@@ -43,6 +43,38 @@ export const TOOL_GROUPS = {
 // buyers in the first place.
 export const BUYERS_GROUP = { id: "190855383448815273", name: "CHKPLT BUYERS" } as const;
 
+// ── PER-PRODUCT BUYER ROUTING ───────────────────────────────────────────────
+//
+// Every buyer of every product currently lands in ONE undifferentiated group,
+// which means a Foundation Kit buyer cannot be sent a Foundation Kit sequence —
+// the segment does not exist to send it to. This map is where that is fixed:
+// a slug routes to its own group, and anything unlisted falls back to the
+// shared buyers group, so adding one product changes nothing for the others.
+//
+// ⚠️ DELIBERATELY EMPTY, pending a founder ruling. Two buyer groups exist in
+// the account and they disagree about reality:
+//
+//     CHKPLT BUYERS   id 190855383448815273    1 subscriber    ← code writes here
+//     BUYERS          id 193225326306788715    7 subscribers
+//
+// The code has only ever landed one person in the group it writes to, while
+// seven sit in the other — so buyers are arriving by some path this codebase
+// does not control, or the wrong group was wired in from the start. Guessing
+// would either split the list further or file people under a second brand's
+// name. Add the entry once that is settled.
+const PRODUCT_BUYER_GROUPS: Record<string, { id: string; name: string }> = {
+  // "called-expert-foundation-kit": { id: "…", name: "FOUNDATION KIT BUYERS" },
+};
+
+/**
+ * Which MailerLite group a buyer of this product belongs in.
+ * Falls back to the shared buyers group, so behaviour is unchanged until a
+ * product is explicitly given its own.
+ */
+export function buyerGroupForProduct(slug: string | null | undefined) {
+  return (slug && PRODUCT_BUYER_GROUPS[slug]) || BUYERS_GROUP;
+}
+
 export type ToolGroupKey = keyof typeof TOOL_GROUPS;
 
 /**
