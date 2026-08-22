@@ -762,6 +762,22 @@ label {
   color: #fff;
   --f-gold: #fbbf24;
   --f-gold-deep: #f59e0b;
+
+  /* THE INVISIBLE-HEADLINE FIX.
+     @layer base paints every heading with var(--foreground), which on these
+     pages resolves to the theme's dark navy ink — navy on black. The gold
+     gradient spans survived only because they set their own fill, which is
+     exactly why the bug looked like "half the headline is missing".
+
+     Re-pointing the token is the correct fix, and the obvious alternative
+     (.funnel h1 { color: #fff }) is a trap: Tailwind's utilities live in
+     @layer utilities, and UNLAYERED css beats every layer, so such a rule
+     would also beat text-slate-300 and grad-gold — and if it ever touched
+     font-size, the whole responsive text-* scale these pages are built on.
+     A token works WITH the cascade: base reads it, utilities still win. */
+  --foreground: #ffffff;
+  --text-body: #cbd5e1;
+  --muted-foreground: #94a3b8;
 }
 
 /* Gold gradient type. The single most recognisable element of the style. */
