@@ -18,6 +18,7 @@ const SITE_NAME = "CHKPLT";
 const ROOT_DOMAIN = "chkplt.com";
 // Product slugs whose purchase unlocks the Foundation Kit workspace.
 const KIT_SLUGS = ["called-expert-foundation-kit", "called-expert-starter-bundle"];
+const ACCELERATOR_SLUG = "contentpreneur-90day-cohort";
 
 // The signed-in workspace lives on contentpreneur.africa (see src/lib/domains.ts),
 // NOT on ROOT_DOMAIN. Every link in this receipt that lands a buyer in their
@@ -336,11 +337,21 @@ export async function fulfillPaidOrder(
     );
   }
 
-  // Does this order unlock the Foundation Kit? Route onboarding straight there.
+  // Where does this order drop the buyer? The Accelerator wins when both are in
+  // the same order — it is the higher tier and it contains everything the kit does.
+  // Until this existed, a $997 buyer landed on the generic /dashboard with no
+  // indication of what they had just bought.
   const hasKit = (items ?? []).some(
     (i: { products: { slug: string } | null }) => i.products && KIT_SLUGS.includes(i.products.slug),
   );
-  const dashboardPath = hasKit ? "/dashboard/foundation-kit" : "/dashboard";
+  const hasAccelerator = (items ?? []).some(
+    (i: { products: { slug: string } | null }) => i.products?.slug === ACCELERATOR_SLUG,
+  );
+  const dashboardPath = hasAccelerator
+    ? "/dashboard/accelerator"
+    : hasKit
+      ? "/dashboard/foundation-kit"
+      : "/dashboard";
 
   // One-click sign-in link → drops the buyer straight into their workspace, signed in.
   let actionUrl: string | null = null;

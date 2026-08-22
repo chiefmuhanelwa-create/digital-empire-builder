@@ -20,13 +20,17 @@ export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")
 // where to start, everything is all over, I do not know what I bought and why
 // is it important or where it is leading me."
 //
-// The cause was structural. This page showed twenty-four equal options and let
+// The cause was structural. This page showed twenty-five equal options and let
 // the buyer infer the point. Now it shows ONE promise, ONE next step, and a
-// six-step path — with the other eighteen tools kept but demoted to a library.
+// five-step path — with the other twenty tools kept but demoted to a library.
 //
 // It also finally surfaces the two things the buyer paid for and could not
-// reach: the ten workbooks (the download function existed with no caller) and
-// the ten-lesson course (the workspace never mentioned it).
+// reach: the workbooks (the download function existed with no caller) and the
+// ten-lesson course (the workspace never mentioned it).
+//
+// The voice matches the sales page deliberately. Somebody who bought after
+// reading "at what point do I start charging" should not land in a product that
+// talks like a different company.
 
 function Workspace() {
   const { access, loading } = useKitAccess();
@@ -79,9 +83,13 @@ function Workspace() {
             Five steps, ending the day somebody pays you.
           </h1>
           <p className="mt-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
-            Not twenty-four things to work out. One path, in order — name what you know, count what
-            you have given away, package it, price it, and send it to one person. Everything else in
-            here is for after that. No delivery, no business.
+            Not twenty-five things to work out. One path, in order — name what you know, count what
+            you have given away, package it, price it, and send it to one person.
+          </p>
+          <p className="mt-3 text-[17px] leading-relaxed" style={{ color: BODY }}>
+            You are the driver. Your knowledge is the cargo. The offer is the delivery — the moment it
+            changes hands and money moves. Everything else in here is for after that.{" "}
+            <strong style={{ color: INK }}>No delivery, no business. Just mileage.</strong>
           </p>
         </section>
 

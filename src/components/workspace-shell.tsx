@@ -1,4 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { useAuth } from "@/lib/auth-context";
+import { myPurchases } from "@/lib/products.functions";
 import { ArrowLeft } from "lucide-react";
 
 // THE WORKSPACE SHELL
@@ -32,7 +36,24 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+/**
+ * Does this member hold the Accelerator? Reuses the "my-purchases" query key the
+ * rest of the workspace already populates, so this adds no extra request.
+ */
+function useHasAccelerator(): boolean {
+  const { user } = useAuth();
+  const purchasesFn = useServerFn(myPurchases);
+  const { data } = useQuery({
+    queryKey: ["my-purchases"],
+    enabled: !!user?.id,
+    queryFn: () => purchasesFn(),
+  });
+  const grants = (data?.grants ?? []) as Array<{ product: { slug: string } | null }>;
+  return grants.some((g) => g.product?.slug === "contentpreneur-90day-cohort");
+}
+
 function WorkspaceHeader() {
+  const hasAccelerator = useHasAccelerator();
   return (
     <header className="sticky top-0 z-40 bg-white" style={{ borderBottom: `1px solid ${LINE}` }}>
       <div className="mx-auto max-w-5xl px-5">
@@ -49,8 +70,12 @@ function WorkspaceHeader() {
             </span>
           </Link>
 
+          {/* "Stages" only appears for Accelerator members. Showing a locked tab
+              to a kit buyer advertises what they did not buy every time they open
+              a tool, which is a worse experience than not knowing it exists. */}
           <nav className="flex items-center gap-1">
             <NavLink to="/dashboard/foundation-kit">Tools</NavLink>
+            {hasAccelerator && <NavLink to="/dashboard/accelerator">Stages</NavLink>}
             <NavLink to="/learn">Course</NavLink>
             <NavLink to="/account">Account</NavLink>
           </nav>

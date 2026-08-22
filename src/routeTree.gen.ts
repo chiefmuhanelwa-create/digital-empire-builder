@@ -61,6 +61,7 @@ import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardInnerCircleRouteImport } from './routes/_authenticated/dashboard.inner-circle'
 import { Route as AuthenticatedDashboardFoundationKitRouteImport } from './routes/_authenticated/dashboard.foundation-kit'
 import { Route as AuthenticatedDashboardCommunityRouteImport } from './routes/_authenticated/dashboard.community'
+import { Route as AuthenticatedDashboardAcceleratorRouteImport } from './routes/_authenticated/dashboard.accelerator'
 import { Route as AuthenticatedAppsYourAlgorithmRouteImport } from './routes/_authenticated/apps.your-algorithm'
 import { Route as AuthenticatedAppsVoicePrintRouteImport } from './routes/_authenticated/apps.voice-print'
 import { Route as AuthenticatedAppsTheSendRouteImport } from './routes/_authenticated/apps.the-send'
@@ -365,6 +366,12 @@ const AuthenticatedDashboardCommunityRoute =
     path: '/community',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardAcceleratorRoute =
+  AuthenticatedDashboardAcceleratorRouteImport.update({
+    id: '/accelerator',
+    path: '/accelerator',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedAppsYourAlgorithmRoute =
   AuthenticatedAppsYourAlgorithmRouteImport.update({
     id: '/apps/your-algorithm',
@@ -663,6 +670,7 @@ export interface FileRoutesByFullPath {
   '/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/apps/voice-print': typeof AuthenticatedAppsVoicePrintRoute
   '/apps/your-algorithm': typeof AuthenticatedAppsYourAlgorithmRoute
+  '/dashboard/accelerator': typeof AuthenticatedDashboardAcceleratorRoute
   '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
@@ -752,6 +760,7 @@ export interface FileRoutesByTo {
   '/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/apps/voice-print': typeof AuthenticatedAppsVoicePrintRoute
   '/apps/your-algorithm': typeof AuthenticatedAppsYourAlgorithmRoute
+  '/dashboard/accelerator': typeof AuthenticatedDashboardAcceleratorRoute
   '/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
@@ -845,6 +854,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/the-send': typeof AuthenticatedAppsTheSendRoute
   '/_authenticated/apps/voice-print': typeof AuthenticatedAppsVoicePrintRoute
   '/_authenticated/apps/your-algorithm': typeof AuthenticatedAppsYourAlgorithmRoute
+  '/_authenticated/dashboard/accelerator': typeof AuthenticatedDashboardAcceleratorRoute
   '/_authenticated/dashboard/community': typeof AuthenticatedDashboardCommunityRoute
   '/_authenticated/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/_authenticated/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
@@ -939,6 +949,7 @@ export interface FileRouteTypes {
     | '/apps/the-send'
     | '/apps/voice-print'
     | '/apps/your-algorithm'
+    | '/dashboard/accelerator'
     | '/dashboard/community'
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
@@ -1028,6 +1039,7 @@ export interface FileRouteTypes {
     | '/apps/the-send'
     | '/apps/voice-print'
     | '/apps/your-algorithm'
+    | '/dashboard/accelerator'
     | '/dashboard/community'
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
@@ -1120,6 +1132,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/the-send'
     | '/_authenticated/apps/voice-print'
     | '/_authenticated/apps/your-algorithm'
+    | '/_authenticated/dashboard/accelerator'
     | '/_authenticated/dashboard/community'
     | '/_authenticated/dashboard/foundation-kit'
     | '/_authenticated/dashboard/inner-circle'
@@ -1558,6 +1571,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardCommunityRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/accelerator': {
+      id: '/_authenticated/dashboard/accelerator'
+      path: '/accelerator'
+      fullPath: '/dashboard/accelerator'
+      preLoaderRoute: typeof AuthenticatedDashboardAcceleratorRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/apps/your-algorithm': {
       id: '/_authenticated/apps/your-algorithm'
       path: '/apps/your-algorithm'
@@ -1861,6 +1881,7 @@ const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardAcceleratorRoute: typeof AuthenticatedDashboardAcceleratorRoute
   AuthenticatedDashboardCommunityRoute: typeof AuthenticatedDashboardCommunityRoute
   AuthenticatedDashboardFoundationKitRoute: typeof AuthenticatedDashboardFoundationKitRoute
   AuthenticatedDashboardInnerCircleRoute: typeof AuthenticatedDashboardInnerCircleRoute
@@ -1871,6 +1892,8 @@ interface AuthenticatedDashboardRouteChildren {
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardAcceleratorRoute:
+      AuthenticatedDashboardAcceleratorRoute,
     AuthenticatedDashboardCommunityRoute: AuthenticatedDashboardCommunityRoute,
     AuthenticatedDashboardFoundationKitRoute:
       AuthenticatedDashboardFoundationKitRoute,
