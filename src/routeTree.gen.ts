@@ -72,12 +72,14 @@ import { Route as AuthenticatedAppsTeleprompterRouteImport } from './routes/_aut
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
 import { Route as AuthenticatedAppsSaleScriptsRouteImport } from './routes/_authenticated/apps.sale-scripts'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
+import { Route as AuthenticatedAppsProofLedgerRouteImport } from './routes/_authenticated/apps.proof-ledger'
 import { Route as AuthenticatedAppsPriceDecisionRouteImport } from './routes/_authenticated/apps.price-decision'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
 import { Route as AuthenticatedAppsOfferBlueprintRouteImport } from './routes/_authenticated/apps.offer-blueprint'
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
 import { Route as AuthenticatedAppsMsTsSsRouteImport } from './routes/_authenticated/apps.ms-ts-ss'
 import { Route as AuthenticatedAppsMoneySplitRouteImport } from './routes/_authenticated/apps.money-split'
+import { Route as AuthenticatedAppsMethodNamerRouteImport } from './routes/_authenticated/apps.method-namer'
 import { Route as AuthenticatedAppsLeadMagnetRouteImport } from './routes/_authenticated/apps.lead-magnet'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
 import { Route as AuthenticatedAppsIncomeTrackerRouteImport } from './routes/_authenticated/apps.income-tracker'
@@ -432,6 +434,12 @@ const AuthenticatedAppsRightSideDiagnosticRoute =
     path: '/apps/right-side-diagnostic',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsProofLedgerRoute =
+  AuthenticatedAppsProofLedgerRouteImport.update({
+    id: '/apps/proof-ledger',
+    path: '/apps/proof-ledger',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsPriceDecisionRoute =
   AuthenticatedAppsPriceDecisionRouteImport.update({
     id: '/apps/price-decision',
@@ -465,6 +473,12 @@ const AuthenticatedAppsMoneySplitRoute =
   AuthenticatedAppsMoneySplitRouteImport.update({
     id: '/apps/money-split',
     path: '/apps/money-split',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsMethodNamerRoute =
+  AuthenticatedAppsMethodNamerRouteImport.update({
+    id: '/apps/method-namer',
+    path: '/apps/method-namer',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAppsLeadMagnetRoute =
@@ -662,12 +676,14 @@ export interface FileRoutesByFullPath {
   '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
   '/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
+  '/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -753,12 +769,14 @@ export interface FileRoutesByTo {
   '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
   '/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
+  '/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -848,12 +866,14 @@ export interface FileRoutesById {
   '/_authenticated/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/_authenticated/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/_authenticated/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
   '/_authenticated/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/_authenticated/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/_authenticated/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
+  '/_authenticated/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/_authenticated/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -944,12 +964,14 @@ export interface FileRouteTypes {
     | '/apps/income-tracker'
     | '/apps/knowledge-audit'
     | '/apps/lead-magnet'
+    | '/apps/method-namer'
     | '/apps/money-split'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
     | '/apps/offer-blueprint'
     | '/apps/paids-auditor'
     | '/apps/price-decision'
+    | '/apps/proof-ledger'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
@@ -1035,12 +1057,14 @@ export interface FileRouteTypes {
     | '/apps/income-tracker'
     | '/apps/knowledge-audit'
     | '/apps/lead-magnet'
+    | '/apps/method-namer'
     | '/apps/money-split'
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
     | '/apps/offer-blueprint'
     | '/apps/paids-auditor'
     | '/apps/price-decision'
+    | '/apps/proof-ledger'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
@@ -1129,12 +1153,14 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/income-tracker'
     | '/_authenticated/apps/knowledge-audit'
     | '/_authenticated/apps/lead-magnet'
+    | '/_authenticated/apps/method-namer'
     | '/_authenticated/apps/money-split'
     | '/_authenticated/apps/ms-ts-ss'
     | '/_authenticated/apps/niche-clarity-builder'
     | '/_authenticated/apps/offer-blueprint'
     | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/apps/price-decision'
+    | '/_authenticated/apps/proof-ledger'
     | '/_authenticated/apps/right-side-diagnostic'
     | '/_authenticated/apps/sale-scripts'
     | '/_authenticated/apps/seeds-pipeline'
@@ -1661,6 +1687,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsRightSideDiagnosticRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/proof-ledger': {
+      id: '/_authenticated/apps/proof-ledger'
+      path: '/apps/proof-ledger'
+      fullPath: '/apps/proof-ledger'
+      preLoaderRoute: typeof AuthenticatedAppsProofLedgerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/price-decision': {
       id: '/_authenticated/apps/price-decision'
       path: '/apps/price-decision'
@@ -1701,6 +1734,13 @@ declare module '@tanstack/react-router' {
       path: '/apps/money-split'
       fullPath: '/apps/money-split'
       preLoaderRoute: typeof AuthenticatedAppsMoneySplitRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/method-namer': {
+      id: '/_authenticated/apps/method-namer'
+      path: '/apps/method-namer'
+      fullPath: '/apps/method-namer'
+      preLoaderRoute: typeof AuthenticatedAppsMethodNamerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/apps/lead-magnet': {
@@ -1976,12 +2016,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsIncomeTrackerRoute: typeof AuthenticatedAppsIncomeTrackerRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
   AuthenticatedAppsLeadMagnetRoute: typeof AuthenticatedAppsLeadMagnetRoute
+  AuthenticatedAppsMethodNamerRoute: typeof AuthenticatedAppsMethodNamerRoute
   AuthenticatedAppsMoneySplitRoute: typeof AuthenticatedAppsMoneySplitRoute
   AuthenticatedAppsMsTsSsRoute: typeof AuthenticatedAppsMsTsSsRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
   AuthenticatedAppsOfferBlueprintRoute: typeof AuthenticatedAppsOfferBlueprintRoute
   AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
   AuthenticatedAppsPriceDecisionRoute: typeof AuthenticatedAppsPriceDecisionRoute
+  AuthenticatedAppsProofLedgerRoute: typeof AuthenticatedAppsProofLedgerRoute
   AuthenticatedAppsRightSideDiagnosticRoute: typeof AuthenticatedAppsRightSideDiagnosticRoute
   AuthenticatedAppsSaleScriptsRoute: typeof AuthenticatedAppsSaleScriptsRoute
   AuthenticatedAppsSeedsPipelineRoute: typeof AuthenticatedAppsSeedsPipelineRoute
@@ -2011,6 +2053,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsIncomeTrackerRoute: AuthenticatedAppsIncomeTrackerRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
   AuthenticatedAppsLeadMagnetRoute: AuthenticatedAppsLeadMagnetRoute,
+  AuthenticatedAppsMethodNamerRoute: AuthenticatedAppsMethodNamerRoute,
   AuthenticatedAppsMoneySplitRoute: AuthenticatedAppsMoneySplitRoute,
   AuthenticatedAppsMsTsSsRoute: AuthenticatedAppsMsTsSsRoute,
   AuthenticatedAppsNicheClarityBuilderRoute:
@@ -2018,6 +2061,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsOfferBlueprintRoute: AuthenticatedAppsOfferBlueprintRoute,
   AuthenticatedAppsPaidsAuditorRoute: AuthenticatedAppsPaidsAuditorRoute,
   AuthenticatedAppsPriceDecisionRoute: AuthenticatedAppsPriceDecisionRoute,
+  AuthenticatedAppsProofLedgerRoute: AuthenticatedAppsProofLedgerRoute,
   AuthenticatedAppsRightSideDiagnosticRoute:
     AuthenticatedAppsRightSideDiagnosticRoute,
   AuthenticatedAppsSaleScriptsRoute: AuthenticatedAppsSaleScriptsRoute,

@@ -100,8 +100,25 @@ function PriceDecision() {
           why="Two different questions, and answering them in the wrong order is why most people stay free. First: am I allowed to charge at all? That is a readiness question with a checkable answer. Only then: what is the number?"
         />
 
+        {/* Condition two asks for a result you can quote, and most people in
+            this audience have produced dozens and recorded none. Sending them to
+            the Ledger first is the difference between "I am not ready" and
+            "I had four of these and never wrote them down". */}
+        <section className="rounded-2xl p-5" style={{ background: TINT, border: `1px solid ${LINE}` }}>
+          <p className="text-[16px] font-bold" style={{ color: INK }}>Do the Proof Ledger first</p>
+          <p className="mt-1.5 text-[16px] leading-relaxed" style={{ color: BODY }}>
+            One of the four conditions below asks for a result you are allowed to quote. If you have
+            been helping people for years you almost certainly have one — you have just never written
+            it down or asked whether you may mention it.
+          </p>
+          <a href="/apps/proof-ledger" className="mt-3 inline-flex items-center gap-1.5 text-[15px] font-semibold"
+             style={{ color: BLUE, textDecoration: "none" }}>
+            Open the Proof Ledger →
+          </a>
+        </section>
+
         {/* ── PART ONE: may I charge */}
-        <section>
+        <section className="mt-8">
           <p className="text-[15px] font-semibold" style={{ color: BLUE }}>Part one</p>
           <h2 className="mt-1 text-[26px] font-black leading-tight" style={{ color: INK }}>
             When do I start charging?

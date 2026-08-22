@@ -5,7 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/gardens";
 import { BookOpen } from "lucide-react";
-import { storeProductUrl } from "@/lib/domains";
+import { memberProductUrl, storeProductUrl } from "@/lib/domains";
 
 type Row = {
   slug: string;
@@ -89,7 +89,11 @@ export function DashboardProducts({ mode }: { mode: "free" | "paid" }) {
             {q.data!.map((p) => (
               <a
                 key={p.slug}
-                href={storeProductUrl(p.slug)}
+                // Native sales page when one exists, so the Foundation Kit and
+                // the Accelerator never bounce a member to chkplt.com. This is a
+                // catalogue page, so items with no native page still link to the
+                // store rather than vanishing.
+                href={memberProductUrl(p.slug) ?? storeProductUrl(p.slug)}
                 className="nx-card group !p-5 flex gap-4 items-start"
               >
                 {p.cover_image_url ? (

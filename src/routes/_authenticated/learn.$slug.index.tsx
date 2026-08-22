@@ -4,7 +4,7 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Lock, PlayCircle } from "lucide-react";
-import { storeProductUrl } from "@/lib/domains";
+import { memberProductUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/")({
   head: ({ params }) => ({
@@ -189,7 +189,7 @@ function CoursePage() {
               You're previewing this course. Get access to unlock every lesson.
             </p>
             <Button asChild className="mt-4 bg-banana text-banana-foreground hover:bg-banana/90">
-              <a href={storeProductUrl(slug)}>Get access →</a>
+              <a href={memberProductUrl(slug) ?? "/foundation"}>Get access →</a>
             </Button>
           </div>
         )}

@@ -12,7 +12,7 @@ import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
 import { CLARITY_STEPS, CLARITY_TOTAL, readClarityProgress, nextClarityStep } from "@/lib/clarity-system";
 import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles, Compass, Users } from "lucide-react";
 import { toast } from "sonner";
-import { storeProductUrl } from "@/lib/domains";
+import { memberProductUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   head: () => ({ meta: [{ title: "Dashboard — Contentpreneur Africa" }] }),
@@ -191,20 +191,24 @@ function Dashboard() {
             <div className="nx-label mb-1 flex items-center gap-2"><Sparkles className="size-4 text-banana" /> Recommended next</div>
             <h2 className="font-display text-2xl sm:text-3xl mb-1">Complete your toolkit</h2>
             <p className="text-sm text-muted-foreground mb-5">
-              The next steps that build on what you already have. These open the store in a new tab —
-              your workspace stays where it is.
+              The next steps that build on what you already have.
             </p>
             <div className="grid sm:grid-cols-3 gap-4">
-              {recommended.map((p) => (
-                // Opens in a new tab on purpose: this is the storefront on another
-                // domain, and losing the workspace behind a purchase page is
-                // disorienting for someone mid-way through the seven stages.
-                <a key={p.slug} href={storeProductUrl(p.slug)} target="_blank" rel="noopener noreferrer" className="nx-card !p-5 flex flex-col group">
-                  <div className="font-display text-lg group-hover:text-banana transition-colors">{p.title}</div>
-                  {p.tagline && <p className="text-sm text-muted-foreground mt-1 flex-1">{p.tagline}</p>}
-                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[var(--nx-gold-text)]">See details in the store <ArrowRight className="size-4" /></span>
-                </a>
-              ))}
+              {/* Only products with a sales page ON THIS DOMAIN are shown. Anything
+                  that would have sent a member to chkplt.com is dropped rather than
+                  linked — a second brand appearing mid-journey is the clutter the
+                  founder asked to be removed, not a feature. Same tab, because the
+                  destination is no longer a different site. */}
+              {recommended
+                .map((p) => ({ p, href: memberProductUrl(p.slug) }))
+                .filter((x): x is { p: typeof x.p; href: string } => x.href !== null)
+                .map(({ p, href }) => (
+                  <a key={p.slug} href={href} className="nx-card !p-5 flex flex-col group">
+                    <div className="font-display text-lg group-hover:text-banana transition-colors">{p.title}</div>
+                    {p.tagline && <p className="text-sm text-muted-foreground mt-1 flex-1">{p.tagline}</p>}
+                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[var(--nx-gold-text)]">See what it covers <ArrowRight className="size-4" /></span>
+                  </a>
+                ))}
             </div>
           </div>
         )}

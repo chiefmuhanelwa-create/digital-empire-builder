@@ -5,7 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { getLessonBody, markLessonComplete } from "@/lib/lms.functions";
 import { Button } from "@/components/ui/button";
 import { Lock, Check } from "lucide-react";
-import { storeProductUrl } from "@/lib/domains";
+import { memberProductUrl } from "@/lib/domains";
 
 export const Route = createFileRoute("/_authenticated/learn/$slug/$lessonSlug")({
   head: ({ params }) => ({
@@ -97,7 +97,7 @@ function LessonPage() {
               Buy access to {data.product.title} to unlock the full content.
             </p>
             <Button asChild className="mt-6 bg-banana text-banana-foreground hover:bg-banana/90">
-              <a href={storeProductUrl(slug)}>Get access →</a>
+              <a href={memberProductUrl(slug) ?? "/foundation"}>Get access →</a>
             </Button>
           </div>
         ) : (

@@ -53,3 +53,33 @@ export function isMemberPath(pathname: string): boolean {
 export function storeProductUrl(slug: string): string {
   return import.meta.env.DEV ? `/products/${slug}` : `https://${STORE_DOMAIN}/products/${slug}`;
 }
+
+/**
+ * Products that have a real sales page ON contentpreneur.africa.
+ *
+ * These pages resolve on both hostnames, so linking to them keeps a member
+ * inside one brand for the whole journey.
+ */
+const NATIVE_SALES_PAGE: Record<string, string> = {
+  "called-expert-foundation-kit": "/foundation",
+  "called-expert-starter-bundle": "/foundation",
+  "contentpreneur-90day-cohort": "/accelerator",
+};
+
+/**
+ * Where a product's sales page lives, FROM INSIDE THE MEMBER WORKSPACE.
+ *
+ * Founder instruction 2026-08-22: "kill these chkplt.com/products/... links in
+ * the contentpreneur.africa dashboard". A Foundation Kit buyer being thrown to
+ * a second brand's storefront mid-journey is the exact thing the domain split
+ * was supposed to end, and /foundation had existed for weeks while the
+ * dashboard still pointed at chkplt.com/products/called-expert-foundation-kit.
+ *
+ * Returns null when a product has NO native page. Callers must then hide the
+ * link rather than falling back to the storefront — a null here means "this
+ * product is not part of the contentpreneur journey", and advertising it inside
+ * the workspace is precisely the clutter being removed.
+ */
+export function memberProductUrl(slug: string): string | null {
+  return NATIVE_SALES_PAGE[slug] ?? null;
+}

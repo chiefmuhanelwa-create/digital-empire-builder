@@ -846,3 +846,78 @@ label {
 .funnel button {
   min-height: 44px;
 }
+
+/* ── MOBILE ────────────────────────────────────────────────────────────────
+   These pages are read on a phone at 22:00 after a full day — that is the
+   stated ICP, so the phone is the primary target and the desktop is the
+   variant. Fixes below are ordered by how badly each one broke.            */
+
+/* 1. Nothing may scroll sideways. The ambient orbs are 28rem wide and sit in a
+      fixed layer; on a 360px screen any leak shows as a page that slides. */
+.funnel {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* 2. Long headlines contain quote marks, em-dashes and prices that must not
+      push the layout wider than the screen. */
+.funnel h1,
+.funnel h2,
+.funnel h3,
+.funnel p,
+.funnel li {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* 3. Tables (the price comparison) scroll inside their own container, never
+      the page. The wrapper already sets overflow-x:auto; this stops iOS from
+      snapping the scroll awkwardly mid-row. */
+.funnel table {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  /* 4. THE CTA. "Get the Foundation Kit — $97" is 30 characters; at the desktop
+        px-9 py-5 text-lg it overflowed a 360px viewport. On phones it becomes a
+        full-width block that wraps, which is also the shape people expect to
+        press with a thumb. */
+  .funnel .cta-pill {
+    display: flex;
+    width: 100%;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    font-size: 1.0625rem;
+    line-height: 1.3;
+    text-align: center;
+    white-space: normal;
+  }
+
+  /* 5. Hero type. clamp keeps it large without letting a long word set the
+        page width. */
+  .funnel h1 {
+    font-size: clamp(1.85rem, 8.5vw, 2.75rem);
+  }
+  .funnel h2 {
+    font-size: clamp(1.5rem, 6.5vw, 2.1rem);
+  }
+
+  /* 6. Cards and sections lose their generous desktop padding, which on a phone
+        is just wasted width. */
+  .funnel .card-glass {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  /* 7. The eyebrow pill wraps rather than forcing a minimum width. */
+  .funnel .eyebrow {
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* 8. Respect the safe area on notched phones — the sticky nav sits under the
+      status bar otherwise. */
+.funnel .funnel-nav {
+  padding-top: env(safe-area-inset-top, 0px);
+}

@@ -85,7 +85,7 @@ export function Orbs({ tint = "amber" }: { tint?: "amber" | "blue" | "green" }) 
 export function Eyebrow({ children, tint = "#fbbf24" }: { children: React.ReactNode; tint?: string }) {
   return (
     <div
-      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold"
+      className="eyebrow inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold"
       style={{ background: `${tint}22`, border: `1px solid ${tint}55`, color: tint }}
     >
       {children}
@@ -110,9 +110,12 @@ export function CTA({
   sub?: string;
   full?: boolean;
 }) {
+  // .cta-pill is the hook the mobile rules in styles.css use to turn this into
+  // a full-width, wrapping block below 640px — "Get the Foundation Kit — $97"
+  // is 30 characters and overflowed a 360px screen at desktop padding.
   const cls =
-    `${full ? "flex w-full" : "inline-flex"} items-center justify-center gap-3 rounded-full ` +
-    "bg-gradient-to-r from-amber-400 to-amber-500 px-9 py-5 text-lg sm:text-xl font-black text-black " +
+    `cta-pill ${full ? "flex w-full" : "inline-flex"} items-center justify-center gap-3 rounded-full ` +
+    "bg-gradient-to-r from-amber-400 to-amber-500 px-6 sm:px-9 py-4 sm:py-5 text-[17px] sm:text-xl font-black text-black " +
     "glow-gold transition-transform hover:scale-[1.02] active:scale-[0.99] " +
     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-400/50";
 
@@ -169,8 +172,8 @@ export function StepCard({
   return (
     <Reveal delay={delay}>
       <GlassCard className="overflow-hidden" accent={`${accent}4d`}>
-        <div className="p-7 sm:p-9">
-          <div className="flex items-start gap-5">
+        <div className="p-5 sm:p-9">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
             <div
               className="grid size-14 shrink-0 place-items-center rounded-2xl text-xl font-black text-black"
               style={{ background: `linear-gradient(135deg, ${accent}, ${accent}bb)` }}
@@ -222,20 +225,21 @@ export function FunnelNav({ ctaTo, ctaHref, ctaLabel }: { ctaTo?: string; ctaHre
   }, []);
 
   const cls =
-    "rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2.5 text-sm font-black text-black " +
-    "transition-transform hover:scale-[1.03]";
+    "shrink-0 whitespace-nowrap rounded-full bg-gradient-to-r from-amber-400 to-amber-500 " +
+    "px-4 sm:px-5 py-2.5 text-[13px] sm:text-sm font-black text-black transition-transform hover:scale-[1.03]";
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-50 transition-colors"
+      className="funnel-nav fixed inset-x-0 top-0 z-50 transition-colors"
       style={{
         background: solid ? "rgba(0,0,0,0.85)" : "transparent",
         backdropFilter: solid ? "blur(12px)" : undefined,
         borderBottom: solid ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
       }}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <span className="text-sm font-black tracking-tight text-white">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+        {/* Truncates rather than wrapping or pushing the button off-screen. */}
+        <span className="min-w-0 truncate text-[13px] sm:text-sm font-black tracking-tight text-white">
           CONTENTPRENEUR<span className="grad-gold"> AFRICA</span>
         </span>
         {ctaTo ? (

@@ -101,7 +101,19 @@ export const TOOLS: KitTool[] = [
   { slug: "offer-blueprint", name: "The Offer Blueprint", stage: 2, start: true,
     blurb: "The spine. Who you help, from what, to what, in how long, for how much — and it rejects a category where a person belongs.",
     output: "One sentence, and a price with a line that defends it.",
-    storage: "synced", key: "nochill-offer-spine-v1", path: 3, lessonSlug: "pb-what-is-a-personal-brand"},
+    storage: "synced", key: "nochill-offer-spine-v1", lessonSlug: "pb-what-is-a-personal-brand"},
+  // STEP 3. Replaced the Offer Blueprint on the path 2026-08-22: the Blueprint
+  // asks somebody to package a thing they cannot yet name, and naming is the
+  // step that turns a favour into a product. The Blueprint stays in the library
+  // for refining the package afterwards.
+  { slug: "method-namer", name: "The Method Namer", stage: 2,
+    blurb: "The process you already run every time somebody comes to you, extracted and given a name. A service you cannot name is a favour, and favours are free by definition.",
+    output: "A named method, and the sentence that says what it does.",
+    storage: "synced", key: "nochill-method-namer-v1", path: 3, readsFrom: "knowledge-audit" },
+  { slug: "proof-ledger", name: "The Proof Ledger", stage: 2,
+    blurb: "The results you have already produced and never recorded, plus the message that asks permission to quote them. Most people are glad to be asked.",
+    output: "Quotable results, and the permission to use them.",
+    storage: "synced", key: "nochill-proof-ledger-v1" },
   { slug: "the-leak", name: "The Leak", stage: 2,
     blurb: "Counts what you have already given away for free, priced the way your own industry prices you. Most people have never added it up.",
     output: "A rand figure, and the sentence that stops each leak.",

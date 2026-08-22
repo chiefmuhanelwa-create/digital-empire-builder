@@ -321,17 +321,17 @@ function FoundationFunnel() {
               accent="#f59e0b" delay={60}
             />
             <StepCard
-              n={3} title="Turn it into one thing people can buy" badge="Step three"
-              body="A favour has no edges, so it stays free. This gives it a name, a promise, and something the other person keeps at the end. You finish with a one-page document you could send to somebody tonight."
+              n={3} title="The Method Namer" badge="A method, not a favour"
+              body="She never gives a student a research topic. After they cite somebody she asks “so, what do YOU say?” Before a defence she says “be honest.” Two students won scholarships on that. That is a method — it just had no name. A service you cannot name is a favour, and favours are free by definition. A method with a name is a product, and products have prices."
               accent="#3b82f6" delay={120}
             />
             <StepCard
-              n={4} title="Decide what to charge — and whether you are ready" badge="The question nobody answers"
-              body="Two questions, in that order, because answering the first one with a number is why most advice fails here. First: are you ready? Four things you can check, not feel."
+              n={4} title="The Proof Ledger, then the Charge Gate" badge="The question nobody answers"
+              body="First we recover the results you gave away, with the permission message to send — most people are glad to be asked. Then four conditions you can check rather than feel."
               points={[
-                "Has more than one person asked you for this?",
-                "Have you done it once, and can you say what changed?",
-                "Do they keep something at the end, or just feel better?",
+                "Has somebody asked for this twice?",
+                "Did you deliver it once and it worked — one result you can quote?",
+                "Is the output a thing, or a feeling?",
                 "Can you say what it costs them not to have it?",
               ]}
               accent="#a855f7" delay={180}
@@ -419,12 +419,16 @@ function FoundationFunnel() {
 
               <ul className="mt-9 space-y-4">
                 {[
-                  ["The five steps, saved as you go", "Start on your phone, finish on the laptop. You never type the same answer twice."],
-                  ["The part nobody explains", "What to charge, and how to know you are ready to ask for it."],
-                  ["25 tools", "Five are the path. Twenty more for after somebody has paid you."],
-                  ["What to say when they hesitate", "The four things people say back, answered — including “that is expensive”."],
-                  ["Money kept properly", "What to put aside for SARS the week it comes in, not the month it is owed."],
-                  ["9 workbooks and 10 short videos", "Everything opens on day one. Nothing is held back for later."],
+                  ["The five-step path, saved across devices", "Start on your phone at lunch, finish on the laptop at 21:00. You never type the same answer twice."],
+                  ["The Method Namer", "Your process, extracted and named."],
+                  ["The Proof Ledger", "Your past results made quotable, with the permission message to send."],
+                  ["The Charge Gate", "The number, and the sentence that defends it."],
+                  ["Sale scripts, the four objections answered", "You know what to say when they say “that is expensive”."],
+                  ["The 4E content calendar", "Thirty prompts about your offer — not generic content ideas."],
+                  ["The invoice builder and the 35% split", "You get paid properly and keep what is SARS's aside, before you spend it."],
+                  ["Your one-pager", "Name, method, price, proof — one document, sendable today."],
+                  ["9 workbooks and a 10-video course", "The printed version of all of it. Everything opens on day one."],
+                  ["Lifetime access, all future updates", "Including everything added later."],
                 ].map(([t, b]) => (
                   <li key={t} className="flex items-start gap-3 border-b border-white/10 pb-4 last:border-0">
                     <Check className="mt-1 size-5 shrink-0 text-amber-400" />
@@ -494,10 +498,10 @@ function FoundationFunnel() {
 
           <div className="mt-10 space-y-6">
             {[
-              ["“I do not have the time.”", "One step an evening, and it remembers where you stopped. You have already spent longer than that this month answering questions for free."],
-              ["“My field is different.”", "It works from your answers, not a template. Step two prices your hour from what your own profession pays somebody with your qualification — an auditor and a nurse get different numbers, because they should."],
-              ["“I do not think I am ready to charge.”", "Step four is a test for exactly that. If you are not ready it says so, and tells you the one thing to go and do first. Most people find they were ready two years ago."],
-              ["“Do I have to leave my job?”", "No. I never did, and none of this assumes you will. Five evenings, in the hours you already have."],
+              ["“I don't have time.”", "One step an evening, saved between sessions. You have spent longer than that this month answering questions for free."],
+              ["“What if my field is different?”", "Nothing in here is a template — every tool works from your own answers. The Leak prices your hour from what your own profession pays somebody with your qualification, so an auditor and a nurse get different numbers, because they should."],
+              ["“I'm not ready to charge yet.”", "Step four is literally a test for that. If you are not ready it tells you so, and tells you exactly what to do first. That answer alone is worth the price."],
+              ["“Do I have to leave my job?”", "No. I never did, and none of this assumes you will."],
             ].map(([q, a], i) => (
               <Reveal key={q} delay={i * 70}>
                 <div>
