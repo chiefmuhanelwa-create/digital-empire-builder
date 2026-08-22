@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 
 // THE FUNNEL KIT.
 //
@@ -268,5 +268,71 @@ export function FunnelFooter() {
         </p>
       </div>
     </footer>
+  );
+}
+
+/**
+ * THE CONTRAST BLOCK — red trap on the left, green outcome on the right.
+ *
+ * Lifted from NicheFinderProduct.tsx in the founder's Mocha export, where it is
+ * the hinge of every sales page: name the trap the reader is currently in, in
+ * their own words, then show the version of them that is out of it. It works
+ * because the left column is recognition, not accusation — the reader has to
+ * tick the boxes themselves.
+ */
+export function Contrast({
+  badTitle, bad, goodTitle, good,
+}: {
+  badTitle: string;
+  bad: string[];
+  goodTitle: string;
+  good: string[];
+}) {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      <Reveal>
+        <div className="h-full rounded-3xl p-8" style={{ background: "rgba(239,68,68,0.06)", border: "2px solid rgba(239,68,68,0.3)" }}>
+          <div className="flex items-center gap-3">
+            <X className="size-9 shrink-0 text-red-500" />
+            <h3 className="text-xl sm:text-2xl font-black text-red-400">{badTitle}</h3>
+          </div>
+          <ul className="mt-6 space-y-3">
+            {bad.map((t) => (
+              <li key={t} className="flex items-start gap-2.5 text-slate-300">
+                <X className="mt-1 size-4 shrink-0 text-red-500" />
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
+      <Reveal delay={120}>
+        <div className="h-full rounded-3xl p-8" style={{ background: "rgba(34,197,94,0.06)", border: "2px solid rgba(34,197,94,0.3)" }}>
+          <div className="flex items-center gap-3">
+            <Check className="size-9 shrink-0 text-green-500" />
+            <h3 className="text-xl sm:text-2xl font-black text-green-400">{goodTitle}</h3>
+          </div>
+          <ul className="mt-6 space-y-3">
+            {good.map((t) => (
+              <li key={t} className="flex items-start gap-2.5 text-slate-300">
+                <Check className="mt-1 size-4 shrink-0 text-green-500" />
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
+    </div>
+  );
+}
+
+/** Struck-through anchor above the real price. */
+export function PriceAnchor({ anchor, price, note }: { anchor: string; price: string; note: string }) {
+  return (
+    <div className="text-center">
+      <div className="text-lg text-slate-500 line-through">{anchor}</div>
+      <div className="mt-1 text-6xl font-black grad-gold">{price}</div>
+      <div className="mt-2 text-slate-400">{note}</div>
+    </div>
   );
 }
