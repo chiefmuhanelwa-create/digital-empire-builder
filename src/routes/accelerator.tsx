@@ -1,26 +1,34 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ContentpreneurHeader, ContentpreneurFooter } from "@/components/contentpreneur-header";
-import { ProCohortBreakdown } from "@/components/PremiumProgramBreakdown";
+import { createFileRoute } from "@tanstack/react-router";
+import { Reveal, Orbs, Eyebrow, CTA, GlassCard, FunnelNav, FunnelFooter } from "@/components/funnel";
+import { STAGES } from "@/lib/accelerator-stages";
+import { ShieldCheck } from "lucide-react";
 
-// Sales page for the Contentpreneur Accelerator, at contentpreneur.africa/accelerator.
-//
-// COPY REWRITTEN 2026-08-22.
+// THE ACCELERATOR FUNNEL — contentpreneur.africa/accelerator
 //
 // ⚠️ SARS — READ BEFORE EDITING THIS FILE.
-// An earlier draft of this page said penalties were waived and the balance paid
-// over eleven months. PROOF.md marks that 🔴 BANNED, and the founder confirmed on
-// 2026-08-20 that NO payments have started. The mechanism is contested across two
-// records — do not assert either. What is confirmed and all that may ever appear
-// here: the assessment was R207,879.20, and he came forward rather than hiding.
-// The teachable lesson is the reserve rule, not a repayment story.
+// An earlier draft said penalties were waived and the balance paid over eleven
+// months. PROOF.md marks that 🔴 BANNED, and the founder confirmed on
+// 2026-08-20 that NO payments have started. The mechanism is contested across
+// two records — do not assert either. What is confirmed, and all that may ever
+// appear here: the assessment was R207,879.20, and he came forward rather than
+// hiding. The teachable lesson is the reserve rule, not a repayment story.
 //
-// The cohort is NOT sold on this page. No cohort has run — there is no group, no
-// schedule, no room. What is real, and what this page sells, is the seven stage
+// The cohort is NOT sold on this page. No cohort has run — there is no group,
+// no schedule, no room. What is real, and what this sells, is the seven stage
 // gates and an application a person reads.
+//
+// ONE CTA: /apply. Every button on this page says the same thing and goes to
+// the same place. The old page had two Apply buttons plus a site header full of
+// menu links and a footer sitemap.
+const CTA_TO = "/apply";
+const APPLY = "Apply for the Accelerator";
+
+const STAGE_TINTS = ["#fbbf24", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#06b6d4", "#ef4444"];
+
 export const Route = createFileRoute("/accelerator")({
   head: () => ({
     meta: [
-      { title: "Contentpreneur Accelerator — $997 — Contentpreneur Africa" },
+      { title: "Contentpreneur Accelerator — Contentpreneur Africa" },
       {
         name: "description",
         content:
@@ -28,226 +36,296 @@ export const Route = createFileRoute("/accelerator")({
       },
     ],
   }),
-  component: AcceleratorPage,
+  component: AcceleratorFunnel,
 });
 
-function AcceleratorPage() {
+function AcceleratorFunnel() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <ContentpreneurHeader />
+    <div className="funnel min-h-screen">
+      <Orbs tint="blue" />
+      <FunnelNav ctaTo={CTA_TO} ctaLabel="Apply" />
 
-      {/* Opens on a real prospect's words. A finance leader — fifteen years of
-          seniority, a published book, an audience of executives on LinkedIn.
-          Profession only, never a name. */}
-      <section className="mx-auto max-w-2xl px-6 pt-20 pb-16">
-        <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">
-          The flagship · $997 · application required
-        </div>
-        <h1 className="mt-6 font-display text-4xl sm:text-5xl leading-[1.05]">
-          “I am not starting from zero, but I do feel like I need direction.”
-        </h1>
-        <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-          A finance leader wrote that. Fifteen years of seniority. A published book. An audience of
-          professionals and executives.
-        </p>
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">She also wrote:</p>
-        <blockquote className="mt-4 border-l-2 border-banana pl-5 font-display text-2xl leading-snug">
-          “I published my first book a few years ago, although I did not actively promote it.”
-        </blockquote>
-        <p className="mt-6 text-lg leading-relaxed">
-          A book. Sold. Earning nothing. Not one email address captured from anybody who read it.
-        </p>
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-          That is not a beginner's problem. It is what happens when someone builds every part of a
-          business except the part where value changes hands and money moves.
-        </p>
-        <Link
-          to="/apply"
-          className="mt-8 inline-flex items-center justify-center rounded-md bg-banana px-8 py-4 font-display text-lg text-banana-foreground hover:bg-banana/90 transition-colors"
-        >
-          Apply Now →
-        </Link>
-      </section>
-
-      <section className="border-t border-border bg-card/30">
-        <div className="mx-auto max-w-2xl px-6 py-16">
-          <h2 className="font-display text-3xl">One sale is not a business</h2>
-          <p className="mt-5 text-muted-foreground leading-relaxed">
-            You have made one. By hand, to somebody you already knew, after a conversation.
-          </p>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
-            Good — that is the hard part, and it is behind you.
-          </p>
-          <p className="mt-4 text-lg leading-relaxed">
-            Now do it eleven more times and look at what you have:{" "}
-            <strong>a job with worse hours than the one you already have, and no way to stop.</strong>{" "}
-            One income stream, and it is Services — the only one of the five that ends the moment you
-            do.
-          </p>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-2xl px-6 py-16">
-        <h2 className="font-display text-3xl">What the next three years cost if this stays manual</h2>
-        <div className="mt-8 space-y-6">
-          {[
-            ["You stay the bottleneck", "Every rand requires you in a conversation. Your income has a hard ceiling and it is your calendar."],
-            ["One morning can still take it all", "No list. Your entire audience sits on a platform whose terms can change without warning. Ask me what that morning feels like."],
-            ["Your best asset keeps depreciating", "The book, the talks, the frameworks — they earn nothing while you keep making new things instead of monetising what already exists."],
-            ["SARS accrues quietly", "Undeclared side income does not disappear. It waits, and it grows. Mine reached R207,879.20 while I felt successful."],
-            ["And the version you would rather not think about", "In three years you are still doing this on Saturdays, still trading hours, still telling yourself next year is the year — with three more years of “should have started” behind you."],
-          ].map(([h, b]) => (
-            <div key={h} className="border-l-2 border-banana pl-5">
-              <div className="font-display text-lg">{h}</div>
-              <p className="mt-1 text-muted-foreground leading-relaxed">{b}</p>
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      <section className="relative z-10 px-4 pt-28 pb-16 sm:pt-36">
+        <div className="mx-auto max-w-3xl text-center">
+          <Reveal>
+            <Eyebrow tint="#60a5fa">The flagship · $997 · application required</Eyebrow>
+            <h1 className="mt-6 text-3xl sm:text-5xl md:text-6xl font-black leading-[1.08]">
+              “I am not starting from zero, but I do feel like I need{" "}
+              <span className="grad-gold">direction.</span>”
+            </h1>
+            <p className="mx-auto mt-7 max-w-2xl text-lg sm:text-xl leading-relaxed text-slate-300">
+              A finance leader wrote that. Fifteen years of seniority. A published book. An audience of
+              professionals and executives.
+            </p>
+            <blockquote className="mx-auto mt-7 max-w-2xl border-l-2 border-amber-400 pl-6 text-left text-xl sm:text-2xl font-bold leading-snug">
+              “I published my first book a few years ago, although I did not actively promote it.”
+            </blockquote>
+            <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-white">
+              A book. Sold. Earning nothing. Not one email address captured from anybody who read it.
+            </p>
+            <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-400">
+              That is not a beginner's problem. It is what happens when someone builds every part of a
+              business except the part where value changes hands and money moves.
+            </p>
+            <div className="mt-10 flex justify-center">
+              <CTA to={CTA_TO} sub="10 minutes · free · read by a person">{APPLY}</CTA>
             </div>
-          ))}
+          </Reveal>
         </div>
       </section>
 
-      {/* The model, stated plainly. This is the spine of the whole programme. */}
-      <section className="border-t border-border bg-card/30">
-        <div className="mx-auto max-w-2xl px-6 py-16">
-          <h2 className="font-display text-3xl">The whole thing, in one picture</h2>
-          <p className="mt-5 text-lg leading-relaxed">
-            You are the driver. Your knowledge is the cargo. The offer is the delivery — the moment
-            the cargo changes hands and money moves.
-          </p>
-          <p className="mt-4 font-display text-2xl">No delivery, no business. Just mileage.</p>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
-            Content is the fuel. Marketing is the vehicle. Platforms are roads — public, busy, owned
-            by somebody who can close them tomorrow. And your email list is the only depot that is
-            yours.
-          </p>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
-            The Foundation Kit teaches the delivery. This teaches everything that turns one delivery
-            into a route that runs.
-          </p>
+      {/* ── ONE SALE IS NOT A BUSINESS ───────────────────────────────────── */}
+      <section className="relative z-10 px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl">
+          <Reveal>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+              One sale is <span className="grad-gold">not a business</span>
+            </h2>
+            <div className="mt-7 space-y-5 text-lg leading-relaxed text-slate-300">
+              <p className="measure">
+                You have made one. By hand, to somebody you already knew, after a conversation. Good —
+                that is the hard part, and it is behind you.
+              </p>
+              <p className="measure text-white">
+                Now do it eleven more times and look at what you have: a job with worse hours than the
+                one you already have, and no way to stop.
+              </p>
+              <p className="measure">
+                One income stream, and it is Services — the only one of the five that ends the moment
+                you do.
+              </p>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-6 py-4">
-        <ProCohortBreakdown />
-      </section>
-
-      <section className="border-t border-border bg-card/30">
-        <div className="mx-auto max-w-2xl px-6 py-16">
-          <h2 className="font-display text-3xl">The money side, from someone who got it wrong</h2>
-          <p className="mt-5 text-muted-foreground leading-relaxed">
-            My Finance axis was zero for years. SARS assessed me{" "}
-            <strong className="text-foreground">R207,879.20</strong>.
-          </p>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
-            I went to them before they came for me. That is the part I got right, and it is the only
-            part I got right.
-          </p>
-          <p className="mt-4 text-lg leading-relaxed">
-            I still carry it. I am telling you that plainly because the useful lesson is not how it
-            ended — it is that none of it would have existed if I had put money aside the week it came
-            in, instead of the month it was owed.
-          </p>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
-            That is what Stage 7 teaches: the reserve rule, the deduction categories, and records that
-            survive being looked at. Nobody else teaching this in South Africa touches it. It is the
-            stage you will score lowest on, and it is the one that ends businesses quietly, years
-            later, in a letter.
-          </p>
+      {/* ── THE MODEL ────────────────────────────────────────────────────── */}
+      <section className="relative z-10 px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl">
+          <Reveal>
+            <GlassCard className="p-8 sm:p-12" accent="rgba(251,191,36,0.3)">
+              <h2 className="text-3xl sm:text-4xl font-black leading-tight">
+                The whole thing, in <span className="grad-gold">one picture</span>
+              </h2>
+              <p className="mt-6 text-lg sm:text-xl leading-relaxed text-white">
+                You are the driver. Your knowledge is the cargo. The offer is the delivery — the moment
+                the cargo changes hands and money moves.
+              </p>
+              <p className="mt-6 text-2xl sm:text-3xl font-black grad-gold">
+                No delivery, no business. Just mileage.
+              </p>
+              <p className="mt-6 leading-relaxed text-slate-300">
+                Content is the fuel. Marketing is the vehicle. Platforms are roads — public, busy,
+                owned by somebody who can close them tomorrow. And your email list is the only depot
+                that is yours.
+              </p>
+              <p className="mt-5 leading-relaxed text-slate-400">
+                The Foundation Kit teaches the delivery. This teaches everything that turns one
+                delivery into a route that runs.
+              </p>
+            </GlassCard>
+          </Reveal>
         </div>
       </section>
 
-      <section className="mx-auto max-w-2xl px-6 py-16">
-        <h2 className="font-display text-3xl">What it is worth against what it costs</h2>
-        <div className="mt-6 font-display text-5xl text-banana">$997</div>
-        <p className="mt-2 text-sm text-muted-foreground">Billed in ZAR · or two payments</p>
-        <ul className="mt-6 space-y-3 text-muted-foreground">
-          <li>· One month of a business coach who has never run a business</li>
-          <li>· Less than a single postgraduate module</li>
-          <li>
-            ·{" "}
-            <strong className="text-foreground">
-              One corporate training day at a proper rate pays for it.
-            </strong>{" "}
-            One keynote pays for it. One retainer client pays for it four times over.
-          </li>
-        </ul>
-        <p className="mt-6 text-lg leading-relaxed">
-          You have spent more than this on qualifications. This is the one that makes them earn.
-        </p>
-      </section>
+      {/* ── THE SEVEN GATES. The actual product. ─────────────────────────── */}
+      <section className="relative z-10 px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-5xl">
+          <Reveal>
+            <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+              Seven stages. <span className="grad-gold">Seven gates you cannot skip.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-center text-lg leading-relaxed text-slate-300">
+              You do not advance because a week passed. You advance because you produced the artifact.
+              That is the whole difference between this and a video library — and we already sell a
+              video library, for a tenth of the price.
+            </p>
+          </Reveal>
 
-      {/* Honest disqualification. This converts better than persuasion with a
-          credentialed professional, and it protects the room. */}
-      <section className="border-t border-border bg-card/30">
-        <div className="mx-auto max-w-2xl px-6 py-16">
-          <h2 className="font-display text-3xl">Do not apply if</h2>
-          <div className="mt-6 space-y-5 text-muted-foreground">
-            <p>
-              <strong className="text-foreground">You have not sent your offer to anybody yet.</strong>{" "}
-              Do the Foundation Kit, sell once, come back. That is the entry requirement and it is the
-              honest one — you cannot systematise a delivery you have never made.
-            </p>
-            <p>
-              <strong className="text-foreground">You want to be famous.</strong> This builds owned
-              assets. Reach is a side effect, and sometimes it is not one.
-            </p>
-            <p>
-              <strong className="text-foreground">You cannot give it four hours a week.</strong> Seven
-              stages, each with a gate. Producing the artifact <em>is</em> the work.
-            </p>
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            {STAGES.map((s, i) => {
+              const tint = STAGE_TINTS[i % STAGE_TINTS.length];
+              return (
+                <Reveal key={s.n} delay={i * 60}>
+                  <GlassCard className="flex h-full flex-col p-7" accent={`${tint}44`}>
+                    <div className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: tint }}>
+                      Stage {s.n} · {s.element}
+                    </div>
+                    <h3 className="mt-2 text-xl sm:text-2xl font-black leading-tight">{s.title}</h3>
+                    <p className="mt-3 text-sm italic text-slate-400">{s.question}</p>
+                    <div className="mt-auto pt-5">
+                      <div className="border-t border-white/10 pt-4">
+                        <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                          You cannot advance without
+                        </div>
+                        <p className="mt-1.5 text-sm font-medium leading-snug text-slate-200">{s.gate}</p>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </Reveal>
+              );
+            })}
           </div>
-          <p className="mt-8 text-lg leading-relaxed">
-            Applications are read by a person. Not everyone gets in.
-          </p>
+
+          <Reveal delay={200}>
+            <p className="mx-auto mt-10 max-w-2xl text-center leading-relaxed text-slate-400">
+              Stage 6 is the one nobody asks for and everybody needs. Every person who has come to me
+              asked about roads. Not one asked about a depot.
+            </p>
+            <div className="mt-10 flex justify-center">
+              <CTA to={CTA_TO} sub="10 minutes · free · read by a person">{APPLY}</CTA>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      <section className="mx-auto max-w-2xl px-6 py-20">
-        <div className="text-center">
-          <div className="font-mono text-xs tracking-[0.25em] uppercase text-banana">FAQ</div>
-          <div className="mt-6 space-y-6 text-left">
-            <div>
-              <div className="font-display text-sm font-bold text-banana">
-                Why an application, not just a checkout button?
+      {/* ── COST OF STAYING MANUAL ───────────────────────────────────────── */}
+      <section className="relative z-10 px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-4xl">
+          <Reveal>
+            <h2 className="text-center text-3xl sm:text-4xl font-black leading-tight">
+              What the next three years cost <span className="text-red-400">if this stays manual</span>
+            </h2>
+          </Reveal>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2">
+            {[
+              ["You stay the bottleneck", "Every rand requires you in a conversation. Your income has a hard ceiling and it is your calendar."],
+              ["One morning can still take it all", "No list. Your entire audience sits on a platform whose terms can change without warning. Ask me what that morning feels like."],
+              ["Your best asset keeps depreciating", "The book, the talks, the frameworks — they earn nothing while you keep making new things instead of monetising what already exists."],
+              ["SARS accrues quietly", "Undeclared side income does not disappear. It waits, and it grows. Mine reached R207,879.20 while I felt successful."],
+            ].map(([h, b], i) => (
+              <Reveal key={h} delay={i * 80}>
+                <GlassCard className="h-full p-7">
+                  <h3 className="text-xl font-black">{h}</h3>
+                  <p className="mt-2.5 leading-relaxed text-slate-300">{b}</p>
+                </GlassCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE MONEY SIDE. See the SARS warning at the top of this file. ── */}
+      <section className="relative z-10 px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl">
+          <Reveal>
+            <h2 className="text-3xl sm:text-4xl font-black leading-tight">
+              The money side, from someone who <span className="grad-gold">got it wrong</span>
+            </h2>
+            <div className="mt-7 space-y-5 text-lg leading-relaxed text-slate-300">
+              <p className="measure">
+                My Finance axis was zero for years. SARS assessed me{" "}
+                <strong className="text-white">R207,879.20</strong>.
+              </p>
+              <p className="measure">
+                I went to them before they came for me. That is the part I got right, and it is the
+                only part I got right.
+              </p>
+              <p className="measure text-white">
+                I still carry it. I am telling you that plainly because the useful lesson is not how it
+                ended — it is that none of it would have existed if I had put money aside the week it
+                came in, instead of the month it was owed.
+              </p>
+              <p className="measure">
+                That is what Stage 7 teaches: the reserve rule, the deduction categories, and records
+                that survive being looked at. It is the stage you will score lowest on, and it is the
+                one that ends businesses quietly, years later, in a letter.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── PRICE + GUARANTEE ────────────────────────────────────────────── */}
+      <section className="relative z-10 px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl">
+          <Reveal>
+            <GlassCard className="p-8 sm:p-12">
+              <div className="text-center">
+                <div className="text-6xl font-black grad-gold">$997</div>
+                <div className="mt-2 text-slate-400">Billed in ZAR · or two payments</div>
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Because the gates need somebody to check them, and I would rather turn you away than
-                take your money for a room you are not ready for. It takes ten minutes and it is free.
+              <ul className="mt-9 space-y-3 border-t border-white/10 pt-8 text-slate-300">
+                <li>· One month of a business coach who has never run a business</li>
+                <li>· Less than a single postgraduate module</li>
+                <li className="text-white">
+                  · One corporate training day at a proper rate pays for it. One keynote pays for it.
+                  One retainer client pays for it four times over.
+                </li>
+              </ul>
+              <p className="mt-7 text-lg leading-relaxed text-white">
+                You have spent more than this on qualifications. This is the one that makes them earn.
               </p>
-            </div>
-            <div>
-              <div className="font-display text-sm font-bold text-banana">What if I am not ready yet?</div>
-              <p className="mt-1 text-sm text-muted-foreground">
-                You will be pointed to the{" "}
-                <Link to="/foundation" className="text-banana underline">Foundation Kit</Link> instead.
-                Not a failure — the right next step, and it is $97.
-              </p>
-            </div>
-            <div>
-              <div className="font-display text-sm font-bold text-banana">Do I have to quit my job?</div>
-              <p className="mt-1 text-sm text-muted-foreground">
-                No. I never did, and the whole thing is built for people who will not. Four hours a
-                week, in the hours you already have.
-              </p>
-            </div>
-          </div>
-          <Link
-            to="/apply"
-            className="mt-10 inline-flex items-center justify-center rounded-md bg-banana px-8 py-4 font-display text-lg text-banana-foreground hover:bg-banana/90 transition-colors"
-          >
-            Apply Now — $997 →
-          </Link>
-        </div>
+              <div className="mt-9">
+                <CTA to={CTA_TO} full sub="10 minutes · free · read by a person">{APPLY}</CTA>
+              </div>
+            </GlassCard>
+          </Reveal>
 
-        <p className="mt-12 text-sm italic leading-relaxed text-muted-foreground">
-          P.S. — What she actually asked me for was help with YouTube and cross-platform strategy. I
-          told her that is not her problem. She has a book that sold and earns nothing, three
-          frameworks living inside her speeches, and no list. Posting more often does not touch any of
-          that. If your version of “where do I focus first” sounds like a platform question, it
-          probably is not one.
-        </p>
+          <Reveal delay={100}>
+            <div className="mt-8 flex items-start gap-4">
+              <ShieldCheck className="mt-1 size-6 shrink-0 text-amber-400" />
+              <p className="leading-relaxed text-slate-300">
+                Clear the first three gates inside thirty days. If you have done that and do not believe
+                this will pay for itself, tell me before day 30 and I refund you in full. Conditional,
+                deliberately — the gates are the product, and somebody who never produces an artifact
+                has not used the thing they are asking to be refunded for.
+              </p>
+            </div>
+          </Reveal>
+        </div>
       </section>
 
-      <ContentpreneurFooter />
+      {/* ── DISQUALIFY. Converts better than persuasion with this buyer. ─── */}
+      <section className="relative z-10 px-4 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl">
+          <Reveal>
+            <h2 className="text-3xl sm:text-4xl font-black leading-tight">Do not apply if</h2>
+            <div className="mt-7 space-y-5 text-slate-300">
+              <p className="measure">
+                <strong className="text-white">You have not sent your offer to anybody yet.</strong> Do
+                the Foundation Kit, sell once, come back. That is the entry requirement and it is the
+                honest one — you cannot systematise a delivery you have never made.
+              </p>
+              <p className="measure">
+                <strong className="text-white">You want to be famous.</strong> This builds owned assets.
+                Reach is a side effect, and sometimes it is not one.
+              </p>
+              <p className="measure">
+                <strong className="text-white">You cannot give it four hours a week.</strong> Seven
+                stages, each with a gate. Producing the artifact <em>is</em> the work.
+              </p>
+            </div>
+            <p className="mt-8 text-xl font-bold text-white">
+              Applications are read by a person. Not everyone gets in.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── CLOSE ────────────────────────────────────────────────────────── */}
+      <section className="relative z-10 px-4 pb-24 pt-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <Reveal>
+            <h2 className="text-3xl sm:text-5xl font-black leading-tight">
+              Stop driving. <span className="grad-gold">Start delivering.</span>
+            </h2>
+            <div className="mt-9 flex justify-center">
+              <CTA to={CTA_TO} sub="10 minutes · free · read by a person">{APPLY}</CTA>
+            </div>
+            <p className="mt-12 text-sm italic leading-relaxed text-slate-500">
+              P.S. — What she actually asked me for was help with YouTube and cross-platform strategy. I
+              told her that is not her problem. She has a book that sold and earns nothing, three
+              frameworks living inside her speeches, and no list. Posting more often does not touch any
+              of that. If your version of “where do I focus first” sounds like a platform question, it
+              probably is not one.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <FunnelFooter />
     </div>
   );
 }

@@ -42,6 +42,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
+import { Route as CheckoutFoundationRouteImport } from './routes/checkout.foundation'
 import { Route as AuthenticatedLearnRouteImport } from './routes/_authenticated/learn'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -264,6 +265,11 @@ const ProductsSlugRoute = ProductsSlugRouteImport.update({
 const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
   id: '/checkout/success',
   path: '/checkout/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutFoundationRoute = CheckoutFoundationRouteImport.update({
+  id: '/checkout/foundation',
+  path: '/checkout/foundation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedLearnRoute = AuthenticatedLearnRouteImport.update({
@@ -636,6 +642,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/learn': typeof AuthenticatedLearnRouteWithChildren
+  '/checkout/foundation': typeof CheckoutFoundationRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products/': typeof ProductsIndexRoute
@@ -726,6 +733,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/checkout/foundation': typeof CheckoutFoundationRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products': typeof ProductsIndexRoute
@@ -820,6 +828,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/learn': typeof AuthenticatedLearnRouteWithChildren
+  '/checkout/foundation': typeof CheckoutFoundationRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products/': typeof ProductsIndexRoute
@@ -915,6 +924,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/learn'
+    | '/checkout/foundation'
     | '/checkout/success'
     | '/products/$slug'
     | '/products/'
@@ -1005,6 +1015,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/account'
+    | '/checkout/foundation'
     | '/checkout/success'
     | '/products/$slug'
     | '/products'
@@ -1098,6 +1109,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/learn'
+    | '/checkout/foundation'
     | '/checkout/success'
     | '/products/$slug'
     | '/products/'
@@ -1189,6 +1201,7 @@ export interface RootRouteChildren {
   TaxGuideRoute: typeof TaxGuideRoute
   TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
+  CheckoutFoundationRoute: typeof CheckoutFoundationRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
@@ -1436,6 +1449,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout/success'
       fullPath: '/checkout/success'
       preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/foundation': {
+      id: '/checkout/foundation'
+      path: '/checkout/foundation'
+      fullPath: '/checkout/foundation'
+      preLoaderRoute: typeof CheckoutFoundationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/learn': {
@@ -2045,6 +2065,7 @@ const rootRouteChildren: RootRouteChildren = {
   TaxGuideRoute: TaxGuideRoute,
   TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
+  CheckoutFoundationRoute: CheckoutFoundationRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   ProductsSlugRoute: ProductsSlugRoute,
   ProductsIndexRoute: ProductsIndexRoute,

@@ -745,3 +745,88 @@ label {
 .theme-contentpreneur .nx-ink {
   background-color: #1C1C1C;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FUNNEL UTILITIES
+   Ported from the Mocha export ("NoChill — Turn Content Into Cash"), which is
+   the visual language the founder wants the sales pages to speak: black ground,
+   gold gradient type, glass cards, one glowing pill CTA.
+
+   Scoped under .funnel so none of it can leak into the workspace (white, blue,
+   black) or the site theme. A funnel page opts in by putting .funnel on its
+   root; nothing else in the app is affected.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.funnel {
+  background: #000;
+  color: #fff;
+  --f-gold: #fbbf24;
+  --f-gold-deep: #f59e0b;
+}
+
+/* Gold gradient type. The single most recognisable element of the style. */
+.funnel .grad-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fbbf24 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.funnel .grad-blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.funnel .glow-gold {
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.2), 0 0 40px rgba(251, 191, 36, 0.1);
+}
+.funnel .glow-gold:hover {
+  box-shadow: 0 8px 32px rgba(251, 191, 36, 0.3), 0 0 60px rgba(251, 191, 36, 0.15);
+}
+
+.funnel .card-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Readable measure. The Mocha CSS capped every <p> at 65ch globally; doing that
+   app-wide here would break the workspace tools, so it is a class instead. */
+.funnel .measure { max-width: 65ch; }
+
+/* Scroll reveal. framer-motion is not a dependency of this app and adding one
+   for four pages is not worth ~50KB, so <Reveal> drives these two classes with
+   an IntersectionObserver. SSR renders the "shown" state, so with JS disabled
+   or before hydration the content is visible rather than invisible — the
+   failure mode of every scroll animation done carelessly. */
+.funnel .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.funnel .reveal.shown {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .funnel .reveal,
+  .funnel .reveal.shown {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Touch targets. The export enforced 44px minimums; the CTA is deliberately
+   much larger than that because it is the only thing on the page to press. */
+.funnel a[role="button"],
+.funnel button {
+  min-height: 44px;
+}
