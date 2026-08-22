@@ -386,9 +386,8 @@ export async function fulfillPaidOrder(
   // Foundation Kit sequence rather than whatever the shared buyers list sends.
   // PRODUCT_BUYER_GROUPS is empty today, so this resolves to BUYERS_GROUP and
   // behaviour is byte-identical until a product is explicitly given its own.
-  const buyerSlug = (items ?? []).find(
-    (i: { products: { slug: string } | null }) => i.products,
-  )?.products?.slug;
+  const buyerSlug = (items ?? []).find((i: { products: { slug: string } | null }) => i.products)
+    ?.products?.slug;
   const group = buyerGroupForProduct(buyerSlug);
   await addToMailerLiteGroup(email, group.id, { first_name, last_name });
 }

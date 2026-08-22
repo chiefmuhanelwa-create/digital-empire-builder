@@ -71,18 +71,34 @@ export function Reveal({
 /** Ambient colour orbs behind the hero. Pure decoration, never interactive. */
 export function Orbs({ tint = "amber" }: { tint?: "amber" | "blue" | "green" }) {
   const a =
-    tint === "blue" ? "rgba(30,58,138,0.25)" : tint === "green" ? "rgba(6,78,59,0.25)" : "rgba(120,53,15,0.28)";
+    tint === "blue"
+      ? "rgba(30,58,138,0.25)"
+      : tint === "green"
+        ? "rgba(6,78,59,0.25)"
+        : "rgba(120,53,15,0.28)";
   const b = tint === "blue" ? "rgba(88,28,135,0.2)" : "rgba(113,63,18,0.22)";
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
-      <div className="absolute -top-24 left-1/4 size-[28rem] rounded-full blur-3xl" style={{ background: a }} />
-      <div className="absolute -bottom-24 right-1/4 size-[28rem] rounded-full blur-3xl" style={{ background: b }} />
+      <div
+        className="absolute -top-24 left-1/4 size-[28rem] rounded-full blur-3xl"
+        style={{ background: a }}
+      />
+      <div
+        className="absolute -bottom-24 right-1/4 size-[28rem] rounded-full blur-3xl"
+        style={{ background: b }}
+      />
     </div>
   );
 }
 
 /** The eyebrow pill above the headline. */
-export function Eyebrow({ children, tint = "#fbbf24" }: { children: React.ReactNode; tint?: string }) {
+export function Eyebrow({
+  children,
+  tint = "#fbbf24",
+}: {
+  children: React.ReactNode;
+  tint?: string;
+}) {
   return (
     <div
       className="eyebrow inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold"
@@ -129,9 +145,13 @@ export function CTA({
   return (
     <div className={full ? "w-full" : ""}>
       {to ? (
-        <Link to={to} className={cls} style={{ textDecoration: "none" }}>{inner}</Link>
+        <Link to={to} className={cls} style={{ textDecoration: "none" }}>
+          {inner}
+        </Link>
       ) : (
-        <a href={href} className={cls} style={{ textDecoration: "none" }}>{inner}</a>
+        <a href={href} className={cls} style={{ textDecoration: "none" }}>
+          {inner}
+        </a>
       )}
       {sub && <p className="mt-4 text-center text-sm text-amber-200/70">{sub}</p>}
     </div>
@@ -159,7 +179,13 @@ export function GlassCard({
 
 /** A numbered step card — the module/step pattern from the export. */
 export function StepCard({
-  n, title, badge, body, points, accent = "#fbbf24", delay = 0,
+  n,
+  title,
+  badge,
+  body,
+  points,
+  accent = "#fbbf24",
+  delay = 0,
 }: {
   n: number | string;
   title: string;
@@ -186,7 +212,11 @@ export function StepCard({
                 {badge && (
                   <span
                     className="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide"
-                    style={{ background: `${accent}22`, border: `1px solid ${accent}66`, color: accent }}
+                    style={{
+                      background: `${accent}22`,
+                      border: `1px solid ${accent}66`,
+                      color: accent,
+                    }}
                   >
                     {badge}
                   </span>
@@ -197,7 +227,9 @@ export function StepCard({
                 <ul className="mt-5 grid gap-3 sm:grid-cols-2">
                   {points.map((p) => (
                     <li key={p} className="flex items-start gap-2.5 text-sm text-slate-300">
-                      <span className="mt-0.5 shrink-0 font-black" style={{ color: accent }}>✓</span>
+                      <span className="mt-0.5 shrink-0 font-black" style={{ color: accent }}>
+                        ✓
+                      </span>
                       <span>{p}</span>
                     </li>
                   ))}
@@ -215,7 +247,15 @@ export function StepCard({
  * Sticky nav with a logo and the CTA. NOTHING ELSE — no menu, no product links,
  * no account link. Every extra item here is a way out of the funnel.
  */
-export function FunnelNav({ ctaTo, ctaHref, ctaLabel }: { ctaTo?: string; ctaHref?: string; ctaLabel: string }) {
+export function FunnelNav({
+  ctaTo,
+  ctaHref,
+  ctaLabel,
+}: {
+  ctaTo?: string;
+  ctaHref?: string;
+  ctaLabel: string;
+}) {
   const [solid, setSolid] = useState(false);
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 40);
@@ -243,9 +283,13 @@ export function FunnelNav({ ctaTo, ctaHref, ctaLabel }: { ctaTo?: string; ctaHre
           CONTENTPRENEUR<span className="grad-gold"> AFRICA</span>
         </span>
         {ctaTo ? (
-          <Link to={ctaTo} className={cls} style={{ textDecoration: "none" }}>{ctaLabel}</Link>
+          <Link to={ctaTo} className={cls} style={{ textDecoration: "none" }}>
+            {ctaLabel}
+          </Link>
         ) : (
-          <a href={ctaHref} className={cls} style={{ textDecoration: "none" }}>{ctaLabel}</a>
+          <a href={ctaHref} className={cls} style={{ textDecoration: "none" }}>
+            {ctaLabel}
+          </a>
         )}
       </div>
     </header>
@@ -266,9 +310,15 @@ export function FunnelFooter() {
         <p>&copy; {new Date().getFullYear()} NOCHILL PTY LTD · Contentpreneur Africa</p>
         <p className="mt-2">Turn What You Know Into Income You Own.</p>
         <p className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs">
-          <Link to="/privacy" className="text-slate-500 hover:text-slate-300">Privacy</Link>
-          <Link to="/terms" className="text-slate-500 hover:text-slate-300">Terms</Link>
-          <Link to="/refund-policy" className="text-slate-500 hover:text-slate-300">Refunds</Link>
+          <Link to="/privacy" className="text-slate-500 hover:text-slate-300">
+            Privacy
+          </Link>
+          <Link to="/terms" className="text-slate-500 hover:text-slate-300">
+            Terms
+          </Link>
+          <Link to="/refund-policy" className="text-slate-500 hover:text-slate-300">
+            Refunds
+          </Link>
         </p>
       </div>
     </footer>
@@ -285,7 +335,10 @@ export function FunnelFooter() {
  * tick the boxes themselves.
  */
 export function Contrast({
-  badTitle, bad, goodTitle, good,
+  badTitle,
+  bad,
+  goodTitle,
+  good,
 }: {
   badTitle: string;
   bad: string[];
@@ -295,7 +348,10 @@ export function Contrast({
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <Reveal>
-        <div className="h-full rounded-3xl p-8" style={{ background: "rgba(239,68,68,0.06)", border: "2px solid rgba(239,68,68,0.3)" }}>
+        <div
+          className="h-full rounded-3xl p-8"
+          style={{ background: "rgba(239,68,68,0.06)", border: "2px solid rgba(239,68,68,0.3)" }}
+        >
           <div className="flex items-center gap-3">
             <X className="size-9 shrink-0 text-red-500" />
             <h3 className="text-xl sm:text-2xl font-black text-red-400">{badTitle}</h3>
@@ -311,7 +367,10 @@ export function Contrast({
         </div>
       </Reveal>
       <Reveal delay={120}>
-        <div className="h-full rounded-3xl p-8" style={{ background: "rgba(34,197,94,0.06)", border: "2px solid rgba(34,197,94,0.3)" }}>
+        <div
+          className="h-full rounded-3xl p-8"
+          style={{ background: "rgba(34,197,94,0.06)", border: "2px solid rgba(34,197,94,0.3)" }}
+        >
           <div className="flex items-center gap-3">
             <Check className="size-9 shrink-0 text-green-500" />
             <h3 className="text-xl sm:text-2xl font-black text-green-400">{goodTitle}</h3>
@@ -331,7 +390,15 @@ export function Contrast({
 }
 
 /** Struck-through anchor above the real price. */
-export function PriceAnchor({ anchor, price, note }: { anchor: string; price: string; note: string }) {
+export function PriceAnchor({
+  anchor,
+  price,
+  note,
+}: {
+  anchor: string;
+  price: string;
+  note: string;
+}) {
   return (
     <div className="text-center">
       <div className="text-lg text-slate-500 line-through">{anchor}</div>
@@ -350,7 +417,15 @@ export function PriceAnchor({ anchor, price, note }: { anchor: string; price: st
  * There is no timer, because a timer that resets is the single clearest signal
  * to a professional buyer that nothing else on the page is true.
  */
-export function FoundingBanner({ line, reason, after }: { line: string | null; reason: string; after: string }) {
+export function FoundingBanner({
+  line,
+  reason,
+  after,
+}: {
+  line: string | null;
+  reason: string;
+  after: string;
+}) {
   if (!line) return null;
   return (
     <div
@@ -384,7 +459,9 @@ export function FoundingBanner({ line, reason, after }: { line: string | null; r
  * cannot receipt what somebody else charges.
  */
 export function PriceComparison({
-  rows, price, priceNote,
+  rows,
+  price,
+  priceNote,
 }: {
   rows: { label: string; amount: string; note?: string }[];
   price: string;

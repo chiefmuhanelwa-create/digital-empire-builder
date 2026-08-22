@@ -35,14 +35,63 @@ export interface MethodInput {
 }
 
 export const EMPTY_METHOD: MethodInput = {
-  profession: "", who: "", moves: ["", "", ""], signature: "", endsWith: "",
+  profession: "",
+  who: "",
+  moves: ["", "", ""],
+  signature: "",
+  endsWith: "",
 };
 
 const STOP = new Set([
-  "the","a","an","and","or","but","of","to","for","in","on","at","with","from",
-  "i","you","they","them","their","my","your","is","are","be","do","does","did",
-  "so","what","that","this","it","them","then","when","before","after","always",
-  "never","every","time","just","really","very","ask","asks","asked","say","says",
+  "the",
+  "a",
+  "an",
+  "and",
+  "or",
+  "but",
+  "of",
+  "to",
+  "for",
+  "in",
+  "on",
+  "at",
+  "with",
+  "from",
+  "i",
+  "you",
+  "they",
+  "them",
+  "their",
+  "my",
+  "your",
+  "is",
+  "are",
+  "be",
+  "do",
+  "does",
+  "did",
+  "so",
+  "what",
+  "that",
+  "this",
+  "it",
+  "them",
+  "then",
+  "when",
+  "before",
+  "after",
+  "always",
+  "never",
+  "every",
+  "time",
+  "just",
+  "really",
+  "very",
+  "ask",
+  "asks",
+  "asked",
+  "say",
+  "says",
 ]);
 
 /** The words worth building a name out of — longest and rarest first. */
@@ -91,7 +140,7 @@ export function nameCandidates(i: MethodInput): NameCandidate[] {
   }
   if (who.length && (end.length || sig.length)) {
     out.push({
-      name: `The ${titleCase(who[0])} ${titleCase((end[0] ?? sig[0]))} Review`,
+      name: `The ${titleCase(who[0])} ${titleCase(end[0] ?? sig[0])} Review`,
       why: "Named after who it is for. Best when your buyer needs to recognise themselves immediately.",
     });
   }

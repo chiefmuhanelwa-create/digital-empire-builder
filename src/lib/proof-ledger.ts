@@ -28,7 +28,10 @@ export interface ProofEntry {
 }
 
 export const EMPTY_ENTRY: Omit<ProofEntry, "id"> = {
-  role: "", before: "", after: "", permission: "not-asked",
+  role: "",
+  before: "",
+  after: "",
+  permission: "not-asked",
 };
 
 export type Strength = "quotable" | "usable" | "thin";
@@ -40,7 +43,8 @@ export interface ScoredEntry extends ProofEntry {
   quote: string | null;
 }
 
-const NUMBERY = /\d|\b(doubled|halved|tripled|first|passed|won|cleared|reduced|cut|raised|saved)\b/i;
+const NUMBERY =
+  /\d|\b(doubled|halved|tripled|first|passed|won|cleared|reduced|cut|raised|saved)\b/i;
 
 export function score(e: ProofEntry): ScoredEntry {
   const hasBefore = e.before.trim().length > 4;
@@ -89,9 +93,11 @@ export function summarise(entries: ProofEntry[]): LedgerSummary {
   if (meets) {
     headline = "You have a result you are allowed to quote. That was the missing condition.";
   } else if (usable > 0) {
-    headline = "You have the results. What you do not have yet is permission — and that is one message away.";
+    headline =
+      "You have the results. What you do not have yet is permission — and that is one message away.";
   } else if (entries.length > 0) {
-    headline = "Keep going. Think about the last five people who came to you, not the impressive ones.";
+    headline =
+      "Keep going. Think about the last five people who came to you, not the impressive ones.";
   } else {
     headline = "Start with the last person you helped for nothing.";
   }

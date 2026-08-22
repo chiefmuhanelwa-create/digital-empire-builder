@@ -5,8 +5,18 @@ import { formatPrice } from "@/lib/gardens";
 import { useCountry } from "@/lib/currency";
 import { useServerFn } from "@tanstack/react-start";
 import {
-  Reveal, Orbs, Eyebrow, CTA, GlassCard, StepCard, Contrast, PriceAnchor,
-  FoundingBanner, PriceComparison, FunnelNav, FunnelFooter,
+  Reveal,
+  Orbs,
+  Eyebrow,
+  CTA,
+  GlassCard,
+  StepCard,
+  Contrast,
+  PriceAnchor,
+  FoundingBanner,
+  PriceComparison,
+  FunnelNav,
+  FunnelFooter,
 } from "@/components/funnel";
 import { paidUnitsForSlug } from "@/lib/products.functions";
 import { FOUNDATION_FOUNDING, foundingState, foundingLine, ONGOING_COST } from "@/lib/launch-offer";
@@ -122,18 +132,20 @@ function FoundationFunnel() {
               Your knowledge has never had a price.
             </p>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">
-              Not once, in all these years. Not because it is not worth one — because nobody has ever
-              made you sit down and set it.
+              Not once, in all these years. Not because it is not worth one — because nobody has
+              ever made you sit down and set it.
             </p>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">
-              So you became the person people go to when they would rather not pay. You did not choose
-              that. It happened one “don't worry about it” at a time.
+              So you became the person people go to when they would rather not pay. You did not
+              choose that. It happened one “don't worry about it” at a time.
             </p>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
               You are not missing knowledge. You are missing a structure to put around it.
             </p>
             <div className="mt-10 flex justify-center">
-              <CTA to={CTA_TO} sub={TRUST}>{BUY}</CTA>
+              <CTA to={CTA_TO} sub={TRUST}>
+                {BUY}
+              </CTA>
             </div>
             {foundingText && (
               <div className="mt-8">
@@ -171,14 +183,14 @@ function FoundationFunnel() {
             </Reveal>
             <Reveal delay={140}>
               <p className="measure mx-auto">
-                Last month you spoke at something. You prepared for two nights. You were thanked warmly
-                and you went home.
+                Last month you spoke at something. You prepared for two nights. You were thanked
+                warmly and you went home.
               </p>
             </Reveal>
             <Reveal delay={180}>
               <p className="measure mx-auto">
-                And there is the document you reviewed. The one you basically rewrote. The junior you
-                have been carrying since March.
+                And there is the document you reviewed. The one you basically rewrote. The junior
+                you have been carrying since March.
               </p>
             </Reveal>
             <Reveal delay={220}>
@@ -229,7 +241,8 @@ function FoundationFunnel() {
               },
               {
                 who: "A medical professional",
-                quote: "I am just not too certain in terms of pricing and at what point do I start charging.",
+                quote:
+                  "I am just not too certain in terms of pricing and at what point do I start charging.",
                 body: "Not how do I get more followers. Not what should I post. She knows what she does. She does not know what she is allowed to ask for it, or when.",
                 pain: "Cannot price it",
               },
@@ -244,11 +257,17 @@ function FoundationFunnel() {
                 <GlassCard className="flex h-full flex-col p-7">
                   <span
                     className="self-start rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide"
-                    style={{ background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.4)", color: "#fbbf24" }}
+                    style={{
+                      background: "rgba(251,191,36,0.15)",
+                      border: "1px solid rgba(251,191,36,0.4)",
+                      color: "#fbbf24",
+                    }}
                   >
                     {p.pain}
                   </span>
-                  <p className="mt-5 text-lg font-bold italic leading-snug text-white">“{p.quote}”</p>
+                  <p className="mt-5 text-lg font-bold italic leading-snug text-white">
+                    “{p.quote}”
+                  </p>
                   <p className="mt-4 text-sm leading-relaxed text-slate-400">{p.body}</p>
                   <p className="mt-auto pt-5 text-sm font-semibold text-slate-500">{p.who}</p>
                 </GlassCard>
@@ -313,22 +332,32 @@ function FoundationFunnel() {
 
           <div className="mt-12 space-y-6">
             <StepCard
-              n={1} title="Name what you know" badge="Step one"
+              n={1}
+              title="Name what you know"
+              badge="Step one"
               body="Everything people already come to you for, written down as a list instead of a habit. This is the step where “just helping out” stops being the words you use."
               accent="#fbbf24"
             />
             <StepCard
-              n={2} title="Count what it has cost you" badge="The hard one"
+              n={2}
+              title="Count what it has cost you"
+              badge="The hard one"
               body="What giving it away has cost you, as an amount of money rather than a feeling. It works out your hourly rate from what your own profession actually pays someone with your qualification, then counts the hours you have handed over. Most people stop reading their own answer halfway down."
-              accent="#f59e0b" delay={60}
+              accent="#f59e0b"
+              delay={60}
             />
             <StepCard
-              n={3} title="The Method Namer" badge="A method, not a favour"
+              n={3}
+              title="The Method Namer"
+              badge="A method, not a favour"
               body="She never gives a student a research topic. After they cite somebody she asks “so, what do YOU say?” Before a defence she says “be honest.” Two students won scholarships on that. That is a method — it just had no name. A service you cannot name is a favour, and favours are free by definition. A method with a name is a product, and products have prices."
-              accent="#3b82f6" delay={120}
+              accent="#3b82f6"
+              delay={120}
             />
             <StepCard
-              n={4} title="The Proof Ledger, then the Charge Gate" badge="The question nobody answers"
+              n={4}
+              title="The Proof Ledger, then the Charge Gate"
+              badge="The question nobody answers"
               body="First we recover the results you gave away, with the permission message to send — most people are glad to be asked. Then four conditions you can check rather than feel."
               points={[
                 "Has somebody asked for this twice?",
@@ -336,30 +365,39 @@ function FoundationFunnel() {
                 "Is the output a thing, or a feeling?",
                 "Can you say what it costs them not to have it?",
               ]}
-              accent="#a855f7" delay={180}
+              accent="#a855f7"
+              delay={180}
             />
             <StepCard
-              n={5} title="Send it to one person" badge="This week"
+              n={5}
+              title="Send it to one person"
+              badge="This week"
               body="One person. One date. One message, already written. Not a list — a list lets you hide, and building the perfect one feels like work the whole time you are not sending anything."
-              accent="#22c55e" delay={240}
+              accent="#22c55e"
+              delay={240}
             />
           </div>
 
           <Reveal delay={300}>
-            <GlassCard className="mx-auto mt-12 max-w-2xl p-8 text-center" accent="rgba(251,191,36,0.3)">
+            <GlassCard
+              className="mx-auto mt-12 max-w-2xl p-8 text-center"
+              accent="rgba(251,191,36,0.3)"
+            >
               <Clock className="mx-auto size-10 text-amber-400" />
               <h3 className="mt-4 text-2xl font-black">You are not quitting anything</h3>
               <p className="mt-3 leading-relaxed text-slate-300">
                 Five evenings, one step each. Your answers save as you go, so you can start on your
-                phone at lunch and finish on the laptop at 21:00. I built my own thing on night shifts
-                and never resigned. This is made for people who will not either.
+                phone at lunch and finish on the laptop at 21:00. I built my own thing on night
+                shifts and never resigned. This is made for people who will not either.
               </p>
             </GlassCard>
           </Reveal>
 
           <Reveal delay={340}>
             <div className="mt-12 flex justify-center">
-              <CTA to={CTA_TO} sub={TRUST}>{BUY}</CTA>
+              <CTA to={CTA_TO} sub={TRUST}>
+                {BUY}
+              </CTA>
             </div>
           </Reveal>
         </div>
@@ -374,15 +412,24 @@ function FoundationFunnel() {
               Why I am the one <span className="grad-gold">telling you this</span>
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-center leading-relaxed text-slate-300">
-              I am not going to show you other people's results, because this is new and I do not have
-              them yet. I will show you mine, and what they cost me.
+              I am not going to show you other people's results, because this is new and I do not
+              have them yet. I will show you mine, and what they cost me.
             </p>
           </Reveal>
           <div className="mt-12 grid gap-5 sm:grid-cols-3">
             {[
-              ["R132,500", "lost by undercharging across my first 50 brand deals, because I never had a number"],
-              ["780,000", "followers gone in one morning, on a platform that owed me no explanation"],
-              ["R207,879", "assessed by SARS, because I built the income before I built the structure"],
+              [
+                "R132,500",
+                "lost by undercharging across my first 50 brand deals, because I never had a number",
+              ],
+              [
+                "780,000",
+                "followers gone in one morning, on a platform that owed me no explanation",
+              ],
+              [
+                "R207,879",
+                "assessed by SARS, because I built the income before I built the structure",
+              ],
             ].map(([n, l], i) => (
               <Reveal key={n} delay={i * 90}>
                 <GlassCard className="h-full p-7 text-center">
@@ -395,8 +442,8 @@ function FoundationFunnel() {
           <Reveal delay={300}>
             <p className="mx-auto mt-10 max-w-2xl text-center text-lg leading-relaxed text-white">
               Every one of those was a structure problem, not a knowledge problem. You are further
-              ahead than I was — you spent your years becoming genuinely good at something instead of
-              chasing attention. You are just not being paid for it.
+              ahead than I was — you spent your years becoming genuinely good at something instead
+              of chasing attention. You are just not being paid for it.
             </p>
           </Reveal>
         </div>
@@ -421,18 +468,39 @@ function FoundationFunnel() {
 
               <ul className="mt-9 space-y-4">
                 {[
-                  ["The five-step path, saved across devices", "Start on your phone at lunch, finish on the laptop at 21:00. You never type the same answer twice."],
+                  [
+                    "The five-step path, saved across devices",
+                    "Start on your phone at lunch, finish on the laptop at 21:00. You never type the same answer twice.",
+                  ],
                   ["The Method Namer", "Your process, extracted and named."],
-                  ["The Proof Ledger", "Your past results made quotable, with the permission message to send."],
+                  [
+                    "The Proof Ledger",
+                    "Your past results made quotable, with the permission message to send.",
+                  ],
                   ["The Charge Gate", "The number, and the sentence that defends it."],
-                  ["Sale scripts, the four objections answered", "You know what to say when they say “that is expensive”."],
-                  ["The 4E content calendar", "Thirty prompts about your offer — not generic content ideas."],
-                  ["The invoice builder and the 35% split", "You get paid properly and keep what is SARS's aside, before you spend it."],
+                  [
+                    "Sale scripts, the four objections answered",
+                    "You know what to say when they say “that is expensive”.",
+                  ],
+                  [
+                    "The 4E content calendar",
+                    "Thirty prompts about your offer — not generic content ideas.",
+                  ],
+                  [
+                    "The invoice builder and the 35% split",
+                    "You get paid properly and keep what is SARS's aside, before you spend it.",
+                  ],
                   ["Your one-pager", "Name, method, price, proof — one document, sendable today."],
-                  ["9 workbooks and a 10-video course", "The printed version of all of it. Everything opens on day one."],
+                  [
+                    "9 workbooks and a 10-video course",
+                    "The printed version of all of it. Everything opens on day one.",
+                  ],
                   ["Lifetime access, all future updates", "Including everything added later."],
                 ].map(([t, b]) => (
-                  <li key={t} className="flex items-start gap-3 border-b border-white/10 pb-4 last:border-0">
+                  <li
+                    key={t}
+                    className="flex items-start gap-3 border-b border-white/10 pb-4 last:border-0"
+                  >
                     <Check className="mt-1 size-5 shrink-0 text-amber-400" />
                     <div>
                       <div className="font-bold">{t}</div>
@@ -443,7 +511,9 @@ function FoundationFunnel() {
               </ul>
 
               <div className="mt-9">
-                <CTA to={CTA_TO} full sub={TRUST}>{BUY}</CTA>
+                <CTA to={CTA_TO} full sub={TRUST}>
+                  {BUY}
+                </CTA>
               </div>
             </GlassCard>
           </Reveal>
@@ -453,24 +523,48 @@ function FoundationFunnel() {
               hedged range, because we cannot receipt what somebody else charges. */}
           <Reveal delay={140}>
             <div className="mt-12">
-              <h3 className="text-center text-2xl font-black">Put it next to what you already spend</h3>
+              <h3 className="text-center text-2xl font-black">
+                Put it next to what you already spend
+              </h3>
               <div className="mt-7">
                 <PriceComparison
                   price={priceLabel}
                   priceNote="Once. Yours for good."
                   rows={[
-                    { label: "The qualification that made you good at this", amount: "You know", note: "Years, and considerably more than this" },
-                    { label: "One hour with a consultant who would answer this for you", amount: "Typically more", note: "And you would still have to do the work afterwards" },
-                    { label: "The course you bought last year", amount: "More", note: "Be honest about whether you finished it" },
-                    { label: "What you gave away last month", amount: "More", note: "Step two makes you add this up. It is the number that decides it." },
-                    { label: "Your first sale, if it is $150", amount: "Pays this back once", note: "At $500 it has paid for itself five times before lunch" },
+                    {
+                      label: "The qualification that made you good at this",
+                      amount: "You know",
+                      note: "Years, and considerably more than this",
+                    },
+                    {
+                      label: "One hour with a consultant who would answer this for you",
+                      amount: "Typically more",
+                      note: "And you would still have to do the work afterwards",
+                    },
+                    {
+                      label: "The course you bought last year",
+                      amount: "More",
+                      note: "Be honest about whether you finished it",
+                    },
+                    {
+                      label: "What you gave away last month",
+                      amount: "More",
+                      note: "Step two makes you add this up. It is the number that decides it.",
+                    },
+                    {
+                      label: "Your first sale, if it is $150",
+                      amount: "Pays this back once",
+                      note: "At $500 it has paid for itself five times before lunch",
+                    },
                   ]}
                 />
               </div>
               <p className="mt-8 text-center leading-relaxed text-slate-400">
-                You have already spent far more than this on the qualifications that made you good at
-                the thing.{" "}
-                <span className="text-white">This is the first money you would spend on being paid for it.</span>
+                You have already spent far more than this on the qualifications that made you good
+                at the thing.{" "}
+                <span className="text-white">
+                  This is the first money you would spend on being paid for it.
+                </span>
               </p>
             </div>
           </Reveal>
@@ -486,24 +580,36 @@ function FoundationFunnel() {
                 If it does not work, I refund you
               </h2>
               <p className="mt-4 leading-relaxed text-slate-300">
-                Do the five steps. Send your thing to one real person. If you get to the end without a
-                price you would actually put in front of somebody, show me the five steps and I will
-                refund you in full.
+                Do the five steps. Send your thing to one real person. If you get to the end without
+                a price you would actually put in front of somebody, show me the five steps and I
+                will refund you in full.
               </p>
               <p className="mt-4 leading-relaxed text-white">
-                I will not refund somebody who bought it and never opened it. That is not a risk I can
-                carry for you, and pretending otherwise would make this page like every other one you
-                have read.
+                I will not refund somebody who bought it and never opened it. That is not a risk I
+                can carry for you, and pretending otherwise would make this page like every other
+                one you have read.
               </p>
             </GlassCard>
           </Reveal>
 
           <div className="mt-10 space-y-6">
             {[
-              ["“I don't have time.”", "One step an evening, saved between sessions. You have spent longer than that this month answering questions for free."],
-              ["“What if my field is different?”", "Nothing in here is a template — every tool works from your own answers. The Leak prices your hour from what your own profession pays somebody with your qualification, so an auditor and a nurse get different numbers, because they should."],
-              ["“I'm not ready to charge yet.”", "Step four is literally a test for that. If you are not ready it tells you so, and tells you exactly what to do first. That answer alone is worth the price."],
-              ["“Do I have to leave my job?”", "No. I never did, and none of this assumes you will."],
+              [
+                "“I don't have time.”",
+                "One step an evening, saved between sessions. You have spent longer than that this month answering questions for free.",
+              ],
+              [
+                "“What if my field is different?”",
+                "Nothing in here is a template — every tool works from your own answers. The Leak prices your hour from what your own profession pays somebody with your qualification, so an auditor and a nurse get different numbers, because they should.",
+              ],
+              [
+                "“I'm not ready to charge yet.”",
+                "Step four is literally a test for that. If you are not ready it tells you so, and tells you exactly what to do first. That answer alone is worth the price.",
+              ],
+              [
+                "“Do I have to leave my job?”",
+                "No. I never did, and none of this assumes you will.",
+              ],
             ].map(([q, a], i) => (
               <Reveal key={q} delay={i * 70}>
                 <div>
@@ -528,12 +634,14 @@ function FoundationFunnel() {
             </p>
             <p className="mx-auto mt-5 max-w-xl text-slate-400">{ONGOING_COST}</p>
             <div className="mt-9 flex justify-center">
-              <CTA to={CTA_TO} sub={TRUST}>{BUY}</CTA>
+              <CTA to={CTA_TO} sub={TRUST}>
+                {BUY}
+              </CTA>
             </div>
             <p className="mt-12 text-sm italic leading-relaxed text-slate-500">
-              P.S. — Step two asks you to add up what you have given away. Do that one page even if you
-              buy nothing else. Almost nobody has ever added it up, and the number is usually bigger
-              than every course they have ever bought, put together.
+              P.S. — Step two asks you to add up what you have given away. Do that one page even if
+              you buy nothing else. Almost nobody has ever added it up, and the number is usually
+              bigger than every course they have ever bought, put together.
             </p>
           </Reveal>
         </div>

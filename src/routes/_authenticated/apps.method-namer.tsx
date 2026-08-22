@@ -1,11 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { WorkspaceShell, BLUE, BLUE_DARK, INK, BODY, MUTED, LINE, TINT } from "@/components/workspace-shell";
+import {
+  WorkspaceShell,
+  BLUE,
+  BLUE_DARK,
+  INK,
+  BODY,
+  MUTED,
+  LINE,
+  TINT,
+} from "@/components/workspace-shell";
 import { ToolHeader, ToolFooter } from "@/components/tool-frame";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { readOffer, writeOffer, EMPTY_OFFER, type Offer } from "@/lib/offer-spine";
 import {
-  EMPTY_METHOD, nameCandidates, checks, isMethod, methodSentence, toOffer, favourVsProduct,
+  EMPTY_METHOD,
+  nameCandidates,
+  checks,
+  isMethod,
+  methodSentence,
+  toOffer,
+  favourVsProduct,
   type MethodInput,
 } from "@/lib/method-engine";
 import { Lock, Check, X, Copy, ArrowRight, Plus } from "lucide-react";
@@ -42,17 +57,27 @@ function MethodNamer() {
     try {
       const r = JSON.parse(localStorage.getItem(KEY) || "null");
       if (r) {
-        setM({ ...EMPTY_METHOD, ...r.m, moves: r.m?.moves?.length ? r.m.moves : EMPTY_METHOD.moves });
+        setM({
+          ...EMPTY_METHOD,
+          ...r.m,
+          moves: r.m?.moves?.length ? r.m.moves : EMPTY_METHOD.moves,
+        });
         setChosen(r.chosen ?? "");
       } else if (o.who) {
         // Carried from the Knowledge Audit so nobody types their buyer twice.
         setM((p) => ({ ...p, who: o.who }));
       }
-    } catch { /* first run */ }
+    } catch {
+      /* first run */
+    }
   }, []);
 
   useEffect(() => {
-    try { localStorage.setItem(KEY, JSON.stringify({ m, chosen })); } catch { /* private mode */ }
+    try {
+      localStorage.setItem(KEY, JSON.stringify({ m, chosen }));
+    } catch {
+      /* private mode */
+    }
   }, [m, chosen]);
 
   const cs = checks(m);
@@ -82,8 +107,11 @@ function MethodNamer() {
           <h1 className="mt-5 text-[30px] font-black" style={{ color: INK }}>
             The Method Namer is part of the Foundation Kit.
           </h1>
-          <a href="/foundation" className="mt-6 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
-             style={{ background: BLUE, color: "#fff", textDecoration: "none" }}>
+          <a
+            href="/foundation"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
+            style={{ background: BLUE, color: "#fff", textDecoration: "none" }}
+          >
             Get the Kit <ArrowRight className="size-4" />
           </a>
         </main>
@@ -93,8 +121,13 @@ function MethodNamer() {
 
   const label = { color: MUTED, fontSize: 15, fontWeight: 600 } as const;
   const input = {
-    border: `1px solid ${LINE}`, borderRadius: 12, padding: "12px 14px",
-    fontSize: 16, width: "100%", color: INK, background: "#fff",
+    border: `1px solid ${LINE}`,
+    borderRadius: 12,
+    padding: "12px 14px",
+    fontSize: 16,
+    width: "100%",
+    color: INK,
+    background: "#fff",
   } as const;
 
   return (
@@ -107,13 +140,18 @@ function MethodNamer() {
 
         {/* The worked example, first, because "what is a method?" is the real
             blocker and an abstract definition does not answer it. */}
-        <section className="rounded-2xl p-6" style={{ background: TINT, border: `1px solid ${LINE}` }}>
-          <p className="text-[15px] font-semibold" style={{ color: BLUE }}>What this looks like</p>
+        <section
+          className="rounded-2xl p-6"
+          style={{ background: TINT, border: `1px solid ${LINE}` }}
+        >
+          <p className="text-[15px] font-semibold" style={{ color: BLUE }}>
+            What this looks like
+          </p>
           <p className="mt-2 text-[17px] leading-relaxed" style={{ color: BODY }}>
             An academic support advisor never gives a student a research topic. After they cite
-            somebody, she asks <strong style={{ color: INK }}>“so, what do YOU say?”</strong> Before a
-            defence, she says <strong style={{ color: INK }}>“be honest.”</strong> Two of her students
-            won scholarships.
+            somebody, she asks <strong style={{ color: INK }}>“so, what do YOU say?”</strong> Before
+            a defence, she says <strong style={{ color: INK }}>“be honest.”</strong> Two of her
+            students won scholarships.
           </p>
           <p className="mt-3 text-[17px] leading-relaxed" style={{ color: BODY }}>
             That is a method. It had no name, so it stayed free for eleven years.
@@ -121,7 +159,9 @@ function MethodNamer() {
         </section>
 
         <section className="mt-8">
-          <h2 className="text-[26px] font-black leading-tight" style={{ color: INK }}>Who do you do this for?</h2>
+          <h2 className="text-[26px] font-black leading-tight" style={{ color: INK }}>
+            Who do you do this for?
+          </h2>
           <input
             style={{ ...input, marginTop: 10 }}
             value={m.who}
@@ -138,19 +178,27 @@ function MethodNamer() {
             What do you do, every time, in order?
           </h2>
           <p className="mt-2 text-[17px] leading-relaxed" style={{ color: BODY }}>
-            Think about the last three people. Not what you would ideally do — what you actually did,
-            all three times.
+            Think about the last three people. Not what you would ideally do — what you actually
+            did, all three times.
           </p>
           <div className="mt-4 space-y-3">
             {m.moves.map((mv, i) => (
               <div key={i} className="flex items-start gap-3">
-                <span className="mt-3 grid size-7 shrink-0 place-items-center rounded-lg text-[13px] font-black"
-                      style={{ background: TINT, color: BLUE }}>{i + 1}</span>
+                <span
+                  className="mt-3 grid size-7 shrink-0 place-items-center rounded-lg text-[13px] font-black"
+                  style={{ background: TINT, color: BLUE }}
+                >
+                  {i + 1}
+                </span>
                 <input
                   style={input}
                   value={mv}
                   onChange={(e) => setMove(i, e.target.value)}
-                  placeholder={i === 0 ? "I read what they have written before we speak" : "The next thing you always do"}
+                  placeholder={
+                    i === 0
+                      ? "I read what they have written before we speak"
+                      : "The next thing you always do"
+                  }
                 />
               </div>
             ))}
@@ -194,22 +242,37 @@ function MethodNamer() {
             placeholder="A defended argument they can stand behind in a viva"
           />
           <p className="mt-2 text-[15px]" style={{ color: MUTED }}>
-            A document, a decision, a corrected draft. If they only leave feeling better, it cannot be priced.
+            A document, a decision, a corrected draft. If they only leave feeling better, it cannot
+            be priced.
           </p>
         </section>
 
         {/* Checks — the same shape as the Charge Gate, on purpose. */}
         <section className="mt-9">
-          <h2 className="text-[22px] font-black" style={{ color: INK }}>Is it a method yet?</h2>
+          <h2 className="text-[22px] font-black" style={{ color: INK }}>
+            Is it a method yet?
+          </h2>
           <div className="mt-4 space-y-3">
             {cs.map((c) => (
-              <div key={c.id} className="flex items-start gap-3 rounded-xl p-4" style={{ border: `1px solid ${LINE}` }}>
-                {c.ok
-                  ? <Check className="mt-0.5 size-5 shrink-0" style={{ color: "#16A34A" }} />
-                  : <X className="mt-0.5 size-5 shrink-0" style={{ color: MUTED }} />}
+              <div
+                key={c.id}
+                className="flex items-start gap-3 rounded-xl p-4"
+                style={{ border: `1px solid ${LINE}` }}
+              >
+                {c.ok ? (
+                  <Check className="mt-0.5 size-5 shrink-0" style={{ color: "#16A34A" }} />
+                ) : (
+                  <X className="mt-0.5 size-5 shrink-0" style={{ color: MUTED }} />
+                )}
                 <div>
-                  <div className="text-[16px] font-bold" style={{ color: INK }}>{c.label}</div>
-                  {!c.ok && <p className="mt-1 text-[15px] leading-relaxed" style={{ color: BODY }}>{c.fix}</p>}
+                  <div className="text-[16px] font-bold" style={{ color: INK }}>
+                    {c.label}
+                  </div>
+                  {!c.ok && (
+                    <p className="mt-1 text-[15px] leading-relaxed" style={{ color: BODY }}>
+                      {c.fix}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -217,8 +280,13 @@ function MethodNamer() {
         </section>
 
         {ready && names.length > 0 && (
-          <section className="mt-9 rounded-2xl p-6" style={{ background: TINT, border: `1px solid ${LINE}` }}>
-            <h2 className="text-[26px] font-black leading-tight" style={{ color: INK }}>Give it a name</h2>
+          <section
+            className="mt-9 rounded-2xl p-6"
+            style={{ background: TINT, border: `1px solid ${LINE}` }}
+          >
+            <h2 className="text-[26px] font-black leading-tight" style={{ color: INK }}>
+              Give it a name
+            </h2>
             <p className="mt-2 text-[17px] leading-relaxed" style={{ color: BODY }}>
               Three shapes, all built from your own words. Pick one or write your own — the point is
               that it has a name, not that the name is perfect.
@@ -236,8 +304,12 @@ function MethodNamer() {
                     cursor: "pointer",
                   }}
                 >
-                  <div className="text-[18px] font-black" style={{ color: INK }}>{n.name}</div>
-                  <div className="mt-1 text-[15px]" style={{ color: BODY }}>{n.why}</div>
+                  <div className="text-[18px] font-black" style={{ color: INK }}>
+                    {n.name}
+                  </div>
+                  <div className="mt-1 text-[15px]" style={{ color: BODY }}>
+                    {n.why}
+                  </div>
                 </button>
               ))}
             </div>
@@ -249,8 +321,13 @@ function MethodNamer() {
             />
 
             {chosen.trim() && (
-              <div className="mt-6 rounded-xl p-5" style={{ background: "#fff", border: `1px solid ${LINE}` }}>
-                <p className="text-[15px] font-semibold" style={{ color: MUTED }}>Say this out loud</p>
+              <div
+                className="mt-6 rounded-xl p-5"
+                style={{ background: "#fff", border: `1px solid ${LINE}` }}
+              >
+                <p className="text-[15px] font-semibold" style={{ color: MUTED }}>
+                  Say this out loud
+                </p>
                 <p className="mt-2 text-[19px] font-bold leading-relaxed" style={{ color: INK }}>
                   {methodSentence(m, chosen)}
                 </p>
@@ -275,7 +352,12 @@ function MethodNamer() {
                       toast.success("Copied");
                     }}
                     className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-[16px] font-bold"
-                    style={{ border: `1px solid ${LINE}`, color: INK, background: "#fff", cursor: "pointer" }}
+                    style={{
+                      border: `1px solid ${LINE}`,
+                      color: INK,
+                      background: "#fff",
+                      cursor: "pointer",
+                    }}
                   >
                     <Copy className="size-4" /> Copy the sentence
                   </button>
@@ -287,8 +369,8 @@ function MethodNamer() {
 
         {offer.name && (
           <p className="mt-6 text-[15px]" style={{ color: MUTED }}>
-            Saved as <strong style={{ color: INK }}>{offer.name}</strong>. The Charge Gate and The Send
-            will use it.
+            Saved as <strong style={{ color: INK }}>{offer.name}</strong>. The Charge Gate and The
+            Send will use it.
           </p>
         )}
 

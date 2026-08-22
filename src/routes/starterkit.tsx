@@ -45,14 +45,32 @@ export const Route = createFileRoute("/starterkit")({
 // worksheets, not 7. Each is described by what you end up holding, in the
 // plainest words available.
 const WORKSHEETS: [string, string][] = [
-  ["The Knowledge Audit", "The list of things people already come to you for. Written down, so it stops being a habit and starts being an inventory."],
-  ["The Scorecard", "Five areas, scored honestly. You see which one is actually holding you back — it is rarely the one you assume."],
+  [
+    "The Knowledge Audit",
+    "The list of things people already come to you for. Written down, so it stops being a habit and starts being an inventory.",
+  ],
+  [
+    "The Scorecard",
+    "Five areas, scored honestly. You see which one is actually holding you back — it is rarely the one you assume.",
+  ],
   ["Your Lowest Score", "One instruction for the next thirty days. Not a list of ten things. One."],
-  ["The Positioning Blueprint", "The sentence. Who you help, and with what. Short enough that somebody can repeat it back to you correctly."],
-  ["Your First Content Engine", "Four kinds of post, one idea each. So you never sit looking at an empty screen again."],
-  ["River, Fish, Tank", "Why the followers are not yours, and what is. Ten minutes that change where you put your effort."],
+  [
+    "The Positioning Blueprint",
+    "The sentence. Who you help, and with what. Short enough that somebody can repeat it back to you correctly.",
+  ],
+  [
+    "Your First Content Engine",
+    "Four kinds of post, one idea each. So you never sit looking at an empty screen again.",
+  ],
+  [
+    "River, Fish, Tank",
+    "Why the followers are not yours, and what is. Ten minutes that change where you put your effort.",
+  ],
   ["Your First Offer", "One thing somebody could actually buy from you, sketched out on a page."],
-  ["The PAIDS Map", "Five ways knowledge turns into income. You are probably walking past three of them."],
+  [
+    "The PAIDS Map",
+    "Five ways knowledge turns into income. You are probably walking past three of them.",
+  ],
 ];
 
 function StarterKitFunnel() {
@@ -75,8 +93,8 @@ function StarterKitFunnel() {
               else, and by the end you are watching their face and you know you have lost them.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-slate-300">
-              You have done this hundreds of times. You have never once walked away happy with how it
-              came out.
+              You have done this hundreds of times. You have never once walked away happy with how
+              it came out.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-white">
               It is not that you do not know. It is that nobody ever made you put it into one
@@ -113,8 +131,8 @@ function StarterKitFunnel() {
             </h2>
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-slate-300">
               <p className="measure">
-                You have spent years getting good at something. Nobody spent ten minutes teaching you
-                how to describe it, price it, or put it in front of anybody.
+                You have spent years getting good at something. Nobody spent ten minutes teaching
+                you how to describe it, price it, or put it in front of anybody.
               </p>
               <p className="measure">
                 That is not a gap in your knowledge. It is a gap in the structure around it — and it
@@ -136,8 +154,8 @@ function StarterKitFunnel() {
               Eight worksheets. <span className="grad-gold">One evening.</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-center text-slate-400">
-              Nothing to research and nothing to invent. Every question is about work you have already
-              done.
+              Nothing to research and nothing to invent. Every question is about work you have
+              already done.
             </p>
           </Reveal>
           <div className="mt-10 space-y-3">
@@ -145,7 +163,9 @@ function StarterKitFunnel() {
               <Reveal key={title} delay={i * 45}>
                 <GlassCard className="p-5">
                   <div className="flex items-start gap-4">
-                    <span className="font-black text-amber-400">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-black text-amber-400">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
                     <div>
                       <div className="font-bold">{title}</div>
                       <div className="mt-1 text-sm leading-relaxed text-slate-400">{desc}</div>
@@ -187,12 +207,12 @@ function StarterKitFunnel() {
                 Then one morning the account was gone and nobody owed me an explanation.
               </p>
               <p className="measure">
-                Everything I had used to prove I mattered belonged to somebody else, and they switched
-                it off.
+                Everything I had used to prove I mattered belonged to somebody else, and they
+                switched it off.
               </p>
               <p className="measure text-white">
-                You are further ahead than I was. You spent your years getting good at something real
-                instead of chasing attention. You are just not being paid for it yet.
+                You are further ahead than I was. You spent your years getting good at something
+                real instead of chasing attention. You are just not being paid for it yet.
               </p>
             </div>
           </Reveal>
@@ -206,8 +226,8 @@ function StarterKitFunnel() {
             <h2 className="text-3xl sm:text-4xl font-black leading-tight">What this will not do</h2>
             <div className="mt-7 space-y-5 text-slate-300">
               <p>
-                <strong className="text-white">It will not motivate you.</strong> There is no pep talk
-                in it. You do not need one — you need a structure.
+                <strong className="text-white">It will not motivate you.</strong> There is no pep
+                talk in it. You do not need one — you need a structure.
               </p>
               <p>
                 <strong className="text-white">It stops at clarity.</strong> You finish knowing what
@@ -215,8 +235,9 @@ function StarterKitFunnel() {
                 the next thing, and it is not this.
               </p>
               <p>
-                <strong className="text-white">It will not work if you only read it.</strong> Reading
-                takes twelve minutes and changes nothing. The questions only work if you answer them.
+                <strong className="text-white">It will not work if you only read it.</strong>{" "}
+                Reading takes twelve minutes and changes nothing. The questions only work if you
+                answer them.
               </p>
             </div>
           </Reveal>
@@ -231,7 +252,9 @@ function StarterKitFunnel() {
               <h2 className="text-center text-2xl sm:text-3xl font-black leading-tight">
                 Send me the <span className="grad-gold">eight worksheets</span>
               </h2>
-              <p className="mt-2 text-center text-sm text-slate-400">Free. No card. Nothing to attend.</p>
+              <p className="mt-2 text-center text-sm text-slate-400">
+                Free. No card. Nothing to attend.
+              </p>
               <div className="mt-6">
                 <MailerLiteEmbedForm formSlug="v3XiMi" />
               </div>

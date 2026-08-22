@@ -157,7 +157,10 @@ export const kitDeliveryReport = createServerFn({ method: "GET" })
         id: "drip",
         label: "Drip",
         level: dripped === 0 ? "ok" : "warn",
-        detail: dripped === 0 ? "Everything opens on day one." : `${dripped} modules still gated behind unlock_week`,
+        detail:
+          dripped === 0
+            ? "Everything opens on day one."
+            : `${dripped} modules still gated behind unlock_week`,
         fix:
           dripped === 0
             ? undefined

@@ -21,9 +21,9 @@ export const Route = createFileRoute("/_authenticated/admin/kit-health")({
 });
 
 const TONE = {
-  ok:   { fg: "#15803D", bg: "#F0FDF4", Icon: CheckIcon,     word: "OK" },
+  ok: { fg: "#15803D", bg: "#F0FDF4", Icon: CheckIcon, word: "OK" },
   warn: { fg: "#B45309", bg: "#FFFBEB", Icon: AlertTriangle, word: "Check" },
-  fail: { fg: "#B91C1C", bg: "#FEF2F2", Icon: XCircle,       word: "Broken" },
+  fail: { fg: "#B91C1C", bg: "#FEF2F2", Icon: XCircle, word: "Broken" },
 } as const;
 
 function KitHealth() {
@@ -35,7 +35,9 @@ function KitHealth() {
       <main className="mx-auto max-w-3xl px-5 py-10">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-[15px] font-semibold" style={{ color: BLUE }}>Admin</p>
+            <p className="text-[15px] font-semibold" style={{ color: BLUE }}>
+              Admin
+            </p>
             <h1 className="mt-1.5 text-[30px] font-black leading-tight" style={{ color: INK }}>
               Does the Foundation Kit actually arrive?
             </h1>
@@ -50,18 +52,28 @@ function KitHealth() {
             onClick={() => q.refetch()}
             disabled={q.isFetching}
             className="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-[15px] font-bold"
-            style={{ border: `1px solid ${LINE}`, background: "#fff", color: INK, cursor: "pointer" }}
+            style={{
+              border: `1px solid ${LINE}`,
+              background: "#fff",
+              color: INK,
+              cursor: "pointer",
+            }}
           >
             <RefreshCw className={`size-4 ${q.isFetching ? "animate-spin" : ""}`} /> Re-run
           </button>
         </div>
 
         {q.isLoading && (
-          <p className="mt-10 text-[16px]" style={{ color: MUTED }}>Checking…</p>
+          <p className="mt-10 text-[16px]" style={{ color: MUTED }}>
+            Checking…
+          </p>
         )}
 
         {q.error && (
-          <div className="mt-8 rounded-2xl p-5" style={{ background: TONE.fail.bg, border: `1px solid ${TONE.fail.fg}33` }}>
+          <div
+            className="mt-8 rounded-2xl p-5"
+            style={{ background: TONE.fail.bg, border: `1px solid ${TONE.fail.fg}33` }}
+          >
             <p className="text-[16px] font-bold" style={{ color: TONE.fail.fg }}>
               {(q.error as Error).message}
             </p>
@@ -72,9 +84,15 @@ function KitHealth() {
           <>
             <div
               className="mt-8 rounded-2xl p-6"
-              style={{ background: TONE[q.data.worst].bg, border: `1px solid ${TONE[q.data.worst].fg}33` }}
+              style={{
+                background: TONE[q.data.worst].bg,
+                border: `1px solid ${TONE[q.data.worst].fg}33`,
+              }}
             >
-              <p className="text-[15px] font-bold uppercase tracking-wide" style={{ color: TONE[q.data.worst].fg }}>
+              <p
+                className="text-[15px] font-bold uppercase tracking-wide"
+                style={{ color: TONE[q.data.worst].fg }}
+              >
                 {TONE[q.data.worst].word}
               </p>
               <p className="mt-1.5 text-[22px] font-black leading-tight" style={{ color: INK }}>
@@ -93,17 +111,28 @@ function KitHealth() {
               {q.data.checks.map((c: Check) => {
                 const t = TONE[c.level];
                 return (
-                  <div key={c.id} className="rounded-2xl p-5" style={{ border: `1px solid ${LINE}` }}>
+                  <div
+                    key={c.id}
+                    className="rounded-2xl p-5"
+                    style={{ border: `1px solid ${LINE}` }}
+                  >
                     <div className="flex items-start gap-3">
                       <t.Icon className="mt-0.5 size-5 shrink-0" style={{ color: t.fg }} />
                       <div className="min-w-0">
-                        <div className="text-[17px] font-bold" style={{ color: INK }}>{c.label}</div>
-                        <p className="mt-1 break-words text-[16px] leading-relaxed" style={{ color: BODY }}>
+                        <div className="text-[17px] font-bold" style={{ color: INK }}>
+                          {c.label}
+                        </div>
+                        <p
+                          className="mt-1 break-words text-[16px] leading-relaxed"
+                          style={{ color: BODY }}
+                        >
                           {c.detail}
                         </p>
                         {c.fix && (
-                          <p className="mt-2.5 rounded-lg p-3 text-[15px] leading-relaxed"
-                             style={{ background: TINT, color: INK }}>
+                          <p
+                            className="mt-2.5 rounded-lg p-3 text-[15px] leading-relaxed"
+                            style={{ background: TINT, color: INK }}
+                          >
                             {c.fix}
                           </p>
                         )}
