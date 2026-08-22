@@ -4,6 +4,7 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
+import { ToolHeader, ToolFooter } from "@/components/tool-frame";
 
 export const Route = createFileRoute("/_authenticated/apps/knowledge-audit")({
   head: () => ({ meta: [{ title: "The Knowledge Audit — Contentpreneur Africa" }] }),
@@ -88,7 +89,7 @@ function KnowledgeAudit() {
   return (
     <Shell>
       <main className="mx-auto max-w-3xl px-4 sm:px-6 py-10">
-        <a href="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">← All tools</a>
+        <ToolHeader slug="knowledge-audit" why={"Before you can price anything you have to name it. This finds the thing people already come to you for — the one so obvious to you that you have stopped noticing it is worth money."} />
 
         {step === "intro" && (
           <div className="nx-hero-orb mt-6">
@@ -229,6 +230,7 @@ function Locked() {
           <p className="nx-body max-w-md mx-auto mt-2">Find the product hiding in your expertise. Get the kit to unlock this and every interactive app.</p>
           <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
         </div>
+        <ToolFooter slug="knowledge-audit" youNowHave="three things people already ask you for, ranked — and the top one is your first product." />
       </main>
     </Shell>
   );

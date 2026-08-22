@@ -227,7 +227,10 @@ async function sendOrderReceipt(
       to: order.email,
       from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
       sender_domain: SENDER_DOMAIN,
-      subject: `Your ${SITE_NAME} order is confirmed`,
+      // The body already switches brand on isKitOrder; the subject did not, so a
+      // Contentpreneur buyer got an email headed "Your CHKPLT order" — a brand
+      // they may never have seen. Same condition, same answer.
+      subject: `Your ${emailProps.siteName} order is confirmed`,
       html,
       text,
       purpose: "transactional",

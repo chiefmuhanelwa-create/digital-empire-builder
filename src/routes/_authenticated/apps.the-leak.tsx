@@ -11,6 +11,7 @@ import {
 } from "@/lib/leak-engine";
 import { Lock, ArrowRight, Plus, Trash2, Copy, Printer, Check, Cloud } from "lucide-react";
 import { toast } from "sonner";
+import { ToolHeader, ToolFooter } from "@/components/tool-frame";
 
 export const Route = createFileRoute("/_authenticated/apps/the-leak")({
   head: () => ({ meta: [{ title: "The Leak — Contentpreneur Africa" }] }),
@@ -105,9 +106,7 @@ function TheLeak() {
       {/* ── hero: state the problem before asking for anything */}
       <section className="border-b border-border bg-[var(--obsidian)]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-12 pb-11">
-          <Link to="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">
-            ← All tools
-          </Link>
+          <ToolHeader slug="the-leak" why={"You are not underpaid. You are unbilled. This counts what you have already given away, at the rate your own industry would charge for you — because you cannot price something until you see what it has been costing you."} />
           <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--nx-gold-bright)] mt-5">
             Stage 2 · The audit nobody runs
           </p>
@@ -367,6 +366,7 @@ function TheLeak() {
             Build the offer <ArrowRight className="size-4" />
           </Link>
         </div>
+        <ToolFooter slug="the-leak" youNowHave="a rand figure for what you gave away last year, and the sentence that stops each leak without burning the relationship." />
       </main>
     </Shell>
   );

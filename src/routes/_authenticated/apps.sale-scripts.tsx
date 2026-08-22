@@ -8,6 +8,7 @@ import {
 } from "@/lib/offer-spine";
 import { Lock, ArrowRight, Copy, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { ToolHeader, ToolFooter } from "@/components/tool-frame";
 
 export const Route = createFileRoute("/_authenticated/apps/sale-scripts")({
   head: () => ({ meta: [{ title: "The First Sale Scripts — Contentpreneur Africa" }] }),
@@ -99,9 +100,7 @@ function SaleScripts() {
     <Shell>
       <section className="nx-hero-orb border-b border-border">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-10 pb-7">
-          <Link to="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">
-            ← All tools
-          </Link>
+          <ToolHeader slug="sale-scripts" why={"You will hear the same four things back. Read them once now, so you are not composing a sentence while somebody is waiting for one."} />
           <p className="nx-label mt-4">Tool 07 · used live</p>
           <h1 className="mt-2">What to say when they push back.</h1>
           <p className="nx-body max-w-xl mt-3">
@@ -209,6 +208,7 @@ function SaleScripts() {
             The Send <ArrowRight className="size-4" />
           </Link>
         </div>
+        <ToolFooter slug="sale-scripts" youNowHave="the four replies you will actually hear, with your own price and output already written into them." />
       </main>
     </Shell>
   );

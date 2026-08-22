@@ -10,6 +10,7 @@ import {
 } from "@/lib/offer-spine";
 import { Lock, ArrowRight, Check, Printer, Copy, Wand2 } from "lucide-react";
 import { toast } from "sonner";
+import { ToolHeader, ToolFooter } from "@/components/tool-frame";
 
 export const Route = createFileRoute("/_authenticated/apps/offer-blueprint")({
   head: () => ({ meta: [{ title: "The Offer Blueprint — Contentpreneur Africa" }] }),
@@ -261,6 +262,7 @@ function OfferBlueprint() {
         )}
 
         {pct === 100 && <Blueprint offer={offer} />}
+        <ToolFooter slug="offer-blueprint" youNowHave="one sentence a stranger can repeat, and a price with a line that defends it." />
       </main>
     </Shell>
   );
@@ -361,9 +363,7 @@ function Header({ pct }: { pct: number }) {
   return (
     <section className="nx-hero-orb border-b border-border">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-10 pb-7">
-        <Link to="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">
-          ← All tools
-        </Link>
+        <ToolHeader slug="offer-blueprint" why={"Everything after this reads from one sentence: your rate card, your invoices, your emails, your calendar. This is the cheapest place to be wrong and the most expensive place to skip."} />
         <p className="nx-label mt-4">Tool 01 · The spine</p>
         <h1 className="mt-2">The Offer Blueprint</h1>
         <p className="nx-body max-w-xl mt-3">

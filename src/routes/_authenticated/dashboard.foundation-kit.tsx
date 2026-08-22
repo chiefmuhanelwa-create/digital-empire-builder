@@ -1,65 +1,53 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { WorkspaceShell, BLUE, BLUE_DARK, INK, BODY, MUTED, LINE, TINT } from "@/components/workspace-shell";
-import { STAGES, TOOLS, toolsForStage, startedSlugs, type KitTool } from "@/lib/kit-catalog";
+import { KitDownload } from "@/components/kit-download";
+import {
+  pathTools, libraryTools, toolsWithWorkbooks, startedSlugs, PATH_LENGTH, type KitTool,
+} from "@/lib/kit-catalog";
 import { readOffer, assembleSentence, isOfferComplete, EMPTY_OFFER, type Offer } from "@/lib/offer-spine";
-import { Lock, ArrowRight, Check, ChevronDown } from "lucide-react";
+import { Lock, ArrowRight, Check, ChevronDown, PlayCircle, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/foundation-kit")({
   head: () => ({ meta: [{ title: "Your Workspace — Contentpreneur Africa" }] }),
   component: Workspace,
 });
 
-// THE WORKSPACE — rebuilt after founder feedback: "I don't know where to start,
-// everything is all over, the words are too small, links leave the workspace."
+// THE WORKSPACE.
 //
-// Every one of those was true, and they share one cause: the page presented
-// twenty-four equal options and let the person work out the order themselves.
+// Rebuilt after the founder walked it as a first-time buyer: "I don't know
+// where to start, everything is all over, I do not know what I bought and why
+// is it important or where it is leading me."
 //
-// The fix is not decoration. It is subtraction:
-//   • ONE thing at the top. Not a dashboard — a next action.
-//   • Stages closed by default, current one open. Seven headings beats
-//     twenty-four cards.
-//   • Body text at 16-17px, headings large. Nothing under 13px anywhere.
-//   • Black on white, one blue for anything clickable. No mid-greys on white,
-//     no gold-on-cream, no tiny uppercase mono labels.
-//   • Nothing links out of the workspace.
+// The cause was structural. This page showed twenty-four equal options and let
+// the buyer infer the point. Now it shows ONE promise, ONE next step, and a
+// six-step path — with the other eighteen tools kept but demoted to a library.
+//
+// It also finally surfaces the two things the buyer paid for and could not
+// reach: the ten workbooks (the download function existed with no caller) and
+// the ten-lesson course (the workspace never mentioned it).
 
 function Workspace() {
   const { access, loading } = useKitAccess();
   const [started, setStarted] = useState<Set<string>>(new Set());
   const [offer, setOffer] = useState<Offer>(EMPTY_OFFER);
-  const [open, setOpen] = useState<number | null>(null);
+  const [showLibrary, setShowLibrary] = useState(false);
+  const [showFiles, setShowFiles] = useState(false);
 
   useEffect(() => {
     setStarted(startedSlugs());
     setOffer(readOffer());
   }, []);
 
-  const done = started.size;
-
-  // Where they actually are — the first stage with anything unfinished.
-  const current = useMemo(
-    () => STAGES.find((s) => toolsForStage(s.id).some((t) => !started.has(t.slug))) ?? STAGES[6],
-    [started],
-  );
-
-  // The single next action. A "start here" tool if the stage has one, else the
-  // first unfinished tool in that stage.
-  const next = useMemo(() => {
-    const inStage = toolsForStage(current.id);
-    return inStage.find((t) => t.start && !started.has(t.slug)) ?? inStage.find((t) => !started.has(t.slug)) ?? null;
-  }, [current, started]);
-
-  useEffect(() => { setOpen(current.id); }, [current.id]);
+  const path = pathTools();
+  const library = libraryTools();
+  const workbooks = toolsWithWorkbooks();
+  const doneOnPath = path.filter((t) => started.has(t.slug)).length;
+  const next = useMemo(() => path.find((t) => !started.has(t.slug)) ?? null, [path, started]);
 
   if (loading) {
-    return (
-      <WorkspaceShell>
-        <div className="py-32 text-center text-[16px]" style={{ color: MUTED }}>Loading…</div>
-      </WorkspaceShell>
-    );
+    return <WorkspaceShell><div className="py-32 text-center text-[16px]" style={{ color: MUTED }}>Loading…</div></WorkspaceShell>;
   }
 
   if (!access) {
@@ -70,14 +58,8 @@ function Workspace() {
           <h1 className="mt-5 text-[32px] font-black leading-tight" style={{ color: INK }}>
             Your workspace is part of the Foundation Kit.
           </h1>
-          <p className="mt-3 text-[17px]" style={{ color: BODY }}>
-            Twenty-four tools, in the order you need them.
-          </p>
-          <a
-            href="/foundation"
-            className="mt-7 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
-            style={{ background: BLUE, color: "#fff", textDecoration: "none" }}
-          >
+          <a href="/foundation" className="mt-7 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
+             style={{ background: BLUE, color: "#fff", textDecoration: "none" }}>
             Get the Kit <ArrowRight className="size-4" />
           </a>
         </main>
@@ -89,186 +71,187 @@ function Workspace() {
     <WorkspaceShell>
       <main className="mx-auto max-w-3xl px-5 py-10">
 
-        {/* ─── ONE next action. Everything else is below the fold, on purpose. */}
+        {/* ── WHAT THIS IS. The founder's first question was "I do not know what
+             I bought." So the page answers it before anything else. */}
+        <section>
+          <p className="text-[15px] font-semibold" style={{ color: BLUE }}>Your Foundation Kit</p>
+          <h1 className="mt-2 text-[30px] sm:text-[38px] font-black leading-[1.1]" style={{ color: INK }}>
+            Six steps. You finish with a priced offer and the words to sell it.
+          </h1>
+          <p className="mt-4 text-[17px] leading-relaxed" style={{ color: BODY }}>
+            Not twenty-four things to work out. One path, in order — each step takes an evening and
+            hands you something you can point at. Your answers carry forward, so you never type the
+            same thing twice.
+          </p>
+        </section>
+
+        {/* ── the one next action */}
         {next ? (
-          <section className="rounded-2xl p-6 sm:p-8" style={{ background: TINT, border: `1px solid ${LINE}` }}>
+          <section className="mt-7 rounded-2xl p-6 sm:p-7" style={{ background: TINT, border: `1px solid ${LINE}` }}>
             <p className="text-[15px] font-semibold" style={{ color: BLUE }}>
-              {done === 0 ? "Start here" : "Next up"}
+              {doneOnPath === 0 ? "Start here" : `Step ${next.path} of ${PATH_LENGTH}`}
             </p>
-            <h1 className="mt-2 text-[28px] sm:text-[34px] font-black leading-[1.15]" style={{ color: INK }}>
+            <h2 className="mt-2 text-[26px] sm:text-[30px] font-black leading-tight" style={{ color: INK }}>
               {next.name}
-            </h1>
-            <p className="mt-3 text-[17px] leading-relaxed" style={{ color: BODY }}>
-              {next.blurb}
-            </p>
-            <p className="mt-4 text-[16px]" style={{ color: BODY }}>
+            </h2>
+            <p className="mt-3 text-[17px] leading-relaxed" style={{ color: BODY }}>{next.blurb}</p>
+            <p className="mt-3 text-[16px]" style={{ color: BODY }}>
               <strong style={{ color: INK }}>You'll finish with:</strong> {next.output}
             </p>
-            <a
-              href={`/apps/${next.slug}`}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
-              style={{ background: BLUE, color: "#fff", textDecoration: "none" }}
-              onMouseOver={(e) => (e.currentTarget.style.background = BLUE_DARK)}
-              onMouseOut={(e) => (e.currentTarget.style.background = BLUE)}
-            >
-              Open this tool <ArrowRight className="size-4" />
+            <a href={`/apps/${next.slug}`}
+               className="mt-6 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[16px] font-bold"
+               style={{ background: BLUE, color: "#fff", textDecoration: "none" }}
+               onMouseOver={(e) => (e.currentTarget.style.background = BLUE_DARK)}
+               onMouseOut={(e) => (e.currentTarget.style.background = BLUE)}>
+              Open this step <ArrowRight className="size-4" />
             </a>
-            <p className="mt-4 text-[15px]" style={{ color: MUTED }}>
-              Step {current.id} of 7 &middot; {current.name} &mdash; {current.outcome}
-            </p>
           </section>
         ) : (
-          <section className="rounded-2xl p-6 sm:p-8" style={{ background: TINT, border: `1px solid ${LINE}` }}>
-            <h1 className="text-[30px] font-black leading-tight" style={{ color: INK }}>
-              You have been through all seven stages.
-            </h1>
-            <p className="mt-3 text-[17px]" style={{ color: BODY }}>
-              Come back to any tool whenever the answer changes. They keep what you wrote.
+          <section className="mt-7 rounded-2xl p-6" style={{ background: TINT, border: `1px solid ${LINE}` }}>
+            <h2 className="text-[26px] font-black leading-tight" style={{ color: INK }}>
+              You have been through all six steps.
+            </h2>
+            <p className="mt-2 text-[17px]" style={{ color: BODY }}>
+              Come back to any of them whenever the answer changes. They keep what you wrote.
             </p>
           </section>
         )}
 
-        {/* ─── their sentence, once it exists */}
+        {/* ── their sentence, once it exists */}
         {isOfferComplete(offer) && (
-          <section className="mt-6 rounded-2xl p-6" style={{ border: `1px solid ${LINE}` }}>
-            <p className="text-[15px] font-semibold" style={{ color: MUTED }}>Your sentence</p>
+          <section className="mt-5 rounded-2xl p-6" style={{ border: `1px solid ${LINE}` }}>
+            <p className="text-[15px] font-semibold" style={{ color: MUTED }}>Your offer, so far</p>
             <p className="mt-2 text-[19px] font-bold leading-relaxed" style={{ color: INK }}>
               &ldquo;{assembleSentence(offer)}&rdquo;
             </p>
-            <p className="mt-2 text-[15px]" style={{ color: MUTED }}>
-              Every tool below fills itself in from this.
-            </p>
           </section>
         )}
 
-        {/* ─── progress, stated plainly */}
-        <section className="mt-6">
-          <div className="flex items-baseline justify-between">
-            <p className="text-[16px] font-semibold" style={{ color: INK }}>
-              {done} of {TOOLS.length} tools started
-            </p>
-            <p className="text-[15px]" style={{ color: MUTED }}>Stage {current.id} of 7</p>
+        {/* ── the path */}
+        <section className="mt-9">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="text-[22px] font-black" style={{ color: INK }}>Your path</h2>
+            <span className="text-[15px]" style={{ color: MUTED }}>{doneOnPath} of {PATH_LENGTH} done</span>
           </div>
           <div className="mt-2 h-2 rounded-full overflow-hidden" style={{ background: LINE }}>
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${Math.round((done / TOOLS.length) * 100)}%`, background: BLUE }}
-            />
+            <div className="h-full rounded-full transition-all duration-500"
+                 style={{ width: `${Math.round((doneOnPath / PATH_LENGTH) * 100)}%`, background: BLUE }} />
+          </div>
+
+          <ol className="mt-5 space-y-3">
+            {path.map((t) => <StepRow key={t.slug} t={t} started={started.has(t.slug)} isNext={next?.slug === t.slug} />)}
+          </ol>
+        </section>
+
+        {/* ── the course. Previously unreachable from this page entirely. */}
+        <section className="mt-9 rounded-2xl p-5" style={{ border: `1px solid ${LINE}` }}>
+          <div className="flex items-start gap-3.5">
+            <PlayCircle className="size-6 shrink-0 mt-0.5" style={{ color: BLUE }} />
+            <div className="flex-1 min-w-0">
+              <h2 className="text-[18px] font-bold" style={{ color: INK }}>The course · 10 lessons, 51 minutes</h2>
+              <p className="mt-1 text-[16px]" style={{ color: BODY }}>
+                Watch alongside the steps, or straight through in one sitting. All of it is open now.
+              </p>
+              <Link to="/learn" className="mt-2.5 inline-flex items-center gap-1.5 text-[15px] font-semibold"
+                    style={{ color: BLUE, textDecoration: "none" }}>
+                Open the course <ArrowRight className="size-4" />
+              </Link>
+            </div>
           </div>
         </section>
 
-        {/* ─── the seven stages. Closed by default; current one open. */}
-        <section className="mt-8">
-          <h2 className="text-[22px] font-black" style={{ color: INK }}>All tools, in order</h2>
-          <p className="mt-1.5 text-[16px]" style={{ color: BODY }}>
-            Seven stages. Work them top to bottom &mdash; each one builds on the last.
-          </p>
-
-          <div className="mt-5 space-y-3">
-            {STAGES.map((stage) => {
-              const tools = toolsForStage(stage.id);
-              const doneHere = tools.filter((t) => started.has(t.slug)).length;
-              const isOpen = open === stage.id;
-              const complete = doneHere === tools.length;
-
-              return (
-                <div key={stage.id} className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${LINE}` }}>
-                  <button
-                    onClick={() => setOpen(isOpen ? null : stage.id)}
-                    className="w-full text-left px-5 py-5 flex items-center gap-4"
-                    style={{ background: isOpen ? TINT : "#fff" }}
-                  >
-                    <span
-                      className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl text-[17px] font-black"
-                      style={{
-                        background: complete ? BLUE : isOpen ? "#fff" : TINT,
-                        color: complete ? "#fff" : BLUE,
-                        border: `1px solid ${complete ? BLUE : LINE}`,
-                      }}
-                    >
-                      {complete ? <Check className="size-5" /> : stage.id}
-                    </span>
-
-                    <span className="flex-1 min-w-0">
-                      <span className="block text-[18px] font-bold leading-tight" style={{ color: INK }}>
-                        {stage.outcome}
-                      </span>
-                      <span className="block text-[15px] mt-0.5" style={{ color: MUTED }}>
-                        {tools.length} tool{tools.length === 1 ? "" : "s"} &middot; {doneHere} started
-                      </span>
-                    </span>
-
-                    <ChevronDown
-                      className="size-5 shrink-0 transition-transform"
-                      style={{ color: MUTED, transform: isOpen ? "rotate(180deg)" : "none" }}
-                    />
-                  </button>
-
-                  {isOpen && (
-                    <div className="px-5 pb-5" style={{ borderTop: `1px solid ${LINE}` }}>
-                      <p className="text-[16px] leading-relaxed mt-4" style={{ color: BODY }}>
-                        {stage.premise}
-                      </p>
-
-                      <div className="mt-4 space-y-2.5">
-                        {tools.map((t) => <ToolRow key={t.slug} t={t} started={started.has(t.slug)} />)}
-                      </div>
-
-                      <div className="mt-4 rounded-xl px-4 py-3.5" style={{ background: TINT }}>
-                        <p className="text-[15px] font-semibold" style={{ color: INK }}>
-                          You finish this stage when:
-                        </p>
-                        <p className="text-[16px] mt-1" style={{ color: BODY }}>{stage.gate}</p>
-                      </div>
-                    </div>
-                  )}
+        {/* ── the workbooks. Promised on the sales page since launch and never
+             reachable, because the download function had no caller. */}
+        <section className="mt-4 rounded-2xl overflow-hidden" style={{ border: `1px solid ${LINE}` }}>
+          <button onClick={() => setShowFiles(!showFiles)} className="w-full text-left px-5 py-5 flex items-center gap-3.5"
+                  style={{ background: showFiles ? TINT : "#fff" }}>
+            <FileText className="size-6 shrink-0" style={{ color: BLUE }} />
+            <span className="flex-1 min-w-0">
+              <span className="block text-[18px] font-bold" style={{ color: INK }}>Your workbooks</span>
+              <span className="block text-[15px] mt-0.5" style={{ color: MUTED }}>
+                Printable versions of the tools — {workbooks.length} of them
+              </span>
+            </span>
+            <ChevronDown className="size-5 shrink-0 transition-transform"
+                         style={{ color: MUTED, transform: showFiles ? "rotate(180deg)" : "none" }} />
+          </button>
+          {showFiles && (
+            <div className="px-5 pb-5 space-y-2.5" style={{ borderTop: `1px solid ${LINE}` }}>
+              <p className="text-[15px] pt-4" style={{ color: BODY }}>
+                Every one of these opens in a new tab. Print them if you think better on paper.
+              </p>
+              {workbooks.map((t) => (
+                <div key={t.slug} className="flex items-center justify-between gap-3 rounded-xl px-4 py-3"
+                     style={{ border: `1px solid ${LINE}` }}>
+                  <span className="text-[16px] font-semibold" style={{ color: INK }}>{t.name}</span>
+                  <KitDownload pdfKey={t.pdfKey!} label="Download" compact />
                 </div>
-              );
-            })}
-          </div>
+              ))}
+              <div className="flex items-center justify-between gap-3 rounded-xl px-4 py-3" style={{ border: `1px solid ${LINE}` }}>
+                <span className="text-[16px] font-semibold" style={{ color: INK }}>The one-page cheat sheet</span>
+                <KitDownload pdfKey="cheat-sheet" label="Download" compact />
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* ── the library. Kept, not deleted — just not the front door. */}
+        <section className="mt-4 rounded-2xl overflow-hidden" style={{ border: `1px solid ${LINE}` }}>
+          <button onClick={() => setShowLibrary(!showLibrary)} className="w-full text-left px-5 py-5 flex items-center gap-3.5"
+                  style={{ background: showLibrary ? TINT : "#fff" }}>
+            <span className="flex-1 min-w-0">
+              <span className="block text-[18px] font-bold" style={{ color: INK }}>More tools ({library.length})</span>
+              <span className="block text-[15px] mt-0.5" style={{ color: MUTED }}>
+                For when you need them. Nothing here is required to finish the path.
+              </span>
+            </span>
+            <ChevronDown className="size-5 shrink-0 transition-transform"
+                         style={{ color: MUTED, transform: showLibrary ? "rotate(180deg)" : "none" }} />
+          </button>
+          {showLibrary && (
+            <div className="px-5 pb-5 pt-4 grid gap-2.5 sm:grid-cols-2" style={{ borderTop: `1px solid ${LINE}` }}>
+              {library.map((t) => (
+                <a key={t.slug} href={`/apps/${t.slug}`} className="rounded-xl p-4"
+                   style={{ border: `1px solid ${LINE}`, textDecoration: "none" }}>
+                  <span className="flex items-center gap-2">
+                    <span className="text-[16px] font-bold" style={{ color: INK }}>{t.name}</span>
+                    {started.has(t.slug) && <Check className="size-4" style={{ color: BLUE }} />}
+                  </span>
+                  <span className="block text-[15px] mt-1 leading-relaxed" style={{ color: BODY }}>{t.blurb}</span>
+                </a>
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </WorkspaceShell>
   );
 }
 
-function ToolRow({ t, started }: { t: KitTool; started: boolean }) {
+function StepRow({ t, started, isNext }: { t: KitTool; started: boolean; isNext: boolean }) {
   return (
-    <a
-      href={`/apps/${t.slug}`}
-      className="flex items-start gap-3.5 rounded-xl p-4 transition-colors"
-      style={{ border: `1px solid ${LINE}`, textDecoration: "none", background: "#fff" }}
-      onMouseOver={(e) => (e.currentTarget.style.background = TINT)}
-      onMouseOut={(e) => (e.currentTarget.style.background = "#fff")}
-    >
-      <span
-        className="inline-flex size-6 shrink-0 items-center justify-center rounded-full mt-0.5"
-        style={{ background: started ? BLUE : "#fff", border: `1px solid ${started ? BLUE : LINE}` }}
-      >
-        {started && <Check className="size-3.5" style={{ color: "#fff" }} />}
-      </span>
-
-      <span className="flex-1 min-w-0">
-        <span className="flex items-center gap-2 flex-wrap">
-          <span className="text-[17px] font-bold" style={{ color: INK }}>{t.name}</span>
-          {t.start && !started && (
-            <span
-              className="text-[13px] font-bold px-2 py-0.5 rounded-md"
-              style={{ background: TINT, color: BLUE }}
-            >
-              Start here
-            </span>
-          )}
+    <li>
+      <a href={`/apps/${t.slug}`} className="flex items-start gap-4 rounded-2xl p-4"
+         style={{ border: `1px solid ${isNext ? BLUE : LINE}`, textDecoration: "none", background: "#fff" }}>
+        <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl text-[16px] font-black"
+              style={{ background: started ? BLUE : TINT, color: started ? "#fff" : BLUE,
+                       border: `1px solid ${started ? BLUE : LINE}` }}>
+          {started ? <Check className="size-5" /> : t.path}
         </span>
-        <span className="block text-[15px] mt-1 leading-relaxed" style={{ color: BODY }}>
-          {t.blurb}
+        <span className="flex-1 min-w-0">
+          <span className="flex items-center gap-2 flex-wrap">
+            <span className="text-[17px] font-bold" style={{ color: INK }}>{t.name}</span>
+            {isNext && (
+              <span className="text-[13px] font-bold px-2 py-0.5 rounded-md" style={{ background: TINT, color: BLUE }}>
+                You're here
+              </span>
+            )}
+          </span>
+          <span className="block text-[15px] mt-1 leading-relaxed" style={{ color: BODY }}>{t.blurb}</span>
+          <span className="block text-[15px] mt-1.5" style={{ color: MUTED }}>You get: {t.output}</span>
         </span>
-        <span className="block text-[15px] mt-1.5" style={{ color: MUTED }}>
-          You get: {t.output}
-        </span>
-      </span>
-
-      <ArrowRight className="size-5 shrink-0 mt-1" style={{ color: BLUE }} />
-    </a>
+        <ArrowRight className="size-5 shrink-0 mt-1" style={{ color: BLUE }} />
+      </a>
+    </li>
   );
 }

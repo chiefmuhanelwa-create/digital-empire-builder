@@ -5,6 +5,7 @@ import { useKitAccess } from "@/lib/use-kit-access";
 import { readOffer, theAsk, isOfferComplete, type Offer, EMPTY_OFFER } from "@/lib/offer-spine";
 import { Lock, Copy, Check, ArrowRight, Send } from "lucide-react";
 import { toast } from "sonner";
+import { ToolHeader, ToolFooter } from "@/components/tool-frame";
 
 export const Route = createFileRoute("/_authenticated/apps/the-send")({
   head: () => ({ meta: [{ title: "The Send — Contentpreneur Africa" }] }),
@@ -279,6 +280,7 @@ function TheSend() {
             <p className="text-[#9A9488] text-xs mt-3">Name the person and the channel first.</p>
           )}
         </div>
+        <ToolFooter slug="the-send" youNowHave="one offer actually sent to one named person — and their answer, recorded." />
       </main>
     </Shell>
   );
@@ -288,9 +290,7 @@ function Hero() {
   return (
     <section className="nx-hero-orb border-b border-border">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-10 pb-7">
-        <Link to="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">
-          ← All tools
-        </Link>
+        <ToolHeader slug="the-send" why={"Every step so far produced a document. This one produces money, or it produces an answer. A list lets you hide; one name does not."} />
         <p className="nx-label mt-4">Tool 10 · The only one that produces money</p>
         <h1 className="mt-2">The Send</h1>
         <p className="nx-body max-w-xl mt-3">

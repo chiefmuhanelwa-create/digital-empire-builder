@@ -4,6 +4,7 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { AiCoach } from "@/components/ai-coach";
 import { Lock, ArrowRight, CalendarDays, RefreshCw } from "lucide-react";
+import { ToolHeader, ToolFooter } from "@/components/tool-frame";
 
 export const Route = createFileRoute("/_authenticated/apps/4e-content-calendar")({
   head: () => ({ meta: [{ title: "4E Content Calendar — Contentpreneur Africa" }] }),
@@ -145,7 +146,7 @@ function FourECalendar() {
     <Shell>
       <section className="nx-hero-orb border-b border-border">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-10 pb-8">
-          <a href="/dashboard/foundation-kit" className="inline-flex items-center gap-1 text-[16px] font-semibold text-[var(--nx-gold-text)] hover:underline">← All tools</a>
+          <ToolHeader slug="4e-content-calendar" why={"A professional with a job cannot publish by inspiration. This builds thirty dated slots from the offer you just made, so the work exists whether or not you feel like it."} />
           <div className="flex items-center gap-3 mt-4">
             <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--bg-card-hi)] text-[var(--nx-gold-deep)]"><CalendarDays className="h-5 w-5" /></span>
             <p className="nx-label">Step 3 · 4E Content Calendar</p>
@@ -233,7 +234,8 @@ function Locked() {
         <p className="nx-body max-w-md mx-auto mt-2">Get the Foundation Kit to unlock the 4E Content Calendar and the full 7-step system.</p>
         <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
       </div>
-    </main>
+      <ToolFooter slug="4e-content-calendar" youNowHave="a month of content, with Day 7 already naming your offer." />
+      </main>
   );
 }
 

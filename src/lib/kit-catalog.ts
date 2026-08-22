@@ -68,6 +68,18 @@ export interface KitTool {
   start?: boolean;
   /** Reads from another tool rather than asking again. */
   readsFrom?: string;
+
+  // ── THE PATH ──────────────────────────────────────────────────────────────
+  // A buyer paid for twenty-four tools and could not tell which to open first.
+  // `path` marks the ordered minimum set that delivers the promise: a priced
+  // offer and the words to sell it. Tools without a `path` stay available as a
+  // library — they are just not what a first-time buyer is shown.
+  /** Position in the guided path, 1-based. Absent = library tool. */
+  path?: number;
+  /** Key into KIT_FILES (products.functions.ts) for this tool's workbook. */
+  pdfKey?: string;
+  /** Lesson slug in the seeded course, so a tool can say "watch this first". */
+  lessonSlug?: string;
 }
 
 export const TOOLS: KitTool[] = [
@@ -75,11 +87,11 @@ export const TOOLS: KitTool[] = [
   { slug: "ms-ts-ss", name: "Readiness Score", stage: 1, start: true,
     blurb: "Scores mindset, toolset and skillset — and multiplies them, so one zero shows up instead of hiding in an average.",
     output: "Your weakest axis, named, with thirty days against it.",
-    storage: "synced", key: "nochill-msts-v1" },
+    storage: "synced", key: "nochill-msts-v1", pdfKey: "ms-ts-ss"},
   { slug: "knowledge-audit", name: "The Knowledge Audit", stage: 1,
     blurb: "Finds the product hiding inside what you already know — the thing so obvious to you that it is invisible.",
     output: "Three things people already ask you for, ranked.",
-    storage: "synced", key: "nochill-knowledge-v1" },
+    storage: "synced", key: "nochill-knowledge-v1", path: 1, pdfKey: "knowledge-audit", lessonSlug: "pb-swot-analysis"},
   { slug: "teleprompter", name: "Teleprompter", stage: 1,
     blurb: "Removes the last excuse for not recording. You read instead of remembering, at the speed you actually talk.",
     output: "A recorded video. That is the whole gate.",
@@ -89,11 +101,11 @@ export const TOOLS: KitTool[] = [
   { slug: "offer-blueprint", name: "The Offer Blueprint", stage: 2, start: true,
     blurb: "The spine. Who you help, from what, to what, in how long, for how much — and it rejects a category where a person belongs.",
     output: "One sentence, and a price with a line that defends it.",
-    storage: "synced", key: "nochill-offer-spine-v1" },
+    storage: "synced", key: "nochill-offer-spine-v1", path: 3, lessonSlug: "pb-what-is-a-personal-brand"},
   { slug: "the-leak", name: "The Leak", stage: 2,
     blurb: "Counts what you have already given away for free, priced the way your own industry prices you. Most people have never added it up.",
     output: "A rand figure, and the sentence that stops each leak.",
-    storage: "server", readsFrom: "knowledge-audit" },
+    storage: "server", readsFrom: "knowledge-audit", path: 2},
   { slug: "adjacent-three", name: "The Adjacent Three", stage: 2,
     blurb: "Three people doing something adjacent to you — not to copy, to find the silence none of them fill.",
     output: "The gap that becomes your position.",
@@ -101,13 +113,13 @@ export const TOOLS: KitTool[] = [
   { slug: "niche-clarity-builder", name: "Niche Clarity Builder", stage: 2,
     blurb: "Narrows a broad field to the one person you are actually for.",
     output: "A niche statement you can say out loud.",
-    storage: "server", key: "nochill-niche-v1" },
+    storage: "server", key: "nochill-niche-v1", pdfKey: "niche-clarity"},
 
   // ── Stage 3 · Content engine
   { slug: "4e-content-calendar", name: "The 4E Calendar", stage: 3, start: true,
     blurb: "Thirty dated slots that generate themselves from your offer — Educate, Entertain, Encourage, Earn.",
     output: "A month of content that exists whether or not you feel inspired.",
-    storage: "synced", key: "nochill-4e-v1" },
+    storage: "synced", key: "nochill-4e-v1", path: 5, pdfKey: "4e-content-calendar", lessonSlug: "pb-3es-content-idea-formula"},
   { slug: "hook-bank", name: "The Hook Bank", stage: 3,
     blurb: "120 hooks, each broken down on the five axes that decide whether a thumb stops. Yours to adapt, never to copy.",
     output: "A scored hook, and the reason it works.",
@@ -119,7 +131,7 @@ export const TOOLS: KitTool[] = [
   { slug: "consistency-blueprint", name: "The Consistency Blueprint", stage: 3,
     blurb: "Thirty days, one small action each. Built for someone with a full-time job, not for someone with free afternoons.",
     output: "A streak, and the evidence you can keep one.",
-    storage: "synced", key: "nochill-consistency-v1" },
+    storage: "synced", key: "nochill-consistency-v1", pdfKey: "30-day-tracker"},
 
   // ── Stage 4 · Profile
   { slug: "right-side-diagnostic", name: "The Right Side Diagnostic", stage: 4, start: true,
@@ -143,17 +155,17 @@ export const TOOLS: KitTool[] = [
   { slug: "seeds-pipeline", name: "SEEDS Pipeline", stage: 5,
     blurb: "Maps how a stranger becomes a buyer — and finds the broken link that makes everything upstream of it wasted.",
     output: "The stage where your pipeline actually breaks.",
-    storage: "synced", key: "nochill-seeds-v1" },
+    storage: "synced", key: "nochill-seeds-v1", pdfKey: "seeds-pipeline"},
 
   // ── Stage 6 · An asset that runs
   { slug: "the-send", name: "The Send", stage: 6, start: true,
     blurb: "One name, one channel, one date. The only tool here that produces money, and the only one people avoid.",
     output: "An offer actually sent, and the answer recorded.",
-    storage: "synced", key: "nochill-the-send-v1" },
+    storage: "synced", key: "nochill-the-send-v1", path: 6},
   { slug: "dares-asset-model", name: "DARES Asset Model", stage: 6,
     blurb: "Tests whether what you built is an asset or a job wearing an asset's clothes. Two of the five decide it on their own.",
     output: "A straight answer: asset, or job.",
-    storage: "synced", key: "nochill-dares-v1" },
+    storage: "synced", key: "nochill-dares-v1", pdfKey: "dares-asset-model"},
   { slug: "the-ladder", name: "The Ladder", stage: 6,
     blurb: "Four rungs, checked against each other — including whether your entry offer is quietly cannibalising your main one.",
     output: "A ladder with its structural faults named.",
@@ -161,13 +173,13 @@ export const TOOLS: KitTool[] = [
   { slug: "sale-scripts", name: "The First Sale Scripts", stage: 6,
     blurb: "The four things you will hear back, and what each one actually means underneath.",
     output: "What to say, with your price already in it.",
-    storage: "none", readsFrom: "offer-blueprint" },
+    storage: "none", readsFrom: "offer-blueprint", path: 4},
 
   // ── Stage 7 · Money kept
   { slug: "paids-auditor", name: "PAIDS Auditor", stage: 7, start: true,
     blurb: "Measures how concentrated your income really is, using the same index competition regulators use on markets.",
     output: "How many streams you actually have — usually fewer than you think.",
-    storage: "synced", key: "nochill-paids-v1", readsFrom: "income-tracker" },
+    storage: "synced", key: "nochill-paids-v1", readsFrom: "income-tracker", pdfKey: "paids"},
   { slug: "income-tracker", name: "Income Tracker", stage: 7,
     blurb: "Every rand mapped to a real stream, so you know which one is carrying you instead of guessing.",
     output: "A running record the Auditor reads from.",
@@ -179,7 +191,7 @@ export const TOOLS: KitTool[] = [
   { slug: "first-income-planner", name: "90-Day Planner", stage: 7,
     blurb: "Works backwards from the number you want to the number of conversations it takes to get there.",
     output: "A dated plan with a milestone per month.",
-    storage: "synced", key: "nochill-90day-v1" },
+    storage: "synced", key: "nochill-90day-v1", pdfKey: "90-day-planner"},
 ];
 
 export function toolsForStage(id: StageId): KitTool[] {
@@ -206,4 +218,35 @@ export function startedSlugs(): Set<string> {
     }
   } catch { /* storage unavailable */ }
   return out;
+}
+
+// ── Path helpers ────────────────────────────────────────────────────────────
+
+/** The guided path, in order. */
+export function pathTools(): KitTool[] {
+  return TOOLS.filter((t) => t.path).sort((a, b) => (a.path ?? 0) - (b.path ?? 0));
+}
+
+export const PATH_LENGTH = TOOLS.filter((t) => t.path).length;
+
+/** Everything not on the path. Available, just not the front door. */
+export function libraryTools(): KitTool[] {
+  return TOOLS.filter((t) => !t.path);
+}
+
+export function nextInPath(slug: string): KitTool | null {
+  const t = toolBySlug(slug);
+  if (!t?.path) return null;
+  return pathTools().find((x) => (x.path ?? 0) === (t.path ?? 0) + 1) ?? null;
+}
+
+export function prevInPath(slug: string): KitTool | null {
+  const t = toolBySlug(slug);
+  if (!t?.path) return null;
+  return pathTools().find((x) => (x.path ?? 0) === (t.path ?? 0) - 1) ?? null;
+}
+
+/** Every workbook a kit owner can download, path first then library. */
+export function toolsWithWorkbooks(): KitTool[] {
+  return [...pathTools(), ...libraryTools()].filter((t) => t.pdfKey);
 }
