@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { KIT_FILES, KIT_OWNER_SLUGS } from "@/lib/products.functions";
 import { TOOLS, pathTools, toolsWithWorkbooks } from "@/lib/kit-catalog";
+import { WORKBOOKS, giveAskRatio } from "@/lib/workbook-content";
 
 // ── FOUNDATION KIT DELIVERY REPORT ──────────────────────────────────────────
 //
@@ -105,6 +106,23 @@ export const kitDeliveryReport = createServerFn({ method: "GET" })
             : "A buyer clicking these gets an error. Upload the files or remove the entries from KIT_FILES.",
       });
     }
+
+    // ── 2b. The five path workbooks are GENERATED, so they cannot go missing.
+    // What can go wrong is the content quality gate, so that is what is checked.
+    const failing = WORKBOOKS.map((w) => ({ w, r: giveAskRatio(w) })).filter((x) => !x.r.passes);
+    checks.push({
+      id: "path-workbooks",
+      label: "Path workbooks (generated)",
+      level: failing.length === 0 ? "ok" : "warn",
+      detail:
+        failing.length === 0
+          ? `${WORKBOOKS.length} generated on demand · give-to-ask ${WORKBOOKS.map((w) => giveAskRatio(w).ratio.toFixed(1)).join(", ")}`
+          : `Below the give-to-ask gate: ${failing.map((x) => x.w.title).join(", ")}`,
+      fix:
+        failing.length === 0
+          ? undefined
+          : "A workbook with more asking than giving is a container the buyer fills in themselves. Add a worked example, a real number, or the first move done for them.",
+    });
 
     // ── 3. Workbooks nothing links to ──────────────────────────────────────
     // A file in KIT_FILES that no tool references is paid-for content the buyer

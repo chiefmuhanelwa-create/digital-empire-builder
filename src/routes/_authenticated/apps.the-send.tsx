@@ -6,6 +6,7 @@ import { readOffer, theAsk, isOfferComplete, type Offer, EMPTY_OFFER } from "@/l
 import { Lock, Copy, Check, ArrowRight, Send } from "lucide-react";
 import { toast } from "sonner";
 import { ToolHeader, ToolFooter } from "@/components/tool-frame";
+import { KitDownload } from "@/components/kit-download";
 
 export const Route = createFileRoute("/_authenticated/apps/the-send")({
   head: () => ({ meta: [{ title: "The Send — Contentpreneur Africa" }] }),
@@ -33,7 +34,13 @@ interface SendState {
 }
 
 const EMPTY: SendState = {
-  name: "", channel: "", date: "", sent: false, sentAt: null, outcome: "", attempts: [],
+  name: "",
+  channel: "",
+  date: "",
+  sent: false,
+  sentAt: null,
+  outcome: "",
+  attempts: [],
 };
 
 const CHANNELS = ["WhatsApp", "Email", "A phone call", "In person", "LinkedIn DM"];
@@ -61,7 +68,11 @@ function TheSend() {
   }, []);
   useEffect(() => {
     if (loaded) {
-      try { localStorage.setItem(SEND_KEY, JSON.stringify(s)); } catch { /* ignore */ }
+      try {
+        localStorage.setItem(SEND_KEY, JSON.stringify(s));
+      } catch {
+        /* ignore */
+      }
     }
   }, [s, loaded]);
 
@@ -75,7 +86,9 @@ function TheSend() {
           <div className="nx-card !p-10 text-center">
             <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
             <h2 className="mt-4 text-2xl">The Send is part of the Foundation Kit.</h2>
-            <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
+            <a href="/foundation" className="cta-glow inline-block mt-6">
+              Get the Kit
+            </a>
           </div>
         </main>
       </Shell>
@@ -95,7 +108,10 @@ function TheSend() {
               There is nothing to send until the blueprint is complete. Ten more minutes there and
               this page writes the message for you.
             </p>
-            <Link to="/apps/offer-blueprint" className="cta-glow inline-flex items-center gap-2 mt-6">
+            <Link
+              to="/apps/offer-blueprint"
+              className="cta-glow inline-flex items-center gap-2 mt-6"
+            >
               Finish the Offer Blueprint <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -125,11 +141,13 @@ function TheSend() {
           <div className="nx-card !p-6">
             <p className="nx-label">What came back?</p>
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
-              {([
-                ["paid", "They paid"],
-                ["talking", "Still talking"],
-                ["no", "No, or no answer"],
-              ] as const).map(([k, label]) => (
+              {(
+                [
+                  ["paid", "They paid"],
+                  ["talking", "Still talking"],
+                  ["no", "No, or no answer"],
+                ] as const
+              ).map(([k, label]) => (
                 <button
                   key={k}
                   onClick={() => setS((p) => ({ ...p, outcome: k }))}
@@ -155,8 +173,12 @@ function TheSend() {
                 <p className="text-sm text-[var(--text-body)] mt-2">
                   Send the invoice today, not tomorrow. Then do the same thing for the next person.
                 </p>
-                <Link to="/accelerator" className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-[var(--nx-gold-text)] hover:underline">
-                  When repeating it is the problem, that is the Accelerator <ArrowRight className="size-3.5" />
+                <Link
+                  to="/accelerator"
+                  className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-[var(--nx-gold-text)] hover:underline"
+                >
+                  When repeating it is the problem, that is the Accelerator{" "}
+                  <ArrowRight className="size-3.5" />
                 </Link>
               </div>
             )}
@@ -165,10 +187,13 @@ function TheSend() {
               <div className="mt-5 rounded-xl border-l-4 border-[var(--nx-gold)] bg-[var(--bg-surface)] px-4 py-4">
                 <p className="font-display text-lg">Then the next words matter.</p>
                 <p className="text-sm text-[var(--text-body)] mt-1">
-                  You will want to offer a discount before they even ask. Don&apos;t. A discount given
-                  to be kind becomes the price permanently.
+                  You will want to offer a discount before they even ask. Don&apos;t. A discount
+                  given to be kind becomes the price permanently.
                 </p>
-                <Link to="/apps/seeds-pipeline" className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-[var(--nx-gold-text)] hover:underline">
+                <Link
+                  to="/apps/seeds-pipeline"
+                  className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-[var(--nx-gold-text)] hover:underline"
+                >
                   Work the conversation <ArrowRight className="size-3.5" />
                 </Link>
               </div>
@@ -182,11 +207,17 @@ function TheSend() {
                   the timing, and one data point cannot separate those. Send it to the next name.
                 </p>
                 <button
-                  onClick={() => setS((p) => ({
-                    ...p,
-                    attempts: [...p.attempts, p.name].filter(Boolean),
-                    name: "", channel: "", sent: false, sentAt: null, outcome: "",
-                  }))}
+                  onClick={() =>
+                    setS((p) => ({
+                      ...p,
+                      attempts: [...p.attempts, p.name].filter(Boolean),
+                      name: "",
+                      channel: "",
+                      sent: false,
+                      sentAt: null,
+                      outcome: "",
+                    }))
+                  }
                   className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[var(--obsidian)] text-white px-4 py-2 text-sm font-semibold hover:bg-[#2A2A2A]"
                 >
                   Next name <ArrowRight className="size-3.5" />
@@ -240,7 +271,11 @@ function TheSend() {
                 className="mt-1 w-full rounded-lg border border-[var(--border-mid)] bg-white p-3 focus:border-[var(--nx-gold)] focus:outline-none"
               >
                 <option value="">Choose…</option>
-                {CHANNELS.map((c) => <option key={c} value={c}>{c}</option>)}
+                {CHANNELS.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -251,11 +286,17 @@ function TheSend() {
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <p className="nx-label">The message — already written, in your words</p>
-                <p className="text-[15px] mt-2 whitespace-pre-line text-[var(--text-body)]">{ask}</p>
+                <p className="text-[15px] mt-2 whitespace-pre-line text-[var(--text-body)]">
+                  {ask}
+                </p>
               </div>
               <button
-                onClick={() => navigator.clipboard.writeText(ask).then(
-                  () => toast.success("Copied"), () => toast.error("Could not copy"))}
+                onClick={() =>
+                  navigator.clipboard.writeText(ask).then(
+                    () => toast.success("Copied"),
+                    () => toast.error("Could not copy"),
+                  )
+                }
                 className="shrink-0 text-[var(--text-dim)] hover:text-foreground"
               >
                 <Copy className="size-4" />
@@ -281,17 +322,30 @@ function TheSend() {
           )}
         </div>
         <div className="mt-8 rounded-xl p-5" style={{ border: "1px solid #E2E5EB" }}>
-          <p className="text-[16px] font-bold" style={{ color: "#111318" }}>If they push back</p>
+          <p className="text-[16px] font-bold" style={{ color: "#111318" }}>
+            If they push back
+          </p>
           <p className="mt-1.5 text-[16px] leading-relaxed" style={{ color: "#3C424D" }}>
             You will hear one of four things. They are written out, with your own price already in
             them — read them the moment a reply lands, not before.
           </p>
-          <a href="/apps/sale-scripts" className="mt-3 inline-flex items-center gap-1.5 text-[15px] font-semibold"
-             style={{ color: "#1A4FD6", textDecoration: "none" }}>
+          <a
+            href="/apps/sale-scripts"
+            className="mt-3 inline-flex items-center gap-1.5 text-[15px] font-semibold"
+            style={{ color: "#1A4FD6", textDecoration: "none" }}
+          >
             Open the Sale Scripts →
           </a>
         </div>
-        <ToolFooter slug="the-send" youNowHave="one offer actually sent to one named person — and their answer, recorded." />
+        {/* The paper version. Generated from the same content the screen
+            renders, so the two can never disagree. */}
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <KitDownload generatedSlug="the-send" label="Print this step as a workbook" compact />
+        </div>
+        <ToolFooter
+          slug="the-send"
+          youNowHave="one offer actually sent to one named person — and their answer, recorded."
+        />
       </main>
     </Shell>
   );
@@ -301,7 +355,12 @@ function Hero() {
   return (
     <section className="nx-hero-orb border-b border-border">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-10 pb-7">
-        <ToolHeader slug="the-send" why={"Every step so far produced a document. This one produces money, or it produces an answer. A list lets you hide; one name does not."} />
+        <ToolHeader
+          slug="the-send"
+          why={
+            "Every step so far produced a document. This one produces money, or it produces an answer. A list lets you hide; one name does not."
+          }
+        />
         <p className="nx-label mt-4">Tool 10 · The only one that produces money</p>
         <h1 className="mt-2">The Send</h1>
         <p className="nx-body max-w-xl mt-3">

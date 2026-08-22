@@ -11,6 +11,7 @@ import {
   TINT,
 } from "@/components/workspace-shell";
 import { ToolHeader, ToolFooter } from "@/components/tool-frame";
+import { KitDownload } from "@/components/kit-download";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { readOffer, writeOffer, EMPTY_OFFER, type Offer } from "@/lib/offer-spine";
 import {
@@ -374,6 +375,11 @@ function MethodNamer() {
           </p>
         )}
 
+        {/* The paper version. Generated from the same content the screen
+            renders, so the two can never disagree. */}
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <KitDownload generatedSlug="method-namer" label="Print this step as a workbook" compact />
+        </div>
         <ToolFooter
           slug="method-namer"
           youNowHave="a named method instead of a favour — and every step after this inherits the name."

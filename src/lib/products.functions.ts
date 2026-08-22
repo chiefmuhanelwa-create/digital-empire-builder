@@ -520,3 +520,58 @@ export const paidUnitsForSlug = createServerFn({ method: "POST" })
 
     return { units: (rows ?? []).reduce((n, r) => n + (r.quantity ?? 1), 0) };
   });
+
+// ── GENERATED WORKBOOKS ─────────────────────────────────────────────────────
+//
+// The five path workbooks are rendered on demand from workbook-content.ts
+// rather than fetched from the bucket. Three reasons, in order of how much
+// trouble each one has already caused here:
+//
+//   1. A file in a bucket drifts from the tool the moment either changes, and
+//      nobody finds out until a buyer clicks. The kit shipped ten workbooks for
+//      a product that had since been rebuilt twice.
+//   2. "Does the file exist?" stops being a question anybody can fail to answer.
+//   3. Nothing to upload, so a new step ships complete.
+//
+// Same access rule as getKitFileUrl — kit, bundle or Accelerator, or admin.
+export const getWorkbookPdf = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ slug: z.string().min(1).max(60) }).parse(input))
+  .handler(async ({ data, context }) => {
+    const { userId } = context;
+
+    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+    let allowed = !!isAdmin;
+    if (!allowed) {
+      const { data: kits } = await supabaseAdmin
+        .from("products")
+        .select("id")
+        .in("slug", KIT_OWNER_SLUGS);
+      const ids = (kits ?? []).map((k) => k.id);
+      if (ids.length) {
+        const { data: grant } = await supabaseAdmin
+          .from("product_grants")
+          .select("id")
+          .eq("user_id", userId)
+          .in("product_id", ids)
+          .is("revoked_at", null)
+          .maybeSingle();
+        allowed = !!grant;
+      }
+    }
+    if (!allowed) throw new Error("You don't have access to the Foundation Kit.");
+
+    const { generateWorkbookPDF, WORKBOOK_FILES } = await import("@/lib/workbook-pdf");
+    const bytes = await generateWorkbookPDF(data.slug);
+
+    // base64 rather than a signed URL: there is no stored object to sign.
+    let bin = "";
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      bin += String.fromCharCode(...bytes.subarray(i, i + chunk));
+    }
+    return { base64: btoa(bin), filename: WORKBOOK_FILES[data.slug] ?? `${data.slug}.pdf` };
+  });

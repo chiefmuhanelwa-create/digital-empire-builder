@@ -5,13 +5,23 @@ import { SiteHeader, SiteFooter } from "@/components/member-shell";
 import { useKitAccess } from "@/lib/use-kit-access";
 import { getLeakAudit, saveLeakAudit } from "@/lib/leak.functions";
 import {
-  KINDS, EMPTY_BASIS, calculate, hourlyRate, costRate, rands, readOut,
-  PRODUCTIVE_HOURS, CHARGE_OUT_MULTIPLIER,
-  type Basis, type LeakItem, type LeakKind,
+  KINDS,
+  EMPTY_BASIS,
+  calculate,
+  hourlyRate,
+  costRate,
+  rands,
+  readOut,
+  PRODUCTIVE_HOURS,
+  CHARGE_OUT_MULTIPLIER,
+  type Basis,
+  type LeakItem,
+  type LeakKind,
 } from "@/lib/leak-engine";
 import { Lock, ArrowRight, Plus, Trash2, Copy, Printer, Check, Cloud } from "lucide-react";
 import { toast } from "sonner";
 import { ToolHeader, ToolFooter } from "@/components/tool-frame";
+import { KitDownload } from "@/components/kit-download";
 
 export const Route = createFileRoute("/_authenticated/apps/the-leak")({
   head: () => ({ meta: [{ title: "The Leak — Contentpreneur Africa" }] }),
@@ -20,7 +30,10 @@ export const Route = createFileRoute("/_authenticated/apps/the-leak")({
 
 const newItem = (kind: LeakKind): LeakItem => ({
   id: Math.random().toString(36).slice(2, 9),
-  kind, label: "", timesPerYear: 0, minutesEach: 0,
+  kind,
+  label: "",
+  timesPerYear: 0,
+  minutesEach: 0,
 });
 
 function TheLeak() {
@@ -45,7 +58,9 @@ function TheLeak() {
       const ka = JSON.parse(localStorage.getItem("nochill-knowledge-v1") || "null");
       const v = (ka?.fields?.ask ?? "").toString().trim();
       if (v) setAsked(v);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   // Load from the server, not from this browser.
@@ -56,19 +71,24 @@ function TheLeak() {
         if (res?.basis && typeof res.basis === "object") setBasis({ ...EMPTY_BASIS, ...res.basis });
         if (Array.isArray(res?.items)) setItems(res.items);
       })
-      .catch(() => { /* first run, or the migration has not been applied yet */ })
+      .catch(() => {
+        /* first run, or the migration has not been applied yet */
+      })
       .finally(() => setLoaded(true));
   }, [getFn]);
 
-  const persist = useCallback(async (b: Basis, it: LeakItem[]) => {
-    setSaving("saving");
-    try {
-      await saveFn({ data: { basis: b, items: it } });
-      setSaving("saved");
-    } catch {
-      setSaving("idle"); // silent: a failed autosave must not interrupt the work
-    }
-  }, [saveFn]);
+  const persist = useCallback(
+    async (b: Basis, it: LeakItem[]) => {
+      setSaving("saving");
+      try {
+        await saveFn({ data: { basis: b, items: it } });
+        setSaving("saved");
+      } catch {
+        setSaving("idle"); // silent: a failed autosave must not interrupt the work
+      }
+    },
+    [saveFn],
+  );
 
   // Debounced autosave. Nobody presses save on a worksheet.
   useEffect(() => {
@@ -77,7 +97,11 @@ function TheLeak() {
     return () => clearTimeout(t);
   }, [basis, items, loaded, persist]);
 
-  const mutate = (fn: () => void) => { dirty.current = true; setSaving("idle"); fn(); };
+  const mutate = (fn: () => void) => {
+    dirty.current = true;
+    setSaving("idle");
+    fn();
+  };
 
   const result = useMemo(() => calculate(basis, items), [basis, items]);
   const rate = hourlyRate(basis);
@@ -85,7 +109,10 @@ function TheLeak() {
   const out = useMemo(() => readOut(result, basis), [result, basis]);
 
   const copyScript = (t: string) =>
-    navigator.clipboard.writeText(t).then(() => toast.success("Copied"), () => toast.error("Could not copy"));
+    navigator.clipboard.writeText(t).then(
+      () => toast.success("Copied"),
+      () => toast.error("Could not copy"),
+    );
 
   if (!access) {
     return (
@@ -94,7 +121,9 @@ function TheLeak() {
           <div className="nx-card !p-10 text-center">
             <Lock className="size-9 text-[var(--text-subtle)] mx-auto" />
             <h2 className="mt-4 text-2xl">The Leak is part of the Foundation Kit.</h2>
-            <a href="/foundation" className="cta-glow inline-block mt-6">Get the Kit</a>
+            <a href="/foundation" className="cta-glow inline-block mt-6">
+              Get the Kit
+            </a>
           </div>
         </main>
       </Shell>
@@ -106,12 +135,19 @@ function TheLeak() {
       {/* ── hero: state the problem before asking for anything */}
       <section className="border-b border-border bg-[var(--obsidian)]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-12 pb-11">
-          <ToolHeader slug="the-leak" why={"You are not underpaid. You are unbilled. This counts what you have already given away, at the rate your own industry would charge for you — because you cannot price something until you see what it has been costing you."} />
+          <ToolHeader
+            slug="the-leak"
+            why={
+              "You are not underpaid. You are unbilled. This counts what you have already given away, at the rate your own industry would charge for you — because you cannot price something until you see what it has been costing you."
+            }
+          />
           <p className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--nx-gold-bright)] mt-5">
             Stage 2 · The audit nobody runs
           </p>
           <h1 className="mt-3 text-white text-[2rem] sm:text-[2.9rem] font-black leading-[1.04] tracking-tight">
-            You are not underpaid.<br />You are unbilled.
+            You are not underpaid.
+            <br />
+            You are unbilled.
           </h1>
           <p className="text-[#C8C2B4] text-[1.02rem] mt-4 max-w-2xl leading-relaxed">
             Every week you give away work that has a price — the brain-pick coffee, the document you
@@ -133,10 +169,16 @@ function TheLeak() {
           </div>
 
           <div className="flex gap-2 mt-4">
-            <Tab on={basis.mode === "package"} onClick={() => mutate(() => setBasis({ ...basis, mode: "package" }))}>
+            <Tab
+              on={basis.mode === "package"}
+              onClick={() => mutate(() => setBasis({ ...basis, mode: "package" }))}
+            >
               Work it out for me
             </Tab>
-            <Tab on={basis.mode === "known"} onClick={() => mutate(() => setBasis({ ...basis, mode: "known" }))}>
+            <Tab
+              on={basis.mode === "known"}
+              onClick={() => mutate(() => setBasis({ ...basis, mode: "known" }))}
+            >
               I already know my rate
             </Tab>
           </div>
@@ -144,14 +186,26 @@ function TheLeak() {
           {basis.mode === "package" ? (
             <>
               <label className="block mt-4">
-                <span className="text-sm font-bold text-[var(--text-body)]">Your total annual package (R)</span>
+                <span className="text-sm font-bold text-[var(--text-body)]">
+                  Your total annual package (R)
+                </span>
                 <span className="block text-xs text-[var(--text-subtle)]">
                   Salary, bonus, benefits — everything. This never leaves your account.
                 </span>
                 <input
-                  type="number" min={0} inputMode="numeric"
+                  type="number"
+                  min={0}
+                  inputMode="numeric"
                   value={basis.annualPackage ?? ""}
-                  onChange={(e) => mutate(() => setBasis({ ...basis, annualPackage: e.target.value === "" ? null : Math.max(0, Number(e.target.value)) }))}
+                  onChange={(e) =>
+                    mutate(() =>
+                      setBasis({
+                        ...basis,
+                        annualPackage:
+                          e.target.value === "" ? null : Math.max(0, Number(e.target.value)),
+                      }),
+                    )
+                  }
                   className="mt-2 w-full sm:w-64 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2.5 text-lg font-bold tabular-nums outline-none focus:border-[var(--nx-gold)]"
                 />
               </label>
@@ -176,12 +230,26 @@ function TheLeak() {
             </>
           ) : (
             <label className="block mt-4">
-              <span className="text-sm font-bold text-[var(--text-body)]">Your hourly rate (R)</span>
-              <span className="block text-xs text-[var(--text-subtle)]">What you charge, or would charge, for an hour of advisory work.</span>
+              <span className="text-sm font-bold text-[var(--text-body)]">
+                Your hourly rate (R)
+              </span>
+              <span className="block text-xs text-[var(--text-subtle)]">
+                What you charge, or would charge, for an hour of advisory work.
+              </span>
               <input
-                type="number" min={0} inputMode="numeric"
+                type="number"
+                min={0}
+                inputMode="numeric"
                 value={basis.knownHourly ?? ""}
-                onChange={(e) => mutate(() => setBasis({ ...basis, knownHourly: e.target.value === "" ? null : Math.max(0, Number(e.target.value)) }))}
+                onChange={(e) =>
+                  mutate(() =>
+                    setBasis({
+                      ...basis,
+                      knownHourly:
+                        e.target.value === "" ? null : Math.max(0, Number(e.target.value)),
+                    }),
+                  )
+                }
                 className="mt-2 w-full sm:w-64 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2.5 text-lg font-bold tabular-nums outline-none focus:border-[var(--nx-gold)]"
               />
             </label>
@@ -205,7 +273,9 @@ function TheLeak() {
                 demand is already proven.
               </p>
               <button
-                onClick={() => mutate(() => setItems([...items, { ...newItem("brain-pick"), label: asked }]))}
+                onClick={() =>
+                  mutate(() => setItems([...items, { ...newItem("brain-pick"), label: asked }]))
+                }
                 className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[var(--obsidian)] px-4 py-2 text-xs font-bold text-white hover:opacity-90 transition-opacity"
               >
                 <Plus className="size-3.5" /> Add it as a leak
@@ -246,18 +316,34 @@ function TheLeak() {
                     <Num
                       label="Times a year"
                       value={it.timesPerYear}
-                      onChange={(v) => mutate(() => setItems(items.map((x, n) => (n === i ? { ...x, timesPerYear: v } : x))))}
+                      onChange={(v) =>
+                        mutate(() =>
+                          setItems(items.map((x, n) => (n === i ? { ...x, timesPerYear: v } : x))),
+                        )
+                      }
                     />
                     <Num
                       label="Minutes each"
                       value={it.minutesEach}
-                      onChange={(v) => mutate(() => setItems(items.map((x, n) => (n === i ? { ...x, minutesEach: v } : x))))}
+                      onChange={(v) =>
+                        mutate(() =>
+                          setItems(items.map((x, n) => (n === i ? { ...x, minutesEach: v } : x))),
+                        )
+                      }
                     />
                     <label className="block col-span-2 sm:col-span-1">
-                      <span className="block text-[11px] uppercase tracking-wider text-[var(--text-subtle)]">Note (optional)</span>
+                      <span className="block text-[11px] uppercase tracking-wider text-[var(--text-subtle)]">
+                        Note (optional)
+                      </span>
                       <input
                         value={it.label}
-                        onChange={(e) => mutate(() => setItems(items.map((x, n) => (n === i ? { ...x, label: e.target.value } : x))))}
+                        onChange={(e) =>
+                          mutate(() =>
+                            setItems(
+                              items.map((x, n) => (n === i ? { ...x, label: e.target.value } : x)),
+                            ),
+                          )
+                        }
                         placeholder="who, or what kind"
                         className="mt-1 w-full rounded-md border border-[var(--border)] bg-transparent px-2 py-1.5 text-sm outline-none focus:border-[var(--nx-gold)]"
                       />
@@ -285,7 +371,9 @@ function TheLeak() {
             <p className="text-white font-black text-[2.6rem] sm:text-[4rem] leading-none tracking-tight mt-3 tabular-nums">
               {out.headline}
             </p>
-            <p className="text-[#C8C2B4] text-[1.02rem] mt-4 max-w-2xl leading-relaxed">{out.body}</p>
+            <p className="text-[#C8C2B4] text-[1.02rem] mt-4 max-w-2xl leading-relaxed">
+              {out.body}
+            </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 mt-7 pt-6 border-t border-white/10">
               <Fig n={`${Math.round(result.totalHours)}`} l="hours a year" dark />
@@ -313,23 +401,32 @@ function TheLeak() {
 
             <div className="mt-5 space-y-4">
               {result.items.slice(0, 5).map((r, i) => (
-                <div key={r.item.id} className="rounded-xl border border-[var(--border)] overflow-hidden">
+                <div
+                  key={r.item.id}
+                  className="rounded-xl border border-[var(--border)] overflow-hidden"
+                >
                   <div className="flex items-baseline justify-between gap-3 flex-wrap bg-[var(--bg-surface)] px-4 py-3">
                     <span className="text-sm font-bold text-[var(--text-body)]">
-                      <span className="font-mono text-[var(--nx-gold-text)] mr-2">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="font-mono text-[var(--nx-gold-text)] mr-2">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                       {r.spec.label}
                     </span>
                     <span className="font-mono text-sm tabular-nums text-[var(--text-body)]">
-                      {rands(r.value)}<span className="text-[var(--text-subtle)]"> / year</span>
+                      {rands(r.value)}
+                      <span className="text-[var(--text-subtle)]"> / year</span>
                     </span>
                   </div>
                   <div className="p-4">
                     <p className="text-xs text-[var(--text-subtle)]">
-                      {Math.round(r.trueHours)} hours · a firm would bill this as {r.spec.billedAs.toLowerCase()}
+                      {Math.round(r.trueHours)} hours · a firm would bill this as{" "}
+                      {r.spec.billedAs.toLowerCase()}
                     </p>
                     <div className="mt-3 rounded-lg border-l-[3px] border-[var(--nx-gold)] bg-[var(--bg-surface)] px-4 py-3">
                       <span className="nx-label">Say this</span>
-                      <p className="text-[15px] text-[var(--text-body)] mt-1 leading-relaxed">{r.spec.script}</p>
+                      <p className="text-[15px] text-[var(--text-body)] mt-1 leading-relaxed">
+                        {r.spec.script}
+                      </p>
                       <button
                         onClick={() => copyScript(r.spec.script)}
                         className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--nx-gold-text)] hover:underline"
@@ -366,24 +463,52 @@ function TheLeak() {
             Build the offer <ArrowRight className="size-4" />
           </Link>
         </div>
-        <ToolFooter slug="the-leak" youNowHave="a rand figure for what you gave away last year, and the sentence that stops each leak without burning the relationship." />
+        {/* The paper version. Generated from the same content the screen
+            renders, so the two can never disagree. */}
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <KitDownload generatedSlug="the-leak" label="Print this step as a workbook" compact />
+        </div>
+        <ToolFooter
+          slug="the-leak"
+          youNowHave="a rand figure for what you gave away last year, and the sentence that stops each leak without burning the relationship."
+        />
       </main>
     </Shell>
   );
 }
 
 function SaveState({ state }: { state: "idle" | "saving" | "saved" }) {
-  if (state === "saving") return <span className="inline-flex items-center gap-1.5 text-xs text-[var(--text-subtle)]"><Cloud className="size-3.5" /> Saving</span>;
-  if (state === "saved") return <span className="inline-flex items-center gap-1.5 text-xs text-[#2A6B4C]"><Check className="size-3.5" /> Saved to your account</span>;
+  if (state === "saving")
+    return (
+      <span className="inline-flex items-center gap-1.5 text-xs text-[var(--text-subtle)]">
+        <Cloud className="size-3.5" /> Saving
+      </span>
+    );
+  if (state === "saved")
+    return (
+      <span className="inline-flex items-center gap-1.5 text-xs text-[#2A6B4C]">
+        <Check className="size-3.5" /> Saved to your account
+      </span>
+    );
   return null;
 }
 
-function Tab({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
+function Tab({
+  on,
+  onClick,
+  children,
+}: {
+  on: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <button
       onClick={onClick}
       className={`rounded-full px-4 py-2 text-sm font-bold border transition-colors ${
-        on ? "bg-[var(--obsidian)] text-white border-transparent" : "border-[var(--border)] text-[var(--text-dim)] hover:text-foreground"
+        on
+          ? "bg-[var(--obsidian)] text-white border-transparent"
+          : "border-[var(--border)] text-[var(--text-dim)] hover:text-foreground"
       }`}
     >
       {children}
@@ -394,20 +519,38 @@ function Tab({ on, onClick, children }: { on: boolean; onClick: () => void; chil
 function Fig({ n, l, gold, dark }: { n: string; l: string; gold?: boolean; dark?: boolean }) {
   return (
     <div>
-      <span className={`block font-display text-2xl tabular-nums ${gold ? "text-[var(--nx-gold-text)]" : dark ? "text-white" : "text-[var(--text-body)]"}`}>
+      <span
+        className={`block font-display text-2xl tabular-nums ${gold ? "text-[var(--nx-gold-text)]" : dark ? "text-white" : "text-[var(--text-body)]"}`}
+      >
         {n}
       </span>
-      <span className={`block text-xs leading-tight mt-0.5 ${dark ? "text-[#8F887A]" : "text-[var(--text-subtle)]"}`}>{l}</span>
+      <span
+        className={`block text-xs leading-tight mt-0.5 ${dark ? "text-[#8F887A]" : "text-[var(--text-subtle)]"}`}
+      >
+        {l}
+      </span>
     </div>
   );
 }
 
-function Num({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) {
+function Num({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+}) {
   return (
     <label className="block">
-      <span className="block text-[11px] uppercase tracking-wider text-[var(--text-subtle)]">{label}</span>
+      <span className="block text-[11px] uppercase tracking-wider text-[var(--text-subtle)]">
+        {label}
+      </span>
       <input
-        type="number" min={0} inputMode="numeric"
+        type="number"
+        min={0}
+        inputMode="numeric"
         value={value || ""}
         onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
         className="mt-1 w-full rounded-md border border-[var(--border)] bg-transparent px-2 py-1.5 text-sm tabular-nums outline-none focus:border-[var(--nx-gold)]"

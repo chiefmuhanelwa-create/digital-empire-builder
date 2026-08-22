@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { getKitFileUrl } from "@/lib/products.functions";
+import { getKitFileUrl, getWorkbookPdf } from "@/lib/products.functions";
 import { Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,25 +19,45 @@ import { toast } from "sonner";
 
 export function KitDownload({
   pdfKey,
+  /** Set for the five path steps: the PDF is generated, not fetched. */
+  generatedSlug,
   label = "Download the workbook",
   compact,
 }: {
-  pdfKey: string;
+  pdfKey?: string;
+  generatedSlug?: string;
   label?: string;
   compact?: boolean;
 }) {
   const getUrl = useServerFn(getKitFileUrl);
+  const getPdf = useServerFn(getWorkbookPdf);
   const [busy, setBusy] = useState(false);
 
   const go = async () => {
     setBusy(true);
     try {
-      const res = await getUrl({ data: { key: pdfKey } });
+      if (generatedSlug) {
+        // Rendered on demand — nothing in a bucket to be missing.
+        const res = await getPdf({ data: { slug: generatedSlug } });
+        const bin = atob(res.base64);
+        const buf = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+        const url = URL.createObjectURL(new Blob([buf], { type: "application/pdf" }));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = res.filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        return;
+      }
+      const res = await getUrl({ data: { key: pdfKey! } });
       const url = (res as { url?: string })?.url;
       if (!url) throw new Error("no-url");
       window.open(url, "_blank", "noopener,noreferrer");
     } catch {
-      toast.error("That workbook isn't available yet — email info@nochill.co.za and we'll send it to you directly.");
+      toast.error(
+        "That workbook isn't available yet — email info@nochill.co.za and we'll send it to you directly.",
+      );
     } finally {
       setBusy(false);
     }
