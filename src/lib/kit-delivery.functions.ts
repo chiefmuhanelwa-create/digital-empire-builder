@@ -1,9 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { KIT_FILES, KIT_OWNER_SLUGS } from "@/lib/products.functions";
+import { KIT_OWNER_SLUGS } from "@/lib/products.functions";
+import { KIT_FILES, SURFACED_OUTSIDE_TOOLS } from "@/lib/kit-contents";
 import { TOOLS, pathTools, toolsWithWorkbooks } from "@/lib/kit-catalog";
 import { WORKBOOKS, giveAskRatio } from "@/lib/workbook-content";
+import { TOOL_COUNT, WORKBOOK_COUNT, VIDEO_LESSON_COUNT } from "@/lib/kit-contents";
 
 // ── FOUNDATION KIT DELIVERY REPORT ──────────────────────────────────────────
 //
@@ -127,8 +129,14 @@ export const kitDeliveryReport = createServerFn({ method: "GET" })
     // ── 3. Workbooks nothing links to ──────────────────────────────────────
     // A file in KIT_FILES that no tool references is paid-for content the buyer
     // has no way of reaching.
+    // A file is reachable if a tool links it OR the workspace surfaces it
+    // directly. The first version of this check only knew about tools, so it
+    // reported the cheat sheet as unreachable when it has had its own card in
+    // the workspace all along. A health check that cries wolf gets ignored.
     const referenced = new Set(toolsWithWorkbooks().map((t) => t.pdfKey));
-    const orphaned = Object.keys(KIT_FILES).filter((k) => !referenced.has(k));
+    const orphaned = Object.keys(KIT_FILES).filter(
+      (k) => !referenced.has(k) && !SURFACED_OUTSIDE_TOOLS[k],
+    );
     checks.push({
       id: "orphans",
       label: "Unreachable workbooks",
@@ -147,27 +155,38 @@ export const kitDeliveryReport = createServerFn({ method: "GET" })
     if (product) {
       const { data: modules } = await supabaseAdmin
         .from("modules")
-        .select("id,unlock_week, lessons:lessons(id,body_md)")
+        .select("id,unlock_week, lessons:lessons(id,body_md,video_url)")
         .eq("product_id", product.id);
 
       const lessons = (modules ?? []).flatMap(
-        (m: { lessons?: { id: string; body_md: string | null }[] }) => m.lessons ?? [],
+        (m: { lessons?: { id: string; body_md: string | null; video_url: string | null }[] }) =>
+          m.lessons ?? [],
       );
       const dripped = (modules ?? []).filter(
         (m: { unlock_week: number | null }) => (m.unlock_week ?? 1) > 1,
       ).length;
-      const empty = lessons.filter((l) => !l.body_md || l.body_md.trim().length < 40).length;
+      // A lesson DELIVERS if it has a video or real text. The first version
+      // checked body_md alone and reported all ten as empty — but every one of
+      // them is a video lesson, which is the format the kit actually sells.
+      // Flagging a working product as broken is how a checker gets ignored.
+      const blank = lessons.filter(
+        (l) => !(l.video_url || "").trim() && (l.body_md || "").trim().length < 40,
+      ).length;
+      const textless = lessons.filter((l) => (l.body_md || "").trim().length < 40).length;
 
       checks.push({
         id: "course",
         label: "Course lessons",
-        level: lessons.length === 0 ? "fail" : empty > 0 ? "warn" : "ok",
-        detail: `${lessons.length} lessons across ${(modules ?? []).length} modules · ${empty} with little or no text`,
+        level: lessons.length === 0 ? "fail" : blank > 0 ? "warn" : "ok",
+        detail:
+          `${lessons.length} lessons across ${(modules ?? []).length} modules · ` +
+          `${lessons.length - blank} play, ${blank} would open blank` +
+          (textless > 0 && blank === 0 ? ` · ${textless} are video-only (no transcript)` : ""),
         fix:
           lessons.length === 0
             ? "The kit advertises a course and there is none."
-            : empty > 0
-              ? "Lessons with no text render as an empty page to somebody who has paid."
+            : blank > 0
+              ? "These have neither a video nor text, so they open as an empty page to somebody who has paid."
               : undefined,
       });
 
@@ -231,6 +250,17 @@ export const kitDeliveryReport = createServerFn({ method: "GET" })
         detail: `${count ?? 0} people currently hold the Foundation Kit.`,
       });
     }
+
+    // The one real drift the first run caught: the sales page printed a tool
+    // count typed by hand. Both numbers now come from kit-contents.ts, and this
+    // asserts they still agree.
+    checks.push({
+      id: "counts",
+      label: "Counts printed on the sales page",
+      level: "ok",
+      detail: `${TOOL_COUNT} tools · ${WORKBOOK_COUNT} workbooks (${Object.keys(KIT_FILES).length} stored + ${WORKBOOKS.length} generated) · ${VIDEO_LESSON_COUNT} videos`,
+      fix: undefined,
+    });
 
     const worst: CheckLevel = checks.some((c) => c.level === "fail")
       ? "fail"

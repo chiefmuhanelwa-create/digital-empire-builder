@@ -21,6 +21,7 @@ import {
 import { paidUnitsForSlug } from "@/lib/products.functions";
 import { FOUNDATION_FOUNDING, foundingState, foundingLine, ONGOING_COST } from "@/lib/launch-offer";
 import { Check, Clock } from "lucide-react";
+import { TOOL_COUNT, WORKBOOK_COUNT, VIDEO_LESSON_COUNT } from "@/lib/kit-contents";
 
 // THE FOUNDATION KIT FUNNEL — contentpreneur.africa/foundation
 //
@@ -492,8 +493,12 @@ function FoundationFunnel() {
                   ],
                   ["Your one-pager", "Name, method, price, proof — one document, sendable today."],
                   [
-                    "9 workbooks and a 10-video course",
+                    `${WORKBOOK_COUNT} workbooks and a ${VIDEO_LESSON_COUNT}-video course`,
                     "The printed version of all of it. Everything opens on day one.",
+                  ],
+                  [
+                    `All ${TOOL_COUNT} tools`,
+                    "Five are the path. The rest are for after somebody has paid you.",
                   ],
                   ["Lifetime access, all future updates", "Including everything added later."],
                 ].map(([t, b]) => (

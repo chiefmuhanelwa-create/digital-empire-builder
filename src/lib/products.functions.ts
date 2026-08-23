@@ -4,6 +4,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
 import { groupForTool, assertGroupRouting } from "@/lib/mailerlite-groups";
+import { KIT_FILES } from "@/lib/kit-contents";
 import { utmRawDataPatch } from "@/lib/utm";
 
 const GARDEN = z.enum(["deshe", "esev", "etz_pri", "devarim"]);
@@ -408,18 +409,9 @@ export const getMyDownloadUrl = createServerFn({ method: "POST" })
 // ── Foundation Kit per-framework downloads ───────────────────────────────────
 // Whitelist of kit deliverable files in product-files (key → filename). Add an
 // entry as each framework's fillable PDF is uploaded.
-export const KIT_FILES: Record<string, string> = {
-  "niche-clarity": "niche-clarity-workbook.pdf",
-  paids: "paids-framework-workbook.pdf",
-  "ms-ts-ss": "ms-ts-ss-workbook.pdf",
-  "knowledge-audit": "knowledge-audit-workbook.pdf",
-  "4e-content-calendar": "4e-content-calendar-workbook.pdf",
-  "seeds-pipeline": "seeds-pipeline-workbook.pdf",
-  "dares-asset-model": "dares-asset-model-workbook.pdf",
-  "90-day-planner": "90-day-first-income-planner.pdf",
-  "cheat-sheet": "called-expert-cheat-sheet.pdf",
-  "30-day-tracker": "30-day-accountability-tracker.pdf",
-};
+// KIT_FILES now lives in kit-contents.ts so a public sales page can read the
+// counts without pulling server code into the browser bundle.
+export { KIT_FILES };
 // Who may download a kit workbook. THE ACCELERATOR WAS MISSING, so a $997 buyer
 // got "You don't have access to the Foundation Kit" on every single PDF — the
 // same failure class already fixed in use-kit-access.ts for the tool routes.

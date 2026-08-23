@@ -11,6 +11,7 @@ import { useCountry, shouldUseStripe } from "@/lib/currency";
 import { FunnelFooter, Orbs } from "@/components/funnel";
 import { toast } from "sonner";
 import { ArrowLeft, Check, Lock, ShieldCheck } from "lucide-react";
+import { TOOL_COUNT, WORKBOOK_COUNT, VIDEO_LESSON_COUNT } from "@/lib/kit-contents";
 
 // THE CHECKOUT, ON ITS OWN PAGE.
 //
@@ -60,7 +61,9 @@ function FoundationCheckout() {
     : "$97";
 
   const [email, setEmail] = useState<string>(user?.email ?? "");
-  const [fullName, setFullName] = useState<string>((user?.user_metadata?.full_name as string) ?? "");
+  const [fullName, setFullName] = useState<string>(
+    (user?.user_metadata?.full_name as string) ?? "",
+  );
   const [tsToken, setTsToken] = useState<string | null>(null);
   // A Turnstile token is single-use — reset after EVERY attempt so a retry gets
   // a fresh one instead of re-sending a spent token, which Cloudflare rejects
@@ -96,7 +99,9 @@ function FoundationCheckout() {
         <div className="card-glass mt-8 rounded-3xl p-7">
           <div className="flex items-baseline justify-between gap-4">
             <div>
-              <div className="text-sm font-bold uppercase tracking-wide text-amber-300">The Foundation Kit</div>
+              <div className="text-sm font-bold uppercase tracking-wide text-amber-300">
+                The Foundation Kit
+              </div>
               <div className="mt-1 text-sm text-slate-400">Lifetime access · instant</div>
             </div>
             <div className="text-4xl font-black grad-gold">{priceLabel}</div>
@@ -106,7 +111,7 @@ function FoundationCheckout() {
             {[
               "The five-step path, ending at money received",
               "The Charge Gate — your number, and the words that defend it",
-              "25 tools, 9 workbooks, a 10-video course",
+              `${TOOL_COUNT} tools, ${WORKBOOK_COUNT} workbooks, a ${VIDEO_LESSON_COUNT}-video course`,
               "Saved across every device you use",
             ].map((t) => (
               <li key={t} className="flex items-start gap-3 text-sm text-slate-300">
@@ -144,7 +149,12 @@ function FoundationCheckout() {
           {/* "allow": a widget that cannot load must never be the reason a sale
               is lost. The server still verifies and alerts — see
               checkTurnstileForCheckout. */}
-          <TurnstileGate ref={tsRef} onToken={setTsToken} unavailablePolicy="allow" className="mt-5" />
+          <TurnstileGate
+            ref={tsRef}
+            onToken={setTsToken}
+            unavailablePolicy="allow"
+            className="mt-5"
+          />
 
           <button
             type="button"
@@ -174,8 +184,8 @@ function FoundationCheckout() {
           <ShieldCheck className="mt-0.5 size-5 shrink-0 text-amber-400" />
           <p>
             Do all five steps and send your offer to one real person. If you finish without a priced
-            offer you would actually put in front of somebody, show me the five steps and I refund you
-            in full.
+            offer you would actually put in front of somebody, show me the five steps and I refund
+            you in full.
           </p>
         </div>
       </main>
