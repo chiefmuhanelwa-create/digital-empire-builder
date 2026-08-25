@@ -40,6 +40,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
+import { Route as VerifySlugRouteImport } from './routes/verify.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as CheckoutFoundationRouteImport } from './routes/checkout.foundation'
@@ -258,6 +259,11 @@ const IndexRoute = IndexRouteImport.update({
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifySlugRoute = VerifySlugRouteImport.update({
+  id: '/verify/$slug',
+  path: '/verify/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
@@ -666,6 +672,7 @@ export interface FileRoutesByFullPath {
   '/checkout/foundation': typeof CheckoutFoundationRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/verify/$slug': typeof VerifySlugRoute
   '/products/': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
@@ -760,6 +767,7 @@ export interface FileRoutesByTo {
   '/checkout/foundation': typeof CheckoutFoundationRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/verify/$slug': typeof VerifySlugRoute
   '/products': typeof ProductsIndexRoute
   '/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
@@ -858,6 +866,7 @@ export interface FileRoutesById {
   '/checkout/foundation': typeof CheckoutFoundationRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/verify/$slug': typeof VerifySlugRoute
   '/products/': typeof ProductsIndexRoute
   '/_authenticated/admin/contacts': typeof AuthenticatedAdminContactsRoute
   '/_authenticated/admin/import-contacts': typeof AuthenticatedAdminImportContactsRoute
@@ -957,6 +966,7 @@ export interface FileRouteTypes {
     | '/checkout/foundation'
     | '/checkout/success'
     | '/products/$slug'
+    | '/verify/$slug'
     | '/products/'
     | '/admin/contacts'
     | '/admin/import-contacts'
@@ -1051,6 +1061,7 @@ export interface FileRouteTypes {
     | '/checkout/foundation'
     | '/checkout/success'
     | '/products/$slug'
+    | '/verify/$slug'
     | '/products'
     | '/admin/contacts'
     | '/admin/import-contacts'
@@ -1148,6 +1159,7 @@ export interface FileRouteTypes {
     | '/checkout/foundation'
     | '/checkout/success'
     | '/products/$slug'
+    | '/verify/$slug'
     | '/products/'
     | '/_authenticated/admin/contacts'
     | '/_authenticated/admin/import-contacts'
@@ -1243,6 +1255,7 @@ export interface RootRouteChildren {
   CheckoutFoundationRoute: typeof CheckoutFoundationRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
+  VerifySlugRoute: typeof VerifySlugRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
   ApiPublicManychatLeadRoute: typeof ApiPublicManychatLeadRoute
@@ -1474,6 +1487,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products/'
       preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify/$slug': {
+      id: '/verify/$slug'
+      path: '/verify/$slug'
+      fullPath: '/verify/$slug'
+      preLoaderRoute: typeof VerifySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/$slug': {
@@ -2134,6 +2154,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutFoundationRoute: CheckoutFoundationRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   ProductsSlugRoute: ProductsSlugRoute,
+  VerifySlugRoute: VerifySlugRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ApiCronSyncFxRoute: ApiCronSyncFxRoute,
   ApiPublicManychatLeadRoute: ApiPublicManychatLeadRoute,

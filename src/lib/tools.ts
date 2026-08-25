@@ -10,6 +10,7 @@ import {
   Receipt,
   Package,
   Compass,
+  Crosshair,
   FileText,
   TrendingUp,
   type LucideIcon,
@@ -89,6 +90,15 @@ export const TOOLS: Tool[] = [
   },
 
   // ── Content Creation ─────────────────────────────────────────────────────
+  {
+    name: "The Positioning Test",
+    path: "/positioning",
+    tier: "free",
+    category: "Content Creation",
+    blurb:
+      "Five tests on the one sentence that decides what you can charge. Scores as you type, no signup to see the result.",
+    icon: Crosshair,
+  },
   {
     name: "Hook Generator",
     path: "/hook-generator",
