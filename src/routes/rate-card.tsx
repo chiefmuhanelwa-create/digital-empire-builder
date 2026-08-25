@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
+import { LeadMagnetHero } from "@/components/tools/LeadMagnetHero";
 import { useToolView, useToolStart, trackToolEvent } from "@/lib/tool-analytics";
 import {
   ToolCanvas,
@@ -201,25 +202,24 @@ function RateCardPage() {
         </div>
 
         {screen === "form" && (
-          <header className="mx-auto max-w-5xl px-5 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-12">
-            {/* Wraps instead of colliding: on a 390px phone the eyebrow and the
-                pill cannot share a row without one of them breaking mid-word. */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-              <Eyebrow>Creator · Free Tool</Eyebrow>
-              <Pill className="whitespace-nowrap">African CPM Data · 2024/2025</Pill>
-            </div>
-            <h1 className="mt-7 font-display text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-[#1C1C1C] sm:text-[56px]">
-              Know your <span className="text-[#C9A84C]">number</span>
-              <br />
-              before they ask.
-            </h1>
-            <p className="mt-5 max-w-xl text-[15.5px] leading-[1.65] text-neutral-600 sm:text-[17px]">
-              Most creators guess, then discount. Build a rate off real African CPM benchmarks, your
-              last 30 days of engagement, and the deliverable — then send the PDF straight to the
-              brand.
-            </p>
-            <div className="mt-7 h-[3px] w-16 rounded-full bg-[#C9A84C]" />
-          </header>
+          <LeadMagnetHero
+            eyebrow="Free Tool"
+            pill="African CPM Data · 2024/2025"
+            headline={
+              <>
+                Know your <span className="text-[#C9A84C]">number</span>
+                <br />
+                before they ask.
+              </>
+            }
+            sub="Most people with a real audience guess their price, then discount. Build a rate off real African CPM benchmarks, your last 30 days, and the deliverable — then send the PDF straight to the brand."
+            bullets={[
+              "Your rate for any platform + deliverable, in seconds",
+              "Built on real African CPM benchmarks — not US guesses",
+              "A brand-ready PDF you can send today",
+            ]}
+            photoSrc="/founder.jpg"
+          />
         )}
 
         {screen === "results" && result && (
