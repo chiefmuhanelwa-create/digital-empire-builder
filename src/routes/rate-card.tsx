@@ -4,7 +4,6 @@ import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
 import { useToolView, useToolStart, trackToolEvent } from "@/lib/tool-analytics";
 import {
-  ToolCanvas,
   DotGrid,
   GoldGlow,
   Eyebrow,
@@ -17,6 +16,7 @@ import {
   Chip,
   GoldButton,
 } from "@/components/tools/premium";
+import { BrandLogo } from "@/components/tools/brand-logos";
 import {
   NICHE_CPM,
   PLATFORM,
@@ -35,15 +35,15 @@ import {
   type RateCardResult,
 } from "@/lib/rate-card-engine";
 
-// Rebuilt native, 2026-08-13. This was previously an iframe wrapping a copied
-// static HTML file — the source of every scroll, height and mobile bug on this
-// page (window.scrollTo was a no-op inside the frame; `100vh` resolved to the
-// frame's own height and pinned it ~900px taller than its content). Going
-// native removes that entire class of problem and lets the tool carry the real
-// brand. The maths is untouched: it lives in rate-card-engine.ts, ported
-// verbatim and diffed against the original across 5 cases — identical to
-// floating-point precision, including the no-platform and sub-1000-follower
-// edge cases.
+// Rebuilt native, 2026-08-13. Re-architected 2026-08-25 into a live two-column
+// workspace: the maths runs on every keystroke and the dark obsidian summary
+// card recalculates in real time — no "Calculate" button, no loading theatre.
+// On desktop the summary is a sticky right rail; on mobile it collapses into a
+// bottom bar that expands to a bottom-sheet drawer, so the running total and the
+// PDF action are always one thumb away no matter how far the form scrolls.
+//
+// The maths is untouched — it lives in rate-card-engine.ts, ported verbatim from
+// the original iframed tool and diffed to floating-point precision.
 
 export const Route = createFileRoute("/rate-card")({
   head: () => ({
@@ -105,12 +105,13 @@ function RateCardPage() {
   const [rates, setRates] = useState<Record<string, number>>({ ZAR: 18.5, USD: 1 });
   const [ratesLive, setRatesLive] = useState(false);
 
-  // Three screens, same as the original tool: fill it in, watch it work, read
-  // the number. Appending results under the form buried the payoff and gave the
-  // reader no way back to their inputs.
-  const [screen, setScreen] = useState<"form" | "loading" | "results">("form");
-  const [result, setResult] = useState<RateCardResult | null>(null);
-  const [error, setError] = useState("");
+  // Every section is always open — accordions hid the form behind chevrons and
+  // read as dead buttons on mobile. The only collapsible thing left is the
+  // summary drawer.
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  // Lifted so "See the full working" in the summary can both open it and scroll
+  // to it in a single tap, instead of landing on a still-collapsed panel.
+  const [showWorking, setShowWorking] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -130,37 +131,16 @@ function RateCardPage() {
   const money = (zar: number) => formatCurrency(rates, currency, zar);
   const converts = canConvert(rates, currency);
 
-  const togglePlatform = (k: PlatformKey) => {
-    markStart();
-    setPlatforms((p) => (p.includes(k) ? p.filter((x) => x !== k) : [...p, k]));
-  };
-  const toggleAddon = (k: AddonKey) => {
-    markStart();
-    setAddons((a) => (a.includes(k) ? a.filter((x) => x !== k) : [...a, k]));
-  };
+  const f = digits(followers);
+  const v = digits(views);
+  const i = digits(interactions);
+  const valid = f > 0 && v > 0 && !!niche;
 
-  function loadExample() {
-    markStart();
-    setFollowers(grouped(EXAMPLE.followers));
-    setViews(grouped(EXAMPLE.views));
-    setInteractions(grouped(EXAMPLE.interactions));
-    setNiche(EXAMPLE.niche);
-    setContentType(EXAMPLE.contentType);
-    setPlatforms(EXAMPLE.platforms);
-  }
-
-  function calculate() {
-    const f = digits(followers),
-      v = digits(views),
-      i = digits(interactions);
-    if (!f || !v) return setError("Enter your followers and total views.");
-    if (!niche) return setError("Pick your niche — it sets the CPM benchmark.");
-    setError("");
-
-    // Computed up front so the loading screen can narrate the real derivation
-    // instead of showing a fake spinner — the numbers on screen while it runs
-    // are this creator's actual intermediate values.
-    const r = computeRateCard({
+  // The whole tool is this line now: recompute on every change. computeRateCard
+  // is pure and cheap, so a live useMemo replaces the old three-screen flow.
+  const result = useMemo<RateCardResult | null>(() => {
+    if (!valid) return null;
+    return computeRateCard({
       followers: f,
       views: v,
       interactions: i,
@@ -173,524 +153,669 @@ function RateCardPage() {
       budgetTier: budgetTier as never,
       includeProduction,
     });
-    setResult(r);
-    setScreen("loading");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [
+    valid,
+    f,
+    v,
+    i,
+    niche,
+    contentType,
+    platforms,
+    addons,
+    objective,
+    scope,
+    budgetTier,
+    includeProduction,
+  ]);
+
+  // Fire the "complete" analytic once, the first time a full rate exists.
+  const firedComplete = useRef(false);
+  useEffect(() => {
+    if (!result || firedComplete.current) return;
+    firedComplete.current = true;
     trackToolEvent("rate-card", "complete", {
       meta: {
         niche,
         contentType,
         platforms: platforms.join("+"),
         currency,
-        totalZar: Math.round(r.total),
+        totalZar: Math.round(result.total),
       },
     });
+  }, [result, niche, contentType, platforms, currency]);
+
+  // Lock the page behind the drawer while it's up.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [drawerOpen]);
+
+  const togglePlatform = (k: PlatformKey) => {
+    markStart();
+    setPlatforms((p) => (p.includes(k) ? p.filter((x) => x !== k) : [...p, k]));
+  };
+  const toggleAddon = (k: AddonKey) => {
+    markStart();
+    setAddons((a) => (a.includes(k) ? a.filter((x) => x !== k) : [...a, k]));
+  };
+  function loadExample() {
+    markStart();
+    setFollowers(grouped(EXAMPLE.followers));
+    setViews(grouped(EXAMPLE.views));
+    setInteractions(grouped(EXAMPLE.interactions));
+    setNiche(EXAMPLE.niche);
+    setContentType(EXAMPLE.contentType);
+    setPlatforms(EXAMPLE.platforms);
   }
 
-  function backToForm() {
-    setScreen("form");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  // Closing the drawer unlocks the body via an effect that runs AFTER this
+  // handler — so scrolling here would fire while the body is still locked and do
+  // nothing (the "dead button"). Unlock synchronously, then scroll on the next
+  // frame once the drawer has actually gone.
+  function scrollToId(id: string) {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = "";
+    setDrawerOpen(false);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() =>
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      ),
+    );
   }
+  const goToPdf = () => scrollToId("get-pdf");
+  const goToWorking = () => {
+    setShowWorking(true);
+    scrollToId("full-working");
+  };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F0]">
+    // No overflow-clipping wrapper around the workspace: an ancestor with
+    // `overflow: hidden` silently breaks `position: sticky`, which is what made
+    // the summary rail scroll away instead of pinning. The dot grid is a plain
+    // absolute backdrop (it doesn't bleed, so it needs no clipping); the only
+    // bleeding glows live inside cards that clip themselves.
+    <div className="relative min-h-screen overflow-x-clip bg-[#FAF7F0]">
       <SiteHeader />
-      <ToolCanvas>
+      <DotGrid />
+      <div className="relative">
         <div className="px-5 pt-3 sm:px-6">
           <BackNav to="/tools" label="All tools" />
         </div>
 
-        {screen === "form" && (
-          <header className="mx-auto max-w-5xl px-5 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-12">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-              <Eyebrow>Creator · Free Tool</Eyebrow>
-              <Pill className="whitespace-nowrap">African CPM Data · 2024/2025</Pill>
-            </div>
-            <h1 className="mt-7 font-display text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-[#1C1C1C] sm:text-[56px]">
-              Know your <span className="text-[#C9A84C]">number</span>
-              <br />
-              before they ask.
-            </h1>
-            <p className="mt-5 max-w-xl text-[15.5px] leading-[1.65] text-neutral-600 sm:text-[17px]">
-              Most creators guess, then discount. Build a rate off real African CPM benchmarks, your
-              last 30 days of engagement, and the deliverable — then send the PDF straight to the
-              brand.
-            </p>
-            <div className="mt-7 h-[3px] w-16 rounded-full bg-[#C9A84C]" />
-          </header>
-        )}
+        <header className="mx-auto max-w-6xl px-5 pb-8 pt-6 sm:px-6 sm:pb-10 sm:pt-10">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+            <Eyebrow>Creator · Free Tool</Eyebrow>
+            <Pill className="whitespace-nowrap">African CPM Data · 2024/2025</Pill>
+          </div>
+          <h1 className="mt-6 font-display text-[32px] font-extrabold leading-[1.06] tracking-[-0.02em] text-[#1C1C1C] sm:text-[52px]">
+            Know your <span className="text-[#C9A84C]">number</span> before they ask.
+          </h1>
+          <p className="mt-4 max-w-2xl text-[15.5px] leading-[1.6] text-neutral-600 sm:text-[17px]">
+            Configure the deal on the left. Your rate builds itself in real time — off real African
+            CPM benchmarks, your last 30 days, and the deliverable.
+          </p>
+          <div className="mt-6 h-[3px] w-16 rounded-full bg-[#C9A84C]" />
+        </header>
 
-        {screen === "results" && result && (
-          <header className="mx-auto max-w-5xl px-5 pb-8 pt-8 sm:px-6 sm:pt-12">
-            <button
-              onClick={backToForm}
-              className="mb-5 inline-flex items-center gap-2 text-[13px] font-bold text-neutral-500 transition hover:text-[#1C1C1C]"
-            >
-              ← Change my numbers
-            </button>
-            <div className="flex items-center justify-between gap-4">
-              <Eyebrow>Your rate card</Eyebrow>
-              <Pill>
-                {CURRENCIES[canConvert(rates, currency) ? currency : "ZAR"].flag}{" "}
-                {canConvert(rates, currency) ? currency : "ZAR"}
-              </Pill>
-            </div>
-            <h1 className="mt-5 font-display text-[30px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#1C1C1C] sm:text-[44px]">
-              Here is what they
-              <br />
-              should be <span className="text-[#C9A84C]">paying you</span>.
-            </h1>
-            <div className="mt-6 h-[3px] w-16 rounded-full bg-[#C9A84C]" />
-          </header>
-        )}
-
-        {screen === "loading" && result && (
-          <CalculatingScreen result={result} money={money} onDone={() => setScreen("results")} />
-        )}
-
-        <main
-          className={`mx-auto max-w-5xl px-5 pb-20 sm:px-6 ${screen === "form" ? "" : "hidden"}`}
-        >
-          {/* Currency */}
-          <Panel className="mb-4 p-4 sm:p-5">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="sm:w-[300px]">
-                <Field label="Currency">
-                  <Select value={currency} onChange={(e) => setCurrency(e.target.value)}>
-                    <optgroup label="Most used">
-                      {POPULAR.map((c) => (
-                        <option key={c} value={c}>
-                          {CURRENCIES[c].flag} {c} — {CURRENCIES[c].label}
-                        </option>
-                      ))}
-                    </optgroup>
-                    <optgroup label="All of Africa (A–Z)">
-                      {CURRENCY_KEYS.slice()
-                        .sort((a, b) => CURRENCIES[a].label.localeCompare(CURRENCIES[b].label))
-                        .map((c) => (
+        {/* Two-column workspace. Left scrolls; right rail is sticky on desktop. */}
+        <div className="mx-auto grid max-w-6xl gap-5 px-5 pb-28 sm:px-6 lg:grid-cols-[minmax(0,1fr)_368px] lg:items-start lg:gap-6 lg:pb-20">
+          {/* LEFT — configuration */}
+          <div className="space-y-4">
+            {/* Currency */}
+            <Panel className="p-4 sm:p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div className="sm:w-[320px]">
+                  <Field label="Currency">
+                    <Select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                      <optgroup label="Most used">
+                        {POPULAR.map((c) => (
                           <option key={c} value={c}>
                             {CURRENCIES[c].flag} {c} — {CURRENCIES[c].label}
                           </option>
                         ))}
-                    </optgroup>
+                      </optgroup>
+                      <optgroup label="All of Africa (A–Z)">
+                        {CURRENCY_KEYS.slice()
+                          .sort((a, b) => CURRENCIES[a].label.localeCompare(CURRENCIES[b].label))
+                          .map((c) => (
+                            <option key={c} value={c}>
+                              {CURRENCIES[c].flag} {c} — {CURRENCIES[c].label}
+                            </option>
+                          ))}
+                      </optgroup>
+                    </Select>
+                  </Field>
+                </div>
+                <p className="text-[12.5px] text-neutral-500 sm:pb-3 sm:text-right">
+                  {converts ? (
+                    <>
+                      {CURRENCIES[currency].flag} 1 USD = {CURRENCIES[currency].sym}
+                      {(rates[currency] ?? 1).toFixed(2)}
+                      <span className="ml-1 text-neutral-400">· {ratesLive ? "live" : "approx."}</span>
+                    </>
+                  ) : (
+                    <span className="text-[#A98A38]">⚠ Live rate for {currency} unavailable — showing rands</span>
+                  )}
+                </p>
+              </div>
+            </Panel>
+
+            {/* Platforms */}
+            <Section
+              title="Where do you post?"
+              step="1"
+              hint="Pick every platform this deal covers. Two or more applies a 10% bundle discount."
+            >
+              <div className="grid gap-2.5 p-5 sm:grid-cols-2 sm:p-6">
+                {PLATFORM_KEYS.map((k) => (
+                  <Chip key={k} active={platforms.includes(k)} onClick={() => togglePlatform(k)}>
+                    <span className="inline-flex items-center gap-2.5">
+                      <BrandLogo platform={k} className="h-5 w-5 shrink-0" />
+                      {PLATFORM[k].name}
+                    </span>
+                  </Chip>
+                ))}
+              </div>
+            </Section>
+
+            {/* Numbers */}
+            <Section
+              title="Your real numbers"
+              step="2"
+              hint="Pull these from your own analytics, set to the LAST 30 DAYS — brands ask for a recent window."
+            >
+              <div className="grid gap-5 p-5 sm:grid-cols-3 sm:p-6">
+                <Field label="Followers" hint="Total today, across the platforms above">
+                  <Input
+                    inputMode="numeric"
+                    placeholder="50 000"
+                    value={followers}
+                    onChange={(e) => {
+                      markStart();
+                      setFollowers(e.target.value);
+                    }}
+                    onBlur={(e) => setFollowers(grouped(e.target.value))}
+                  />
+                </Field>
+                <Field label="Views per post" hint="Your average over the last 30 days">
+                  <Input
+                    inputMode="numeric"
+                    placeholder="120 000"
+                    value={views}
+                    onChange={(e) => {
+                      markStart();
+                      setViews(e.target.value);
+                    }}
+                    onBlur={(e) => setViews(grouped(e.target.value))}
+                  />
+                </Field>
+                <Field label="Interactions" hint="Likes + comments + saves + shares, last 30 days">
+                  <Input
+                    inputMode="numeric"
+                    placeholder="3 500"
+                    value={interactions}
+                    onChange={(e) => {
+                      markStart();
+                      setInteractions(e.target.value);
+                    }}
+                    onBlur={(e) => setInteractions(grouped(e.target.value))}
+                  />
+                </Field>
+                <Field
+                  label="Your niche"
+                  hint="Sets the CPM benchmark — this moves the number more than anything else"
+                  className="sm:col-span-2"
+                >
+                  <Select
+                    value={niche}
+                    onChange={(e) => {
+                      markStart();
+                      setNiche(e.target.value);
+                    }}
+                  >
+                    <option value="">Select your niche…</option>
+                    {NICHES.map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+                <Field label="Deliverable">
+                  <Select
+                    value={contentType}
+                    onChange={(e) => setContentType(e.target.value as ContentTypeKey)}
+                  >
+                    {(Object.keys(CONTENT_TYPE) as ContentTypeKey[]).map((k) => (
+                      <option key={k} value={k}>
+                        {CONTENT_TYPE[k].label}
+                      </option>
+                    ))}
                   </Select>
                 </Field>
               </div>
-              <p className="text-[13px] text-neutral-500 sm:text-right">
-                {converts ? (
-                  <>
-                    {CURRENCIES[currency].flag} 1 USD = {CURRENCIES[currency].sym}
-                    {(rates[currency] ?? 1).toFixed(2)}
-                    <span className="ml-1 text-neutral-400">
-                      · {ratesLive ? "live" : "approx."}
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-[#A98A38]">
-                    ⚠ Live rate for {currency} unavailable — showing rands
-                  </span>
-                )}
-              </p>
-            </div>
-          </Panel>
+              {niche && (
+                <div className="mx-5 mb-5 rounded-xl border border-[#C9A84C]/35 bg-[#C9A84C]/[0.07] p-4 sm:mx-6 sm:mb-6">
+                  <Eyebrow>{niche} · African market</Eyebrow>
+                  <p className="mt-2 text-[13.5px] leading-relaxed text-neutral-700">
+                    {NICHE_CPM[niche].notes}
+                  </p>
+                </div>
+              )}
+            </Section>
 
-          {/* Platforms */}
-          <Panel className="mb-4">
-            <PanelHeader
-              title="Where do you post?"
-              step="01"
-              hint="Pick every platform this deal covers. Two or more applies a 10% bundle discount."
-            />
-            <div className="grid gap-2.5 p-5 sm:grid-cols-2 lg:grid-cols-3 sm:p-6">
-              {PLATFORM_KEYS.map((k) => (
-                <Chip key={k} active={platforms.includes(k)} onClick={() => togglePlatform(k)}>
-                  {PLATFORM[k].name}
-                </Chip>
-              ))}
-            </div>
-          </Panel>
-
-          {/* Numbers */}
-          <Panel className="mb-4">
-            <PanelHeader
-              title="Your real numbers"
-              step="02"
-              hint="Pull these from your own analytics, set to the LAST 30 DAYS. Brands ask for a recent window — an all-time average overstates a quiet month and undersells a good one."
-            />
-            <div className="grid gap-5 p-5 sm:grid-cols-3 sm:p-6">
-              <Field label="Followers" hint="Total today, across the platforms above">
-                <Input
-                  inputMode="numeric"
-                  placeholder="50 000"
-                  value={followers}
-                  onChange={(e) => {
-                    markStart();
-                    setFollowers(e.target.value);
-                  }}
-                  onBlur={(e) => setFollowers(grouped(e.target.value))}
-                />
-              </Field>
-              <Field label="Views per post" hint="Your average over the last 30 days">
-                <Input
-                  inputMode="numeric"
-                  placeholder="120 000"
-                  value={views}
-                  onChange={(e) => {
-                    markStart();
-                    setViews(e.target.value);
-                  }}
-                  onBlur={(e) => setViews(grouped(e.target.value))}
-                />
-              </Field>
-              <Field label="Interactions" hint="Likes + comments + saves + shares, last 30 days">
-                <Input
-                  inputMode="numeric"
-                  placeholder="3 500"
-                  value={interactions}
-                  onChange={(e) => {
-                    markStart();
-                    setInteractions(e.target.value);
-                  }}
-                  onBlur={(e) => setInteractions(grouped(e.target.value))}
-                />
-              </Field>
-              <Field
-                label="Your niche"
-                hint="Sets the CPM benchmark — this moves the number more than anything else"
-                className="sm:col-span-2"
-              >
-                <Select
-                  value={niche}
-                  onChange={(e) => {
-                    markStart();
-                    setNiche(e.target.value);
-                  }}
-                >
-                  <option value="">Select your niche…</option>
-                  {NICHES.map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field label="Deliverable">
-                <Select
-                  value={contentType}
-                  onChange={(e) => setContentType(e.target.value as ContentTypeKey)}
-                >
-                  {(Object.keys(CONTENT_TYPE) as ContentTypeKey[]).map((k) => (
-                    <option key={k} value={k}>
-                      {CONTENT_TYPE[k].label}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            </div>
-            {niche && (
-              <div className="mx-5 mb-5 rounded-xl border border-[#C9A84C]/35 bg-[#C9A84C]/[0.07] p-4 sm:mx-6 sm:mb-6">
-                <Eyebrow>{niche} · African market</Eyebrow>
-                <p className="mt-2 text-[13.5px] leading-relaxed text-neutral-700">
-                  {NICHE_CPM[niche].notes}
-                </p>
-              </div>
-            )}
-          </Panel>
-
-          {/* Deal shape */}
-          <Panel className="mb-4">
-            <PanelHeader
+            {/* Deal shape */}
+            <Section
               title="The deal"
-              step="03"
+              step="3"
               hint="Optional — leave blank if the brand hasn't said yet."
-            />
-            <div className="grid gap-5 p-5 sm:grid-cols-3 sm:p-6">
-              <Field label="Objective">
-                <Select value={objective} onChange={(e) => setObjective(e.target.value)}>
-                  <option value="">Not specified</option>
-                  {Object.entries(OBJECTIVES).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v.label}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field label="Scope">
-                <Select value={scope} onChange={(e) => setScope(e.target.value)}>
-                  <option value="">Not specified</option>
-                  {Object.entries(SCOPES).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v.label}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field label="Brand size">
-                <Select value={budgetTier} onChange={(e) => setBudgetTier(e.target.value)}>
-                  <option value="">Not specified</option>
-                  {Object.entries(BUDGET_TIERS).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v.label}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            </div>
-          </Panel>
+            >
+              <div className="grid gap-5 p-5 sm:grid-cols-3 sm:p-6">
+                <Field label="Objective">
+                  <Select value={objective} onChange={(e) => setObjective(e.target.value)}>
+                    <option value="">Not specified</option>
+                    {Object.entries(OBJECTIVES).map(([k, val]) => (
+                      <option key={k} value={k}>
+                        {val.label}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+                <Field label="Scope">
+                  <Select value={scope} onChange={(e) => setScope(e.target.value)}>
+                    <option value="">Not specified</option>
+                    {Object.entries(SCOPES).map(([k, val]) => (
+                      <option key={k} value={k}>
+                        {val.label}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+                <Field label="Brand size">
+                  <Select value={budgetTier} onChange={(e) => setBudgetTier(e.target.value)}>
+                    <option value="">Not specified</option>
+                    {Object.entries(BUDGET_TIERS).map(([k, val]) => (
+                      <option key={k} value={k}>
+                        {val.label}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+              </div>
+            </Section>
 
-          {/* Add-ons */}
-          <Panel className="mb-6">
-            <PanelHeader
+            {/* Add-ons */}
+            <Section
               title="What else are they asking for?"
-              step="04"
+              step="4"
               hint="Each one is real work or real risk. Charge for it."
-            />
-            <div className="grid gap-2.5 p-5 sm:grid-cols-2 sm:p-6">
-              {(Object.keys(ADDONS) as AddonKey[]).map((k) => (
+            >
+              <div className="grid gap-2.5 p-5 sm:grid-cols-2 sm:p-6">
+                {(Object.keys(ADDONS) as AddonKey[]).map((k) => (
+                  <Chip
+                    key={k}
+                    active={addons.includes(k)}
+                    onClick={() => toggleAddon(k)}
+                    sub={ADDONS[k].desc}
+                  >
+                    {ADDONS[k].label} · {ADDONS[k].pct}
+                  </Chip>
+                ))}
                 <Chip
-                  key={k}
-                  active={addons.includes(k)}
-                  onClick={() => toggleAddon(k)}
-                  sub={ADDONS[k].desc}
+                  active={includeProduction}
+                  onClick={() => setIncludeProduction((val) => !val)}
+                  sub={`${CONTENT_TYPE[contentType].prod_desc} · +${money(CONTENT_TYPE[contentType].prod)}`}
                 >
-                  {ADDONS[k].label} · {ADDONS[k].pct}
+                  Add production costs
                 </Chip>
-              ))}
-              <Chip
-                active={includeProduction}
-                onClick={() => setIncludeProduction((v) => !v)}
-                sub={`${CONTENT_TYPE[contentType].prod_desc} · +${money(CONTENT_TYPE[contentType].prod)}`}
-              >
-                Add production costs
-              </Chip>
-            </div>
-          </Panel>
+              </div>
+            </Section>
 
-          {error && (
-            <p className="mb-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] font-semibold text-red-700">
-              {error}
-            </p>
-          )}
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <GoldButton onClick={calculate} className="sm:flex-[2]">
-              Calculate my rate →
-            </GoldButton>
             <button
               onClick={loadExample}
-              className="min-h-[54px] rounded-xl border border-neutral-300 bg-white px-6 text-[14px] font-bold text-neutral-700 transition hover:border-neutral-400 sm:flex-1"
+              className="min-h-[48px] w-full rounded-xl border border-neutral-300 bg-white px-6 text-[14px] font-bold text-neutral-700 transition hover:border-neutral-400"
             >
               Load an example
             </button>
           </div>
-        </main>
 
-        {screen === "results" && result && (
-          <main className="mx-auto max-w-5xl px-5 pb-20 sm:px-6">
-            <Results
+          {/* RIGHT — sticky summary (desktop only). top-20 clears the 64px
+              sticky site header; the parent no longer clips overflow, so this
+              actually pins now. The max-height + internal scroll is load-bearing:
+              without it, a card taller than the viewport pins its top and hangs
+              its bottom (the buttons) off-screen — the "stuck in the middle" bug.
+              Capping it to the viewport lets the whole card, buttons included,
+              always be reachable. */}
+          <aside className="hidden lg:block">
+            <div className="no-scrollbar sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto">
+              <SummaryCard
+                result={result}
+                money={money}
+                currency={currency}
+                rates={rates}
+                onPdf={goToPdf}
+                onWorking={goToWorking}
+              />
+            </div>
+          </aside>
+        </div>
+
+        {/* Deep-dive analytics — full width, live once a rate exists */}
+        {result && (
+          <div className="mx-auto max-w-6xl px-5 pb-24 sm:px-6">
+            <DeepDive
               result={result}
               money={money}
               currency={currency}
               rates={rates}
-              onEdit={backToForm}
+              showWorking={showWorking}
+              onToggleWorking={() => setShowWorking((v) => !v)}
             />
-          </main>
+          </div>
         )}
-      </ToolCanvas>
+      </div>
 
-      {/* Only after there is a number to act on — before that it is a pitch for
-          something the reader has no context for yet. */}
-      {screen === "results" && <UpsellBand />}
+      {result && <UpsellBand />}
       <SiteFooter />
+
+      {/* MOBILE — sticky bottom bar + expandable drawer. Only once there's a
+          rate to act on; before that it's empty chrome. The spacer gives the
+          footer room to clear the fixed bar at the very bottom of the scroll. */}
+      {result && (
+        <>
+          <MobileSummaryBar
+            result={result}
+            money={money}
+            onExpand={() => setDrawerOpen(true)}
+            onPdf={goToPdf}
+          />
+          <div className="h-20 lg:hidden" aria-hidden />
+        </>
+      )}
+      {drawerOpen && (
+        <MobileDrawer onClose={() => setDrawerOpen(false)}>
+          <SummaryCard
+            result={result}
+            money={money}
+            currency={currency}
+            rates={rates}
+            onPdf={goToPdf}
+            onWorking={goToWorking}
+          />
+        </MobileDrawer>
+      )}
     </div>
   );
 }
 
-// The calculating screen. Deliberately not a spinner: every line that appears
-// is a REAL intermediate value from this creator's own result, revealed in the
-// order the engine actually derives them. It buys the ~1.7s that makes the
-// number feel worked out rather than guessed, and it teaches the method while
-// it waits — which is the whole argument the creator later makes to the brand.
-function CalculatingScreen({
-  result: r,
-  money,
-  onDone,
+// A titled section card — always open. The step sits in a gold badge so the
+// header reads as a heading, never a tappable/dead control.
+function Section({
+  title,
+  step,
+  hint,
+  children,
 }: {
-  result: RateCardResult;
-  money: (zar: number) => string;
-  onDone: () => void;
+  title: string;
+  step: string;
+  hint: string;
+  children: React.ReactNode;
 }) {
-  const n = (x: number) => Math.round(x).toLocaleString("en-ZA");
-  const steps = useMemo(
-    () => [
-      {
-        label: "Reading the African benchmark",
-        value: `${r.niche} · R${r.nicheCPM.cpm.toFixed(2)} CPM`,
-      },
-      { label: "Adjusting for your tier", value: `${r.tier.label} · ×${r.tier.mult.toFixed(2)}` },
-      {
-        label: "Weighting your platforms",
-        value: `${r.selPlats.map((p) => PLATFORM[p].name).join(" + ") || "Instagram"} · ×${r.cpm_mult.toFixed(2)}`,
-      },
-      { label: "Pricing on reach (CPM)", value: money(r.price_cpm_final) },
-      { label: "Pricing on engagement (CPE)", value: money(r.price_cpe_final) },
-      {
-        label: "Taking the stronger method",
-        value: r.price_cpm_final >= r.price_cpe_final ? "Reach wins" : "Engagement wins",
-      },
-      { label: "Building your rate card", value: `${n(r.followers)} followers priced` },
-    ],
-    [r, money],
-  );
-
-  const [done, setDone] = useState(0);
-  const finish = useRef(onDone);
-  finish.current = onDone;
-
-  useEffect(() => {
-    const reduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    const perStep = reduced ? 60 : 230;
-    if (done >= steps.length) {
-      const t = setTimeout(() => finish.current(), reduced ? 60 : 420);
-      return () => clearTimeout(t);
-    }
-    const t = setTimeout(() => setDone((d) => d + 1), perStep);
-    return () => clearTimeout(t);
-  }, [done, steps.length]);
-
-  const pct = Math.round((done / steps.length) * 100);
-
   return (
-    <div className="mx-auto max-w-2xl px-5 py-16 sm:px-6 sm:py-24">
-      <div className="relative overflow-hidden rounded-3xl bg-[#1C1C1C] p-6 sm:p-9">
-        <DotGrid dark />
-        <GoldGlow className="-right-24 -top-28" size={460} opacity={0.7} />
-        <div className="relative" aria-live="polite" aria-busy={done < steps.length}>
-          <div className="flex items-center justify-between gap-4">
-            <Eyebrow className="!text-[#C9A84C]">Working it out</Eyebrow>
-            <span className="font-mono text-[13px] font-bold tabular-nums text-white/50">
-              {pct}%
-            </span>
-          </div>
-
-          <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
-            <div
-              className="h-full rounded-full bg-[#C9A84C] transition-[width] duration-300 ease-out"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-
-          <ul className="mt-7 space-y-3">
-            {steps.map((st, i) => {
-              const state = i < done ? "done" : i === done ? "active" : "pending";
-              return (
-                <li
-                  key={st.label}
-                  className={`transition-opacity duration-300 ${
-                    state === "pending" ? "opacity-25" : "opacity-100"
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <span
-                      className={`mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
-                        state === "done"
-                          ? "border-[#C9A84C] bg-[#C9A84C]"
-                          : state === "active"
-                            ? "animate-pulse border-[#C9A84C]"
-                            : "border-white/25"
-                      }`}
-                    >
-                      {state === "done" && (
-                        <svg
-                          viewBox="0 0 12 12"
-                          className="h-2.5 w-2.5 text-[#1C1C1C]"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                        >
-                          <path
-                            d="M2.5 6.5l2.5 2.5 4.5-5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </span>
-                    <span className="min-w-0 flex-1 text-[14px] leading-snug text-white/85">
-                      {st.label}
-                    </span>
-                    {/* Two placements, not two values: on a phone the derived
-                        figure sits under its label, because side-by-side forces
-                        both to wrap into each other. */}
-                    <span
-                      className={`hidden shrink-0 text-right text-[13px] font-bold tabular-nums text-[#C9A84C] transition-opacity duration-300 sm:block ${
-                        i < done ? "opacity-100" : "opacity-0"
-                      }`}
-                    >
-                      {st.value}
-                    </span>
-                  </div>
-                  {i < done && (
-                    <span className="mt-1 block pl-7 text-[13px] font-bold tabular-nums text-[#C9A84C] sm:hidden">
-                      {st.value}
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+    <Panel>
+      <div className="flex items-start gap-3.5 px-5 py-4 sm:px-6">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1C1C1C] font-display text-[13px] font-extrabold text-[#C9A84C]">
+          {step}
+        </span>
+        <div>
+          <h2 className="font-display text-[15px] font-bold tracking-tight text-[#1C1C1C] sm:text-base">
+            {title}
+          </h2>
+          <p className="mt-1 text-[13px] leading-snug text-neutral-500">{hint}</p>
         </div>
       </div>
-      <p className="mt-5 text-center text-[13px] text-neutral-500">
-        Every line above is your own number — not a loading bar.
+      <div className="border-t border-neutral-200/80">{children}</div>
+    </Panel>
+  );
+}
+
+// The dark obsidian summary — the one component shared by the desktop rail and
+// the mobile drawer. It reads `result` live; before the form is valid it shows
+// what's still needed rather than a zero.
+function SummaryCard({
+  result: r,
+  money,
+  currency,
+  rates,
+  onPdf,
+  onWorking,
+}: {
+  result: RateCardResult | null;
+  money: (zar: number) => string;
+  currency: string;
+  rates: Record<string, number>;
+  onPdf: () => void;
+  onWorking: () => void;
+}) {
+  const usableCurrency = canConvert(rates, currency) ? currency : "ZAR";
+  const base = r ? Math.max(r.price_cpm, r.price_cpe) : 0;
+  const adjustments = r ? r.sponsorship - base : 0;
+  const usd =
+    r && rates.ZAR > 0 ? Math.round(r.total / rates.ZAR).toLocaleString("en-US") : null;
+
+  return (
+    <div className="relative overflow-hidden rounded-3xl border border-[#C9A84C]/30 bg-[#111111] p-6 shadow-[0_28px_70px_-30px_rgba(0,0,0,0.8)] sm:p-7">
+      <DotGrid dark />
+      <GoldGlow className="-right-24 -top-28" size={420} opacity={0.6} />
+      <div className="relative">
+        <div className="flex items-center justify-between gap-3">
+          <Eyebrow className="!text-[#C9A84C]">Your opening quote</Eyebrow>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/60">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            </span>
+            Live
+          </span>
+        </div>
+
+        {!r ? (
+          <div className="mt-5">
+            <p className="font-display text-[34px] font-extrabold leading-none tracking-[-0.03em] text-white/25">
+              {CURRENCIES[usableCurrency].sym} —
+            </p>
+            <p className="mt-4 text-[14px] leading-relaxed text-white/55">
+              Add your <strong className="text-white/80">followers</strong>,{" "}
+              <strong className="text-white/80">views</strong> and{" "}
+              <strong className="text-white/80">niche</strong> and your rate appears here — and
+              updates as you go.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="mt-4 flex items-center justify-between gap-3">
+              <Pill tone="gold">{r.tier.label}</Pill>
+              <span className="text-[12px] text-white/45">
+                {CURRENCIES[usableCurrency].flag} {usableCurrency}
+              </span>
+            </div>
+
+            <p className="mt-4 font-display text-[42px] font-extrabold leading-none tracking-[-0.03em] text-[#E5C588] [font-variant-numeric:tabular-nums] sm:text-[52px]">
+              {money(r.total)}
+            </p>
+            {usd && <p className="mt-2 text-[13px] text-white/40">≈ ${usd} USD</p>}
+            <p className="mt-2 text-[13px] text-white/50">
+              {r.niche} · {r.ct.label} ·{" "}
+              {r.selPlats.map((p) => PLATFORM[p].name).join(" + ") || "Instagram"}
+            </p>
+
+            {/* Itemized lineage */}
+            <div className="mt-6 space-y-2.5 border-t border-white/10 pt-5 text-[13.5px]">
+              <SummaryRow label="Base rate (CPM/CPE)" value={money(base)} />
+              {adjustments > 0.5 && (
+                <SummaryRow label="Add-ons & campaign terms" value={`+${money(adjustments)}`} />
+              )}
+              {r.includeProduction && (
+                <SummaryRow label={`Production (${r.ct.label})`} value={`+${money(r.productionCost)}`} />
+              )}
+              <div className="flex items-center justify-between gap-3 border-t border-white/10 pt-3">
+                <span className="text-[13px] font-bold uppercase tracking-wider text-white/60">Total</span>
+                <span className="font-display text-[18px] font-extrabold text-[#E5C588]">
+                  {money(r.total)}
+                </span>
+              </div>
+            </div>
+
+            {/* Floor / Standard / Premium */}
+            <div className="mt-5 grid grid-cols-3 gap-2">
+              <MiniRate label="Floor" value={money(r.range_low)} />
+              <MiniRate label="Standard" value={money(r.total)} hero />
+              <MiniRate label="Premium" value={money(r.range_high)} />
+            </div>
+          </>
+        )}
+
+        <button
+          type="button"
+          onClick={onPdf}
+          disabled={!r}
+          className="mt-6 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E5C588] px-6 text-[15px] font-bold text-[#1C1C1C] transition hover:brightness-105 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Email me the rate card PDF →
+        </button>
+        <button
+          type="button"
+          onClick={onWorking}
+          disabled={!r}
+          className="mt-2.5 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border border-white/20 px-6 text-[14px] font-bold text-white/85 transition hover:border-[#C9A84C] hover:text-[#E5C588] disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          See the full working
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function SummaryRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-white/55">{label}</span>
+      <span className="font-bold text-white [font-variant-numeric:tabular-nums]">{value}</span>
+    </div>
+  );
+}
+
+function MiniRate({ label, value, hero }: { label: string; value: string; hero?: boolean }) {
+  return (
+    <div
+      className={`rounded-xl border p-2.5 text-center ${
+        hero ? "border-[#C9A84C] bg-[#C9A84C]/15" : "border-white/10 bg-white/[0.03]"
+      }`}
+    >
+      <p className={`text-[9px] font-bold uppercase tracking-[0.12em] ${hero ? "text-[#E5C588]" : "text-white/40"}`}>
+        {label}
+      </p>
+      <p className="mt-1 font-display text-[13px] font-extrabold leading-tight text-white [font-variant-numeric:tabular-nums]">
+        {value}
       </p>
     </div>
   );
 }
 
-// Count-up on the money numbers. The old tool animated these and it is a big
-// part of why the result felt earned rather than printed.
-function useCountUp(target: number, ms = 1100) {
-  const [v, setV] = useState(0);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      setV(target);
-      return;
-    }
-    let raf = 0;
-    const t0 = performance.now();
-    const tick = (now: number) => {
-      const p = Math.min(1, (now - t0) / ms);
-      // easeOutExpo — fast, then settles
-      setV(target * (p === 1 ? 1 : 1 - Math.pow(2, -10 * p)));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, ms]);
-  return v;
+// Fixed bottom bar on mobile. Always shows the running total and routes to the
+// PDF; tapping the total opens the full drawer.
+function MobileSummaryBar({
+  result: r,
+  money,
+  onExpand,
+  onPdf,
+}: {
+  result: RateCardResult | null;
+  money: (zar: number) => string;
+  onExpand: () => void;
+  onPdf: () => void;
+}) {
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#C9A84C]/25 bg-[#111111] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-12px_30px_-12px_rgba(0,0,0,0.6)] lg:hidden">
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onExpand}
+          className="flex min-h-[48px] flex-1 flex-col justify-center text-left"
+        >
+          <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            </span>
+            {r ? "Your rate · tap for breakdown" : "Live rate"}
+          </span>
+          <span className="mt-0.5 font-display text-[22px] font-extrabold leading-none text-[#E5C588] [font-variant-numeric:tabular-nums]">
+            {r ? money(r.total) : "R —"}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={onPdf}
+          disabled={!r}
+          className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E5C588] px-5 text-[14px] font-bold text-[#1C1C1C] transition active:scale-[0.98] disabled:opacity-40"
+        >
+          Get PDF →
+        </button>
+      </div>
+    </div>
+  );
 }
 
-function Results({
+function MobileDrawer({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  // Mount off-screen, then slide up on the next frame — a proper app-style
+  // bottom sheet rather than a card that just pops into existence.
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
+      <div
+        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${shown ? "opacity-100" : "opacity-0"}`}
+        onClick={onClose}
+      />
+      <div
+        className={`absolute inset-x-0 bottom-0 max-h-[90vh] overflow-y-auto overscroll-contain rounded-t-3xl bg-[#0d0d0d] p-4 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-[0_-20px_60px_-20px_rgba(0,0,0,0.7)] transition-transform duration-300 ease-out ${shown ? "translate-y-0" : "translate-y-full"}`}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="mx-auto mb-4 block h-1.5 w-12 rounded-full bg-white/25"
+        />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function DeepDive({
   result: r,
   money,
   currency,
   rates,
-  onEdit,
+  showWorking,
+  onToggleWorking,
 }: {
   result: RateCardResult;
   money: (zar: number) => string;
   currency: string;
   rates: Record<string, number>;
-  onEdit: () => void;
+  showWorking: boolean;
+  onToggleWorking: () => void;
 }) {
-  const [showBreakdown, setShowBreakdown] = useState(false);
-  const animatedTotal = useCountUp(r.total);
   const n = (x: number) => Math.round(x).toLocaleString("en-ZA");
-  const usd = rates.ZAR > 0 ? Math.round(r.total / rates.ZAR).toLocaleString("en-US") : null;
   const cpmWins = r.price_cpm_final >= r.price_cpe_final;
   const maxBar = Math.max(r.total, r.saAvgRate, r.globalAvgRate) * 1.1;
 
@@ -704,9 +829,7 @@ function Results({
       `Your ER of ${r.er.toFixed(2)}% is below the 3.39% African average. Reply to comments in the first hour — it is the fastest way to lift it.`,
     );
   if (r.price_cpm_final > r.price_cpe_final * 1.2)
-    tips.push(
-      "CPM dominates your rate — pitch brand-awareness campaigns. Reach is your strongest asset.",
-    );
+    tips.push("CPM dominates your rate — pitch brand-awareness campaigns. Reach is your strongest asset.");
   else if (r.price_cpe_final > r.price_cpm_final * 1.2)
     tips.push(
       `CPE dominates (${money(r.price_cpe_final)} vs ${money(r.price_cpm_final)} on CPM). Quote CPE to conversion-focused brands — they will see the ROI.`,
@@ -729,49 +852,9 @@ function Results({
     );
 
   return (
-    <>
-      {/* The money moment — charcoal, so it reads as the payoff, not another form card */}
-      <div className="relative overflow-hidden rounded-3xl bg-[#1C1C1C] p-6 sm:p-10">
-        <DotGrid dark />
-        <GoldGlow className="-bottom-40 -right-24" size={520} opacity={0.75} />
-        <div className="relative">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <Eyebrow className="!text-[#C9A84C]">Your opening quote</Eyebrow>
-            <Pill tone="gold">{r.tier.label}</Pill>
-          </div>
-
-          <p className="mt-6 font-display text-[40px] font-extrabold leading-none tracking-[-0.03em] text-white [font-variant-numeric:tabular-nums] sm:text-[76px]">
-            {money(animatedTotal)}
-          </p>
-          {usd && <p className="mt-2 text-[14px] text-white/40">≈ ${usd} USD</p>}
-          <p className="mt-2 text-[14px] text-white/50">
-            {r.niche} · {r.ct.label} ·{" "}
-            {r.selPlats.map((p) => PLATFORM[p].name).join(" + ") || "Instagram"}
-          </p>
-
-          {r.includeProduction && (
-            <div className="mt-6 space-y-2 border-t border-white/10 pt-5 text-[14px]">
-              <div className="flex justify-between text-white/70">
-                <span>Sponsorship fee</span>
-                <span className="font-bold text-white">{money(r.sponsorship)}</span>
-              </div>
-              <div className="flex justify-between text-white/70">
-                <span>Production ({r.ct.label})</span>
-                <span className="font-bold text-white">{money(r.productionCost)}</span>
-              </div>
-            </div>
-          )}
-
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            <RateBox label="Floor rate" value={money(r.range_low)} note="Never go below this" />
-            <RateBox label="Standard" value={money(r.total)} note="Quote this first" hero />
-            <RateBox label="Premium" value={money(r.range_high)} note="Full rights + exclusivity" />
-          </div>
-        </div>
-      </div>
-
-      {/* Negotiation strategy */}
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+    <div className="space-y-4">
+      {/* Negotiation */}
+      <div className="grid gap-4 sm:grid-cols-2">
         <Panel className="p-5">
           <Eyebrow>Open here</Eyebrow>
           <p className="mt-2 font-display text-[28px] font-extrabold leading-none text-[#1C1C1C]">
@@ -792,8 +875,8 @@ function Results({
         </Panel>
       </div>
 
-      {/* How the two methods compare */}
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      {/* Method comparison */}
+      <div className="grid gap-4 sm:grid-cols-2">
         <Panel className={`p-5 ${cpmWins ? "ring-2 ring-[#C9A84C]/45" : ""}`}>
           <div className="flex items-center justify-between">
             <Eyebrow tone="muted">CPM method · reach</Eyebrow>
@@ -812,14 +895,12 @@ function Results({
           <p className="mt-2 font-display text-[26px] font-extrabold leading-none text-[#1C1C1C]">
             {money(r.price_cpe_final)}
           </p>
-          <p className="mt-2 text-[13px] text-neutral-500">
-            Across {n(r.interactions)} interactions
-          </p>
+          <p className="mt-2 text-[13px] text-neutral-500">Across {n(r.interactions)} interactions</p>
         </Panel>
       </div>
 
       {/* Evidence */}
-      <div className="mt-4 grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <Panel className="p-5">
           <Eyebrow tone="muted">Engagement rate</Eyebrow>
           <p
@@ -844,14 +925,12 @@ function Results({
           <p className="mt-2 font-display text-[26px] font-extrabold leading-none text-[#1C1C1C]">
             {money(r.adjustedCPM)}
           </p>
-          <p className="mt-2 text-[13px] text-neutral-500">
-            Per 1 000 views, after every multiplier
-          </p>
+          <p className="mt-2 text-[13px] text-neutral-500">Per 1 000 views, after every multiplier</p>
         </Panel>
       </div>
 
       {/* Benchmark bars */}
-      <Panel className="mt-4 p-5 sm:p-6">
+      <Panel className="p-5 sm:p-6">
         <Eyebrow tone="muted">How you compare</Eyebrow>
         <div className="mt-4 space-y-3">
           {[
@@ -879,18 +958,18 @@ function Results({
           ))}
         </div>
         <p className="mt-4 text-[13px] leading-relaxed text-neutral-500">
-          African creators average <strong className="text-[#A98A38]">3.39% ER</strong> against
-          1.49% globally. Use that in every brand conversation. Benchmarks are calibrated on South
-          African market data — the strongest creator-rate dataset on the continent.
+          African creators average <strong className="text-[#A98A38]">3.39% ER</strong> against 1.49%
+          globally. Use that in every brand conversation. Benchmarks are calibrated on South African
+          market data — the strongest creator-rate dataset on the continent.
         </p>
       </Panel>
 
-      {/* Strategic insights */}
-      <Panel className="mt-4 p-5 sm:p-6">
+      {/* Tips */}
+      <Panel className="p-5 sm:p-6">
         <Eyebrow>What to actually do with this</Eyebrow>
         <ul className="mt-4 space-y-3">
-          {tips.map((t, i) => (
-            <li key={i} className="flex gap-3 text-[14px] leading-relaxed text-neutral-700">
+          {tips.map((t, idx) => (
+            <li key={idx} className="flex gap-3 text-[14px] leading-relaxed text-neutral-700">
               <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#C9A84C]" />
               <span>{t}</span>
             </li>
@@ -899,10 +978,10 @@ function Results({
       </Panel>
 
       {/* Full working */}
-      <Panel className="mt-4">
+      <Panel id="full-working" className="scroll-mt-24">
         <button
-          onClick={() => setShowBreakdown((v) => !v)}
-          aria-expanded={showBreakdown}
+          onClick={onToggleWorking}
+          aria-expanded={showWorking}
           className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6"
         >
           <span>
@@ -914,22 +993,19 @@ function Results({
             </span>
           </span>
           <span
-            className={`shrink-0 text-neutral-400 transition-transform ${showBreakdown ? "rotate-180" : ""}`}
+            className={`shrink-0 text-neutral-400 transition-transform ${showWorking ? "rotate-180" : ""}`}
           >
             ▾
           </span>
         </button>
-        {showBreakdown && (
+        {showWorking && (
           <div className="space-y-5 border-t border-neutral-200/80 p-5 sm:p-6">
             <BreakdownBlock
               title="CPM calculation — priced on reach"
               rows={[
                 [`Base niche CPM (${r.niche})`, `R ${r.nicheCPM.cpm.toFixed(2)} / 1 000 views`],
                 [`× Tier (${r.tier.label})`, r.tier.mult.toFixed(2)],
-                [
-                  `× Platform average (${r.selPlats.join(" + ") || "instagram"})`,
-                  r.cpm_mult.toFixed(2),
-                ],
+                [`× Platform average (${r.selPlats.join(" + ") || "instagram"})`, r.cpm_mult.toFixed(2)],
                 [`× Content type (${r.ct.label})`, r.ct.mult.toFixed(2)],
                 ["= Adjusted CPM", `R ${r.adjustedCPM.toFixed(2)} / 1 000`],
                 ["× Views", n(r.views)],
@@ -940,10 +1016,7 @@ function Results({
               title="CPE calculation — priced on engagement"
               rows={[
                 ["Engagement rate", `${r.er.toFixed(2)}%`],
-                [
-                  `CPE tier (${r.cpeTierData.label})`,
-                  `R ${r.cpeTierData.cpe_zar.toFixed(2)} / interaction`,
-                ],
+                [`CPE tier (${r.cpeTierData.label})`, `R ${r.cpeTierData.cpe_zar.toFixed(2)} / interaction`],
                 ["× Platform CPE average", r.cpe_mult.toFixed(2)],
                 ["× Total interactions", n(r.interactions)],
               ]}
@@ -980,14 +1053,7 @@ function Results({
       </Panel>
 
       <EmailCapture result={r} currency={currency} rates={rates} money={money} />
-
-      <button
-        onClick={onEdit}
-        className="mt-4 w-full rounded-xl border border-neutral-300 bg-white px-6 py-4 text-[14px] font-bold text-neutral-700 transition hover:border-neutral-400"
-      >
-        ← Change my numbers
-      </button>
-    </>
+    </div>
   );
 }
 
@@ -1006,10 +1072,10 @@ function BreakdownBlock({
         {title}
       </p>
       <div className="divide-y divide-neutral-100">
-        {rows.map(([k, v], i) => (
-          <div key={i} className="flex items-start justify-between gap-4 px-4 py-2.5">
+        {rows.map(([k, val], idx) => (
+          <div key={idx} className="flex items-start justify-between gap-4 px-4 py-2.5">
             <span className="text-[13px] leading-snug text-neutral-600">{k}</span>
-            <span className="shrink-0 text-right text-[13px] font-bold text-[#1C1C1C]">{v}</span>
+            <span className="shrink-0 text-right text-[13px] font-bold text-[#1C1C1C]">{val}</span>
           </div>
         ))}
         <div className="flex items-center justify-between gap-4 bg-[#C9A84C]/10 px-4 py-3">
@@ -1017,36 +1083,6 @@ function BreakdownBlock({
           <span className="text-[15px] font-extrabold text-[#1C1C1C]">{total[1]}</span>
         </div>
       </div>
-    </div>
-  );
-}
-
-function RateBox({
-  label,
-  value,
-  note,
-  hero,
-}: {
-  label: string;
-  value: string;
-  note: string;
-  hero?: boolean;
-}) {
-  return (
-    <div
-      className={`rounded-2xl border p-4 text-center ${hero ? "border-[#C9A84C] bg-[#C9A84C]" : "border-white/12 bg-white/[0.04]"}`}
-    >
-      <p
-        className={`text-[10px] font-bold uppercase tracking-[0.16em] ${hero ? "text-[#1C1C1C]/70" : "text-white/45"}`}
-      >
-        {label}
-      </p>
-      <p
-        className={`mt-2 font-display text-[22px] font-extrabold leading-none ${hero ? "text-[#1C1C1C]" : "text-white"}`}
-      >
-        {value}
-      </p>
-      <p className={`mt-2 text-[12px] ${hero ? "text-[#1C1C1C]/65" : "text-white/40"}`}>{note}</p>
     </div>
   );
 }
@@ -1089,8 +1125,6 @@ function EmailCapture({
             tier: r.tier.label,
             er: r.er.toFixed(2),
             erLabel: r.cpeTierData.label,
-            // Same currency the creator is looking at — the PDF is the document
-            // they forward to the brand, so it must never revert to rands.
             floor: money(r.range_low),
             standard: money(r.total),
             ceiling: money(r.range_high),
@@ -1109,8 +1143,6 @@ function EmailCapture({
       trackToolEvent("rate-card", "lead", { email, meta: { currency } });
     } catch {
       setState("idle");
-      // Never surface a raw server string. A creator once saw the literal word
-      // "Forbidden" here and reasonably concluded the tool was broken.
       setMsg(
         "We couldn't send that just now. Check the email address and try again — if it keeps failing, reply to any of our emails and we'll send it manually.",
       );
@@ -1119,7 +1151,7 @@ function EmailCapture({
 
   if (state === "sent") {
     return (
-      <Panel raised className="mt-4 p-6 text-center sm:p-8">
+      <Panel raised id="get-pdf" className="scroll-mt-24 p-6 text-center sm:p-8">
         <p className="font-display text-[22px] font-extrabold text-[#1C1C1C]">Check your inbox.</p>
         <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-neutral-600">
           Your rate card PDF is on its way to <strong>{email}</strong>. Forward it straight to the
@@ -1130,7 +1162,7 @@ function EmailCapture({
   }
 
   return (
-    <Panel raised className="mt-4 p-5 sm:p-7">
+    <Panel raised id="get-pdf" className="scroll-mt-24 p-5 sm:p-7">
       <Eyebrow>Get the PDF</Eyebrow>
       <h3 className="mt-3 font-display text-[22px] font-bold tracking-tight text-[#1C1C1C] sm:text-[26px]">
         Send yourself the rate card.

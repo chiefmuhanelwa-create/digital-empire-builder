@@ -114,13 +114,16 @@ export function Panel({
   children,
   className,
   raised = false,
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
   raised?: boolean;
+  id?: string;
 }) {
   return (
     <div
+      id={id}
       className={cn(
         "rounded-2xl border border-neutral-200/90 bg-white",
         raised
