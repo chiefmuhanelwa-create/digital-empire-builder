@@ -1596,3 +1596,61 @@ Spine already matched blueprint. Built the 4 gaps the user picked:
 - **`Panel` in `premium.tsx` gained an optional `id` prop** (for scroll anchors like `#get-pdf`, `#full-working`).
 - **Hook Generator (`/hook-generator`) reskinned to the premium kit** (cream ground, dot grid + gold bloom, hairline white Panels, charcoal-gold lock/upsell moments) — logic untouched (Turnstile single-use reset, 3-free limit, R×A×C×U^B server call). It's the proven pattern for reskinning the remaining tools (Media Kit, SARS Calculator, Offer Builder, Align·Accelerate·Excel).
 - **Deviation flagged to founder:** primary summary CTA is "Email me the rate card PDF" (the real flow — server emails the creator the designed PDF to forward), NOT the spec's "Send PDF to Brand" / client-side "Download Branded PDF" — no in-browser PDF generation or direct-to-brand send exists. Awaiting decision on whether to build a real download button.
+
+## 2026-08-25 — Auditing the audit: why the docs were wrong in both directions
+
+Asked to map a strategy brief onto the platform, I built the first plan from
+`Learnings.md` and `docs/ARCHITECTURE.md`. The founder rejected it — correctly. Both
+documents were stale, and the errors ran in **both** directions.
+
+- **`Learnings.md` had stopped 5 days and 25 commits behind HEAD.** The four most
+  substantive audits since 08-20 existed only in commit messages (`1c30403` checkout
+  security, `0cd5b90` Foundation Kit delivery, `c690bab` workbook audit, `0132fe5`
+  health-check corrections). A doc that is written at the end of a session stops being
+  true the moment the next session ships without one.
+- **Some fixes never touch git at all.** The Creator Bundle "45% of leads never receive
+  the bundle" gap was fixed by switching off double opt-in *in the MailerLite dashboard*.
+  Live now: 60 subscribers, 60 active, 0 unconfirmed. No commit, no migration, nothing to
+  grep. **A repo-only audit cannot see a dashboard fix.**
+- **Migrations are not the catalogue.** 14 product slugs — including `asset-accelerator`
+  and `creator-swipe-vault` — have no seed migration anywhere; they exist only in the
+  live DB from admin/Lovable-era writes. Counting products by grepping migrations
+  systematically undercounts and mis-flags. The live table says **23 published, all ZAR**.
+- **The pessimistic errors mattered as much as the optimistic ones.** "5 products deliver
+  nothing" was wrong: of 7 published rows with no `download_path`, five are correct by
+  design (physical book, membership, app-gated cohort, workspace kit, human-delivered
+  programme). The real number is **2**. Over-reporting breakage burns trust just as fast
+  as under-reporting it.
+- **Verify liveness before recommending a delist.** Both "broken" external tool tiles
+  return HTTP 200. The invoice generator's failure is its email send, not its page.
+
+**Method that actually worked:** query the live system directly. The Supabase anon key in
+`.env` reads the published catalogue over PostgREST; the MailerLite MCP returns real group
+counts. RLS correctly returns `*/0` to anon on `orders`/`subscribers`/`tool_events`, so
+those counts still need the service role or `/admin/tools` — and that limit is worth
+stating rather than guessing around.
+
+**Rule going in:** for any claim about what is live, the authority order is
+live system → git log → dated docs. Never the other way round.
+
+### Also this session
+- `/apply` never wrote to `subscribers` — only `client_stewardship_applications`. So
+  applicants were invisible to `/admin/contacts` and every subscriber count, and
+  `docs/ARCHITECTURE.md:589` asserted the opposite. Fixed, and the doc line corrected.
+- Foundation Kit's live R1,565.03 existed **nowhere** as a value in any `.sql` file —
+  only in comments. The last migration to set the price writes `9700 / 'USD'`, and
+  Paystack cannot bill USD on this account, so a fresh rebuild produced a kit South
+  Africans could not buy. Pinned in `20260825120000`.
+- Certification specced and built (founder override of the "not Year 1" ruling):
+  `docs/CERTIFICATION-SPEC.md`, a `certificates` table, and `/verify/$slug`. Design
+  choice worth keeping: **a revoked certificate resolves rather than 404s** — one that
+  vanishes when withdrawn is indistinguishable from one that never existed.
+- **A view that anon must read cannot rely on generated types until the migration is
+  pushed.** `certificates` is absent from `src/integrations/supabase/types.ts` because
+  those types are generated from the live DB. Used a documented narrow cast in
+  `certificates.functions.ts` rather than hand-editing a generated file; it deletes
+  itself once `supabase gen types` is re-run.
+- GitHub PAT moved out of plaintext `.git/config` (this repo and `product-lab/web-tools`)
+  into the macOS keychain via `git credential approve`; remotes are now plain HTTPS and
+  still authenticate. No SSH keys exist on this machine and `gh` is not installed, so
+  "switch to SSH" was not available. **The token still needs rotating.**

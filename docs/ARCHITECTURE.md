@@ -7,7 +7,7 @@
 > the same session it makes the change.** It is not a one-time snapshot — treat drift
 > here the same as an untested code path: not done until it's written down.
 >
-> Last verified against the live repo: 2026-07-29 (63 migrations, cart/quick-view/header
+> Last verified against the live repo: 2026-08-25 (73 migrations, cart/quick-view/header
 > rebuild + Tools Hub Phase 1/2 + real ops alerting on critical failures — just shipped).
 
 ---
@@ -26,7 +26,7 @@
 │ Supabase PostgreSQL    │ Supabase magic-link + password          │
 │ 40+ tables/functions,  │ First registered user → auto admin      │
 │ RLS on every table     │ (DB trigger)                            │
-│ 62 migrations          │                                         │
+│ 73 migrations          │                                         │
 ├───────────────────────┼───────────────────────────────────────┤
 │ Payments (ZAR)         │ Payments (Global)                       │
 │ Paystack               │ Stripe                                  │
@@ -107,7 +107,7 @@ routes: [
   // MEMBER_PATH_PREFIXES in src/lib/domains.ts (Cloudflare route patterns are
   // config and cannot read that array).
   "contentpreneur.africa/dashboard*"           → this Worker (the Foundation Kit workspace)
-  "contentpreneur.africa/apps/*"               → this Worker (the 11 kit-gated tools)
+  "contentpreneur.africa/apps/*"               → this Worker (the 27 kit-gated tools)
   "contentpreneur.africa/learn*"               → this Worker (LMS)
   "contentpreneur.africa/account*"             → this Worker
   "contentpreneur.africa/login*"               → this Worker
@@ -159,7 +159,8 @@ exports `scheduled()` to route the two cron triggers above to `fx-sync.ts` /
 | `/checkout/success` | `checkout.success.tsx` | Post-payment landing — download link + "check your email" notice |
 | `/about`, `/contact`, `/terms`, `/privacy`, `/refund-policy` | | Static/legal |
 | `/tools` | `tools.tsx` | Free tools index |
-| `/rate-card`, `/media-kit`, `/sars-calculator`, `/hook-generator`, `/offer-builder`, `/niche-clarity`, `/align-accelerate-excel` | | Standalone free lead-magnet tools, each with its own `*.functions.ts` |
+| `/rate-card`, `/media-kit`, `/sars-calculator`, `/hook-generator`, `/offer-builder`, `/niche-clarity`, `/align-accelerate-excel`, `/positioning`, `/rented`, `/provisional-tax` (alias `/tax`), `/tax-guide`, `/creator-bundle` | | Standalone free lead-magnet tools, each with its own `*.functions.ts`. `/positioning` was orphaned until 2026-08-25 — live, with an engine and PDF, but linked from nothing; it is now in `src/lib/tools.ts`. `/rented` is still orphaned and needs a founder call on where it belongs. |
+| `/verify/$slug` | | **Public certificate verification.** No auth, `noindex`. Reads through `verifyCertificate` in `src/lib/certificates.functions.ts`, which returns only holder / level / issue date / revocation — never `evidence`. Revoked certificates resolve rather than 404. See `docs/CERTIFICATION-SPEC.md`. |
 | `/starterkit`, `/foundation`, `/accelerator` | | contentpreneur.africa flagship funnels (routed here per §3), own `ContentpreneurHeader`/`Footer` |
 
 ### Authenticated (`_authenticated/` prefix — Supabase session required)
@@ -176,7 +177,7 @@ paths there. In-page links out to the storefront must therefore be ABSOLUTE — 
 | `/dashboard/products/free`, `/dashboard/products/paid` | Owned-products views |
 | `/dashboard/foundation-kit`, `/dashboard/inner-circle`, `/dashboard/community` | Program-specific member views |
 | `/learn`, `/learn/$slug`, `/learn/$slug/$lessonSlug` | LMS — course list, modules, lessons |
-| `/apps/*` (**11** routes) | Interactive member tools, all gated on `useKitAccess` — 4E calendar, DARES model, income tracker, niche-clarity builder, knowledge audit, MS×TS×SS, PAIDS auditor, consistency blueprint, first-income planner, right-side diagnostic, seeds-pipeline. This count is what the Foundation Kit sales copy claims; if a tool is added or gated differently, the copy in `/foundation` and the product's `benefits` must move with it. |
+| `/apps/*` (**27** routes, verified 2026-08-25) | Interactive member tools, all gated on `useKitAccess` — 4E calendar, DARES model, income tracker, niche-clarity builder, knowledge audit, MS×TS×SS, PAIDS auditor, consistency blueprint, first-income planner, right-side diagnostic, seeds-pipeline. This count is what the Foundation Kit sales copy claims; if a tool is added or gated differently, the copy in `/foundation` and the product's `benefits` must move with it. |
 
 ### Admin (admin role via `has_role()` RPC)
 | Route | Purpose |
@@ -200,7 +201,7 @@ paths there. In-page links out to the storefront must therefore be ABSOLUTE — 
 
 ---
 
-## 5. Database (Supabase Postgres, RLS everywhere, 62 migrations)
+## 5. Database (Supabase Postgres, RLS everywhere, 73 migrations)
 
 **Never edit a migration file. Always add a new one.** `npx supabase db push` applies
 pending migrations to the linked remote project.
@@ -232,6 +233,22 @@ tool_submissions                         — generic cross-tool input/output cap
                                             capture, added once rather than a table per
                                             tool; admin-read-only via RLS
 contact_submissions                      — /contact form
+certificates                             — Contentpreneur Certification (levels 1-5).
+                                            One live cert per level per holder (partial
+                                            unique index); revocation requires a reason
+                                            (check constraint); `evidence` jsonb is
+                                            frozen at issue and carries revenue figures,
+                                            so it is never exposed. Anon reads go through
+                                            the `certificates_public` VIEW only — no
+                                            user_id, no evidence, no assessor. Public
+                                            page: /verify/$slug. Spec:
+                                            docs/CERTIFICATION-SPEC.md
+kit_workspace                            — Foundation Kit member workspace state
+leak_audits                              — The Leak audit (basis + items jsonb,
+                                            denormalised annual_value_cents)
+tool_events                              — tool funnel analytics (view/start/complete/
+                                            lead), powers /admin/tools
+agent_events                             — department agent event log
 incidents                                — error/incident log (admin/incidents)
 audit_ledgers                            — admin/ledger transaction audit
 email_send_log, email_send_state,
@@ -550,6 +567,58 @@ for every server-only value in `.env.example`.
 
 ## 13. Known Gaps / Flagged Items (keep current — remove once resolved)
 
+### Verified against live systems 2026-08-25 — corrections to entries below
+
+The entries in this section were written from `Learnings.md`, which stopped at
+2026-08-20 and is now behind HEAD. Checked against the live Supabase catalogue, the
+live MailerLite account and `git log`. **Where a system and a document disagreed, the
+system won.** Corrections:
+
+- ✅ **RESOLVED — Creator Bundle double opt-in.** The "~45% of leads never receive the
+  bundle" entry is obsolete. Live: **60 subscribers, 60 active, 0 unconfirmed**, with
+  new signups landing active on 08-20/21/23/24. Double opt-in was switched off in the
+  MailerLite dashboard, so the fix is invisible to this repo — which is exactly why the
+  doc went stale. **Lesson: not every fix lands in git.**
+- ✅ **Lead capture is healthy.** 173 subscribers across 13 groups. Rate Card 35,
+  DM_LEADS 33, Tax 19, StarterKit 13, BUYERS 7 (85% open). `addToMailerLiteGroup`
+  cannot throw, so an ESP failure can never lose a lead.
+- ✅ **Payments are working.** The old "1 of 12 payments came through CHKPLT" framing is
+  dead. Both rails are signature-verified with atomic idempotent claims; two real
+  vulnerabilities were closed on 2026-08-25 (`1c30403`); a real $997 Accelerator buyer
+  is on record (that buyer is what surfaced `0cd5b90`).
+- ⚠️ **Delivery gap is 2 products, not 5.** Verified against the live `products` table:
+  **23 published products, all ZAR.** Of the 7 with no `download_path`, five are correct
+  by design (physical book, monthly membership, application-gated cohort, workspace kit,
+  human-delivered programme). Genuinely broken:
+  1. `called-expert-foundations` — R4,791.89, **not** application-gated, `format` says
+     "LMS course — 4 recorded modules, self-paced", live DB holds **zero** modules and
+     zero lessons. Module rows exist for exactly two products account-wide
+     (`contentpreneur-90day-cohort` 7, `called-expert-foundation-kit` 1).
+     **This also blocks Certification Level 1 — see docs/CERTIFICATION-SPEC.md §7.**
+  2. `called-expert-foundation-kit-bonus` — R290.42, `format` says "Digital download —
+     3 PDF tools", no `download_path`. This is also the order bump that `/foundation`
+     never offers; wiring the bump before fixing the file would sell a broken product.
+- ✅ **No ₦NGN products are live.** The 2026-05-25 placeholders (`digital-empire-blueprint`,
+  `founders-circle`, `starter-toolkit`) are not in the published catalogue.
+- ⚠️ **The external tool tiles are NOT dead pages.** Both
+  `invoice-generator-delta-navy.vercel.app` and `nochill-income-matcher.vercel.app`
+  return HTTP 200. The invoice generator's broken part is its *email send* (unset Zoho
+  env on a separate Vercel project), not the page. Do not delist them.
+- ⚠️ **Still open, unchanged:** `apply.functions.ts`, `offer-builder.functions.ts` and
+  `aligned.functions.ts` still route through `MAILERLITE_GROUP_ID_CALLED_EXPERT` /
+  `_ALIGNED`, and **no group with either ID exists in the live account**. Note
+  `aligned`'s `??` fallback only catches null/undefined, so a secret set to a dead value
+  wins and never falls back. Fix is either re-pointing the secrets or moving these three
+  onto `src/lib/mailerlite-groups.ts` — which is the whole reason that file exists.
+- ⚠️ **`BUYERS` (7 subs, 85% open) vs `CHKPLT BUYERS` (1 sub)** — the code writes to the
+  one with 1. Founder ruling still outstanding; `PRODUCT_BUYER_GROUPS` stays empty until
+  it lands.
+- 🔑 **Git credentials.** The inline GitHub PAT was removed from `.git/config` in this
+  repo and in `product-lab/web-tools` on 2026-08-25 and moved into the macOS keychain;
+  both remotes are now plain HTTPS and `git ls-remote` still authenticates. **The token
+  itself should still be rotated** — it existed in plaintext on disk for months.
+
+
 - **Two manual dashboard steps are REQUIRED before the Phase 3 domain move works**
   (code is deployed, these are config outside the repo):
   1. **Supabase → Authentication → URL Configuration.** Add
@@ -586,8 +655,13 @@ for every server-only value in `.env.example`.
   `MAILERLITE_GROUP_ID_FREE_KNOWLEDGE_AUDIT`; almost certainly the former, since no
   group of that name exists in the account. Used by BOTH `offer-builder.functions.ts`
   and `apply.functions.ts`, so qualified Accelerator applicants are not being synced.
-  Leads are still safe — they are written to `subscribers` before the ESP call — but
-  they never enter a nurture sequence. **Founder must re-point the env var.** Live group
+  Leads are safe on every path — written to `subscribers` before the ESP call — but
+  they never enter a nurture sequence. **Founder must re-point the env var.**
+  (Corrected 2026-08-25: this "every path" claim was FALSE for `/apply`, which only
+  ever wrote to `client_stewardship_applications`, making applicants invisible to
+  `/admin/contacts` and to every subscribers-based count. `apply.functions.ts` now
+  upserts `subscribers` first. Verified live the same day: the account holds 173
+  subscribers across 13 groups, so capture itself is healthy.) Live group
   IDs: CHKPLT BUYERS `190855383448815273` · Knowledge Audit `190855293404448728` ·
   StarterKit Leads `194182161960535616` · CREATOR BUNDLE LEADS `190074355106973432`.
 - `MAILERLITE_GROUP_ID_BUYERS` points at a group literally *named*
