@@ -145,7 +145,13 @@ export const initializeCheckout = createServerFn({ method: "POST" })
         .select("id,slug,title,price_cents,currency,status,is_free")
         .in("slug", bumpSlugs);
       bumps = (bumpRows ?? [])
-        .filter((b) => b.status === "published" && !b.is_free && b.price_cents > 0 && b.currency === product.currency)
+        .filter(
+          (b) =>
+            b.status === "published" &&
+            !b.is_free &&
+            b.price_cents > 0 &&
+            b.currency === product.currency,
+        )
         .map((b) => ({ id: b.id, slug: b.slug, title: b.title, price_cents: b.price_cents }));
     }
     const bumpTotal = bumps.reduce((sum, b) => sum + b.price_cents, 0);
@@ -217,16 +223,17 @@ export const initializeCheckout = createServerFn({ method: "POST" })
     // costs nothing. A LIST WRITE proves nothing, so it does not get to happen
     // on an unverified request. The sale still goes through either way.
     const nameParts = (data.fullName ?? "").trim().split(/\s+/);
-    if (turnstile.verified) void supabaseAdmin.from("subscribers").upsert(
-      {
-        email: data.email.toLowerCase(),
-        first_name: nameParts[0] || null,
-        last_name: nameParts.slice(1).join(" ") || null,
-        phone: data.phone ?? null,
-        source: data.utmSource ? `utm:${data.utmSource}` : "checkout_intent",
-      },
-      { onConflict: "email" },
-    );
+    if (turnstile.verified)
+      void supabaseAdmin.from("subscribers").upsert(
+        {
+          email: data.email.toLowerCase(),
+          first_name: nameParts[0] || null,
+          last_name: nameParts.slice(1).join(" ") || null,
+          phone: data.phone ?? null,
+          source: data.utmSource ? `utm:${data.utmSource}` : "checkout_intent",
+        },
+        { onConflict: "email" },
+      );
 
     // 3. Initialize Paystack transaction
     const host = getRequestHost();
@@ -268,10 +275,7 @@ export const initializeCheckout = createServerFn({ method: "POST" })
     }
 
     // Persist the reference
-    await supabaseAdmin
-      .from("orders")
-      .update({ provider_reference: ref })
-      .eq("id", order.id);
+    await supabaseAdmin.from("orders").update({ provider_reference: ref }).eq("id", order.id);
 
     await supabaseAdmin.from("payments").insert({
       order_id: order.id,
@@ -426,16 +430,17 @@ export const initializeStripeCheckout = createServerFn({ method: "POST" })
     // reach the payment page (fail-open protects real sales) but may NOT write
     // to the subscriber list. Fixing only one of the two branches would have
     // left the identical hole open on the international checkout.
-    if (turnstile.verified) void supabaseAdmin.from("subscribers").upsert(
-      {
-        email: data.email.toLowerCase(),
-        first_name: nameParts[0] || null,
-        last_name: nameParts.slice(1).join(" ") || null,
-        phone: data.phone ?? null,
-        source: data.utmSource ? `utm:${data.utmSource}` : "checkout_intent",
-      },
-      { onConflict: "email" },
-    );
+    if (turnstile.verified)
+      void supabaseAdmin.from("subscribers").upsert(
+        {
+          email: data.email.toLowerCase(),
+          first_name: nameParts[0] || null,
+          last_name: nameParts.slice(1).join(" ") || null,
+          phone: data.phone ?? null,
+          source: data.utmSource ? `utm:${data.utmSource}` : "checkout_intent",
+        },
+        { onConflict: "email" },
+      );
 
     const host = getRequestHost();
     const protocol = host.includes("localhost") ? "http" : "https";
@@ -484,7 +489,10 @@ export const initializeStripeCheckout = createServerFn({ method: "POST" })
       throw new Error("Stripe checkout initialization failed");
     }
 
-    await supabaseAdmin.from("orders").update({ provider_reference: session.id }).eq("id", order.id);
+    await supabaseAdmin
+      .from("orders")
+      .update({ provider_reference: session.id })
+      .eq("id", order.id);
     await supabaseAdmin.from("payments").insert({
       order_id: order.id,
       provider: "stripe",
@@ -501,9 +509,7 @@ export const initializeStripeCheckout = createServerFn({ method: "POST" })
   });
 
 export const verifyCheckout = createServerFn({ method: "POST" })
-  .inputValidator((input) =>
-    z.object({ reference: z.string().min(1).max(120) }).parse(input),
-  )
+  .inputValidator((input) => z.object({ reference: z.string().min(1).max(120) }).parse(input))
   .handler(async ({ data }) => {
     const { data: order } = await supabaseAdmin
       .from("orders")
@@ -564,7 +570,9 @@ export const verifyCheckout = createServerFn({ method: "POST" })
 // page polls verifyCheckout(reference) for the download — same as the main flow.
 export const chargeUpsell = createServerFn({ method: "POST" })
   .inputValidator((input) =>
-    z.object({ email: z.string().email().max(255), productSlug: z.string().min(1).max(120) }).parse(input),
+    z
+      .object({ email: z.string().email().max(255), productSlug: z.string().min(1).max(120) })
+      .parse(input),
   )
   .handler(async ({ data }) => {
     const secret = process.env.PAYSTACK_SECRET_KEY;
@@ -632,8 +640,15 @@ export const chargeUpsell = createServerFn({ method: "POST" })
     const json: any = await res.json();
     const ok = res.ok && json.status && json.data?.status === "success";
     if (!ok) {
-      await supabaseAdmin.from("orders").update({ status: "failed", metadata: { error: json } }).eq("id", order.id);
-      return { ok: false as const, reason: "charge_failed" as const, message: json.data?.gateway_response || json.message };
+      await supabaseAdmin
+        .from("orders")
+        .update({ status: "failed", metadata: { error: json } })
+        .eq("id", order.id);
+      return {
+        ok: false as const,
+        reason: "charge_failed" as const,
+        message: json.data?.gateway_response || json.message,
+      };
     }
     // charge.success webhook (fired by Paystack) grants + sends receipt for this ref.
     return { ok: true as const, reference: ref };
@@ -727,7 +742,10 @@ export const initializeSubscription = createServerFn({ method: "POST" })
     });
     const initJson: any = await initRes.json();
     if (!initRes.ok || !initJson.status) {
-      await supabaseAdmin.from("orders").update({ status: "failed", metadata: { error: initJson } }).eq("id", order.id);
+      await supabaseAdmin
+        .from("orders")
+        .update({ status: "failed", metadata: { error: initJson } })
+        .eq("id", order.id);
       throw new Error(initJson.message || "Paystack subscription init failed");
     }
 
