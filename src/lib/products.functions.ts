@@ -492,9 +492,22 @@ export const claimMyGrants = createServerFn({ method: "POST" })
  *
  * Returns only a count. No customer data crosses this boundary.
  */
+// ⚠️ PUBLIC AND UNAUTHENTICATED. It runs with the service role, so what it is
+// allowed to answer questions ABOUT has to be pinned down.
+//
+// As first written it accepted ANY slug and returned exact paid units, which
+// let anybody enumerate the precise sales volume of every product in the
+// catalogue — a business-intelligence leak introduced to power one counter on
+// one sales page. The allowlist is the whole fix: only products that publicly
+// display a counter can be asked about, and everything else returns null the
+// same way an unknown slug does.
+const PUBLIC_UNIT_COUNTS = new Set(["called-expert-foundation-kit"]);
+
 export const paidUnitsForSlug = createServerFn({ method: "POST" })
   .inputValidator((input) => z.object({ slug: z.string().min(1).max(120) }).parse(input))
   .handler(async ({ data }) => {
+    if (!PUBLIC_UNIT_COUNTS.has(data.slug)) return { units: null as number | null };
+
     const { data: product } = await supabaseAdmin
       .from("products")
       .select("id")

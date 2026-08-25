@@ -201,10 +201,23 @@ export const initializeCheckout = createServerFn({ method: "POST" })
     ]);
     if (iErr) throw new Error(iErr.message);
 
-    // Pre-payment lead capture — save to subscribers before Paystack redirect
-    // so abandoned checkouts are still captured for follow-up nurture.
+    // Pre-payment lead capture — save to subscribers before the Paystack
+    // redirect so abandoned checkouts are still captured for nurture.
+    //
+    // ⚠️ ONLY WHEN TURNSTILE ACTUALLY VERIFIED.
+    //
+    // This endpoint is unauthenticated by necessity, and checkout deliberately
+    // FAILS OPEN on Turnstile so a broken widget never costs a real sale. Those
+    // two facts together handed anybody a free primitive for writing arbitrary
+    // emails, names, phone numbers and utm strings straight into the subscriber
+    // table — at volume, with a bot, into the list this entire business runs on.
+    //
+    // The asymmetry is the fix. A PAYMENT proves itself: money either arrives
+    // or it does not, so letting an unverified request continue to Paystack
+    // costs nothing. A LIST WRITE proves nothing, so it does not get to happen
+    // on an unverified request. The sale still goes through either way.
     const nameParts = (data.fullName ?? "").trim().split(/\s+/);
-    void supabaseAdmin.from("subscribers").upsert(
+    if (turnstile.verified) void supabaseAdmin.from("subscribers").upsert(
       {
         email: data.email.toLowerCase(),
         first_name: nameParts[0] || null,
@@ -409,7 +422,11 @@ export const initializeStripeCheckout = createServerFn({ method: "POST" })
 
     // Pre-payment lead capture (same as Paystack path).
     const nameParts = (data.fullName ?? "").trim().split(/\s+/);
-    void supabaseAdmin.from("subscribers").upsert(
+    // Same guard as the Paystack path above: an unverified request may still
+    // reach the payment page (fail-open protects real sales) but may NOT write
+    // to the subscriber list. Fixing only one of the two branches would have
+    // left the identical hole open on the international checkout.
+    if (turnstile.verified) void supabaseAdmin.from("subscribers").upsert(
       {
         email: data.email.toLowerCase(),
         first_name: nameParts[0] || null,
