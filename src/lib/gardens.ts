@@ -56,11 +56,11 @@ export const GARDEN_ORDER: Garden[] = ["deshe", "esev", "etz_pri", "devarim"];
 export const ZAR_PER_USD = 16.58;
 
 export const USD_DISPLAY: Record<string, number> = {
-  "called-expert-foundation-kit": 9700,   // $97  (charged R1,604 @ 16.58)
-  "called-expert-starter-bundle": 9700,   // $97  (charged ~R1,800)
-  "called-expert-foundations": 29700,     // $297 (charged ~R5,500)
-  "called-expert-facilitator": 400000,    // $4,000 (charged R75,000)
-  "called-expert-inner-circle": 2900,     // $29/mo (charged R540/mo) — DRIFT: dashboard.inner-circle.tsx:38,78 hardcodes "$39/mo" instead of reading this value. Not resolved here — no source establishes which number is the actual intended price (Paystack plan PLN_4oafnq18t7e36gl's real billing amount isn't visible from code); needs a founder/ops decision, not a guess.
+  "called-expert-foundation-kit": 9700,   // $97  (charged R1,565.03 @ 16.13 — verified live 2026-08-25)
+  "called-expert-starter-bundle": 9700,   // $97  (charged R1,565.03 — verified live 2026-08-25)
+  "called-expert-foundations": 29700,     // $297 (charged R4,791.89 — verified live 2026-08-25)
+  "called-expert-facilitator": 400000,    // $4,000 (charged R64,537.20 — verified live 2026-08-25)
+  "called-expert-inner-circle": 2900,     // $29/mo (DB row R467.89/mo, Paystack bills R540/mo) — DRIFT: dashboard.inner-circle.tsx:38,78 hardcodes "$39/mo" instead of reading this value. Not resolved here — no source establishes which number is the actual intended price (Paystack plan PLN_4oafnq18t7e36gl's real billing amount isn't visible from code); needs a founder/ops decision, not a guess.
   // Founder ruling 2026-08-19: the ladder is $97 → $997 → $2,997. Everything
   // else becomes an order bump or a downsell, not a rung.
   // USD is the source of truth; the ZAR in price_cents is derived at 16.13 —
@@ -68,8 +68,8 @@ export const USD_DISPLAY: Record<string, number> = {
   // repricing these two moves nothing else.
   "contentpreneur-90day-cohort": 99700,   // $997 (charged R16,081.61) — was $499, reprice 2026-08-19
   "contentpreneur-vip-tier": 299700,      // $2,997 (charged R48,341.61) — new tier 2026-08-19
-  "creator-swipe-vault": 1700,            // $17 order bump (charged R290)
-  "asset-accelerator": 19700,             // $197 1-click upsell (charged R3,600)
+  "creator-swipe-vault": 1700,            // $17 order bump (charged R274.28 — verified live 2026-08-25)
+  "asset-accelerator": 19700,             // $197 1-click upsell (charged R3,178.46 — verified live 2026-08-25)
   "personal-brand-30-days": 4900,         // $49 video course (charged R899)
   "hook-science": 14700,                  // $147 flagship (Stage 4b — draft until content ships)
   "contentpreneur-community": 1900,       // $19/mo (charged ~R315) — draft until a real Paystack plan exists, see docs/RUNBOOK-COMMUNITY-LAUNCH.md

@@ -229,6 +229,26 @@ export const submitApplication = createServerFn({ method: "POST" })
         (err) => console.error("[apply] sendApplicationEmail failed", err),
       );
 
+      // Applicants used to live ONLY in client_stewardship_applications, which made them
+      // invisible to /admin/contacts and to every subscribers-based count — and when the
+      // MailerLite group ID below is stale, invisible everywhere. The DB write comes first
+      // so the lead survives an ESP failure.
+      const { error: subErr } = await supabaseAdmin.from("subscribers").upsert(
+        {
+          email: data.email,
+          first_name: data.full_name ?? null,
+          source: "apply",
+        },
+        { onConflict: "email", ignoreDuplicates: false },
+      );
+      if (subErr) {
+        void reportError(subErr, {
+          endpoint: "submitApplication:subscriberUpsert",
+          severity: "warning",
+          meta: { email: data.email },
+        });
+      }
+
       // Sync applicant to MailerLite — qualified → Contentpreneur buyer group, else → Knowledge Audit nurture.
       const nameParts = data.full_name.trim().split(/\s+/);
       await addToMailerLiteGroup(
