@@ -73,6 +73,7 @@ import { Route as AuthenticatedAppsTeleprompterRouteImport } from './routes/_aut
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
 import { Route as AuthenticatedAppsSaleScriptsRouteImport } from './routes/_authenticated/apps.sale-scripts'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
+import { Route as AuthenticatedAppsReturnRouteImport } from './routes/_authenticated/apps.return'
 import { Route as AuthenticatedAppsProofLedgerRouteImport } from './routes/_authenticated/apps.proof-ledger'
 import { Route as AuthenticatedAppsPriceDecisionRouteImport } from './routes/_authenticated/apps.price-decision'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
@@ -83,12 +84,16 @@ import { Route as AuthenticatedAppsMoneySplitRouteImport } from './routes/_authe
 import { Route as AuthenticatedAppsMethodNamerRouteImport } from './routes/_authenticated/apps.method-namer'
 import { Route as AuthenticatedAppsLeadMagnetRouteImport } from './routes/_authenticated/apps.lead-magnet'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
+import { Route as AuthenticatedAppsInvoiceRouteImport } from './routes/_authenticated/apps.invoice'
 import { Route as AuthenticatedAppsIncomeTrackerRouteImport } from './routes/_authenticated/apps.income-tracker'
 import { Route as AuthenticatedAppsHookBankRouteImport } from './routes/_authenticated/apps.hook-bank'
 import { Route as AuthenticatedAppsFirstIncomePlannerRouteImport } from './routes/_authenticated/apps.first-income-planner'
 import { Route as AuthenticatedAppsFirstFiveEmailsRouteImport } from './routes/_authenticated/apps.first-five-emails'
+import { Route as AuthenticatedAppsFigureCheckRouteImport } from './routes/_authenticated/apps.figure-check'
+import { Route as AuthenticatedAppsDealsRouteImport } from './routes/_authenticated/apps.deals'
 import { Route as AuthenticatedAppsDaresAssetModelRouteImport } from './routes/_authenticated/apps.dares-asset-model'
 import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
+import { Route as AuthenticatedAppsBriefCheckRouteImport } from './routes/_authenticated/apps.brief-check'
 import { Route as AuthenticatedAppsAdjacentThreeRouteImport } from './routes/_authenticated/apps.adjacent-three'
 import { Route as AuthenticatedApps4eContentCalendarRouteImport } from './routes/_authenticated/apps.4e-content-calendar'
 import { Route as AuthenticatedAdminToolsRouteImport } from './routes/_authenticated/admin.tools'
@@ -441,6 +446,11 @@ const AuthenticatedAppsRightSideDiagnosticRoute =
     path: '/apps/right-side-diagnostic',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsReturnRoute = AuthenticatedAppsReturnRouteImport.update({
+  id: '/apps/return',
+  path: '/apps/return',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAppsProofLedgerRoute =
   AuthenticatedAppsProofLedgerRouteImport.update({
     id: '/apps/proof-ledger',
@@ -500,6 +510,12 @@ const AuthenticatedAppsKnowledgeAuditRoute =
     path: '/apps/knowledge-audit',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsInvoiceRoute =
+  AuthenticatedAppsInvoiceRouteImport.update({
+    id: '/apps/invoice',
+    path: '/apps/invoice',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsIncomeTrackerRoute =
   AuthenticatedAppsIncomeTrackerRouteImport.update({
     id: '/apps/income-tracker',
@@ -524,6 +540,17 @@ const AuthenticatedAppsFirstFiveEmailsRoute =
     path: '/apps/first-five-emails',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsFigureCheckRoute =
+  AuthenticatedAppsFigureCheckRouteImport.update({
+    id: '/apps/figure-check',
+    path: '/apps/figure-check',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsDealsRoute = AuthenticatedAppsDealsRouteImport.update({
+  id: '/apps/deals',
+  path: '/apps/deals',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAppsDaresAssetModelRoute =
   AuthenticatedAppsDaresAssetModelRouteImport.update({
     id: '/apps/dares-asset-model',
@@ -534,6 +561,12 @@ const AuthenticatedAppsConsistencyBlueprintRoute =
   AuthenticatedAppsConsistencyBlueprintRouteImport.update({
     id: '/apps/consistency-blueprint',
     path: '/apps/consistency-blueprint',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsBriefCheckRoute =
+  AuthenticatedAppsBriefCheckRouteImport.update({
+    id: '/apps/brief-check',
+    path: '/apps/brief-check',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAppsAdjacentThreeRoute =
@@ -683,12 +716,16 @@ export interface FileRoutesByFullPath {
   '/admin/tools': typeof AuthenticatedAdminToolsRoute
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/adjacent-three': typeof AuthenticatedAppsAdjacentThreeRoute
+  '/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/apps/deals': typeof AuthenticatedAppsDealsRoute
+  '/apps/figure-check': typeof AuthenticatedAppsFigureCheckRoute
   '/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/apps/hook-bank': typeof AuthenticatedAppsHookBankRoute
   '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
+  '/apps/invoice': typeof AuthenticatedAppsInvoiceRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
   '/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
@@ -699,6 +736,7 @@ export interface FileRoutesByFullPath {
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
+  '/apps/return': typeof AuthenticatedAppsReturnRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -778,12 +816,16 @@ export interface FileRoutesByTo {
   '/admin/tools': typeof AuthenticatedAdminToolsRoute
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/adjacent-three': typeof AuthenticatedAppsAdjacentThreeRoute
+  '/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/apps/deals': typeof AuthenticatedAppsDealsRoute
+  '/apps/figure-check': typeof AuthenticatedAppsFigureCheckRoute
   '/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/apps/hook-bank': typeof AuthenticatedAppsHookBankRoute
   '/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
+  '/apps/invoice': typeof AuthenticatedAppsInvoiceRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
   '/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
@@ -794,6 +836,7 @@ export interface FileRoutesByTo {
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
+  '/apps/return': typeof AuthenticatedAppsReturnRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -877,12 +920,16 @@ export interface FileRoutesById {
   '/_authenticated/admin/tools': typeof AuthenticatedAdminToolsRoute
   '/_authenticated/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/_authenticated/apps/adjacent-three': typeof AuthenticatedAppsAdjacentThreeRoute
+  '/_authenticated/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
   '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/_authenticated/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
+  '/_authenticated/apps/deals': typeof AuthenticatedAppsDealsRoute
+  '/_authenticated/apps/figure-check': typeof AuthenticatedAppsFigureCheckRoute
   '/_authenticated/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/_authenticated/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
   '/_authenticated/apps/hook-bank': typeof AuthenticatedAppsHookBankRoute
   '/_authenticated/apps/income-tracker': typeof AuthenticatedAppsIncomeTrackerRoute
+  '/_authenticated/apps/invoice': typeof AuthenticatedAppsInvoiceRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/_authenticated/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
   '/_authenticated/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
@@ -893,6 +940,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/_authenticated/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
+  '/_authenticated/apps/return': typeof AuthenticatedAppsReturnRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/_authenticated/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
@@ -977,12 +1025,16 @@ export interface FileRouteTypes {
     | '/admin/tools'
     | '/apps/4e-content-calendar'
     | '/apps/adjacent-three'
+    | '/apps/brief-check'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
+    | '/apps/deals'
+    | '/apps/figure-check'
     | '/apps/first-five-emails'
     | '/apps/first-income-planner'
     | '/apps/hook-bank'
     | '/apps/income-tracker'
+    | '/apps/invoice'
     | '/apps/knowledge-audit'
     | '/apps/lead-magnet'
     | '/apps/method-namer'
@@ -993,6 +1045,7 @@ export interface FileRouteTypes {
     | '/apps/paids-auditor'
     | '/apps/price-decision'
     | '/apps/proof-ledger'
+    | '/apps/return'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
@@ -1072,12 +1125,16 @@ export interface FileRouteTypes {
     | '/admin/tools'
     | '/apps/4e-content-calendar'
     | '/apps/adjacent-three'
+    | '/apps/brief-check'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
+    | '/apps/deals'
+    | '/apps/figure-check'
     | '/apps/first-five-emails'
     | '/apps/first-income-planner'
     | '/apps/hook-bank'
     | '/apps/income-tracker'
+    | '/apps/invoice'
     | '/apps/knowledge-audit'
     | '/apps/lead-magnet'
     | '/apps/method-namer'
@@ -1088,6 +1145,7 @@ export interface FileRouteTypes {
     | '/apps/paids-auditor'
     | '/apps/price-decision'
     | '/apps/proof-ledger'
+    | '/apps/return'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
     | '/apps/seeds-pipeline'
@@ -1170,12 +1228,16 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/tools'
     | '/_authenticated/apps/4e-content-calendar'
     | '/_authenticated/apps/adjacent-three'
+    | '/_authenticated/apps/brief-check'
     | '/_authenticated/apps/consistency-blueprint'
     | '/_authenticated/apps/dares-asset-model'
+    | '/_authenticated/apps/deals'
+    | '/_authenticated/apps/figure-check'
     | '/_authenticated/apps/first-five-emails'
     | '/_authenticated/apps/first-income-planner'
     | '/_authenticated/apps/hook-bank'
     | '/_authenticated/apps/income-tracker'
+    | '/_authenticated/apps/invoice'
     | '/_authenticated/apps/knowledge-audit'
     | '/_authenticated/apps/lead-magnet'
     | '/_authenticated/apps/method-namer'
@@ -1186,6 +1248,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/apps/price-decision'
     | '/_authenticated/apps/proof-ledger'
+    | '/_authenticated/apps/return'
     | '/_authenticated/apps/right-side-diagnostic'
     | '/_authenticated/apps/sale-scripts'
     | '/_authenticated/apps/seeds-pipeline'
@@ -1720,6 +1783,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsRightSideDiagnosticRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/return': {
+      id: '/_authenticated/apps/return'
+      path: '/apps/return'
+      fullPath: '/apps/return'
+      preLoaderRoute: typeof AuthenticatedAppsReturnRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/proof-ledger': {
       id: '/_authenticated/apps/proof-ledger'
       path: '/apps/proof-ledger'
@@ -1790,6 +1860,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsKnowledgeAuditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/invoice': {
+      id: '/_authenticated/apps/invoice'
+      path: '/apps/invoice'
+      fullPath: '/apps/invoice'
+      preLoaderRoute: typeof AuthenticatedAppsInvoiceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/income-tracker': {
       id: '/_authenticated/apps/income-tracker'
       path: '/apps/income-tracker'
@@ -1818,6 +1895,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsFirstFiveEmailsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/figure-check': {
+      id: '/_authenticated/apps/figure-check'
+      path: '/apps/figure-check'
+      fullPath: '/apps/figure-check'
+      preLoaderRoute: typeof AuthenticatedAppsFigureCheckRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/deals': {
+      id: '/_authenticated/apps/deals'
+      path: '/apps/deals'
+      fullPath: '/apps/deals'
+      preLoaderRoute: typeof AuthenticatedAppsDealsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/dares-asset-model': {
       id: '/_authenticated/apps/dares-asset-model'
       path: '/apps/dares-asset-model'
@@ -1830,6 +1921,13 @@ declare module '@tanstack/react-router' {
       path: '/apps/consistency-blueprint'
       fullPath: '/apps/consistency-blueprint'
       preLoaderRoute: typeof AuthenticatedAppsConsistencyBlueprintRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/brief-check': {
+      id: '/_authenticated/apps/brief-check'
+      path: '/apps/brief-check'
+      fullPath: '/apps/brief-check'
+      preLoaderRoute: typeof AuthenticatedAppsBriefCheckRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/apps/adjacent-three': {
@@ -2050,12 +2148,16 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLearnRoute: typeof AuthenticatedLearnRouteWithChildren
   AuthenticatedApps4eContentCalendarRoute: typeof AuthenticatedApps4eContentCalendarRoute
   AuthenticatedAppsAdjacentThreeRoute: typeof AuthenticatedAppsAdjacentThreeRoute
+  AuthenticatedAppsBriefCheckRoute: typeof AuthenticatedAppsBriefCheckRoute
   AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
   AuthenticatedAppsDaresAssetModelRoute: typeof AuthenticatedAppsDaresAssetModelRoute
+  AuthenticatedAppsDealsRoute: typeof AuthenticatedAppsDealsRoute
+  AuthenticatedAppsFigureCheckRoute: typeof AuthenticatedAppsFigureCheckRoute
   AuthenticatedAppsFirstFiveEmailsRoute: typeof AuthenticatedAppsFirstFiveEmailsRoute
   AuthenticatedAppsFirstIncomePlannerRoute: typeof AuthenticatedAppsFirstIncomePlannerRoute
   AuthenticatedAppsHookBankRoute: typeof AuthenticatedAppsHookBankRoute
   AuthenticatedAppsIncomeTrackerRoute: typeof AuthenticatedAppsIncomeTrackerRoute
+  AuthenticatedAppsInvoiceRoute: typeof AuthenticatedAppsInvoiceRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
   AuthenticatedAppsLeadMagnetRoute: typeof AuthenticatedAppsLeadMagnetRoute
   AuthenticatedAppsMethodNamerRoute: typeof AuthenticatedAppsMethodNamerRoute
@@ -2066,6 +2168,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
   AuthenticatedAppsPriceDecisionRoute: typeof AuthenticatedAppsPriceDecisionRoute
   AuthenticatedAppsProofLedgerRoute: typeof AuthenticatedAppsProofLedgerRoute
+  AuthenticatedAppsReturnRoute: typeof AuthenticatedAppsReturnRoute
   AuthenticatedAppsRightSideDiagnosticRoute: typeof AuthenticatedAppsRightSideDiagnosticRoute
   AuthenticatedAppsSaleScriptsRoute: typeof AuthenticatedAppsSaleScriptsRoute
   AuthenticatedAppsSeedsPipelineRoute: typeof AuthenticatedAppsSeedsPipelineRoute
@@ -2085,14 +2188,18 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedApps4eContentCalendarRoute:
     AuthenticatedApps4eContentCalendarRoute,
   AuthenticatedAppsAdjacentThreeRoute: AuthenticatedAppsAdjacentThreeRoute,
+  AuthenticatedAppsBriefCheckRoute: AuthenticatedAppsBriefCheckRoute,
   AuthenticatedAppsConsistencyBlueprintRoute:
     AuthenticatedAppsConsistencyBlueprintRoute,
   AuthenticatedAppsDaresAssetModelRoute: AuthenticatedAppsDaresAssetModelRoute,
+  AuthenticatedAppsDealsRoute: AuthenticatedAppsDealsRoute,
+  AuthenticatedAppsFigureCheckRoute: AuthenticatedAppsFigureCheckRoute,
   AuthenticatedAppsFirstFiveEmailsRoute: AuthenticatedAppsFirstFiveEmailsRoute,
   AuthenticatedAppsFirstIncomePlannerRoute:
     AuthenticatedAppsFirstIncomePlannerRoute,
   AuthenticatedAppsHookBankRoute: AuthenticatedAppsHookBankRoute,
   AuthenticatedAppsIncomeTrackerRoute: AuthenticatedAppsIncomeTrackerRoute,
+  AuthenticatedAppsInvoiceRoute: AuthenticatedAppsInvoiceRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
   AuthenticatedAppsLeadMagnetRoute: AuthenticatedAppsLeadMagnetRoute,
   AuthenticatedAppsMethodNamerRoute: AuthenticatedAppsMethodNamerRoute,
@@ -2104,6 +2211,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsPaidsAuditorRoute: AuthenticatedAppsPaidsAuditorRoute,
   AuthenticatedAppsPriceDecisionRoute: AuthenticatedAppsPriceDecisionRoute,
   AuthenticatedAppsProofLedgerRoute: AuthenticatedAppsProofLedgerRoute,
+  AuthenticatedAppsReturnRoute: AuthenticatedAppsReturnRoute,
   AuthenticatedAppsRightSideDiagnosticRoute:
     AuthenticatedAppsRightSideDiagnosticRoute,
   AuthenticatedAppsSaleScriptsRoute: AuthenticatedAppsSaleScriptsRoute,

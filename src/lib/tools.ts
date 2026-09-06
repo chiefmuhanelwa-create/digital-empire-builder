@@ -13,6 +13,10 @@ import {
   Crosshair,
   FileText,
   TrendingUp,
+  ClipboardList,
+  BellRing,
+  ShieldCheck,
+  ClipboardCheck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -59,6 +63,54 @@ export const TOOLS: Tool[] = [
     blurb: "Set aside the right tax reserve on every rand you earn from a deal.",
     icon: Receipt,
   },
+  {
+    // The rate card says what to charge and the invoice generator bills it.
+    // Nothing has ever tracked the gap between those two, which is exactly
+    // where the money goes missing.
+    name: "Deal Tracker",
+    path: "/apps/deals",
+    tier: "premium",
+    category: "Brand Deals",
+    blurb:
+      "Every deal from first conversation to money in the bank — and what to do today about the one that hasn't paid.",
+    icon: ClipboardList,
+  },
+  {
+    // Stage 12. The only tool here whose job is to make you come back, rather
+    // than to make something. Borrows the provisional tax calendar, which is
+    // enforced by somebody other than the user.
+    name: "The Return",
+    path: "/apps/return",
+    tier: "premium",
+    category: "Creator Finance",
+    blurb:
+      "What has gone quiet since you last looked — overdue invoices, uninvoiced work, and the deadline nobody moves.",
+    icon: BellRing,
+  },
+  {
+    // Built from the agency archive: a complete brief has twelve things in it
+    // and most have seven. The five that go missing are the five that cost
+    // money later — usage rights above all.
+    name: "Brief Check + Pitch",
+    path: "/apps/brief-check",
+    tier: "premium",
+    category: "Brand Deals",
+    blurb:
+      "What is missing from the brief before you say yes — and a pitch that only claims what your records back.",
+    icon: ClipboardCheck,
+  },
+  {
+    // Stage 11. Checks a figure against the user's own paid records before it
+    // goes into a pitch or a caption. Built because ten audited claims all
+    // drifted upward and none drifted down.
+    name: "Figure Check",
+    path: "/apps/figure-check",
+    tier: "premium",
+    category: "Creator Finance",
+    blurb:
+      "Check a number against your own receipts before you say it out loud — and get the version you can defend.",
+    icon: ShieldCheck,
+  },
 
   // ── Creator Finance ──────────────────────────────────────────────────────
   {
@@ -71,12 +123,15 @@ export const TOOLS: Tool[] = [
     icon: Receipt,
   },
   {
-    name: "Invoice Generator",
-    path: "https://invoice-generator-delta-navy.vercel.app",
-    external: true,
-    tier: "free",
+    // Native now. It reads straight from the Deal Tracker, so the deal you
+    // logged becomes the invoice without retyping it — and the tracker knows
+    // the moment it was billed, which is what starts the chase clock.
+    name: "Invoice",
+    path: "/apps/invoice",
+    tier: "premium",
     category: "Creator Finance",
-    blurb: "Generate a professional brand-deal invoice in 2 minutes — SA banking formats built in.",
+    blurb:
+      "Bill a delivered deal without leaving the app — banking details, EFT terms and end-of-month dating built in.",
     icon: FileText,
   },
   {

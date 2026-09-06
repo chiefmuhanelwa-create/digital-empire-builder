@@ -192,6 +192,87 @@ export type Database = {
         }
         Relationships: []
       }
+      deals: {
+        Row: {
+          accepted_at: string | null
+          amount: number
+          chase_count: number
+          counterparty: string
+          counterparty_type: string
+          category: string | null
+          created_at: string
+          currency: string
+          deliverable: string
+          delivered_at: string | null
+          due_date: string | null
+          exclusive_until: string | null
+          exclusivity_scope: string | null
+          id: string
+          invoice_number: string | null
+          invoiced_at: string | null
+          last_chased_at: string | null
+          notes: string | null
+          paid_at: string | null
+          platform: string | null
+          quoted_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          amount: number
+          chase_count?: number
+          counterparty: string
+          counterparty_type?: string
+          category?: string | null
+          created_at?: string
+          currency?: string
+          deliverable: string
+          delivered_at?: string | null
+          due_date?: string | null
+          exclusive_until?: string | null
+          exclusivity_scope?: string | null
+          id?: string
+          invoice_number?: string | null
+          invoiced_at?: string | null
+          last_chased_at?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          platform?: string | null
+          quoted_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string | null
+          amount?: number
+          chase_count?: number
+          counterparty?: string
+          counterparty_type?: string
+          category?: string | null
+          created_at?: string
+          currency?: string
+          deliverable?: string
+          delivered_at?: string | null
+          due_date?: string | null
+          exclusive_until?: string | null
+          exclusivity_scope?: string | null
+          id?: string
+          invoice_number?: string | null
+          invoiced_at?: string | null
+          last_chased_at?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          platform?: string | null
+          quoted_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
@@ -534,6 +615,72 @@ export type Database = {
           payload?: Json
           tool_slug?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      invoice_settings: {
+        Row: {
+          account_holder: string | null
+          account_number: string | null
+          account_type: string | null
+          address: string | null
+          bank_name: string | null
+          branch_code: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          invoice_prefix: string
+          is_vat_registered: boolean
+          legal_name: string | null
+          next_invoice_number: number
+          notes: string | null
+          payment_terms_days: number
+          registration_number: string | null
+          trading_name: string | null
+          updated_at: string
+          user_id: string
+          vat_number: string | null
+        }
+        Insert: {
+          account_holder?: string | null
+          account_number?: string | null
+          account_type?: string | null
+          address?: string | null
+          bank_name?: string | null
+          branch_code?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          invoice_prefix?: string
+          is_vat_registered?: boolean
+          legal_name?: string | null
+          next_invoice_number?: number
+          notes?: string | null
+          payment_terms_days?: number
+          registration_number?: string | null
+          trading_name?: string | null
+          updated_at?: string
+          user_id: string
+          vat_number?: string | null
+        }
+        Update: {
+          account_holder?: string | null
+          account_number?: string | null
+          account_type?: string | null
+          address?: string | null
+          bank_name?: string | null
+          branch_code?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          invoice_prefix?: string
+          is_vat_registered?: boolean
+          legal_name?: string | null
+          next_invoice_number?: number
+          notes?: string | null
+          payment_terms_days?: number
+          registration_number?: string | null
+          trading_name?: string | null
+          updated_at?: string
+          user_id?: string
+          vat_number?: string | null
         }
         Relationships: []
       }
