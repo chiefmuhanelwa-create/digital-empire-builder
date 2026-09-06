@@ -174,6 +174,13 @@ export const CONTENT_TYPE = {
 } as const;
 export type ContentTypeKey = keyof typeof CONTENT_TYPE;
 
+// Market ER benchmarks (%). Sourced from the SA creator-rate dataset the rate
+// card is built on. Exported so tools (Media Kit's "your ER vs average") share
+// one figure instead of re-hardcoding it. Also duplicated inline in
+// rate-card-pdf.ts and rate-card.tsx — consolidate here if those are touched.
+export const AFRICAN_AVG_ER = 3.39;
+export const GLOBAL_AVG_ER = 1.49;
+
 export const CPE_TIER = [
   { min: 0, max: 0.99, cpe_zar: 1.0, label: "Low", color: "#6B7280" },
   { min: 1.0, max: 1.99, cpe_zar: 2.5, label: "Moderate", color: "#8B5CF6" },
@@ -236,6 +243,85 @@ export const BUDGET_TIERS = {
   premium: { mult: 1.1, label: "Premium brand" },
   enterprise: { mult: 1.2, label: "Enterprise" },
 } as const;
+
+// ── Top-1% value stack (2026) ────────────────────────────────────────────────
+// Additive negotiation layers that sit ON TOP of the verified base fee — these do
+// NOT touch computeRateCard's maths. They are the documented industry conventions
+// from the founder's brief, shown à-la-carte on the "Partnership Investment"
+// document so brands see what each layer costs. Percentages are of the base fee.
+export const DISTRIBUTION_ADDONS = {
+  cross_post: { pct: 30, label: "Cross-post to a 2nd platform" },
+  newsletter: { pct: 50, label: "Newsletter / email blast to my list" },
+  whatsapp: { pct: 40, label: "WhatsApp channel blast" },
+  pinned_7d: { pct: 20, label: "Pinned for 7 days" },
+} as const;
+
+// Paid usage = brand runs your content AS THEIR ad. Priced by duration, of base.
+export const USAGE_DURATION = {
+  paid_3mo: { pct: 100, label: "Paid usage — 3 months" },
+  paid_6mo: { pct: 180, label: "Paid usage — 6 months" },
+  paid_12mo: { pct: 300, label: "Paid usage — 12 months" },
+} as const;
+
+// Whitelisting / Spark & Partnership Ads = brand runs ads THROUGH your handle.
+export const WHITELISTING = {
+  wl_30d: { pct: 40, label: "Whitelisting — 30 days" },
+  wl_60d: { pct: 80, label: "Whitelisting — 60 days" },
+} as const;
+
+export const RETAINER_DISCOUNT = 0.15; // −15% for a 3+ campaign monthly retainer
+export const VALIDITY_DAYS = 21; // "Rates valid for 21 days" — creates urgency
+
+// The 3-package offer ladder. Compositions are fixed (what each bundles); the
+// price is DERIVED from the creator's own computed base fee — never hardcoded.
+// `mult` is the package price as a multiple of the base standard rate, reflecting
+// the deliverables + rights each stacks (a hero reel is 1× the base).
+export const PACKAGE_DEFS = [
+  {
+    tier: "Content Signal",
+    mult: 1.4, // hero reel (1×) + story set (~0.3) + 30-day organic
+    includes: ["1× Hero Reel / Short-Form video", "1× Story set (3 frames)", "30 days organic usage"],
+  },
+  {
+    tier: "Authority Signal",
+    mult: 3.5, // ≈ 2.5× Content: + long-form + newsletter + whitelisting + 90d paid usage
+    popular: true,
+    includes: [
+      "1× Hero Reel + 1× Long-form integration",
+      "Newsletter feature",
+      "30 days whitelisting",
+      "90 days paid usage rights",
+    ],
+  },
+  {
+    tier: "Acquisition Signal",
+    mult: 7.0, // ≈ 5× Content: + live workshop + 6-mo paid usage + category exclusivity
+    includes: [
+      "Everything in Authority",
+      "1× Live workshop with community",
+      "Affiliate / performance link",
+      "6 months paid usage + 30 days category exclusivity",
+    ],
+  },
+] as const;
+
+export interface RateCardPackage {
+  tier: string;
+  includes: readonly string[];
+  from: number;
+  popular: boolean;
+}
+
+/** Build the 3 named packages from the creator's own base (standard) rate. */
+export function computePackages(baseStandardZar: number, opts?: { retainer?: boolean }): RateCardPackage[] {
+  const retainerFactor = opts?.retainer ? 1 - RETAINER_DISCOUNT : 1;
+  return PACKAGE_DEFS.map((p) => ({
+    tier: p.tier,
+    includes: p.includes,
+    popular: "popular" in p ? Boolean(p.popular) : false,
+    from: baseStandardZar * p.mult * retainerFactor,
+  }));
+}
 
 export function getTier(followers: number) {
   for (const [key, t] of Object.entries(TIER)) {
