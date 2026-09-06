@@ -63,6 +63,33 @@ export type Database = {
         }
         Relationships: []
       }
+      audience_snapshots: {
+        Row: {
+          channels: Json
+          created_at: string
+          id: string
+          notes: string | null
+          taken_on: string
+          user_id: string
+        }
+        Insert: {
+          channels?: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          taken_on?: string
+          user_id: string
+        }
+        Update: {
+          channels?: Json
+          created_at?: string
+          id?: string
+          notes?: string | null
+          taken_on?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       audit_ledgers: {
         Row: {
           created_at: string

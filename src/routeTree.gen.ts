@@ -90,9 +90,11 @@ import { Route as AuthenticatedAppsHookBankRouteImport } from './routes/_authent
 import { Route as AuthenticatedAppsFirstIncomePlannerRouteImport } from './routes/_authenticated/apps.first-income-planner'
 import { Route as AuthenticatedAppsFirstFiveEmailsRouteImport } from './routes/_authenticated/apps.first-five-emails'
 import { Route as AuthenticatedAppsFigureCheckRouteImport } from './routes/_authenticated/apps.figure-check'
+import { Route as AuthenticatedAppsEditBriefRouteImport } from './routes/_authenticated/apps.edit-brief'
 import { Route as AuthenticatedAppsDealsRouteImport } from './routes/_authenticated/apps.deals'
 import { Route as AuthenticatedAppsDaresAssetModelRouteImport } from './routes/_authenticated/apps.dares-asset-model'
 import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
+import { Route as AuthenticatedAppsConcentrationRouteImport } from './routes/_authenticated/apps.concentration'
 import { Route as AuthenticatedAppsBriefCheckRouteImport } from './routes/_authenticated/apps.brief-check'
 import { Route as AuthenticatedAppsAdjacentThreeRouteImport } from './routes/_authenticated/apps.adjacent-three'
 import { Route as AuthenticatedApps4eContentCalendarRouteImport } from './routes/_authenticated/apps.4e-content-calendar'
@@ -546,6 +548,12 @@ const AuthenticatedAppsFigureCheckRoute =
     path: '/apps/figure-check',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsEditBriefRoute =
+  AuthenticatedAppsEditBriefRouteImport.update({
+    id: '/apps/edit-brief',
+    path: '/apps/edit-brief',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsDealsRoute = AuthenticatedAppsDealsRouteImport.update({
   id: '/apps/deals',
   path: '/apps/deals',
@@ -561,6 +569,12 @@ const AuthenticatedAppsConsistencyBlueprintRoute =
   AuthenticatedAppsConsistencyBlueprintRouteImport.update({
     id: '/apps/consistency-blueprint',
     path: '/apps/consistency-blueprint',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsConcentrationRoute =
+  AuthenticatedAppsConcentrationRouteImport.update({
+    id: '/apps/concentration',
+    path: '/apps/concentration',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAppsBriefCheckRoute =
@@ -717,9 +731,11 @@ export interface FileRoutesByFullPath {
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/adjacent-three': typeof AuthenticatedAppsAdjacentThreeRoute
   '/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
+  '/apps/concentration': typeof AuthenticatedAppsConcentrationRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/deals': typeof AuthenticatedAppsDealsRoute
+  '/apps/edit-brief': typeof AuthenticatedAppsEditBriefRoute
   '/apps/figure-check': typeof AuthenticatedAppsFigureCheckRoute
   '/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
@@ -817,9 +833,11 @@ export interface FileRoutesByTo {
   '/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/apps/adjacent-three': typeof AuthenticatedAppsAdjacentThreeRoute
   '/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
+  '/apps/concentration': typeof AuthenticatedAppsConcentrationRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/deals': typeof AuthenticatedAppsDealsRoute
+  '/apps/edit-brief': typeof AuthenticatedAppsEditBriefRoute
   '/apps/figure-check': typeof AuthenticatedAppsFigureCheckRoute
   '/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
@@ -921,9 +939,11 @@ export interface FileRoutesById {
   '/_authenticated/apps/4e-content-calendar': typeof AuthenticatedApps4eContentCalendarRoute
   '/_authenticated/apps/adjacent-three': typeof AuthenticatedAppsAdjacentThreeRoute
   '/_authenticated/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
+  '/_authenticated/apps/concentration': typeof AuthenticatedAppsConcentrationRoute
   '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
   '/_authenticated/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/_authenticated/apps/deals': typeof AuthenticatedAppsDealsRoute
+  '/_authenticated/apps/edit-brief': typeof AuthenticatedAppsEditBriefRoute
   '/_authenticated/apps/figure-check': typeof AuthenticatedAppsFigureCheckRoute
   '/_authenticated/apps/first-five-emails': typeof AuthenticatedAppsFirstFiveEmailsRoute
   '/_authenticated/apps/first-income-planner': typeof AuthenticatedAppsFirstIncomePlannerRoute
@@ -1026,9 +1046,11 @@ export interface FileRouteTypes {
     | '/apps/4e-content-calendar'
     | '/apps/adjacent-three'
     | '/apps/brief-check'
+    | '/apps/concentration'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
     | '/apps/deals'
+    | '/apps/edit-brief'
     | '/apps/figure-check'
     | '/apps/first-five-emails'
     | '/apps/first-income-planner'
@@ -1126,9 +1148,11 @@ export interface FileRouteTypes {
     | '/apps/4e-content-calendar'
     | '/apps/adjacent-three'
     | '/apps/brief-check'
+    | '/apps/concentration'
     | '/apps/consistency-blueprint'
     | '/apps/dares-asset-model'
     | '/apps/deals'
+    | '/apps/edit-brief'
     | '/apps/figure-check'
     | '/apps/first-five-emails'
     | '/apps/first-income-planner'
@@ -1229,9 +1253,11 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/4e-content-calendar'
     | '/_authenticated/apps/adjacent-three'
     | '/_authenticated/apps/brief-check'
+    | '/_authenticated/apps/concentration'
     | '/_authenticated/apps/consistency-blueprint'
     | '/_authenticated/apps/dares-asset-model'
     | '/_authenticated/apps/deals'
+    | '/_authenticated/apps/edit-brief'
     | '/_authenticated/apps/figure-check'
     | '/_authenticated/apps/first-five-emails'
     | '/_authenticated/apps/first-income-planner'
@@ -1902,6 +1928,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsFigureCheckRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/edit-brief': {
+      id: '/_authenticated/apps/edit-brief'
+      path: '/apps/edit-brief'
+      fullPath: '/apps/edit-brief'
+      preLoaderRoute: typeof AuthenticatedAppsEditBriefRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/deals': {
       id: '/_authenticated/apps/deals'
       path: '/apps/deals'
@@ -1921,6 +1954,13 @@ declare module '@tanstack/react-router' {
       path: '/apps/consistency-blueprint'
       fullPath: '/apps/consistency-blueprint'
       preLoaderRoute: typeof AuthenticatedAppsConsistencyBlueprintRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/concentration': {
+      id: '/_authenticated/apps/concentration'
+      path: '/apps/concentration'
+      fullPath: '/apps/concentration'
+      preLoaderRoute: typeof AuthenticatedAppsConcentrationRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/apps/brief-check': {
@@ -2149,9 +2189,11 @@ interface AuthenticatedRouteChildren {
   AuthenticatedApps4eContentCalendarRoute: typeof AuthenticatedApps4eContentCalendarRoute
   AuthenticatedAppsAdjacentThreeRoute: typeof AuthenticatedAppsAdjacentThreeRoute
   AuthenticatedAppsBriefCheckRoute: typeof AuthenticatedAppsBriefCheckRoute
+  AuthenticatedAppsConcentrationRoute: typeof AuthenticatedAppsConcentrationRoute
   AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
   AuthenticatedAppsDaresAssetModelRoute: typeof AuthenticatedAppsDaresAssetModelRoute
   AuthenticatedAppsDealsRoute: typeof AuthenticatedAppsDealsRoute
+  AuthenticatedAppsEditBriefRoute: typeof AuthenticatedAppsEditBriefRoute
   AuthenticatedAppsFigureCheckRoute: typeof AuthenticatedAppsFigureCheckRoute
   AuthenticatedAppsFirstFiveEmailsRoute: typeof AuthenticatedAppsFirstFiveEmailsRoute
   AuthenticatedAppsFirstIncomePlannerRoute: typeof AuthenticatedAppsFirstIncomePlannerRoute
@@ -2189,10 +2231,12 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedApps4eContentCalendarRoute,
   AuthenticatedAppsAdjacentThreeRoute: AuthenticatedAppsAdjacentThreeRoute,
   AuthenticatedAppsBriefCheckRoute: AuthenticatedAppsBriefCheckRoute,
+  AuthenticatedAppsConcentrationRoute: AuthenticatedAppsConcentrationRoute,
   AuthenticatedAppsConsistencyBlueprintRoute:
     AuthenticatedAppsConsistencyBlueprintRoute,
   AuthenticatedAppsDaresAssetModelRoute: AuthenticatedAppsDaresAssetModelRoute,
   AuthenticatedAppsDealsRoute: AuthenticatedAppsDealsRoute,
+  AuthenticatedAppsEditBriefRoute: AuthenticatedAppsEditBriefRoute,
   AuthenticatedAppsFigureCheckRoute: AuthenticatedAppsFigureCheckRoute,
   AuthenticatedAppsFirstFiveEmailsRoute: AuthenticatedAppsFirstFiveEmailsRoute,
   AuthenticatedAppsFirstIncomePlannerRoute:

@@ -43,6 +43,12 @@ export type ReturnInput = {
     created_at: string;
   }>;
   income: Array<{ type: string; amount: number; date: string }>;
+  /** Exclusivity windows agreed on deals. Agreed once, in a brief, and then
+   *  forgotten — which is how a creator turns down nothing and breaches
+   *  something. Optional so older callers keep working. */
+  exclusivities?: Array<{ counterparty: string; exclusive_until: string | null; exclusivity_scope: string | null }>;
+  /** Dates of saved concentration snapshots, newest anywhere in the list. */
+  snapshotDates?: string[];
   /** Percentage of income to hold back for tax. Defaults to 25 to match the
    *  SARS 25% Calculator already shipped in this product, so a user does not
    *  meet two different numbers in one app. */
@@ -202,6 +208,60 @@ export function returnSignals(input: ReturnInput): Signal[] {
         title: "Since the last deal actually paid",
         value: `${since} days`,
         action: "Your quoted rate is now based on an old market. Re-check it before the next quote goes out.",
+      });
+    }
+  }
+
+  // 7 · An exclusivity window nobody is tracking. Agreed inside a brief months
+  //     ago, then forgotten — so the creator either breaches it or, more often,
+  //     keeps declining category work long after the clause has expired.
+  for (const ex of input.exclusivities ?? []) {
+    if (!ex.exclusive_until) continue;
+    const left = daysBetween(today, utcDay(new Date(`${ex.exclusive_until}T00:00:00Z`)));
+    const scope = ex.exclusivity_scope?.trim() || "an unstated category";
+
+    if (left >= 0 && left <= 21) {
+      out.push({
+        id: `exclusivity-ending-${ex.counterparty}`,
+        state: "attention",
+        title: `Exclusivity with ${ex.counterparty} ends`,
+        value: left === 0 ? "today" : `in ${left} day${left === 1 ? "" : "s"}`,
+        action: `You are free to take ${scope} work again from ${ex.exclusive_until}. Line something up now rather than finding out later.`,
+        because: "An expired clause you never noticed is a quarter of turned-down work you never had to turn down.",
+      });
+    } else if (left > 21) {
+      out.push({
+        id: `exclusivity-active-${ex.counterparty}`,
+        state: "ok",
+        title: `Locked out of ${scope}`,
+        value: `${left} days left`,
+        action: `From ${ex.counterparty}. Decline competing briefs in this category until ${ex.exclusive_until}.`,
+      });
+    }
+  }
+
+  // 8 · The concentration snapshot goes stale. Unlike everything above it, this
+  //     one has no external date forcing it — so it decays on the only schedule
+  //     that makes a trend readable, which is monthly.
+  const lastSnapshot = (input.snapshotDates ?? []).slice().sort().pop();
+  if (!lastSnapshot) {
+    out.push({
+      id: "no-snapshot",
+      state: "attention",
+      title: "You have never run the concentration test",
+      value: "—",
+      action: "Ten minutes. It works out what is left if your biggest channel stops.",
+      because: "An account termination arrives with no warning and no export. The time to know the number is before.",
+    });
+  } else {
+    const age = daysBetween(utcDay(new Date(`${lastSnapshot}T00:00:00Z`)), today);
+    if (age >= 60) {
+      out.push({
+        id: "stale-snapshot",
+        state: "attention",
+        title: "Since you last checked where your audience sits",
+        value: `${age} days`,
+        action: "Re-run it. One snapshot is a number; two is a direction.",
       });
     }
   }

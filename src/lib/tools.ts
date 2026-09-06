@@ -17,6 +17,8 @@ import {
   BellRing,
   ShieldCheck,
   ClipboardCheck,
+  Waves,
+  Scissors,
   type LucideIcon,
 } from "lucide-react";
 
@@ -91,12 +93,12 @@ export const TOOLS: Tool[] = [
     // Built from the agency archive: a complete brief has twelve things in it
     // and most have seven. The five that go missing are the five that cost
     // money later — usage rights above all.
-    name: "Brief Check + Pitch",
+    name: "Brief · Pitch · Contract",
     path: "/apps/brief-check",
     tier: "premium",
     category: "Brand Deals",
     blurb:
-      "What is missing from the brief before you say yes — and a pitch that only claims what your records back.",
+      "What the brief left out, a pitch your records can back, and an agreement that prices the rights before you sign them away.",
     icon: ClipboardCheck,
   },
   {
@@ -144,6 +146,19 @@ export const TOOLS: Tool[] = [
     icon: TrendingUp,
   },
 
+  {
+    // Stage 5. The only tool here that argues against the platform the rest of
+    // the product runs on — which is exactly why it has to exist before any
+    // scheduler does.
+    name: "If It Ended Tonight",
+    path: "/apps/concentration",
+    tier: "premium",
+    category: "Creator Finance",
+    blurb:
+      "How much of your income sits on rented land — and what is actually left standing if the biggest channel stops.",
+    icon: Waves,
+  },
+
   // ── Content Creation ─────────────────────────────────────────────────────
   {
     name: "The Positioning Test",
@@ -171,6 +186,18 @@ export const TOOLS: Tool[] = [
     blurb:
       "Turn your expertise into a clear, sellable offer — AI-assisted, 2 free then Foundation Kit.",
     icon: Package,
+  },
+  {
+    // Stage 4. Thresholds come from 8 reels on ONE account, 3 torn down with
+    // ffmpeg — the page says so, because presenting one creator's measured set
+    // as a general law is exactly the failure this product exists to correct.
+    name: "Edit Brief",
+    path: "/apps/edit-brief",
+    tier: "premium",
+    category: "Content Creation",
+    blurb:
+      "Check the cut before you make it — runtime, first cut, cut rate, and where the face is when you ask.",
+    icon: Scissors,
   },
   {
     name: "Align · Accelerate · Excel",

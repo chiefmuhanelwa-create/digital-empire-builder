@@ -33,6 +33,8 @@ function Engine() {
     return returnSignals({
       deals: data.deals as never,
       income: data.income as never,
+      exclusivities: data.exclusivities,
+      snapshotDates: data.snapshotDates,
       reservePercent: data.reservePercent,
     });
   }, [data]);
