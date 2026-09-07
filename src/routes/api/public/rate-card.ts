@@ -42,6 +42,20 @@ const bodySchema = z.object({
     ceiling: z.string().max(40).optional(),
     followers: z.string().max(40).optional(),
     date: z.string().max(60).optional(),
+    quarter: z.string().max(60).optional(),
+    notes: z.string().max(1000).optional(),
+    validity: z.string().max(120).optional(),
+    packages: z
+      .array(
+        z.object({
+          tier: z.string().max(60),
+          includes: z.array(z.string().max(200)).max(10),
+          from: z.string().max(60),
+          popular: z.boolean().optional(),
+        }),
+      )
+      .max(6)
+      .optional(),
   }),
 });
 

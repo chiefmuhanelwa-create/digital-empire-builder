@@ -206,7 +206,7 @@ function YourAlgorithm() {
             {totals.totalLeads === 0 && totals.totalViews > 0 && (
               <div className="mt-5 rounded-lg border-2 border-[#EA580C] bg-[#EA580C]/5 p-4">
                 <p className="text-sm font-bold text-[#9A3412]">
-                  {totals.totalViews.toLocaleString("en-ZA")} views. Zero leads.
+                  {totals.totalViews.toLocaleString("en-GB")} views. Zero leads.
                 </p>
                 <p className="text-sm text-[#7C2D12] mt-1.5 leading-relaxed">
                   This is the most expensive pattern there is, and it is almost never a content

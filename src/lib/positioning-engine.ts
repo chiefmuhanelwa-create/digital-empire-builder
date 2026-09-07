@@ -237,7 +237,7 @@ export function testPrice(p: Positioning): TestResult {
     return {
       ...base,
       passed: false,
-      note: `R${p.price.toLocaleString("en-ZA")} is a thank-you, not a price.`,
+      note: `R${p.price.toLocaleString("en-GB")} is a thank-you, not a price.`,
       fix: "Nobody values what costs them nothing to lose. Below this, the price itself tells them not to take it seriously.",
     };
   }
@@ -245,14 +245,14 @@ export function testPrice(p: Positioning): TestResult {
     return {
       ...base,
       passed: true,
-      note: `R${p.price.toLocaleString("en-ZA")} works as a way in, but it is priced like a product when you are selling judgement.`,
+      note: `R${p.price.toLocaleString("en-GB")} works as a way in, but it is priced like a product when you are selling judgement.`,
       fix: null,
     };
   }
   return {
     ...base,
     passed: true,
-    note: `R${p.price.toLocaleString("en-ZA")} is a real number. At this level buyers argue about proof, not price — so the artifact above has to be specific.`,
+    note: `R${p.price.toLocaleString("en-GB")} is a real number. At this level buyers argue about proof, not price — so the artifact above has to be specific.`,
     fix: null,
   };
 }

@@ -160,7 +160,7 @@ export function floors(i: PriceInputs): Floor[] {
       id: "time",
       name: "The time floor",
       amount: trueHours * i.hourlyRate,
-      how: `${i.hours}h to deliver, ×${PREP_FACTOR} for the work around it, at R${Math.round(i.hourlyRate).toLocaleString("en-ZA")}/hour. Below this you are paying to work.`,
+      how: `${i.hours}h to deliver, ×${PREP_FACTOR} for the work around it, at R${Math.round(i.hourlyRate).toLocaleString("en-GB")}/hour. Below this you are paying to work.`,
     });
   } else {
     out.push({
@@ -174,7 +174,7 @@ export function floors(i: PriceInputs): Floor[] {
       id: "outcome",
       name: "The outcome floor",
       amount: i.outcomeValue * OUTCOME_SHARE_LOW,
-      how: `A tenth of what the result is worth to them. If it is worth R${Math.round(i.outcomeValue).toLocaleString("en-ZA")}, then R${Math.round(i.outcomeValue * OUTCOME_SHARE_LOW).toLocaleString("en-ZA")} is the modest end and R${Math.round(i.outcomeValue * OUTCOME_SHARE_HIGH).toLocaleString("en-ZA")} is defensible.`,
+      how: `A tenth of what the result is worth to them. If it is worth R${Math.round(i.outcomeValue).toLocaleString("en-GB")}, then R${Math.round(i.outcomeValue * OUTCOME_SHARE_LOW).toLocaleString("en-GB")} is the modest end and R${Math.round(i.outcomeValue * OUTCOME_SHARE_HIGH).toLocaleString("en-GB")} is defensible.`,
     });
   } else {
     out.push({
@@ -225,18 +225,18 @@ export function foundingOffer(full: number): { price: number; sentence: string }
   const price = Math.round((full * 0.6) / 50) * 50;
   return {
     price,
-    sentence: `I'm taking the first three people at R${price.toLocaleString("en-ZA")} instead of R${full.toLocaleString("en-ZA")}. Not a sale — I want three results I can point to. After the third it goes to the full price, and I won't be reopening it.`,
+    sentence: `I'm taking the first three people at R${price.toLocaleString("en-GB")} instead of R${full.toLocaleString("en-GB")}. Not a sale — I want three results I can point to. After the third it goes to the full price, and I won't be reopening it.`,
   };
 }
 
 /** When to raise, expressed as a trigger rather than a date. */
 export function raiseTrigger(current: number): string {
   const next = nudgeUp(current);
-  return `Raise it to R${next.toLocaleString("en-ZA")} once three people have paid without hesitating. Hesitation is the signal — if nobody flinches, you are under the market, and waiting for a round number on the calendar just costs you the difference.`;
+  return `Raise it to R${next.toLocaleString("en-GB")} once three people have paid without hesitating. Hesitation is the signal — if nobody flinches, you are under the market, and waiting for a round number on the calendar just costs you the difference.`;
 }
 
 /** For the person who has always had it free and now has to be told. */
 export function transitionScript(offerName: string, price: number): string {
   const name = offerName.trim() || "this";
-  return `I've started charging for ${name} — R${price.toLocaleString("en-ZA")}.\n\nI'm telling you directly because you've asked me before and I don't want it to be a surprise. Nothing about how I help you changes; the only difference is that it is now a proper piece of work rather than something I squeeze in.\n\nIf the timing isn't right, say so and there are no hard feelings at all.`;
+  return `I've started charging for ${name} — R${price.toLocaleString("en-GB")}.\n\nI'm telling you directly because you've asked me before and I don't want it to be a surprise. Nothing about how I help you changes; the only difference is that it is now a proper piece of work rather than something I squeeze in.\n\nIf the timing isn't right, say so and there are no hard feelings at all.`;
 }

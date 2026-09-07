@@ -99,7 +99,7 @@ function HookGeneratorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F0]">
+    <div className="min-h-screen overflow-x-clip bg-[#F5F3FF]">
       <SiteHeader />
       <ToolCanvas>
         <div className="px-5 pt-3 sm:px-6">
@@ -112,14 +112,14 @@ function HookGeneratorPage() {
               <Eyebrow>Creator · Free Tool</Eyebrow>
               <Pill className="whitespace-nowrap">R×A×C×U^B Framework</Pill>
             </div>
-            <h1 className="mt-7 font-display text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-[#1C1C1C] sm:text-[52px]">
-              Stop posting into <span className="text-[#C9A84C]">silence.</span>
+            <h1 className="mt-7 font-display text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-[#1A1523] sm:text-[52px]">
+              Stop posting into <span className="text-[#8B5CF6]">silence.</span>
             </h1>
             <p className="mt-5 max-w-xl text-[15.5px] leading-[1.65] text-neutral-600 sm:text-[17px]">
               5 scroll-stopping hooks, written fresh for your topic and your audience on NoChill's
               R×A×C×U^B framework — and each one shows you exactly why it works.
             </p>
-            <div className="mt-7 h-[3px] w-16 rounded-full bg-[#C9A84C]" />
+            <div className="mt-7 h-[3px] w-16 rounded-full bg-[#8B5CF6]" />
           </header>
         )}
 
@@ -179,12 +179,12 @@ function HookGeneratorPage() {
                         aria-pressed={active}
                         className={`flex items-start justify-between gap-3 rounded-xl border px-4 py-3.5 text-left transition ${
                           active
-                            ? "border-[#C9A84C] bg-[#C9A84C]/10 shadow-[0_0_0_3px_rgba(201,168,76,0.12)]"
+                            ? "border-[#8B5CF6] bg-[#8B5CF6]/10 shadow-[0_0_0_3px_rgba(139,92,246,0.12)]"
                             : "border-neutral-200 bg-white hover:border-neutral-300"
                         }`}
                       >
                         <span className="min-w-0 flex-1">
-                          <span className="block text-[14px] font-bold leading-snug text-[#1C1C1C]">
+                          <span className="block text-[14px] font-bold leading-snug text-[#1A1523]">
                             {o.t}
                           </span>
                           <span className="mt-1 block text-[12.5px] leading-snug text-neutral-500">
@@ -193,11 +193,11 @@ function HookGeneratorPage() {
                         </span>
                         <span
                           className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition ${
-                            active ? "border-[#C9A84C] bg-[#C9A84C]" : "border-neutral-300 bg-white"
+                            active ? "border-[#8B5CF6] bg-[#8B5CF6]" : "border-neutral-300 bg-white"
                           }`}
                         >
                           {active && (
-                            <span className="h-2 w-2 rounded-full bg-[#1C1C1C]" />
+                            <span className="h-2 w-2 rounded-full bg-[#1A1523]" />
                           )}
                         </span>
                       </button>
@@ -259,11 +259,11 @@ function HookGeneratorPage() {
 function HookLimitReached() {
   return (
     <Panel raised className="overflow-hidden">
-      <div className="relative overflow-hidden bg-[#1C1C1C] px-6 py-9 text-center sm:px-10">
+      <div className="relative overflow-hidden bg-[#1A1523] px-6 py-9 text-center sm:px-10">
         <DotGrid dark />
         <GoldGlow className="-right-24 -top-28" size={420} opacity={0.6} />
         <div className="relative">
-          <div className="mx-auto inline-flex size-12 items-center justify-center rounded-full bg-[#C9A84C] text-[#1C1C1C]">
+          <div className="mx-auto inline-flex size-12 items-center justify-center rounded-full bg-[#8B5CF6] text-white">
             <Lock className="size-5" />
           </div>
           <h3 className="mt-5 font-display text-[24px] font-extrabold tracking-tight text-white sm:text-[28px]">
@@ -277,7 +277,7 @@ function HookLimitReached() {
           <Link
             to="/products/$slug"
             params={{ slug: "called-expert-foundation-kit" }}
-            className="mt-6 inline-flex min-h-[52px] items-center gap-2 rounded-xl bg-[#C9A84C] px-7 text-[15px] font-bold text-[#1C1C1C] transition hover:bg-white"
+            className="mt-6 inline-flex min-h-[52px] items-center gap-2 rounded-xl bg-[#8B5CF6] px-7 text-[15px] font-bold text-white transition hover:brightness-110"
           >
             Get the Foundation Kit <ArrowRight className="size-4" />
           </Link>
@@ -301,7 +301,7 @@ function HookResults({ hooks, onReset }: { hooks: Hook[]; onReset: () => void })
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-1.5 text-[13px] font-bold text-neutral-500 transition hover:text-[#1C1C1C]"
+          className="inline-flex items-center gap-1.5 text-[13px] font-bold text-neutral-500 transition hover:text-[#1A1523]"
         >
           <RotateCcw className="size-3.5" /> New hooks
         </button>
@@ -314,11 +314,11 @@ function HookResults({ hooks, onReset }: { hooks: Hook[]; onReset: () => void })
       </div>
 
       <Panel raised className="mt-6 overflow-hidden">
-        <div className="relative overflow-hidden bg-[#1C1C1C] px-6 py-9 text-center sm:px-10">
+        <div className="relative overflow-hidden bg-[#1A1523] px-6 py-9 text-center sm:px-10">
           <DotGrid dark />
           <GoldGlow className="-bottom-32 -right-20" size={440} opacity={0.6} />
           <div className="relative">
-            <Eyebrow className="!text-[#C9A84C]">Hooks open the door</Eyebrow>
+            <Eyebrow className="!text-[#8B5CF6]">Hooks open the door</Eyebrow>
             <h3 className="mt-4 font-display text-[24px] font-extrabold tracking-tight text-white sm:text-[30px]">
               Now walk through it.
             </h3>
@@ -330,13 +330,13 @@ function HookResults({ hooks, onReset }: { hooks: Hook[]; onReset: () => void })
               <Link
                 to="/products/$slug"
                 params={{ slug: "called-expert-foundation-kit" }}
-                className="inline-flex min-h-[52px] items-center gap-2 rounded-xl bg-[#C9A84C] px-7 text-[15px] font-bold text-[#1C1C1C] transition hover:bg-white"
+                className="inline-flex min-h-[52px] items-center gap-2 rounded-xl bg-[#8B5CF6] px-7 text-[15px] font-bold text-white transition hover:brightness-110"
               >
                 Get the Foundation Kit <ArrowRight className="size-4" />
               </Link>
               <Link
                 to="/offer-builder"
-                className="inline-flex min-h-[52px] items-center gap-2 rounded-xl border border-white/25 px-7 text-[14px] font-bold text-white transition hover:border-[#C9A84C] hover:text-[#C9A84C]"
+                className="inline-flex min-h-[52px] items-center gap-2 rounded-xl border border-white/25 px-7 text-[14px] font-bold text-white transition hover:border-[#8B5CF6] hover:text-[#8B5CF6]"
               >
                 Build your offer
               </Link>
@@ -360,17 +360,17 @@ function HookCard({ hook, n }: { hook: Hook; n: number }) {
   return (
     <Panel className="p-5">
       <div className="mb-2 flex items-center justify-between gap-3">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#A98A38]">
+        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#7C3AED]">
           #{n} · {hook.type}
         </span>
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1.5 text-[12px] font-bold text-neutral-500 transition hover:text-[#1C1C1C]"
+          className="inline-flex items-center gap-1.5 text-[12px] font-bold text-neutral-500 transition hover:text-[#1A1523]"
         >
           {copied ? (
             <>
-              <Check className="size-3.5 text-[#C9A84C]" /> Copied
+              <Check className="size-3.5 text-[#8B5CF6]" /> Copied
             </>
           ) : (
             <>
@@ -379,11 +379,11 @@ function HookCard({ hook, n }: { hook: Hook; n: number }) {
           )}
         </button>
       </div>
-      <p className="text-[17px] font-medium leading-snug text-[#1C1C1C]">{hook.text}</p>
+      <p className="text-[17px] font-medium leading-snug text-[#1A1523]">{hook.text}</p>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="mt-3 text-[12px] font-bold text-neutral-500 transition hover:text-[#A98A38]"
+        className="mt-3 text-[12px] font-bold text-neutral-500 transition hover:text-[#7C3AED]"
       >
         {open ? "Hide" : "Why this works →"}
       </button>

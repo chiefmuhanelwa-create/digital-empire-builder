@@ -251,10 +251,26 @@ export function FunnelNav({
   ctaTo,
   ctaHref,
   ctaLabel,
+  tone = "dark",
+  ctaHideOnMobile = false,
 }: {
   ctaTo?: string;
   ctaHref?: string;
   ctaLabel: string;
+  /**
+   * Drop the nav CTA below 640px. For a page whose form is already above the
+   * fold on a phone, a "scroll to the form" button is not just redundant — at
+   * 375px it squeezed the wordmark down to "CONTENTPRENEUR AFRI...".
+   * Defaults false, so pages that need the button on mobile keep it.
+   */
+  ctaHideOnMobile?: boolean;
+  /**
+   * "paper" is the cream skin used by /starterkit (see .funnel-paper in
+   * styles.css). The scrolled background and the logo colour are set INLINE
+   * here, and inline styles beat every stylesheet — so a CSS-only variant
+   * cannot reach them. That is the whole reason this prop exists.
+   */
+  tone?: "dark" | "paper";
 }) {
   const [solid, setSolid] = useState(false);
   useEffect(() => {
@@ -264,23 +280,43 @@ export function FunnelNav({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const cls =
-    "shrink-0 whitespace-nowrap rounded-full bg-gradient-to-r from-amber-400 to-amber-500 " +
-    "px-4 sm:px-5 py-2.5 text-[13px] sm:text-sm font-black text-black transition-transform hover:scale-[1.03]";
+  const paper = tone === "paper";
+
+  const hide = ctaHideOnMobile ? "hidden sm:inline-flex " : "";
+  const cls = paper
+    ? hide +
+      "shrink-0 whitespace-nowrap rounded-full bg-[#1c1c1c] px-4 sm:px-5 py-2.5 " +
+      "text-[13px] sm:text-sm font-semibold text-[#faf8f3] transition-opacity hover:opacity-85"
+    : hide +
+      "shrink-0 whitespace-nowrap rounded-full bg-gradient-to-r from-amber-400 to-amber-500 " +
+      "px-4 sm:px-5 py-2.5 text-[13px] sm:text-sm font-black text-black transition-transform hover:scale-[1.03]";
 
   return (
     <header
       className="funnel-nav fixed inset-x-0 top-0 z-50 transition-colors"
       style={{
-        background: solid ? "rgba(0,0,0,0.85)" : "transparent",
+        background: solid ? (paper ? "rgba(250,248,243,0.92)" : "rgba(0,0,0,0.85)") : "transparent",
         backdropFilter: solid ? "blur(12px)" : undefined,
-        borderBottom: solid ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
+        borderBottom: solid
+          ? paper
+            ? "1px solid rgba(28,28,28,0.11)"
+            : "1px solid rgba(255,255,255,0.08)"
+          : "1px solid transparent",
       }}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         {/* Truncates rather than wrapping or pushing the button off-screen. */}
-        <span className="min-w-0 truncate text-[13px] sm:text-sm font-black tracking-tight text-white">
-          CONTENTPRENEUR<span className="grad-gold"> AFRICA</span>
+        <span
+          className={
+            paper
+              ? "min-w-0 truncate text-[13px] sm:text-sm font-semibold tracking-[0.14em] text-[#1c1c1c]"
+              : "min-w-0 truncate text-[13px] sm:text-sm font-black tracking-tight text-white"
+          }
+        >
+          CONTENTPRENEUR
+          {/* The deepened gold, not the display gold: this sits at 13px and needs
+              4.5:1 on cream. Mirrors --p-gold-text in styles.css. */}
+          <span className={paper ? "text-[#876814]" : "grad-gold"}> AFRICA</span>
         </span>
         {ctaTo ? (
           <Link to={ctaTo} className={cls} style={{ textDecoration: "none" }}>
@@ -303,20 +339,34 @@ export function FunnelNav({
  * address, and a privacy link is the one link that earns its place on a funnel.
  * Everything else a normal footer carries is an exit.
  */
-export function FunnelFooter() {
+export function FunnelFooter({ tone = "dark" }: { tone?: "dark" | "paper" }) {
+  const paper = tone === "paper";
+  const link = paper
+    ? "text-[#7a736c] hover:text-[#1c1c1c]"
+    : "text-slate-500 hover:text-slate-300";
   return (
-    <footer className="border-t border-white/10 py-10">
-      <div className="mx-auto max-w-6xl px-4 text-center text-sm text-slate-500">
+    <footer
+      className={
+        paper ? "border-t border-[rgba(28,28,28,0.11)] py-12" : "border-t border-white/10 py-10"
+      }
+    >
+      <div
+        className={
+          paper
+            ? "mx-auto max-w-6xl px-4 text-center text-sm text-[#7a736c]"
+            : "mx-auto max-w-6xl px-4 text-center text-sm text-slate-500"
+        }
+      >
         <p>&copy; {new Date().getFullYear()} NOCHILL PTY LTD · Contentpreneur Africa</p>
         <p className="mt-2">Turn What You Know Into Income You Own.</p>
         <p className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs">
-          <Link to="/privacy" className="text-slate-500 hover:text-slate-300">
+          <Link to="/privacy" className={link}>
             Privacy
           </Link>
-          <Link to="/terms" className="text-slate-500 hover:text-slate-300">
+          <Link to="/terms" className={link}>
             Terms
           </Link>
-          <Link to="/refund-policy" className="text-slate-500 hover:text-slate-300">
+          <Link to="/refund-policy" className={link}>
             Refunds
           </Link>
         </p>

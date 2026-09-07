@@ -29,7 +29,7 @@ const bodySchema = z.object({
   expenses: amounts,
 });
 
-const zar = (n: number) => "R " + Math.round(n).toLocaleString("en-ZA");
+const zar = (n: number) => "R" + Math.round(n).toLocaleString("en-GB");
 
 export const Route = createFileRoute("/api/public/provisional-tax")({
   server: {

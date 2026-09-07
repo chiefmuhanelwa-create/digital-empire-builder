@@ -117,7 +117,7 @@ const ML_FORM_CSS = `
 const INSIDE = [
   {
     t: "Whether you even need to register",
-    d: `The threshold is R${TAX_THRESHOLD.toLocaleString("en-ZA")}. Most creators have no idea they crossed it two years ago.`,
+    d: `The threshold is R${TAX_THRESHOLD.toLocaleString("en-GB")}. Most creators have no idea they crossed it two years ago.`,
   },
   {
     t: "Every deduction you're allowed",

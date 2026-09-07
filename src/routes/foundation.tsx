@@ -420,8 +420,8 @@ function FoundationFunnel() {
           <div className="mt-12 grid gap-5 sm:grid-cols-3">
             {[
               [
-                "R132,500",
-                "lost by undercharging across my first 50 brand deals, because I never had a number",
+                "R15,000 \u2192 R45,000",
+                "what one job was worth once I costed it properly \u2014 same account, same week, April 2020",
               ],
               [
                 "780,000",

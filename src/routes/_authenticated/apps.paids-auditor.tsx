@@ -27,7 +27,7 @@ const STREAMS: { id: Sid; letter: string; name: string; examples: string; why: s
     why: "This is where 'R100K/month without active selling' actually lives. Recurring income that pays whether you show up or not. The single biggest gap in most creators' income.",
     product: "Start a paid letter (R99/mo) or a membership. One recurring product changes everything." },
   { id: "d", letter: "D", name: "Deals", examples: "Brand campaigns, retainers",
-    why: "One brand deal is a payday. One retainer is a salary. The skill is turning a campaign into recurring — Savanna paid me R25,000/month for four months that way.",
+    why: "One brand deal is a payday. One retainer is a salary. The skill is turning a campaign into recurring — one three-month deal of mine became six that way.",
     product: "Turn your next one-off deal into a retainer offer. Track the pipeline so nothing dies in the DMs." },
   { id: "s", letter: "S", name: "Services", examples: "UGC, management, consulting",
     why: "Lowest leverage, fastest cash. Services fund and validate everything else — but cap them. They pay today; they cannot scale. Use them to build the other four.",
@@ -36,7 +36,7 @@ const STREAMS: { id: Sid; letter: string; name: string; examples: string; why: s
 
 type Amounts = Record<Sid, string>;
 const EMPTY: Amounts = { p: "", a: "", i: "", d: "", s: "" };
-const money = (n: number) => "R" + Math.round(n || 0).toLocaleString("en-ZA");
+const money = (n: number) => "R" + Math.round(n || 0).toLocaleString("en-GB");
 // Priority for what to build next when streams tie: Information first (recurring), then Products, etc.
 const NEXT_PRIORITY: Sid[] = ["i", "p", "a", "d", "s"];
 
@@ -150,7 +150,7 @@ function PaidsAuditor() {
           </div>
           <h1 className="mt-3">A real empire earns from all five.</h1>
           <p className="nx-body max-w-2xl mt-3">
-            “Google killed my AdSense — R180,000 a year, gone overnight. My income didn't hit zero.” Because I wasn't living on
+            “My ad account was terminated at the end of 2024 — two appeals, both refused, the second one final. My income didn't hit zero.” Because I wasn't living on
             one stream. Enter what you earn across the five PAIDS streams and see how exposed you are. Breadth is the insurance policy.
           </p>
         </div>
@@ -175,7 +175,7 @@ function PaidsAuditor() {
                 </p>
                 {pull.unmapped > 0 && (
                   <p className="text-xs text-[#B4650F] mt-2">
-                    R{Math.round(pull.unmapped).toLocaleString("en-ZA")} sits under “Other Income” and has not been
+                    R{Math.round(pull.unmapped).toLocaleString("en-GB")} sits under “Other Income” and has not been
                     placed. Guessing a stream for it would skew the score — re-tag it in the Tracker, or add it below
                     by hand.
                   </p>

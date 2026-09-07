@@ -218,7 +218,7 @@ function TheLeak() {
                     <Fig n={rands(rate)} l="what you are worth per hour" gold />
                   </div>
                   <p className="text-xs text-[var(--text-dim)] mt-4 leading-relaxed">
-                    Your package divided by {PRODUCTIVE_HOURS.toLocaleString("en-ZA")} working hours
+                    Your package divided by {PRODUCTIVE_HOURS.toLocaleString("en-GB")} working hours
                     gives what you cost. Professional firms bill people out at roughly{" "}
                     {CHARGE_OUT_MULTIPLIER} times that — it covers overhead, non-billable time and
                     margin. It is why a salaried consultant is billed to clients far above their

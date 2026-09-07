@@ -49,7 +49,7 @@ function build(o: Offer, m: Magnet): Draft[] {
   const output = o.output.trim() || "what they keep";
   const name = o.name.trim() || "your offer";
   const time = o.timeframe.trim() || "the timeframe";
-  const price = o.price ? `R${o.price.toLocaleString("en-ZA")}` : "the price";
+  const price = o.price ? `R${o.price.toLocaleString("en-GB")}` : "the price";
   const magnet = m.title.trim() || "the thing you gave away";
 
   return [

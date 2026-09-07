@@ -37,7 +37,7 @@ const INCOME_CATEGORIES = [...PAIDS_INCOME_CATEGORIES];
 const EXPENSE_CATEGORIES = ["Equipment", "Software", "Marketing", "Travel", "Office", "Education", "Other Expense"];
 
 function rand(n: number) {
-  return `R${n.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `R${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function emptyForm() {

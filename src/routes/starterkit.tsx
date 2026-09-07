@@ -1,32 +1,44 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MailerLiteEmbedForm } from "@/components/MailerLiteEmbedForm";
-import { Reveal, Orbs, Eyebrow, GlassCard, FunnelNav, FunnelFooter } from "@/components/funnel";
+import { Reveal, GlassCard, FunnelNav, FunnelFooter } from "@/components/funnel";
 
 // THE STARTER KIT OPT-IN — contentpreneur.africa/starterkit
 //
-// COPY REWRITTEN 2026-08-22: "use their language — and make sense".
+// COPY REPLACED 2026-09-01 from STARTERKIT-PAGE-AND-FUNNEL.md (founder brief,
+// written for the Creator Lab talk on 2026-09-02). The QR code on the stage
+// slide points here, so the page has to look like the slide: the H1 and the
+// sub-headline are reproduced EXACTLY as they appear on it. Somebody scanning
+// a QR has three seconds to confirm they are in the right place.
 //
-// THE LOGIC THAT MAKES THE LADDER MAKE SENSE.
-// Each page now opens on the person whose exact problem that tier solves:
+// THIS IS AN OPT-IN PAGE, NOT A SALES PAGE. Committed in writing to the event
+// organiser: "It goes to a free resource, not a sales page." The speaker brief
+// adds "please do not use your session to solicit business." So, enforced here:
+//   · No price. Anywhere.
+//   · No Accelerator, no Foundation Kit, no Community, no book.
+//   · One ask, repeated once. No exit-intent, no countdown, no scarcity.
+// The offer comes later, by email, once it has been earned.
 //
-//   Starter Kit   "I'm not sure how to put that in one sentence."
-//                 → the Positioning Blueprint is literally that sentence.
-//   Foundation    "At what point do I start charging?"
-//                 → the Charge Gate is literally that answer.
-//   Accelerator   "I am not starting from zero, but I need direction."
-//                 → seven stages is literally that direction.
+// TAX IS THE DOOR, OWNERSHIP IS THE ROOM. The room arrives with a tax fright.
+// Building them a tax product would start a second funnel for a secondary
+// audience — the documented failure mode. So the page acknowledges the tax fear
+// in the first three lines and reframes it in the next three. Same page, same
+// kit, one funnel. The people who only wanted a tax hack will not opt in; that
+// is the page working correctly, not failing.
 //
-// Real messages, kept word for word, attributed by profession only.
-//
-// Note how plain their words are. Nobody writes "monetise your expertise". They
-// write not sure, not too certain, I need direction. This page matches that. If
-// a line sounds like a course being sold, it is wrong and it goes.
-//
-// This page does NOT sell the Foundation Kit. It captures the address; the email
-// sequence does the selling. The two ladder buttons that used to sit near the
-// bottom asked a stranger to make three decisions instead of one.
+// WHAT WAS REMOVED, and why it is not an oversight:
+//   · The "780,000 followers" opener. The claim ledger forbids dating that loss
+//     and the figure is contested; the new second block replaces it with the
+//     R207,879.20 story, which is E1 and cleared.
+//   · "What this will not do" — its job is now done by "Who it is not for".
+//   · The P.S. It moves to the delivery email, per Part 3 of the brief.
 //
 // The MailerLite embed and slug v3XiMi are untouched — live lead capture.
+// NOTE: the brief asks for ONE field (email only) and a "Send me the kit"
+// button. Field count and button label belong to the MailerLite form, not to
+// this file — they are a dashboard change, not a code change.
+//
+// Skin: the `funnel-paper` cream variant (styles.css). Sibling funnel pages
+// (/foundation, /accelerator) keep the black-and-gold skin.
 export const Route = createFileRoute("/starterkit")({
   head: () => ({
     meta: [
@@ -34,241 +46,334 @@ export const Route = createFileRoute("/starterkit")({
       {
         name: "description",
         content:
-          "Eight short worksheets. Ninety minutes. You finish able to say what you do in one sentence — and what you would charge for it.",
+          "Tax is the symptom. Ownership is the fix. The free Knowledge Entrepreneur Starter Kit — turn what you know into income you own.",
       },
+    ],
+    // WARM THE MAILERLITE HOSTS. Measured 2026-09-01 on Slow-4G + 4x CPU:
+    // the form's inputs did not exist until 3505ms, because the whole chain
+    // only starts AFTER hydration — inject universal.js (2764ms) -> forms
+    // JSONP (2986ms) -> this form's JSONP (3042ms) -> their fonts (3321ms).
+    // Every hop paid a fresh DNS + TLS handshake at 150ms RTT.
+    //
+    // preconnect pays those handshakes during HTML parse instead. preload
+    // fetches universal.js into the cache WITHOUT executing it, so the
+    // injection in MailerLiteEmbedForm hits a warm cache rather than the
+    // network. Deliberately NOT moving the script into <head> to execute
+    // early: universal.js scans for .ml-embedded nodes, and those do not
+    // exist until React renders. Warming is a pure win; re-ordering is not.
+    links: [
+      { rel: "preconnect", href: "https://assets.mailerlite.com" },
+      { rel: "preconnect", href: "https://assets.mlcdn.com" },
+      { rel: "dns-prefetch", href: "https://assets.mailerlite.com" },
+      { rel: "dns-prefetch", href: "https://assets.mlcdn.com" },
+      { rel: "preload", href: "https://assets.mailerlite.com/js/universal.js", as: "script" },
     ],
   }),
   component: StarterKitFunnel,
 });
 
-// Verified against the real deliverable PDF (Google Drive, 2026-08-08) — 8
-// worksheets, not 7. Each is described by what you end up holding, in the
-// plainest words available.
-const WORKSHEETS: [string, string][] = [
+// ── THE ASSESSMENT LINE ────────────────────────────────────────────────────
+// R207,879.20 is E1 and is the ONLY publishable SARS figure. It is written in
+// full and never rounded.
+//
+// ⚠️ THE TAX YEARS ARE A SEPARATE CLAIM AND ARE NOT CLEARED BY THE LEDGER.
+// CLAUDE.md, "SARS story specifics": two internal records contradict each other
+// "and even disagree on the tax years".
+//
+// 🔒 FOUNDER RULING 2026-09-01: raised before publishing, and ruled to ship as
+// written in STARTERKIT-PAGE-AND-FUNNEL.md. A live founder instruction outranks
+// the ledger (authority order, Article I), so this is settled — do NOT re-open
+// it or silently remove it in a later session.
+//
+// Still isolated as one constant: if the records are ever reconciled the other
+// way, set this to "" and the sentence reads correctly and stays true with the
+// figure alone, which is E1 and the only publishable SARS figure.
+const ASSESSMENT_PERIOD = ", across the 2020 to 2022 tax years";
+
+// ── WHAT IS INSIDE ─────────────────────────────────────────────────────────
+// Part 2 of the brief marks this block as SLOTS, in red: "fill these from the
+// actual PDF. Do not let me or anyone else invent them... If a line isn't
+// literally in the PDF, it comes out."
+//
+// Nothing here is invented. These are the eight worksheet NAMES already carried
+// in this file with a dated provenance note — verified against the real
+// deliverable PDF (Google Drive, 2026-08-08), which is where the "8 worksheets,
+// not 7" correction came from. What changed is only the SHAPE the brief asks
+// for: name the tool, never the topic, one line each, verb first.
+const INSIDE: [string, string][] = [
   [
     "The Knowledge Audit",
-    "The list of things people already come to you for. Written down, so it stops being a habit and starts being an inventory.",
+    "List what people already come to you for, so it stops being a habit and starts being an inventory.",
   ],
   [
     "The Scorecard",
-    "Five areas, scored honestly. You see which one is actually holding you back — it is rarely the one you assume.",
+    "Score five areas honestly and find the one that is actually holding you back.",
   ],
-  ["Your Lowest Score", "One instruction for the next thirty days. Not a list of ten things. One."],
-  [
-    "The Positioning Blueprint",
-    "The sentence. Who you help, and with what. Short enough that somebody can repeat it back to you correctly.",
-  ],
+  ["Your Lowest Score", "Turn that one area into a single instruction for the next thirty days."],
+  ["The Positioning Blueprint", "Write the sentence: who you help, and with what."],
   [
     "Your First Content Engine",
-    "Four kinds of post, one idea each. So you never sit looking at an empty screen again.",
+    "Build four kinds of post so you never face an empty screen again.",
   ],
-  [
-    "River, Fish, Tank",
-    "Why the followers are not yours, and what is. Ten minutes that change where you put your effort.",
-  ],
-  ["Your First Offer", "One thing somebody could actually buy from you, sketched out on a page."],
-  [
-    "The PAIDS Map",
-    "Five ways knowledge turns into income. You are probably walking past three of them.",
-  ],
+  ["River, Fish, Tank", "See why the followers are not yours — and what is."],
+  ["Your First Offer", "Sketch one thing somebody could actually buy from you."],
+  ["The PAIDS Map", "Map the five ways knowledge turns into income."],
 ];
+
+const FOR_YOU = [
+  "You know more than you are paid for.",
+  "You are qualified, experienced, good at the thing — and none of it belongs to you in a form you can sell.",
+  "You are busy. You do not need motivation. You need a structure.",
+];
+
+const NOT_FOR_YOU = [
+  "Anyone looking for a shortcut. There isn't one in here.",
+  "Anyone who wants followers rather than income.",
+  "Anyone who wants somebody else to do it for them.",
+];
+
+/** Section label. A ruled, letter-spaced line — not a pill. */
+function Label({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--p-muted)]">
+      {children}
+    </p>
+  );
+}
+
+/** The one hairline that separates every section. */
+function Rule() {
+  return <div className="mx-auto max-w-3xl border-t border-[var(--p-line)]" />;
+}
+
+/**
+ * The single ask. Appears twice — same form, same words, same destination.
+ *
+ * THE HEADING IS OPTIONAL, AND SMALL, ON PURPOSE. MailerLite's form sometimes
+ * renders its own title and sometimes does not — it changed under this page
+ * twice on 2026-09-01 — so the card cannot depend on their markup for a
+ * heading, and equally must not shout over it when it is there. Hence a
+ * compact one, passed only by the hero card. The closing card already has a
+ * section h2 immediately above it and passes nothing.
+ *
+ * The full-size heading that used to sit here cost ~46px in the exact place
+ * the mobile fold budget is tightest — the difference between the Subscribe
+ * button being on an iPhone SE screen or off it.
+ *
+ * THE SKELETON IS NOT DECORATION. MailerLite renders this form client-side,
+ * and measured on Slow-4G that takes ~3.5s. For those 3.5s the card was a
+ * heading floating above an empty white gap, which on a phone at an event
+ * reads as broken, and the arrival of the real form shifted the page.
+ *
+ * It is swapped out by CSS alone — `.ml-embedded:empty + .ml-skeleton`, see
+ * styles.css. MailerLite fills the div with children, so `:empty` stops
+ * matching the instant the real form lands. No JS, no observer, no state,
+ * and nothing to go wrong if their script never arrives at all.
+ */
+function OptIn({ heading }: { heading?: React.ReactNode }) {
+  return (
+    <GlassCard className="p-5 sm:p-9">
+      {heading && (
+        <h2 className="mb-4 text-[1.15rem] leading-tight sm:mb-5 sm:text-[1.4rem]">{heading}</h2>
+      )}
+      <MailerLiteEmbedForm formSlug="v3XiMi" />
+      {/* Only ever seen if MailerLite is slow or never arrives. It carries a
+          real sentence, not just grey bars, so a failed third party still
+          leaves a card that says something. */}
+      <div className="ml-skeleton">
+        <p className="ml-skeleton-text">Loading the form&hellip;</p>
+        <div className="ml-skeleton-bar ml-skeleton-field" />
+        <div className="ml-skeleton-bar ml-skeleton-field" />
+        <div className="ml-skeleton-bar ml-skeleton-button" />
+      </div>
+      <p className="mt-5 text-sm leading-relaxed text-[var(--p-muted)] sm:mt-6">
+        The kit arrives immediately. One email. Leave any time.
+      </p>
+    </GlassCard>
+  );
+}
 
 function StarterKitFunnel() {
   return (
-    <div className="funnel min-h-screen">
-      <Orbs tint="amber" />
-      <FunnelNav ctaHref="#get" ctaLabel="Get the kit" />
+    <div className="funnel funnel-paper min-h-screen">
+      <FunnelNav ctaHref="#get" ctaLabel="Send me the kit" tone="paper" ctaHideOnMobile />
 
-      {/* ── HERO. Her sentence, because it is the exact thing the kit fixes. */}
-      <section className="relative z-10 px-4 pt-28 pb-14 sm:pt-36">
-        <div className="mx-auto grid max-w-5xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-          <Reveal>
-            <Eyebrow>Free · 8 worksheets · about 90 minutes</Eyebrow>
-            <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05]">
-              Somebody asks what you do. You listen to yourself{" "}
-              <span className="grad-gold">answer it badly.</span>
+      {/* ── ABOVE THE FOLD. Must read as the stage slide. ────────────────── */}
+      {/*
+        THE ORDER IS DIFFERENT ON A PHONE, ON PURPOSE.
+
+        Almost everyone arrives here by scanning a QR code off a slide, which
+        means a phone, in a room, once. Measured on an iPhone 13 viewport
+        (844px tall) BEFORE this change: the Subscribe button sat at 932px —
+        below the fold. People had to scroll to find the only thing the page
+        asks them to do, having already been told what it was from stage.
+
+        So on mobile the DOM order is: headline -> THE FORM -> the three
+        supporting lines. The promise, the ask, then the argument for anyone
+        who wants it. On lg and up there is room for both columns, so explicit
+        row/column placement puts the prose back in the left column and the
+        form in the right, spanning both rows. One set of markup, one form.
+      */}
+      <section className="paper-hero relative z-10 px-5 pt-[4.5rem] pb-16 sm:pt-32 sm:pb-24 lg:pt-40">
+        <div className="mx-auto grid max-w-5xl items-start gap-x-16 gap-y-6 sm:gap-y-9 lg:grid-cols-[1.05fr_0.95fr] lg:gap-y-8">
+          {/* The promise. */}
+          <Reveal className="lg:col-start-1 lg:row-start-1">
+            <Label>Free · The Knowledge Entrepreneur Starter Kit</Label>
+            <h1 className="mt-5 text-[2.1rem] leading-[1.12] sm:mt-6 sm:text-5xl md:text-[3.35rem] md:leading-[1.08]">
+              Turn What You Know Into <span className="grad-gold">Income You Own</span>
             </h1>
-            <p className="mt-7 text-lg sm:text-xl leading-relaxed text-slate-300">
-              Again. You start with your job title, then you add something, then you add something
-              else, and by the end you are watching their face and you know you have lost them.
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-slate-300">
-              You have done this hundreds of times. You have never once walked away happy with how
-              it came out.
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-white">
-              It is not that you do not know. It is that nobody ever made you put it into one
-              sentence.
+            <p className="mt-4 text-lg font-medium leading-snug text-[var(--p-ink)] sm:mt-5 sm:text-2xl">
+              Tax is the symptom. Ownership is the fix.
             </p>
           </Reveal>
 
-          <Reveal delay={120}>
+          {/* The ask. Second on a phone; right-hand column on a desktop. */}
+          <Reveal delay={100} className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
             <div id="get" className="scroll-mt-24">
-              <GlassCard className="p-6 sm:p-8" accent="rgba(251,191,36,0.35)">
-                <h2 className="text-2xl font-black leading-tight">
-                  Send me the <span className="grad-gold">eight worksheets</span>
-                </h2>
-                <p className="mt-2 text-sm text-slate-400">Free. No card. Nothing to attend.</p>
-                <div className="mt-5">
-                  <MailerLiteEmbedForm formSlug="v3XiMi" />
-                </div>
-                <p className="mt-4 text-xs leading-relaxed text-slate-500">
-                  We'll email your kit, and WhatsApp you if there is something worth your time. No
-                  spam, unsubscribe anytime.
-                </p>
-              </GlassCard>
+              <OptIn heading={<>Send me the Starter Kit &mdash; free</>} />
             </div>
           </Reveal>
-        </div>
-      </section>
 
-      {/* ── WHY IT HAPPENS. Removes the blame, keeps the problem. ────────── */}
-      <section className="relative z-10 px-4 py-16 sm:py-24">
-        <div className="mx-auto max-w-3xl">
-          <Reveal>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
-              It is not that you <span className="grad-gold">don't know enough</span>
-            </h2>
-            <div className="mt-8 space-y-5 text-lg leading-relaxed text-slate-300">
-              <p className="measure">
-                You have spent years getting good at something. Nobody spent ten minutes teaching
-                you how to describe it, price it, or put it in front of anybody.
+          {/* The argument, for anyone who wants it before deciding. */}
+          <Reveal delay={160} className="lg:col-start-1 lg:row-start-2">
+            <div className="space-y-5 text-lg leading-[1.65] text-[var(--p-body)]">
+              <p className="max-w-[38ch]">You know more than you are being paid for.</p>
+              <p className="max-w-[38ch]">
+                The money that does come in arrives on someone else&rsquo;s terms, in someone
+                else&rsquo;s format, whenever they decide.
               </p>
-              <p className="measure">
-                That is not a gap in your knowledge. It is a gap in the structure around it — and it
-                is the reason people keep asking you for things and keep not paying you for them.
-              </p>
-              <p className="measure text-white">
-                You cannot charge for something you cannot name. So we start with the name.
+              <p className="max-w-[38ch] font-medium text-[var(--p-ink)]">
+                This kit is the first step out of that.
               </p>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ── WHAT YOU END UP HOLDING. ─────────────────────────────────────── */}
-      <section className="relative z-10 px-4 py-16 sm:py-24">
+      <Rule />
+
+      {/* ── THE HONEST REASON IT EXISTS. ─────────────────────────────────── */}
+      <section className="relative z-10 px-5 py-20 sm:py-28">
         <div className="mx-auto max-w-3xl">
           <Reveal>
-            <h2 className="text-center text-3xl sm:text-4xl font-black leading-tight">
-              Eight worksheets. <span className="grad-gold">One evening.</span>
+            <h2 className="text-[1.75rem] leading-[1.2] sm:text-4xl">
+              I built this because of <span className="grad-gold">a number</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-center text-slate-400">
-              Nothing to research and nothing to invent. Every question is about work you have
-              already done.
-            </p>
+            <div className="mt-9 space-y-6 text-lg leading-[1.7] text-[var(--p-body)]">
+              <p className="measure">
+                In 2020 I was doing well. Brand money was landing. It felt like winning.
+              </p>
+              <p className="measure">
+                I took a week off and went through my finances. No savings. No investments. No
+                assets. Two good years had left nothing structural behind.
+              </p>
+              <p className="measure">
+                Then the assessment came.{" "}
+                <strong className="font-semibold text-[var(--p-ink)]">R207,879.20</strong>
+                {ASSESSMENT_PERIOD}.
+              </p>
+              <p className="measure">
+                I was not hiding anything. I assumed. I never asked. And assuming is a decision
+                &mdash; it just sends its invoice late.
+              </p>
+              <p className="measure font-medium text-[var(--p-ink)]">
+                I am still carrying it. I have not paid it off, and I am not going to pretend
+                otherwise to make this page sound better.
+              </p>
+              <p className="measure">
+                What I did do is build the system I wish somebody had handed me in 2020. That system
+                is not about tax. Tax was the symptom. The real problem was that everything I earned
+                arrived on rented land &mdash; someone else&rsquo;s platform, someone else&rsquo;s
+                brief, someone else&rsquo;s timing &mdash; and I owned none of the structure it
+                landed in.
+              </p>
+              <p className="measure font-medium text-[var(--p-ink)]">
+                This kit is where that changes.
+              </p>
+            </div>
           </Reveal>
-          <div className="mt-10 space-y-3">
-            {WORKSHEETS.map(([title, desc], i) => (
-              <Reveal key={title} delay={i * 45}>
-                <GlassCard className="p-5">
-                  <div className="flex items-start gap-4">
-                    <span className="font-black text-amber-400">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <div className="font-bold">{title}</div>
-                      <div className="mt-1 text-sm leading-relaxed text-slate-400">{desc}</div>
+        </div>
+      </section>
+
+      <Rule />
+
+      {/* ── WHAT IS INSIDE. Named tools, verb first, nothing invented. ───── */}
+      <section className="relative z-10 px-5 py-20 sm:py-28">
+        <div className="mx-auto max-w-3xl">
+          <Reveal>
+            <Label>What is in it</Label>
+            <h2 className="mt-5 text-[1.75rem] leading-[1.2] sm:text-4xl">What&rsquo;s inside</h2>
+          </Reveal>
+
+          <div className="mt-11 border-t border-[var(--p-line)]">
+            {INSIDE.map(([title, line], i) => (
+              <Reveal key={title} delay={i * 40}>
+                <div className="grid grid-cols-[2.5rem_1fr] gap-x-4 border-b border-[var(--p-line)] py-6 sm:grid-cols-[3.25rem_1fr] sm:py-7">
+                  <span className="pt-0.5 text-sm font-semibold tabular-nums text-[var(--p-gold-text)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <div className="font-semibold text-[var(--p-ink)]">{title}</div>
+                    <div className="mt-2 max-w-[58ch] text-[15px] leading-[1.65] text-[var(--p-body)]">
+                      {line}
                     </div>
                   </div>
-                </GlassCard>
+                </div>
               </Reveal>
             ))}
           </div>
-
-          <Reveal delay={400}>
-            <GlassCard className="mt-10 p-7" accent="rgba(34,197,94,0.3)">
-              <h3 className="text-xl font-black">By the end you can answer four questions</h3>
-              <ul className="mt-5 space-y-3 text-slate-300">
-                <li>· What do you actually do — in one sentence somebody could repeat?</li>
-                <li>· Who is it for?</li>
-                <li>· What is the one thing they could buy from you?</li>
-                <li>· What is the first number you would put on it?</li>
-              </ul>
-              <p className="mt-5 leading-relaxed text-slate-400">
-                Four answers, on one page, in your own handwriting. Most people with twenty years of
-                expertise have never written them down.
-              </p>
-            </GlassCard>
-          </Reveal>
         </div>
       </section>
 
-      {/* ── PROOF. Short, and pointed at why he is the one saying this. ──── */}
-      <section className="relative z-10 px-4 py-16 sm:py-24">
-        <div className="mx-auto max-w-3xl">
+      <Rule />
+
+      {/* ── THE FILTER. Repels the wrong people, makes the right ones feel
+             found. This block does more work than any other on the page. ── */}
+      <section className="relative z-10 px-5 py-20 sm:py-28">
+        <div className="mx-auto grid max-w-3xl gap-12 sm:grid-cols-2 sm:gap-10">
           <Reveal>
-            <h2 className="text-3xl sm:text-4xl font-black leading-tight">
-              Why I am the one <span className="grad-gold">handing you this</span>
-            </h2>
-            <div className="mt-8 space-y-5 text-lg leading-relaxed text-slate-300">
-              <p className="measure">
-                I had 780,000 followers and I was still doing sums in my head about the electricity.
-                Then one morning the account was gone and nobody owed me an explanation.
-              </p>
-              <p className="measure">
-                Everything I had used to prove I mattered belonged to somebody else, and they
-                switched it off.
-              </p>
-              <p className="measure text-white">
-                You are further ahead than I was. You spent your years getting good at something
-                real instead of chasing attention. You are just not being paid for it yet.
-              </p>
-            </div>
+            <h2 className="text-[1.4rem] leading-[1.25] sm:text-[1.6rem]">Who this is for</h2>
+            <ul className="mt-6 space-y-4 leading-[1.65] text-[var(--p-body)]">
+              {FOR_YOU.map((line) => (
+                <li key={line} className="border-t border-[var(--p-line)] pt-4">
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={120}>
+            <h2 className="text-[1.4rem] leading-[1.25] sm:text-[1.6rem]">Who it is not for</h2>
+            <ul className="mt-6 space-y-4 leading-[1.65] text-[var(--p-muted)]">
+              {NOT_FOR_YOU.map((line) => (
+                <li key={line} className="border-t border-[var(--p-line)] pt-4">
+                  {line}
+                </li>
+              ))}
+            </ul>
           </Reveal>
         </div>
       </section>
 
-      {/* ── HONEST LIMITS. Says what it will not do. ─────────────────────── */}
-      <section className="relative z-10 px-4 py-16">
-        <div className="mx-auto max-w-3xl">
-          <Reveal>
-            <h2 className="text-3xl sm:text-4xl font-black leading-tight">What this will not do</h2>
-            <div className="mt-7 space-y-5 text-slate-300">
-              <p>
-                <strong className="text-white">It will not motivate you.</strong> There is no pep
-                talk in it. You do not need one — you need a structure.
-              </p>
-              <p>
-                <strong className="text-white">It stops at clarity.</strong> You finish knowing what
-                you do, who it is for and what you would charge. Actually going and getting paid is
-                the next thing, and it is not this.
-              </p>
-              <p>
-                <strong className="text-white">It will not work if you only read it.</strong>{" "}
-                Reading takes twelve minutes and changes nothing. The questions only work if you
-                answer them.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <Rule />
 
-      {/* ── CLOSE. The same single ask. ──────────────────────────────────── */}
-      <section className="relative z-10 px-4 pb-24 pt-8">
+      {/* ── CLOSING CTA. Nothing below this but the legal footer. ────────── */}
+      <section className="relative z-10 px-5 pb-28 pt-20 sm:pt-24">
         <div className="mx-auto max-w-lg">
           <Reveal>
-            <GlassCard className="p-7 sm:p-9" accent="rgba(251,191,36,0.35)">
-              <h2 className="text-center text-2xl sm:text-3xl font-black leading-tight">
-                Send me the <span className="grad-gold">eight worksheets</span>
-              </h2>
-              <p className="mt-2 text-center text-sm text-slate-400">
-                Free. No card. Nothing to attend.
-              </p>
-              <div className="mt-6">
-                <MailerLiteEmbedForm formSlug="v3XiMi" />
-              </div>
-            </GlassCard>
-            <p className="mt-10 text-sm italic leading-relaxed text-slate-500">
-              P.S. — The first question is: what have you been doing for three years or more that
-              people keep asking you about? If an answer came to you while you read that, write it
-              down now. It will be gone by tonight, the way it has been every other time.
+            <h2 className="text-center text-[1.75rem] leading-[1.2] sm:text-4xl">
+              Start with what you <span className="grad-gold">already know</span>
+            </h2>
+            <div className="mt-10">
+              <OptIn />
+            </div>
+            <p className="mt-10 text-center text-sm text-[var(--p-muted)]">
+              Ndivhuwo Muhanelwa &middot; Founder, Contentpreneur Africa
             </p>
           </Reveal>
         </div>
       </section>
 
-      <FunnelFooter />
+      <FunnelFooter tone="paper" />
     </div>
   );
 }

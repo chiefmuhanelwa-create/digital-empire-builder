@@ -25,20 +25,20 @@ function ToolTile({ tool }: { tool: Tool }) {
   const body = (
     <>
       <div className="flex w-full items-start justify-between gap-3">
-        <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#C9A84C]/30 bg-[#C9A84C]/10 text-[#A98A38] transition group-hover:bg-[#C9A84C] group-hover:text-[#1C1C1C]">
+        <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 text-[#7C3AED] transition group-hover:bg-[#8B5CF6] group-hover:text-white">
           <Icon className="h-5 w-5" />
         </span>
         <Pill tone={tool.tier === "premium" ? "dark" : "outline"}>
           {tool.tier === "premium" ? "Premium" : "Free"}
         </Pill>
       </div>
-      <span className="mt-4 block font-display text-[19px] font-bold tracking-tight text-[#1C1C1C]">
+      <span className="mt-4 block font-display text-[19px] font-bold tracking-tight text-[#1A1523]">
         {tool.name}
       </span>
       <span className="mt-1.5 block text-[14.5px] leading-relaxed text-neutral-600">
         {tool.blurb}
       </span>
-      <span className="mt-4 block text-[13px] font-bold text-[#A98A38]">
+      <span className="mt-4 block text-[13px] font-bold text-[#7C3AED]">
         {tool.external ? "Open tool \u2197" : "Open tool \u2192"}
       </span>
     </>
@@ -47,7 +47,7 @@ function ToolTile({ tool }: { tool: Tool }) {
   const cls =
     "group flex h-full flex-col rounded-2xl border border-neutral-200/90 bg-white p-5 " +
     "shadow-[0_2px_10px_-4px_rgba(28,28,28,0.08)] transition " +
-    "hover:-translate-y-0.5 hover:border-[#C9A84C]/60 hover:shadow-[0_18px_40px_-22px_rgba(28,28,28,0.35)]";
+    "hover:-translate-y-0.5 hover:border-[#8B5CF6]/60 hover:shadow-[0_18px_40px_-22px_rgba(28,28,28,0.35)]";
 
   if (tool.external) {
     return (
@@ -66,29 +66,29 @@ function ToolTile({ tool }: { tool: Tool }) {
 function ToolsIndex() {
   useToolView("tools-hub");
   return (
-    <div className="min-h-screen bg-[#FAF7F0]">
+    <div className="min-h-screen overflow-x-clip bg-[#F5F3FF]">
       <SiteHeader />
       <ToolCanvas>
         <main className="mx-auto max-w-5xl px-5 pb-20 pt-8 sm:px-6 sm:pt-12">
           <BackNav to="/" label="Home" className="mb-6" />
           <Eyebrow>Contentpreneur · Toolkit</Eyebrow>
-          <h1 className="mt-5 font-display text-[38px] font-extrabold leading-[1.05] tracking-[-0.02em] text-[#1C1C1C] sm:text-[52px]">
+          <h1 className="mt-5 font-display text-[38px] font-extrabold leading-[1.05] tracking-[-0.02em] text-[#1A1523] sm:text-[52px]">
             Practical tools.
             <br />
-            <span className="text-[#C9A84C]">No fluff.</span>
+            <span className="text-[#8B5CF6]">No fluff.</span>
           </h1>
           <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-neutral-600 sm:text-[17px]">
             Price your work, manage your money, and sharpen your message — grouped by what you're
             actually trying to do. Free, and yours to use as often as you like.
           </p>
-          <div className="mb-14 mt-6 h-[3px] w-16 rounded-full bg-[#C9A84C]" />
+          <div className="mb-14 mt-6 h-[3px] w-16 rounded-full bg-[#8B5CF6]" />
 
           {TOOL_CATEGORY_ORDER.map((category) => {
             const tools = TOOLS.filter((t) => t.category === category);
             if (tools.length === 0) return null;
             return (
               <section key={category} className="mb-14">
-                <h2 className="mb-5 font-display text-[22px] font-bold tracking-tight text-[#1C1C1C] sm:text-[26px]">
+                <h2 className="mb-5 font-display text-[22px] font-bold tracking-tight text-[#1A1523] sm:text-[26px]">
                   {category}
                 </h2>
                 <div className="grid gap-5 sm:grid-cols-2">
@@ -100,11 +100,11 @@ function ToolsIndex() {
             );
           })}
 
-          <div className="relative mt-4 overflow-hidden rounded-3xl bg-[#1C1C1C] p-7 sm:p-10">
+          <div className="relative mt-4 overflow-hidden rounded-3xl bg-[#1A1523] p-7 sm:p-10">
             <DotGrid dark />
             <GoldGlow className="-bottom-40 -right-24" size={480} opacity={0.7} />
             <div className="relative">
-              <Eyebrow className="!text-[#C9A84C]">Ready for the system?</Eyebrow>
+              <Eyebrow className="!text-[#8B5CF6]">Ready for the system?</Eyebrow>
               <h2 className="mb-3 mt-4 font-display text-[26px] font-extrabold leading-tight tracking-tight text-white sm:text-[34px]">
                 Tools are the start.
                 <br />
@@ -118,7 +118,7 @@ function ToolsIndex() {
               <Link
                 to="/products/$slug"
                 params={{ slug: "called-expert-foundation-kit" }}
-                className="inline-flex min-h-[54px] items-center rounded-xl bg-[#C9A84C] px-8 text-[15px] font-bold text-[#1C1C1C] transition hover:bg-white"
+                className="inline-flex min-h-[54px] items-center rounded-xl bg-[#8B5CF6] px-8 text-[15px] font-bold text-white transition hover:brightness-110"
               >
                 See the Foundation Kit →
               </Link>

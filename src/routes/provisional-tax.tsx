@@ -48,11 +48,11 @@ export const Route = createFileRoute("/provisional-tax")({
   component: ProvisionalTaxPage,
 });
 
-const zar = (n: number) => "R " + Math.round(n).toLocaleString("en-ZA");
+const zar = (n: number) => "R" + Math.round(n).toLocaleString("en-GB");
 const digits = (s: string) => Number(String(s).replace(/[^\d.]/g, "")) || 0;
 const grouped = (s: string) => {
   const n = digits(s);
-  return n ? n.toLocaleString("en-ZA") : "";
+  return n ? n.toLocaleString("en-GB") : "";
 };
 
 function ProvisionalTaxPage() {
@@ -276,7 +276,7 @@ function Results({
               </p>
               <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-white/70">
                 On {zar(r.taxable)} taxable income you're below the R
-                {TAX_THRESHOLD.toLocaleString("en-ZA")} threshold, so your estimated tax is nil. One
+                {TAX_THRESHOLD.toLocaleString("en-GB")} threshold, so your estimated tax is nil. One
                 good month changes that — keep the record and re-run it.
               </p>
             </>
@@ -417,8 +417,8 @@ function BracketTable({ taxable }: { taxable: number }) {
   const rows = BRACKETS.map((b) => {
     const range =
       b.upTo === Infinity
-        ? `R${low.toLocaleString("en-ZA")} and above`
-        : `R${low.toLocaleString("en-ZA")} – R${b.upTo.toLocaleString("en-ZA")}`;
+        ? `R${low.toLocaleString("en-GB")} and above`
+        : `R${low.toLocaleString("en-GB")} – R${b.upTo.toLocaleString("en-GB")}`;
     const active = taxable >= low && (b.upTo === Infinity || taxable <= b.upTo);
     low = b.upTo + 1;
     return { range, rate: `${(b.rate * 100).toFixed(0)}%`, active };

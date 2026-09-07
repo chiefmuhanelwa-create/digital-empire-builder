@@ -204,7 +204,7 @@ export function calculate(basis: Basis, items: LeakItem[]): LeakResult {
 }
 
 export function rands(n: number): string {
-  return `R${Math.round(n).toLocaleString("en-ZA")}`;
+  return `R${Math.round(n).toLocaleString("en-GB")}`;
 }
 
 /**

@@ -93,7 +93,7 @@ function FirstIncomePlanner() {
                 [maths.sales, "sales"],
                 [maths.conversations, "real conversations"],
                 [maths.perWeek, "a week"],
-                [`R${maths.price.toLocaleString("en-ZA")}`, "your price"],
+                [`R${maths.price.toLocaleString("en-GB")}`, "your price"],
               ].map(([n, l]) => (
                 <div key={String(l)}>
                   <span className="block font-display text-2xl text-white tabular-nums">{n}</span>

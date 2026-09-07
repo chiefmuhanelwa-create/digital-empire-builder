@@ -117,7 +117,7 @@ export const WORKBOOKS: Workbook[] = [
       ),
       receipt(
         "What not doing this cost me",
-        "I lost R132,500 across my first fifty brand deals by undercharging. Not because I was bad at the work — because I had never written down what the work actually was, so I had no idea what it was worth. The list is what stops that.",
+        "For years my standing rate was R15,000. I quoted it because it was my number, not because I had ever worked it out. In April 2020 I costed a job properly for the first time — scope, usage, exclusivity — and it came to R45,000. Same account, same week. Nothing about my audience had changed. The list is what makes that difference visible.",
       ),
       t(
         "Now cut it",

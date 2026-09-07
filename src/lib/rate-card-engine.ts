@@ -500,5 +500,5 @@ export function convertFromZar(rates: Record<string, number>, code: string, zar:
 export function formatCurrency(rates: Record<string, number>, code: string, zar: number): string {
   const usable = canConvert(rates, code) ? code : "ZAR";
   const c = CURRENCIES[usable] ?? CURRENCIES.ZAR;
-  return `${c.sym} ${Math.round(convertFromZar(rates, usable, zar)).toLocaleString("en-ZA")}`;
+  return `${c.sym} ${Math.round(convertFromZar(rates, usable, zar)).toLocaleString("en-GB")}`;
 }

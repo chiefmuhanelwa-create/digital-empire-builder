@@ -40,7 +40,7 @@ const SARS_RATE = 0.25;
 const BUSINESS_RATE = 0.10;
 
 const rand = (n: number) =>
-  `R${n.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `R${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 function MoneySplit() {
   const { access } = useKitAccess();

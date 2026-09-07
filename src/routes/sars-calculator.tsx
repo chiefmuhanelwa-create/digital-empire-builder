@@ -1,11 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, ShieldCheck, Plus, Trash2, PiggyBank } from "lucide-react";
+import { ArrowRight, Plus, Trash2, PiggyBank } from "lucide-react";
 
 import { SiteHeader, SiteFooter } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+  ToolCanvas,
+  DotGrid,
+  GoldGlow,
+  Eyebrow,
+  Pill,
+  Panel,
+  PanelHeader,
+  Field,
+  Input,
+  GoldButton,
+} from "@/components/tools/premium";
 import { useToolView } from "@/lib/tool-analytics";
 
 export const Route = createFileRoute("/sars-calculator")({
@@ -32,7 +42,7 @@ interface Entry {
   amount: number;
 }
 
-const fmtZAR = (n: number) => "R " + Math.round(n).toLocaleString("en-ZA");
+const fmtZAR = (n: number) => "R" + Math.round(n).toLocaleString("en-GB");
 const parseNum = (s: string) => parseFloat(String(s).replace(/[,\s]/g, "")) || 0;
 
 function load(): Entry[] {
@@ -81,192 +91,228 @@ function SarsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#0F172A]">
+    <div className="min-h-screen overflow-x-clip bg-[#F5F3FF]">
       <SiteHeader />
-      <main className="mx-auto max-w-2xl px-5 pt-24 pb-20">
-        <BackNav to="/tools" label="All tools" className="mb-6" />
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-banana mb-3">
-            <ShieldCheck className="size-3.5" /> Free SARS 25% Reserve Calculator
+      <ToolCanvas>
+        <div className="px-5 pt-3 sm:px-6">
+          <BackNav to="/tools" label="All tools" />
+        </div>
+
+        <header className="mx-auto max-w-2xl px-5 pb-8 pt-8 sm:px-6 sm:pb-10 sm:pt-12">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+            <Eyebrow>Creator · Free Tool</Eyebrow>
+            <Pill className="whitespace-nowrap">SARS 25% Reserve</Pill>
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl uppercase leading-[1.05]">
-            The 25% you <strong>don't touch.</strong>
+          <h1 className="mt-7 font-display text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-[#1A1523] sm:text-[52px]">
+            The 25% you <span className="text-[#8B5CF6]">don't touch.</span>
           </h1>
-          <p className="text-[#555] mt-3 max-w-md mx-auto">
+          <p className="mt-5 max-w-xl text-[15.5px] leading-[1.65] text-neutral-600 sm:text-[17px]">
             Reserve a quarter of every rand the day it lands — so a tax bill never blindsides you.
             Log what you earn, see exactly what to move into a separate account, keep the rest with
             a clear conscience.
           </p>
-        </div>
+          <div className="mt-7 h-[3px] w-16 rounded-full bg-[#8B5CF6]" />
+        </header>
 
-        {/* This tool is the habit; the provisional calculator is the number.
-            Without this pointer the two tax tools read as duplicates. */}
-        <div className="mb-6 rounded-2xl border border-[#0F172A]/15 bg-[#0F172A] p-5 text-center">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#C9A84C]">
-            Want the exact figure?
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-[#e8e2d4]">
-            This reserves a flat 25% — a safe habit, not a calculation. The{" "}
-            <Link to="/provisional-tax" className="font-bold text-[#C9A84C] underline">
-              Provisional Tax Calculator
-            </Link>{" "}
-            runs your real income and deductions through the current SARS brackets and gives you
-            both IRP6 payments with their dates.
-          </p>
-        </div>
-
-        {/* The story / why */}
-        <div className="border border-[#F59E0B]/40 rounded-2xl bg-[#FBF7EC] p-5 mb-6">
-          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#777] mb-1">
-            Why 25%, why now
-          </div>
-          <p className="text-[#2A2A2A] text-sm leading-relaxed">
-            I learned this the hard way: an assessment of <strong>R207,879</strong> landed because
-            the tax was never set aside. Don't let that be you. The fix is boring and it works — the
-            moment money hits your account, move 25% out of reach. When SARS comes, it's already
-            waiting.
-          </p>
-        </div>
-
-        {/* Summary */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-          <Stat label="Income logged" value={fmtZAR(totals.income)} tone="ink" />
-          <Stat label="Reserve (25%)" value={fmtZAR(totals.reserve)} tone="gold" />
-          <Stat label="Yours to keep" value={fmtZAR(totals.keep)} tone="ink" />
-        </div>
-
-        {/* Add entry */}
-        <div className="border border-[#e8e0d4] rounded-2xl bg-white p-5 sm:p-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.10)] mb-6">
-          <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-banana mb-3">
-            Log income
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-[1.4fr_1fr_auto] gap-2">
-            <Input
-              value={source}
-              onChange={(e) => setSource(e.target.value)}
-              placeholder="Source (e.g. Capitec brand deal)"
-              className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0"
-            />
-            <Input
-              value={amount}
-              inputMode="numeric"
-              onChange={(e) => setAmount(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && add()}
-              placeholder="Amount (R)"
-              className="h-11 border-[#d0c8bc] focus:border-[#F59E0B] focus:ring-0"
-            />
-            <Button
-              type="button"
-              onClick={add}
-              disabled={parseNum(amount) <= 0}
-              className="h-11 bg-[#F59E0B] hover:bg-[#b8963e] text-[#111] font-display font-black uppercase tracking-wide text-sm px-5 disabled:opacity-40"
-            >
-              <Plus className="size-4 mr-1" /> Add
-            </Button>
-          </div>
-          {amount && parseNum(amount) > 0 && (
-            <p className="mt-3 text-sm text-[#555]">
-              From this, set aside{" "}
-              <strong className="text-banana">{fmtZAR(parseNum(amount) * RESERVE_RATE)}</strong>,
-              keep <strong>{fmtZAR(parseNum(amount) * (1 - RESERVE_RATE))}</strong>.
-            </p>
-          )}
-        </div>
-
-        {/* The action */}
-        {totals.reserve > 0 && (
-          <div className="border border-[#0F172A] rounded-2xl bg-[#0F172A] text-[#f1e7c3] p-5 mb-6 flex items-start gap-3">
-            <PiggyBank className="size-5 text-[#B45309] shrink-0 mt-0.5" />
-            <div>
-              <div className="font-display text-lg text-white">
-                Move {fmtZAR(totals.reserve)} to your SARS account.
-              </div>
-              <p className="text-[#cdc3a8] text-sm mt-1">
-                Open a separate savings account you never spend from. That balance isn't yours —
-                it's SARS's, sitting safely until provisional tax is due (Aug &amp; Feb).
+        <main className="mx-auto max-w-2xl space-y-4 px-5 pb-20 sm:px-6">
+          {/* This tool is the habit; the provisional calculator is the number.
+              Without this pointer the two tax tools read as duplicates. */}
+          <Panel raised className="overflow-hidden">
+            <div className="relative overflow-hidden bg-[#1A1523] px-6 py-6 text-center sm:px-8">
+              <Eyebrow className="!text-[#8B5CF6]">Want the exact figure?</Eyebrow>
+              <p className="mx-auto mt-3 max-w-md text-[14px] leading-relaxed text-white/70">
+                This reserves a flat 25% — a safe habit, not a calculation. The{" "}
+                <Link to="/provisional-tax" className="font-bold text-[#8B5CF6] underline">
+                  Provisional Tax Calculator
+                </Link>{" "}
+                runs your real income and deductions through the current SARS brackets and gives you
+                both IRP6 payments with their dates.
               </p>
             </div>
-          </div>
-        )}
+          </Panel>
 
-        {/* Entries */}
-        {entries.length > 0 && (
-          <div className="border border-[#e8e0d4] rounded-2xl bg-white overflow-hidden mb-2">
-            {entries.map((e) => (
-              <div
-                key={e.id}
-                className="flex items-center justify-between gap-3 px-5 py-3 border-b border-[#f0ebe1] last:border-0"
-              >
-                <div className="min-w-0">
-                  <div className="text-sm font-medium text-[#0F172A] truncate">{e.source}</div>
-                  <div className="text-xs text-[#777]">
-                    reserve {fmtZAR(e.amount * RESERVE_RATE)}
-                  </div>
+          {/* The story / why */}
+          <Panel className="border-[#8B5CF6]/35 bg-[#8B5CF6]/[0.06] p-5 sm:p-6">
+            <Eyebrow>Why 25%, why now</Eyebrow>
+            <p className="mt-3 text-[14.5px] leading-relaxed text-neutral-700">
+              I learned this the hard way: an assessment of <strong>R207,879</strong> landed because
+              the tax was never set aside. Don't let that be you. The fix is boring and it works — the
+              moment money hits your account, move 25% out of reach. When SARS comes, it's already
+              waiting.
+            </p>
+          </Panel>
+
+          {/* Summary — the money card */}
+          <Panel raised className="overflow-hidden">
+            <div className="relative overflow-hidden bg-[#1A1523] px-6 py-8 sm:px-8">
+              <DotGrid dark />
+              <GoldGlow className="-right-24 -top-28" size={420} opacity={0.6} />
+              <div className="relative">
+                <div className="flex items-center justify-between gap-3">
+                  <Eyebrow className="!text-[#8B5CF6]">Your reserve</Eyebrow>
+                  <Pill tone="gold">25%</Pill>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="font-mono text-sm text-[#0F172A]">{fmtZAR(e.amount)}</span>
-                  <button
-                    type="button"
-                    onClick={() => setEntries((list) => list.filter((x) => x.id !== e.id))}
-                    className="text-[#bbb] hover:text-[#b3582c] transition-colors"
-                    aria-label="Remove"
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
+                <p className="mt-4 font-display text-[42px] font-extrabold leading-none tracking-[-0.03em] text-[#C4B5FD] [font-variant-numeric:tabular-nums] sm:text-[52px]">
+                  {fmtZAR(totals.reserve)}
+                </p>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-white/50">
+                  Set this aside from {fmtZAR(totals.income)} logged, and keep{" "}
+                  {fmtZAR(totals.keep)}.
+                </p>
+                <div className="mt-6 space-y-2.5 border-t border-white/10 pt-5 text-[13.5px]">
+                  <SummaryRow label="Income logged" value={fmtZAR(totals.income)} />
+                  <SummaryRow label="Reserve (25%)" value={fmtZAR(totals.reserve)} gold />
+                  <SummaryRow label="Yours to keep" value={fmtZAR(totals.keep)} />
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-        {entries.length > 0 && (
-          <p className="text-[#777] text-xs text-center mb-2">
-            Saved on this device. This is a discipline tool, not tax advice — confirm your bracket
-            with a practitioner.
-          </p>
-        )}
+            </div>
+          </Panel>
 
-        {/* Bridge CTA */}
-        <div className="mt-8 text-center border border-[#e8e0d4] rounded-2xl p-6 bg-white">
-          <h3 className="font-display text-xl uppercase">
-            Reserving is step one. Knowing the rules is the system.
-          </h3>
-          <p className="text-[#555] text-sm mt-2 max-w-md mx-auto">
-            The 25% habit keeps you safe. SARS &amp; Creator Income shows you the full picture —
-            provisional tax dates, what's deductible, and how to register without fear.
-          </p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              to="/products/$slug"
-              params={{ slug: "sars-creator-income" }}
-              className="cta-glow inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-display font-black uppercase tracking-wide"
-            >
-              Get SARS &amp; Creator Income <ArrowRight className="size-4" />
-            </Link>
-            <Link
-              to="/provisional-tax"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-mono uppercase tracking-[0.15em] border border-[#F59E0B] text-[#0F172A] hover:bg-[#F59E0B] hover:text-[#111] transition-colors"
-            >
-              Work out what you owe
-            </Link>
-          </div>
-        </div>
-      </main>
+          {/* Add entry */}
+          <Panel>
+            <PanelHeader
+              title="Log income"
+              step="01"
+              hint="Add each payment the day it lands — the reserve updates as you go."
+            />
+            <div className="space-y-5 p-5 sm:p-6">
+              <Field label="Source" hint="Where the money came from.">
+                <Input
+                  value={source}
+                  onChange={(e) => setSource(e.target.value)}
+                  placeholder="Source (e.g. Capitec brand deal)"
+                />
+              </Field>
+              <Field label="Amount" hint="What landed in your account, in rands.">
+                <Input
+                  value={amount}
+                  inputMode="numeric"
+                  onChange={(e) => setAmount(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && add()}
+                  placeholder="Amount (R)"
+                />
+              </Field>
+              <GoldButton type="button" onClick={add} disabled={parseNum(amount) <= 0}>
+                <Plus className="size-4" /> Add income
+              </GoldButton>
+              {amount && parseNum(amount) > 0 && (
+                <p className="text-center text-[13.5px] text-neutral-600">
+                  From this, set aside{" "}
+                  <strong className="text-[#7C3AED]">
+                    {fmtZAR(parseNum(amount) * RESERVE_RATE)}
+                  </strong>
+                  , keep <strong>{fmtZAR(parseNum(amount) * (1 - RESERVE_RATE))}</strong>.
+                </p>
+              )}
+            </div>
+          </Panel>
+
+          {/* The action */}
+          {totals.reserve > 0 && (
+            <Panel raised className="overflow-hidden">
+              <div className="relative flex items-start gap-3 overflow-hidden bg-[#1A1523] p-5 sm:p-6">
+                <PiggyBank className="mt-0.5 size-5 shrink-0 text-[#8B5CF6]" />
+                <div>
+                  <div className="font-display text-lg font-bold text-white">
+                    Move {fmtZAR(totals.reserve)} to your SARS account.
+                  </div>
+                  <p className="mt-1 text-[14px] leading-relaxed text-white/70">
+                    Open a separate savings account you never spend from. That balance isn't yours —
+                    it's SARS's, sitting safely until provisional tax is due (Aug &amp; Feb).
+                  </p>
+                </div>
+              </div>
+            </Panel>
+          )}
+
+          {/* Entries */}
+          {entries.length > 0 && (
+            <Panel className="overflow-hidden">
+              {entries.map((e) => (
+                <div
+                  key={e.id}
+                  className="flex items-center justify-between gap-3 border-b border-neutral-200/70 px-5 py-3.5 last:border-0"
+                >
+                  <div className="min-w-0">
+                    <div className="truncate text-[14px] font-semibold text-[#1A1523]">
+                      {e.source}
+                    </div>
+                    <div className="text-[12px] text-neutral-500">
+                      reserve {fmtZAR(e.amount * RESERVE_RATE)}
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span className="font-mono text-[14px] text-[#1A1523] [font-variant-numeric:tabular-nums]">
+                      {fmtZAR(e.amount)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setEntries((list) => list.filter((x) => x.id !== e.id))}
+                      className="inline-flex size-11 items-center justify-center text-neutral-400 transition-colors hover:text-[#7C3AED]"
+                      aria-label="Remove"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </Panel>
+          )}
+          {entries.length > 0 && (
+            <p className="text-center text-[12px] text-neutral-500">
+              Saved on this device. This is a discipline tool, not tax advice — confirm your bracket
+              with a practitioner.
+            </p>
+          )}
+
+          {/* Bridge CTA */}
+          <Panel raised className="mt-2 overflow-hidden">
+            <div className="relative overflow-hidden bg-[#1A1523] px-6 py-9 text-center sm:px-10">
+              <DotGrid dark />
+              <GoldGlow className="-bottom-32 -right-20" size={440} opacity={0.6} />
+              <div className="relative">
+                <Eyebrow className="!text-[#8B5CF6]">Reserving is step one</Eyebrow>
+                <h3 className="mt-4 font-display text-[24px] font-extrabold tracking-tight text-white sm:text-[30px]">
+                  Knowing the rules is the system.
+                </h3>
+                <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-white/70">
+                  The 25% habit keeps you safe. SARS &amp; Creator Income shows you the full picture —
+                  provisional tax dates, what's deductible, and how to register without fear.
+                </p>
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                  <Link
+                    to="/products/$slug"
+                    params={{ slug: "sars-creator-income" }}
+                    className="inline-flex min-h-[52px] items-center gap-2 rounded-xl bg-[#8B5CF6] px-7 text-[15px] font-bold text-white transition hover:brightness-110"
+                  >
+                    Get SARS &amp; Creator Income <ArrowRight className="size-4" />
+                  </Link>
+                  <Link
+                    to="/provisional-tax"
+                    className="inline-flex min-h-[52px] items-center gap-2 rounded-xl border border-white/25 px-7 text-[14px] font-bold text-white transition hover:border-[#8B5CF6] hover:text-[#8B5CF6]"
+                  >
+                    Work out what you owe
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Panel>
+        </main>
+      </ToolCanvas>
       <SiteFooter />
     </div>
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone: "ink" | "gold" }) {
+function SummaryRow({ label, value, gold }: { label: string; value: string; gold?: boolean }) {
   return (
-    <div
-      className={`rounded-xl p-4 text-center border ${tone === "gold" ? "border-[#F59E0B]/50 bg-[#FBF7EC]" : "border-[#e8e0d4] bg-[#FBFAF8]"}`}
-    >
-      <div
-        className={`font-display text-xl sm:text-2xl ${tone === "gold" ? "text-banana" : "text-[#0F172A]"}`}
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-white/55">{label}</span>
+      <span
+        className={`font-bold [font-variant-numeric:tabular-nums] ${gold ? "text-[#C4B5FD]" : "text-white"}`}
       >
         {value}
-      </div>
-      <div className="font-mono text-[9px] uppercase tracking-wide text-[#777] mt-1">{label}</div>
+      </span>
     </div>
   );
 }

@@ -57,9 +57,10 @@ export type ReturnInput = {
 };
 
 // House style is R1,800 — comma thousands, full stop decimal. en-ZA renders
-// "R1 800,00" with a non-breaking space, which the brief bans. en-GB gives the
-// documented format. NOTE: 40 existing call sites across this codebase still
-// use en-ZA and render the wrong format in production — logged, not fixed here.
+// "R1 800,00" with a non-breaking space, which the brief bans; en-GB gives the
+// documented format. All 46 currency call sites across this codebase were
+// converted on 2026-09-07. Date formatting deliberately stays on en-ZA — SA
+// date order is correct there, and only the currency was ever wrong.
 function rand(n: number) {
   return `R${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }

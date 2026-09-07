@@ -1654,3 +1654,182 @@ live system → git log → dated docs. Never the other way round.
   into the macOS keychain via `git credential approve`; remotes are now plain HTTPS and
   still authenticate. No SSH keys exist on this machine and `gh` is not installed, so
   "switch to SSH" was not available. **The token still needs rotating.**
+
+## 2026-08-26 — Media Kit "top-1%" upgrade (four Foundation-Kit-gated premium bundles)
+
+- **Scope decision (founder):** upgrade the free `/media-kit` one-pager to the 2026
+  "top-1%" standard — fields + output only (keep `window.print()`; NO server PDF, NO
+  shareable/verifiable link, creator-only). Added four premium bundles: Verified metrics
+  (per-platform avg views + "verified on" date + ER-vs-SA-average), Audience depth
+  (psychographics + buying behaviour + cities/interests), Structured proof (case studies
+  Objective→What we did→Result + testimonials), Commercial (offer ladder Silver/Gold/
+  Platinum "from…", usage/whitelisting/exclusivity rights, working terms + availability),
+  plus a hero "forwardable line" (positioning + one-line proof).
+- **Gate = Foundation Kit ownership, by email (mirrors Hook Generator).** Core kit stays
+  free/unlimited; the four bundles are hidden behind a locked panel until the user proves
+  Foundation Kit ownership via the new `checkMediaKitAccess` server fn (Turnstile + lead
+  capture + `emailOwnsFoundationKit`). Chose ownership-based over a numeric "3-free" count
+  because a builder isn't per-use like an AI call — a free-count doesn't map. Flagged to
+  founder; a 1-use taster via `tool_submissions` is a trivial add if wanted.
+- **Extracted `emailOwnsFoundationKit` to `src/lib/kit-access.ts`** (was a private fn in
+  `hook-generator.functions.ts`); refactored Hook Generator to import it. One entitlement
+  check, two tools. `supabaseAdmin` import stays in hook-generator (still used elsewhere).
+- **Server re-checks entitlement before emailing premium.** `emailMediaKit` only renders
+  the premium sections in the emailed kit if `emailOwnsFoundationKit(recipientEmail)` is
+  true — a spoofed client `unlocked` flag can't leak gated output. Client gating (React
+  `unlocked` flag on the print/preview) is convenience only; the print path is inherently
+  client-side and bypassable, which is acceptable for a free lead magnet (same threat
+  model as before) — the real value is conversion + lead capture, not DRM.
+- **Consolidated the ER benchmark:** exported `AFRICAN_AVG_ER = 3.39` / `GLOBAL_AVG_ER =
+  1.49` from `rate-card-engine.ts` (was hardcoded in `rate-card-pdf.ts` + `rate-card.tsx`).
+  Media Kit imports the constant for "N× SA avg" instead of adding a third copy. Did NOT
+  refactor the two existing hardcodes (working code; left a comment pointing here).
+- **Closed the email parity gap:** `media-kit-result.tsx` now renders location, niches,
+  audience, brands (previously dropped from the email though shown in the on-screen
+  preview) + all premium sections when entitled.
+- **Fact-lock held:** every new field ships an illustrative *placeholder* the user
+  overwrites — no founder proof numbers, follower counts, brand counts, or ER baked as
+  defaults; no banned figures. The "8% engagement — 2.4× SA average" example stays a
+  placeholder, never a shipped claim.
+- **Array-of-object state helper:** extended the existing `setArr` union
+  (Platform|Pillar|Rate|CaseStudy|Testimonial|Package) — the `setK((s)=>({...s,[key]:(s[key] as T[]).map(...)}))`
+  computed-key shape compiles fine (proven by the original 3-type version); add/remove-row
+  helpers follow the same cast shape. Saved re-deriving per-array typed helpers.
+- Status: tsc + `bun run build` clean. NOT deployed (awaiting founder go). Live verification
+  of the unlock needs a real Foundation-Kit-owning email in dev/prod.
+
+### 2026-08-26 (same day, follow-up) — Media Kit pivot: free open top-1% builder + Pro waitlist
+
+- **Founder pivoted the gate model mid-session.** Dropped the Foundation-Kit section-unlock. New Phase-1 model: the ENTIRE top-1% builder is free and open (all sections + full customization); monetisation ("remove watermark, save & re-edit your kit, 7-day free trial") is a **Pro subscription on a WAITLIST** — validate demand before building billing (the founder's own "waitlist before build" rule). I flagged that a media-kit SaaS serves the traffic-engine ICP, not the Knowledge-Entrepreneur buyer, and that recurring billing on a low-money segment is hard — recommended the staged waitlist approach, which the founder took.
+- **Removed `checkMediaKitAccess`** (the entitlement-unlock fn built earlier the same day) and added **`joinMediaKitProWaitlist`** (Turnstile + subscriber upsert with `source: tool:media-kit-pro-waitlist` + MailerLite). `emailMediaKit` now includes premium sections unconditionally (everything is free in Phase 1). `emailOwnsFoundationKit`/`kit-access.ts` stays (still used by Hook Generator).
+- **Watermark = the freemium lever.** `KitPreview` renders a repeated diagonal "PREVIEW · chkplt.com" overlay (opacity 0.06) that PRINTS (Pro will remove it in Phase 2). Print CSS updated: `@media print { .pointer-events-none.absolute:not(.mk-watermark) { display:none } }` — hides the decorative dot-grid/glow at print but KEEPS the watermark. NB: in Phase 1 there's no Pro, so even the founder's own export is watermarked — intentional, flagged.
+- **Full customization, no storage/auth needed.** Accent colour (swatches + `<input type=color>`, applied via a `--accent` CSS var + inline `color-mix()` for tints/borders), light/dark kit theme, font pairing (bold `font-display` / editorial `font-serif` / modern `font-sans`), **logo + brand-image upload via FileReader→base64 data URL in state** (embeds in preview + print, no Supabase storage until Phase 2 saved-kits), custom footer, **currency selector** (reuses `CURRENCIES` from rate-card-engine; `money()` prefixes the symbol only on bare-number entries), and **pricing add-ons** (reuses `ADDONS`).
+- **All research "1% fields" now in the free tool:** forwardable line + one-line proof, per-platform avg views/growth/verified-date + ER-vs-SA-avg, 3-layer audience + authenticity score, case studies + testimonials, offer ladder + add-ons + usage/whitelisting/exclusivity, turnaround/revisions/comms/payment terms, availability/scarcity, press & authority, last-updated.
+- **Phase 2 (only if the waitlist converts):** subscription (Paystack Plans / Stripe subs + lifecycle webhooks), 7-day trial clock, accounts + saved/re-editable kits, image storage (Supabase/R2), watermark gated on an active sub. Not built.
+- Status: tsc + build + deploy clean (Worker ba08a34e).
+
+## 2026-08-26 (same day) — Rate Card → top-1% "Partnership Investment" (packages + value-stack + Pro)
+
+- **Applied the 2026 top-1% rate-card brief to `/rate-card`, mirroring the media-kit model.** The tool already had the live CPM/CPE engine + floor/standard/premium + currency selector + server PDF; the upgrade adds the 1% *packaging/framing* layer on top WITHOUT touching the verified `computeRateCard` maths.
+- **Engine additions are additive only** (`rate-card-engine.ts`): `DISTRIBUTION_ADDONS` (+30/50/40/20%), `USAGE_DURATION` (paid usage 3/6/12-mo +100/180/300%), `WHITELISTING` (30/60d +40/80%), `RETAINER_DISCOUNT=0.15`, `VALIDITY_DAYS=21`, `PACKAGE_DEFS` (Content/Authority/Acquisition "Signal" with fixed compositions + a base multiplier 1.3/3.2/6.5), and pure `computePackages(baseStandardZar,{retainer})` → derives the 3 package "from" prices from the creator's OWN computed rate. No hardcoded prices; existing `ADDONS` left untouched to avoid double-count (value stack lives in the document layer, calculator keeps its add-ons).
+- **New "Partnership Investment" document** (`InvestmentDocument` in `rate-card.tsx`) — the forwardable 1% deliverable rendered in the results area: dark header (name/handle/niche/proof/logo), 3-package ladder ("Most popular" on the middle), à-la-carte value-stack menu with %s, retainer line, terms block (50% deposit / 1 revision / #ad / "valid 21 days"), notes-for-brands, custom footer. Watermarked via the media-kit `mk-watermark` overlay. Accent colour via `--accent` CSS var + `color-mix` tints; logo upload via FileReader→base64.
+- **Print-one-element trick:** the rate card had no `print:hidden` scaffolding, so instead of tagging every section I used a print stylesheet — `@media print { body{visibility:hidden} .rc-document,.rc-document *{visibility:visible} .rc-document{position:absolute;inset:0} }` — so "Save as PDF" (window.print) outputs ONLY the document (watermark included).
+- **Shared Pro waitlist:** new `src/lib/tool-pro-waitlist.functions.ts` `joinToolProWaitlist({tool,email,...})` (Turnstile + subscriber `source: tool:{tool}-pro-waitlist` + MailerLite), `tool` enum `media-kit|rate-card`. `ProWaitlist` component is self-contained (owns its own state + `tsRef`) — avoids passing a `RefObject<TurnstileGateHandle>` through props (React 19 ref-variance typing pain).
+- **Consistency fix:** the rate card's server-emailed PDF was CLEAN and free, which undercut the watermark/Pro model. Added a tiled diagonal watermark to `rate-card-pdf.ts` (`page.drawText` + `degrees(-30)`, opacity 0.06, run through `pdfSafe`) so nothing clean is free in Phase 1. Full packages-in-server-PDF + brand-styling deferred to Pro/Phase-2 (window.print is the primary branded export now).
+- Decisions: live-FX only (no strategic USD markup); monetise = mirror media kit (free watermarked + Pro waitlist/7-day trial for clean brandable PDF + saved cards); customization badged "Pro" but usable in preview.
+- Status: tsc + build + deploy clean (Worker 37a7d5d9).
+
+## 2026-08-26 (same day) — "Aurora" gradient rebrand of ALL tools (founder override of the locked palette)
+
+- **Founder ruling (overrides the CLAUDE.md "tools = cream/charcoal/gold, do not harmonise" lock):** the TOOLS move to an iridescent gradient-mesh + glassmorphism look inspired by premium fintech/AI references. Authority order #1 (direct founder instruction, newest wins) supersedes the prior palette lock — but ONLY for the tools; video, carousel and marketing-site palettes are untouched. Recorded here so nobody "reverts to brand" by mistake.
+- **The rebrand is driven by the shared kit `src/components/tools/premium.tsx`** — every tool imports its `ToolCanvas`/`Panel`/`GoldButton`/`Chip`/`Pill`/`Input`/`Eyebrow`, so restyling the kit shifts all tools at once. New system: aurora mesh ground (violet→pink→blue radial gradients on near-white), frosted-glass `Panel` (`bg-white/70 backdrop-blur-xl`), `ACCENT_GRADIENT = linear-gradient(135deg,#8B5CF6,#EC4899,#3B82F6)`, violet controls. **Export names kept** (`GoldButton`, `GoldGlow`, `BRAND.gold`) so no tool needed import changes — only visuals changed. `BRAND` tokens repointed to aurora.
+- **Palette map used everywhere:** `#C9A84C→#8B5CF6` (accent), `#A98A38→#7C3AED` (deep accent), `#E5C588→#C4B5FD` (light accent on dark), `#D4AF37→#8B5CF6`, gold gradient buttons `from-[#D4AF37] to-[#E5C588]`→`from-[#8B5CF6] via-[#EC4899] to-[#3B82F6]`, charcoal `#1C1C1C/#111111→#1A1523`, cream `#FAF7F0→#F5F3FF` (or the aurora-mesh root style for tools not wrapped in ToolCanvas, e.g. media-kit/rate-card).
+- **Execution:** converted the kit + rate-card flagship by hand, then 5 parallel subagents swept the other tools (media-kit, hook-generator, sars-calculator, offer-builder, align) — same parallel-reskin pattern as before. Then a central cleanup pass fixed the ONE systemic bug the swaps created: **solid gold buttons had dark text (`text-[#1C1C1C]`) that became dark-on-violet after the swap** — the Foundation-Kit CTAs, icon badges, Likert badge, and the align submit override. Fixed all to `text-white` + `hover:brightness-110` (was `hover:bg-white`, which would've made white text vanish on hover). Also swept stray cream tints the agents flagged (offer progress track `#E8DDC9→#EDE9FE`, "before" card `#FBFAF8→#FAF9FF`).
+- **Lesson:** a blanket gold→violet hex swap is safe for text/border/bg-accents but creates contrast bugs wherever a button was `bg-gold + dark-text` (dark text was correct on gold, wrong on violet). Always grep `bg-[#8B5CF6].*text-[#1A1523]` after such a swap and flip those to white text + a brightness hover (never `hover:bg-white` under white text). `brand-logos.tsx` `#1C1C1C` was deliberately NOT changed — those are real brand-logo colours (TikTok black, globe fallback).
+- Status: tsc + build + deploy clean (Worker 34356d3c). All 6 tools + `/tools` hub on aurora.
+
+## 2026-08-26 — NOCHILL-OS: the evidence audit (S0–S11), and what the primary sources actually said
+
+**What this was:** a full-estate sweep (5 archives — Desktop, iCloud 105 GB, Documents,
+Google Drive, plus live MailerLite/Vercel/Gmail) refined through Knowledge → Understanding
+→ Wisdom → Skills into `~/Desktop/NOCHILL-OS/`. **318 files. 235 claims. 44 defects. 10
+specs.** Founder ruled it becomes THE Constitution; the competing ones get archived.
+
+### The technical receipts
+
+- **Stdlib-only, offline, deterministic `bin/` (10 scripts).** No `pandas`, no `jq`, no
+  `tesseract`, no `exiftool`, no `gh`/`supabase`/`psql` on this machine. `openpyxl 3.1.5`
+  and `sqlite3` are present. EPUB and DOCX are both just `zipfile` + XML — no library
+  needed. **No OCR at all**, so every image is a vision Read, one per call.
+- **`pii_check.sh` reads its forbidden literals from `~/.claude/.nochill-pii-patterns`
+  (mode 600, OUTSIDE the tree).** A redaction test that names the term it tests for becomes
+  the leak it exists to prevent — `PII-POLICY.md` itself named the employer twice before
+  this was fixed.
+- **It caught all three breaches, including two I created.** An auto-generated
+  `summaries.md` had pulled employer, salary figures, bank balances, third-party names and
+  a customer email into the tree. Fix: the generator now never writes summaries, and the
+  check extended to `.txt`.
+- **MCP connectors expire mid-session and cannot be re-authorised from a non-interactive
+  session.** Gmail died mid-search; Drive died mid-download (9 of 16 ChatGPT shards still
+  unretrieved). Plan for partial capture rather than assuming a session-long token.
+- **`wc -l` on a multi-line-quoted CSV is not a row count.** 304→135, and 281/1,129→
+  280/1,128 once the header row was excluded. Use the `csv` module.
+
+### The method lessons — all six from figures that looked fine until checked
+
+1. **A first page of recency-sorted results is not a search.** Declared Savanna absent from
+   one page; it was there, dated 2020.
+2. **Search by product and campaign name, not only brand.** The Samsung correspondence
+   never contains "Samsung" — only *S20*, *the phone*, *#S20isplenty*.
+3. **Naming a sampling bias is not correcting for it.** Wrote "this is a biased sample by
+   construction", then reasoned as if it weren't. Ceiling was off by 4×.
+4. **Not every drifted figure drifted upward.** AdMarula was *understated*: claimed
+   R38,070+, documented **R56,564.00** across 15 named months.
+5. **Do not estimate what can be counted.** Estimated a manuscript at ~150,000 words via
+   chars÷6; actual 117,556 drafted, 71,305 submitted.
+6. **A preview snippet is not the document.** Withdrew a "this email merges two stories"
+   finding — the body was correct, only the preheader compressed.
+
+**Seven of the nine standing corrections were to claims I made myself.** That is the
+argument for `nochill-claim-check` existing.
+
+### The structural findings
+
+- **Live E2 data beat the self-published claims repeatedly.** "50,000+ email list" against
+  **173** live subscribers. "1,643 survey respondents" against **425**. "40,047 rows"
+  against **13,233**. "90.1% South Africa" against **38.2%** among identifiable subscribers.
+- **17 of 19 live Vercel properties have no source on this machine**, including a
+  custom-domain sales page that therefore cannot be audited for fact compliance. Six are
+  redundant duplicates of each other.
+- **The failure mode across every stream, list and build is spike-then-decay** — six
+  independent sources. It is *continuing* that fails here, not starting. That is why 9 of
+  the 10 specs finish/correct/retire something and only one creates anything.
+- **Five email identities, each holding a different part of the record.** Every "absent"
+  finding made before all five were known was provisional — which is exactly how three
+  false negatives got produced in one day.
+
+### Architecture that made it work
+
+- **Questions as tags, never directories.** One pain point is legitimately Q3+Q6+Q7; folders
+  force a false single home and produce a 200-file maze.
+- **Article III firewall: a dated founder ruling is not evidence and evidence never
+  overrules it.** Without this, an automated pass finds an old screenshot and "corrects"
+  something ruled on personally — including matters carrying legal cost. Evidence
+  contradicting a ruling raises a conflict and *stops*.
+- **`STATE.md` as the single resume pointer.** A session opens it and nothing else.
+
+## 2026-09-06 — The money layer shipped (5 apps, 22 files, deployed)
+
+- **Built and deployed:** Deal Tracker (`/apps/deals`), Invoice (`/apps/invoice`),
+  The Return (`/apps/return`), Figure Check (`/apps/figure-check`), Brief Check +
+  Pitch (`/apps/brief-check`). Commit `252ba25` on `main`; Worker version
+  `05f953c4-4755-4de0-9e4b-0eda52c9bf23`. All five return 200 on both zones.
+- **Every engine is pure and offline.** `deals-chase-engine`, `return-engine`,
+  `figure-gate`, `conflict-check`, `brief-check`, `pitch-builder`,
+  `invoice-engine` — no AI anywhere in the money path, so nothing here can
+  invent a figure. It also means the retention mechanic costs nothing per use,
+  which is the one feature whose cost does not scale with usage.
+- **`toLocaleString("en-ZA")` renders `R1 234,50`** — a non-breaking space and a
+  decimal comma. House style is `R1,800`. Used `en-GB` in all seven new files.
+  **40 pre-existing call sites still use `en-ZA`** and render the wrong format.
+- **Invoicing was the hole in the loop.** The tracker's states run invoiced → due
+  → chased → paid, but "invoiced" was an outbound link to a separate Vercel app.
+  Native now, reading the delivered deal straight from the tracker.
+- **VAT defaults to off, and that is a legal decision not a UX one.** SA
+  registration is compulsory above R1m turnover; charging VAT without a number is
+  an offence. The engine refuses to apply VAT unless both the flag and a VAT
+  number are present.
+- **Agencies pay end-of-month, not net-30.** The archive is consistent on it, so
+  end-of-month is the default dating and net-N is the opt-out. A campaign ending
+  on the 2nd can mean waiting the better part of two months — the tool shows both
+  dates before you send.
+- **`wrangler deploy` builds from the working tree, not from git.** This deploy
+  therefore also shipped 19 uncommitted files from the 2026-08-26 media-kit and
+  rate-card sessions (~4,800 changed lines), plus 2 untracked (`kit-access.ts`,
+  `tool-pro-waitlist.functions.ts`). Build and `tsc --noEmit` were clean across
+  all of it. **Those 19 are still uncommitted** — main does not yet describe
+  everything that is live.
+- **Migration files written after the fact for two migrations already applied to
+  production** (`deals_category_and_exclusivity`, `invoice_settings`). Applying
+  through the MCP does not create the file; the repo drifts silently unless the
+  file is written by hand.

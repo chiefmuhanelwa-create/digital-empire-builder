@@ -32,7 +32,7 @@ const PAD = 52;
 const COL = W - PAD * 2;
 const BASELINE = 0.8;
 
-const zar = (n: number) => "R " + Math.round(n).toLocaleString("en-ZA");
+const zar = (n: number) => "R" + Math.round(n).toLocaleString("en-GB");
 
 interface T {
   x: number;
@@ -402,8 +402,8 @@ export async function generateTaxPDF(d: TaxPdfData): Promise<Uint8Array> {
   for (const b of BRACKETS) {
     const range =
       b.upTo === Infinity
-        ? `R${low.toLocaleString("en-ZA")} and above`
-        : `R${low.toLocaleString("en-ZA")} – R${b.upTo.toLocaleString("en-ZA")}`;
+        ? `R${low.toLocaleString("en-GB")} and above`
+        : `R${low.toLocaleString("en-GB")} – R${b.upTo.toLocaleString("en-GB")}`;
     const inBand = r.taxable >= low && (b.upTo === Infinity || r.taxable <= b.upTo);
     if (inBand) box(page, PAD, y, COL, 17, GOLD_TINT);
     text(page, range, {

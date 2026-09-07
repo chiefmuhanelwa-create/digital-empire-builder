@@ -1,3 +1,22 @@
+> # ⛔ SUPERSEDED — DO NOT COPY FROM THIS FILE
+>
+> Quarantined 2026-09-07. This document carries figures the evidence has since
+> **disproven**, and it must not be used as a source for any script, email, page
+> or product until it has been rebuilt against the audited banks.
+>
+> Known bad figures still present below, left in place deliberately so the record
+> of what was believed is not erased:
+> **R132,500** undercharging · **R180,000/year** AdSense · **R800,000+** ads and
+> affiliates · **R450,000+** partnership value · **R100,000** Netflix (the contract
+> shows a different figure and is under NDA — do not publish either) ·
+> **R25,000/month Savanna x4** · **18% engagement** · **R23,000 in one day**.
+>
+> The authoritative sources are, in the estate:
+> `02-INFORMATION/STORIES_BANK.csv` (109 rows, 39 E1),
+> `02-INFORMATION/CREDIBILITY-BANK.md` (55 E1 proof rows) and
+> `02-INFORMATION/PROOF_BANK.csv`. Lifetime bank-confirmed receipts are
+> **R453,710.37**, not any total in this file.
+
 # CHKPLT — Email Infrastructure Reference
 
 > The email list is the only platform we own 100%. Instagram can suspend (780K gone). AdSense can disable (R180K/year gone). The email list cannot be suspended.

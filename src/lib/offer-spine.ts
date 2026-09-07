@@ -388,19 +388,19 @@ export function invoiceLineItem(o: Offer): string | null {
 /** Day 7 of the 30-day calendar is always the first Earn day. */
 export function earnDayPrompt(o: Offer): string | null {
   if (!o.name.trim()) return null;
-  const price = o.price ? `R${o.price.toLocaleString("en-ZA")}` : "what it costs";
+  const price = o.price ? `R${o.price.toLocaleString("en-GB")}` : "what it costs";
   return `What ${o.name.trim()} is, who it is for, and ${price === "what it costs" ? price : `that it is ${price}`}.`;
 }
 
 export function closingLine(o: Offer): string | null {
   if (!o.name.trim() || !o.price) return null;
-  return `${o.name.trim()} is R${o.price.toLocaleString("en-ZA")}. If that is a yes, reply and I will send the invoice today.`;
+  return `${o.name.trim()} is R${o.price.toLocaleString("en-GB")}. If that is a yes, reply and I will send the invoice today.`;
 }
 
 /** The one-person ask used by Tool 10 · The Send. */
 export function theAsk(o: Offer, name: string): string | null {
   if (!o.who.trim() || !o.to.trim() || !o.name.trim()) return null;
-  const price = o.price ? ` It is R${o.price.toLocaleString("en-ZA")}.` : "";
+  const price = o.price ? ` It is R${o.price.toLocaleString("en-GB")}.` : "";
   const to = name.trim() || "there";
   return `Hi ${to} — I have put together something called ${o.name.trim()}. It is for ${o.who.trim()}, and it gets them to ${o.to.trim()}${o.timeframe.trim() ? ` in ${o.timeframe.trim()}` : ""}. You would walk away with ${o.output.trim()}.${price}\n\nWould you like me to send you the details?`;
 }

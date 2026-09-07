@@ -232,7 +232,7 @@ export const CHECKLIST: ChecklistItem[] = [
     category: "Registration",
     title: "Register as a taxpayer with SARS",
     priority: "High",
-    detail: `If your taxable income passes R${TAX_THRESHOLD.toLocaleString("en-ZA")}, you must be registered.`,
+    detail: `If your taxable income passes R${TAX_THRESHOLD.toLocaleString("en-GB")}, you must be registered.`,
   },
   {
     id: "reg-provisional",
@@ -247,7 +247,7 @@ export const CHECKLIST: ChecklistItem[] = [
     category: "Registration",
     title: "Check whether you need to register for VAT",
     priority: "Medium",
-    detail: `Compulsory once taxable turnover passes R${VAT_THRESHOLD.toLocaleString("en-ZA")} in any 12 months.`,
+    detail: `Compulsory once taxable turnover passes R${VAT_THRESHOLD.toLocaleString("en-GB")} in any 12 months.`,
   },
 
   {

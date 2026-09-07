@@ -369,6 +369,8 @@ browser for testing).
 | `contacts.functions.ts`, `contacts-import.functions.ts`, `contact.functions.ts` | Contact management + CSV import + public contact form |
 | `income-tracker.functions.ts`, `niche-clarity.functions.ts`, `offer-builder.functions.ts`, `rate-card.functions.ts`, `media-kit.functions.ts`, `starterkit.functions.ts`, `aligned.functions.ts`, `inner-circle.functions.ts`, `community.functions.ts` | Per-tool/per-program server logic — mostly `requireSupabaseAuth`-gated CRUD or public email-capture-then-deliver patterns |
 | `hook-generator.functions.ts` | `generateHooks` — public, Turnstile-gated, calls Claude (`getAnthropic()`/`COACH_MODEL`) to write 5 real hooks per request; free-then-paid gated (3/email via `tool_submissions` count, then requires Foundation Kit ownership resolved by email against `orders`), sends a confirmation email, logs to `tool_submissions` |
+| `kit-access.ts` | `emailOwnsFoundationKit(email)` — shared EMAIL-based Foundation-Kit entitlement check (queries `orders` by email against `KIT_OWNER_SLUGS`). Extracted 2026-08-26 from hook-generator; reused by Media Kit's premium unlock. Distinct from `tool-ai.functions.ts` `assertKitAccess` (account-based). |
+| `media-kit.functions.ts` | `emailMediaKit` (emails the built kit; premium sections included ONLY after a server-side `emailOwnsFoundationKit` re-check) + `checkMediaKitAccess` — Turnstile-gated unlock endpoint added 2026-08-26 for the four "top-1%" premium bundles (verified metrics, audience depth, case studies, commercial/rights). Free core kit is ungated; premium unlocks by Foundation Kit ownership. Both capture the lead (subscribers + MailerLite `media-kit` group). |
 | `offer-builder.functions.ts` | `buildOffer` — public, Turnstile-gated, calls Claude (`OFFER_MODEL`, Opus-tier) for a full structured offer; same free-then-paid gate as Hook Generator (2/email via `offer_builder_leads` count) — this gate was ADDED 2026-07-29 after an audit found the function had no usage limit at all despite the catalog claiming "Foundation Kit owners only"; sends a confirmation email |
 | `turnstile.functions.ts` / `turnstile.server.ts` | Site-key fetch + server-side token verification |
 | `geo.functions.ts` | `getViewerCountry` — reads Cloudflare's `CF-IPCountry` |
@@ -672,10 +674,12 @@ system won.** Corrections:
   gate their submit button on a token, but authentication goes straight to Supabase —
   nothing ever calls `verifyTurnstile`. Closing this means enabling Supabase's own
   CAPTCHA protection (dashboard setting + the same secret), not app code.
-- **`starterkit.functions.ts` and `media-kit.functions.ts` have no Turnstile at all** —
-  public email-capture endpoints with no bot protection and no widget on the page. A
-  free lead magnet is a list-poisoning target; adding a challenge to it is a conversion
-  trade-off, so it is flagged rather than changed.
+- **`starterkit.functions.ts` has no Turnstile at all** — public email-capture endpoint
+  with no bot protection and no widget on the page. A free lead magnet is a
+  list-poisoning target; adding a challenge to it is a conversion trade-off, so it is
+  flagged rather than changed. (Media Kit's `checkMediaKitAccess` unlock path IS now
+  Turnstile-gated as of 2026-08-26; `emailMediaKit` itself is still unguarded — same
+  trade-off, left flagged.)
 - `sendOpsAlert` only emails on `severity: "critical"` — 7 of ~30 `reportError` call
   sites. Everything else lands in `incidents` silently and is only ever seen if someone
   opens `/admin/incidents`. Deliberate (see the comment in `error-logger.ts`), but it

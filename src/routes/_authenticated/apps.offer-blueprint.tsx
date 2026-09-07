@@ -253,7 +253,7 @@ function OfferBlueprint() {
                     onClick={() => set("price", nudgeUp(offer.price!))}
                     className="mt-3 text-sm font-bold text-[var(--nx-gold-text)] hover:underline"
                   >
-                    It came out easily — make it R{nudgeUp(offer.price).toLocaleString("en-ZA")} →
+                    It came out easily — make it R{nudgeUp(offer.price).toLocaleString("en-GB")} →
                   </button>
                 )}
               </div>
@@ -313,7 +313,7 @@ function Blueprint({ offer }: { offer: Offer }) {
 
         <dl className="mt-5 grid gap-4 sm:grid-cols-2">
           <Field label="Called" value={offer.name} />
-          <Field label="Price" value={offer.price ? `R${offer.price.toLocaleString("en-ZA")}` : "—"} />
+          <Field label="Price" value={offer.price ? `R${offer.price.toLocaleString("en-GB")}` : "—"} />
           <Field label="Delivered as" value={offer.format} />
           <Field label="They keep" value={offer.output} />
         </dl>

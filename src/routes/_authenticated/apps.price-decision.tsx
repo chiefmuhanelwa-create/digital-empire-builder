@@ -278,7 +278,7 @@ function PriceDecision() {
                     </span>
                   ) : (
                     <span className="text-[17px] font-black tabular-nums" style={{ color: INK }}>
-                      R{Math.round(f.amount).toLocaleString("en-ZA")}
+                      R{Math.round(f.amount).toLocaleString("en-GB")}
                     </span>
                   )}
                 </div>
@@ -301,7 +301,7 @@ function PriceDecision() {
                 className="mt-2 font-black tabular-nums leading-none"
                 style={{ color: "#fff", fontSize: "clamp(2.4rem,7vw,3.6rem)" }}
               >
-                R{rec.amount.toLocaleString("en-ZA")}
+                R{rec.amount.toLocaleString("en-GB")}
               </p>
               <p className="mt-3 text-[16px] leading-relaxed" style={{ color: "#C7CEDA" }}>
                 {rec.note}
@@ -328,7 +328,7 @@ function PriceDecision() {
                 Your founding price
               </p>
               <p className="mt-1 text-[24px] font-black tabular-nums" style={{ color: INK }}>
-                R{founding.price.toLocaleString("en-ZA")}
+                R{founding.price.toLocaleString("en-GB")}
               </p>
               <p className="mt-3 text-[16px] leading-relaxed" style={{ color: BODY }}>
                 {founding.sentence}
@@ -383,11 +383,11 @@ function PriceDecision() {
                 style={{ background: BLUE, color: "#fff" }}
               >
                 <Check className="size-4" /> Save R
-                {(finalPrice ?? rec.amount).toLocaleString("en-ZA")} to my offer
+                {(finalPrice ?? rec.amount).toLocaleString("en-GB")} to my offer
               </button>
               {offer.price ? (
                 <p className="mt-2 text-[15px]" style={{ color: MUTED }}>
-                  Your offer currently says R{offer.price.toLocaleString("en-ZA")}.
+                  Your offer currently says R{offer.price.toLocaleString("en-GB")}.
                 </p>
               ) : null}
             </>

@@ -264,7 +264,7 @@ function AdminProducts() {
               <div className="col-span-2 text-right font-mono">
                 <div>{formatPrice(p.price_cents, p.currency, p.is_free, p.slug)}</div>
                 {!p.is_free && p.currency === "ZAR" && (
-                  <div className="text-[10px] text-muted-foreground">charged R{(p.price_cents / 100).toLocaleString("en-ZA")}</div>
+                  <div className="text-[10px] text-muted-foreground">charged R{(p.price_cents / 100).toLocaleString("en-GB")}</div>
                 )}
               </div>
               <div className="col-span-2 text-right font-mono">
@@ -272,7 +272,7 @@ function AdminProducts() {
                   <>
                     <div>{sale.unitsSold} sold</div>
                     <div className="text-[10px] text-muted-foreground">
-                      R{(sale.revenueCents / 100).toLocaleString("en-ZA")}
+                      R{(sale.revenueCents / 100).toLocaleString("en-GB")}
                     </div>
                   </>
                 ) : (

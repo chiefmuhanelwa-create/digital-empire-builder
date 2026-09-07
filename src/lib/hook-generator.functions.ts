@@ -11,7 +11,7 @@ import { reportError } from "@/lib/error-logger";
 import { addToMailerLiteGroup } from "@/lib/mailerlite";
 import { groupForTool, assertGroupRouting } from "@/lib/mailerlite-groups";
 import { utmRawDataPatch } from "@/lib/utm";
-import { KIT_OWNER_SLUGS } from "@/lib/tool-ai.functions";
+import { emailOwnsFoundationKit } from "@/lib/kit-access";
 import { HookGeneratorResultEmail } from "@/lib/email-templates/hook-generator-result";
 
 const VOICE = `You are NoChill (Ndivhuwo Muhanelwa) writing hooks for a Contentpreneur — someone turning their expertise into content that sells. Voice: direct, raw, SA real-talk, big-brother-with-a-system — never a guru, never generic marketing-speak. Short declarative sentences. No hashtags, no emoji spam, no "In today's world..." preambles. Every hook must be immediately usable — something a real person would actually post, not a template with blanks left in it.`;
@@ -33,23 +33,10 @@ const HookSchema = z.object({
 
 // AI generation costs real money per call — this tool is a genuine freemium
 // lead-magnet, not an unlimited free API. FREE_LIMIT real generations per
-// email, then it requires owning the Foundation Kit (same payment gate
-// pattern as Offer Builder's assertKitAccess in tool-ai.functions.ts, but
-// resolved by EMAIL here since this tool is intentionally usable without an
-// account — checkout's ensureBuyerUserId() means every real buyer's email
-// has a real paid order regardless of whether they ever logged in).
+// email, then it requires owning the Foundation Kit. The entitlement check
+// (emailOwnsFoundationKit) now lives in kit-access.ts, shared with Media Kit's
+// premium unlock.
 const FREE_LIMIT = 3;
-
-async function emailOwnsFoundationKit(email: string): Promise<boolean> {
-  const { data } = await supabaseAdmin
-    .from("orders")
-    .select("metadata")
-    .ilike("email", email)
-    .eq("status", "paid");
-  return (data ?? []).some((o) =>
-    KIT_OWNER_SLUGS.includes((o.metadata as { product_slug?: string } | null)?.product_slug ?? ""),
-  );
-}
 
 export const generateHooks = createServerFn({ method: "POST" })
   .inputValidator((input) =>

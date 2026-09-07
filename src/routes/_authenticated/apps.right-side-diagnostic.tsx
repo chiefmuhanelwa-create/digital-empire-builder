@@ -108,8 +108,8 @@ function RightSideDiagnostic() {
               <p className="nx-label !text-[var(--nx-gold-bright)]">Cast your net on the right side</p>
               <h1 className="text-white mt-3">Is your business built on rented land?</h1>
               <p className="text-[#C8C2B4] mt-4 leading-relaxed">
-                I had 780,000 followers. Gone overnight — one false claim. Then Google killed my AdSense: R180,000 a year, gone in a
-                notification. My income didn't drop to zero, because most of it sat on land I owned.
+                I had 780,000 followers. Gone — one false claim. Then my ad account was terminated at the end of 2024: two appeals, both
+                refused, the second one final. My income didn't drop to zero, because most of it sat on land I owned.
                 <strong className="text-[var(--nx-gold-bright)]"> This 8-question check shows how exposed you are right now.</strong>
               </p>
               <button onClick={() => { setStep("q"); setQIndex(0); }} className="cta-glow inline-flex items-center gap-2 mt-6">Start the diagnostic <ArrowRight className="size-4" /></button>
