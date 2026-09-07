@@ -160,7 +160,7 @@ function KnowledgeAudit() {
             <h1 className="mt-3">You're sitting on expertise you can't see.</h1>
             <p className="nx-body mt-3">
               Ten, twenty years of real knowledge — and you think you have nothing to sell. I built
-              R600,000+ in the 4-hour gaps between air-traffic shifts. I wasn't qualified. I was
+              mine in the gaps around a full-time job, an hour a day. I wasn't qualified. I was
               called. This audit finds the knowledge you already have and runs it through the one
               formula that decides if it'll sell.
             </p>

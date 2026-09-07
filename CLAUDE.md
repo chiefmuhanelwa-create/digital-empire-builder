@@ -92,36 +92,79 @@ Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 
 ### Verified Proof Numbers (Use Exactly — Never Fabricate)
 
-| Story / Fact | Figure |
-|---|---|
-| First online payment | R200 |
-| Brand-deal undercharging | R132,500 lost across the first 50 deals (market rate was R3,000). ⚠ The "R350 first deal" figure is banned — the books contradict each other on it. |
-| AdMarula affiliate day (March 2019) | R23,000 in ONE day; R38,070+ total |
-| First R50K month (March 2021) | R50,000 → crashed to R8,000 (algorithm change) |
-| Savanna Cider retainer | R25,000/month × 4 months = R100,000 |
-| Capitec campaign (The Tilt Effect, 2026) | R10,500/IG Reel |
-| Superbalist / Takealot / MrD Food deal (Nov 2021) | R12,000 |
-| Savanna Cider retainer | R25,000/month × 4 months = R100,000 |
-| Capitec campaign (The Tilt Effect, 2026) | R10,500/IG Reel |
-| SA Tourism campaign (Trending Topix) | R10,000 (10 deliverables) |
-| Playa Bets retainer (2025–2026, active) | R12,500/month |
-| Meta payouts, 12 months (2023) | ~R600,000 |
-| Total Ads & Affiliates (all streams, all years) | R800,000+ |
-| AdMarula — Mr Price affiliate (March 2019) | R23,000 in ONE DAY; R38,070+ total |
-| Google AdSense (annual, disabled Dec 2024) | R180,000/year |
-| SARS original assessment | R207,879.20 — **the only publishable SARS figure** |
-| SARS debt status | **UNPAID — no payments started, still being carried** (confirmed 2026-08-20) |
-| Instagram suspended (August 2025) | ~780K followers |
-| Total cross-platform followers (peak) | 3M+ (Facebook 1M+ · Instagram ~800K · TikTok + YouTube) |
+> ⛔ **REBUILT 2026-09-07 against the audited claim ledger.** The previous version of
+> this table asserted eight figures the evidence has since **disproven**, under a heading
+> telling every session to use them exactly. That is why banned figures reached shipped
+> product pages (`D-59`). If a number is not in this table, it does not ship.
+>
+> **Removed and why:** `R132,500` undercharging — disproven across 681 records (`D-52`) ·
+> `R23,000 in ONE day` — it was **R23,524** and it was a **month** (`D-25`) · `R38,070+`
+> AdMarula — actual **R41,562.15 received** · `Savanna R25,000/mo × 4 = R100,000` —
+> evidence shows **R45,000 quoted, 2020** (`D-27`) · `Meta ~R600,000 in 12 months` —
+> actual **$22,180.93 remitted across 2021–2025** · `Total Ads & Affiliates R800,000+` —
+> not reconstructable · `AdSense R180,000/year` — 13 payments, peak month **$260.01**
+> (`D-26`) · `3M+ cross-platform followers` — cross-platform totals are banned.
+
+| Story / Fact | Figure | Tier |
+|---|---|---|
+| **Lifetime bank-confirmed receipts** | **R453,710.37**, 2017–2025, 27 rows | E1 |
+| Meta, remitted | **$22,180.93**, 2021–2025, inward telegraphic transfers | E1 |
+| AdMarula affiliate | **R41,562.15 received** (R56,564 invoiced — say *received*) | E1 |
+| OfferForge | **R36,050.50** across 10 payments, 2017–2019 | E1 |
+| Best affiliate month | **R23,524**, March 2019 — **41.6% of all affiliate commission ever** | E1 |
+| **The rate story** | Standing **R15,000** → costed one job properly, **R45,000**, April 2020 | E1 |
+| Capitec (The Tilt Effect, 2026) | R10,500 / IG Reel | E1 |
+| SA Tourism (Trending Topix) | R10,000, 10 deliverables | E1 |
+| Playa Bets retainer (2025–2026) | R12,500 / month | E1 |
+| Superbalist / Takealot / MrD (Nov 2021) | R12,000 | E1 |
+| Grey Advertising · GBets · DStv (2020) | R47,500 · R36,000 · R25,000 | E1 |
+| Contracted, **not received** — say *"I was contracted at"* | Flying Fish R50,000 · MediaCom PO R35,000 · Dynamex R36,000 | E1 |
+| SARS original assessment | **R207,879.20** — the **only** publishable SARS figure | E1 |
+| SARS debt status | **UNPAID.** No payments started. No final figure, no waived-penalty figure, no monthly amount, no month count | 🔒 |
+| VDP | Lodged **July 2025**, unprompted and unaudited, **and later withdrawn** — both halves or neither | 🔒 |
+| Ad account | Terminated **end-2024**; two appeals refused, the second final, **May 2025** | E1 |
+| Instagram followers | **270,283**, API-confirmed 2026-09-01 | E1 |
+| Email list | **173** | E1 |
+| Press | TimesLIVE/Sunday Times **22 Nov 2025** · News24 **27 Feb 2026** | E1 |
+| Awards | 🔒 ruled **10** — but a conflict is open. Say *"award-winning"* or name one. **State no total** | 🔒 |
+| First brand deal | **R350** (2017); second **R750** same month. **R200 was the first *online payment*** — a different event | E1 |
+| Mother's income | ~**R400/month** picking potatoes; four people lived on it. Died **2011** | E1 |
+| First salary | **R6,000/month**, 2014 — bought his first phone | E1 |
+
+**⚠ Never state as settled — flag instead:** the **780,000-follower loss must not be dated**
+(`D-62` — five live pages currently date it as "one morning" / "overnight"). Cross-platform
+follower totals. A second SARS matter.
+
+**🔒 Founder only:** the Netflix contract figure — it is **under NDA**, and neither the real
+figure nor the banned R100,000 may be published.
+
 | Contentpreneur Programme | R18,000 PIF / R6,500×3 |
 | Total confirmed brand campaigns | 18+ brands · 23 agencies · 50+ deals |
 
 **Never use:** R285,000 (unverified SARS figure) · R207,869 (slightly wrong) · fabricated follower counts · round estimates
 
-**SARS story specifics:** He came forward and corrected it rather than hiding. ⛔ Never claim it was paid off, cleared, settled or resolved. ⛔ Never state a final-debt figure, a waived-penalty figure, a monthly amount, a number of months, or the mechanism (whether the voluntary disclosure proceeded or was withdrawn) — two internal records contradict each other and even disagree on the tax years. ⛔ Never publish a reference number or name a tax practitioner or firm. The teachable lesson is the 35% Rule: 25% SARS, 10% business, 65% yours, split the day money lands.
+**SARS story specifics:** He came forward and corrected it rather than hiding. ⛔ Never claim it was paid off, cleared, settled or resolved. ⛔ Never state a final-debt figure, a waived-penalty figure, a monthly amount or a number of months. ✅ **The VDP mechanism was UNBANNED by dated ruling 2026-09-01:** he may state that he came forward voluntarily — a Voluntary Disclosure Programme application lodged **July 2025**, unprompted and unaudited — **and that it was later withdrawn. Both halves or neither**; told without the withdrawal it becomes a boast. ⛔ The framing *"SARS came for me"* is banned — it inverts the evidenced sequence. Permitted: *"I went to SARS before they came to me. Nobody prompted me and nobody audited me. And it still went wrong."* ⛔ Never publish a reference number or name a tax practitioner or firm. The teachable lesson is the 35% Rule: 25% SARS, 10% business, 65% yours, split the day money lands.
 
-**Full verified story bank (11 stories):** See `docs/STORY-BANK.md`
-**Full verified proof statement:** "From sleeping in university bathrooms to R600,000+ in a single year — with receipts from Capitec, Netflix, Standard Bank, Superbalist, Suzuki, SA Tourism, ABSA, Showmax, Flying Fish, and 40+ other brands — across 23 agencies, 10 awards, a SAMA 30 & 31 judge seat (consecutive), and a Meta speaker slot."
+**Story bank:** ⛔ `docs/STORY-BANK.md` is **QUARANTINED** (`D-60`) — it carries disproven
+figures and must not be copied from. Use the estate instead: `02-INFORMATION/STORIES_BANK.csv`
+(109 rows, 39 E1) and `02-INFORMATION/CREDIBILITY-BANK.md` (55 E1 proof rows).
+
+**Proof statement.** ⛔ The previous one-liner here is withdrawn: it claimed **R600,000+ in a
+single year** (not reconstructable), named **Netflix** as a receipt (the contract is **under
+NDA** — neither figure is publishable), stated **10 awards** as a total (ruled 10, but a
+conflict is open — say *"award-winning"* or name one, state no total), and said **40+ brands**
+against a record of **19 named brands and 23 agencies**.
+
+Defensible replacement, every clause receipted:
+
+> "From sleeping in university bathrooms to **R453,710.37** in bank-confirmed receipts across
+> eight years — with 19 named brands and 23 agencies behind it, two national newspapers, and a
+> SAMA 30 & 31 judge seat, consecutive."
+
+Prefer the behavioural proof where it fits. It is the strongest category and the least used:
+unprompted written performance reports to **three independent agencies, 2019–2020**, one of
+whom replied he was **the only influencer who had ever done it**. Unlike every reach number,
+it does not decay.
 
 ### NOCHILL Frameworks (Quick Reference)
 

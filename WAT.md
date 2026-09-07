@@ -291,7 +291,7 @@ Claude Code operates as the primary development and documentation agent for CHKP
 | **Canva** | Product PDFs, social content, covers | Heritage Gold `#C9A84C` · Charcoal `#1C1C1C` · Tool Black `#111111` · Cream `#FAF7F0` |
 | | | Fonts: Montserrat (headings 700–900) · Lato (body 400/700) |
 | | | Footer on all PDFs: `chkplt.com \| @nochill_god` |
-| | | Proof statement: "Sleeping in university bathrooms → R600,000+ annual income · 19 named brands · 23 agencies · 9 awards · SAMA31 judge · Meta speaker" |
+| | | Proof statement: "Sleeping in university bathrooms → R453,710.37 bank-confirmed across eight years · 19 named brands · 23 agencies · award-winning · SAMA31 judge · Meta speaker" (⛔ state no award total — conflict open) |
 
 ### Analytics & Monitoring
 

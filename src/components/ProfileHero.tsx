@@ -42,7 +42,7 @@ export function ProfileHero() {
         <h1 className="mt-1 font-display text-2xl font-extrabold text-[#000]">Ndivhuwo Muhanelwa</h1>
 
         <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-          {["3M+ Followers", "50+ Brand Deals", "Author"].map((s) => (
+          {["270k Followers", "19 Brands · 23 Agencies", "Author"].map((s) => (
             <span
               key={s}
               className="rounded-full border border-[#D4AF37]/40 bg-[#f5f5f5] px-3 py-1 text-xs font-semibold text-[#000]"
@@ -69,10 +69,10 @@ export function ProfileHero() {
           </span>
           <p className="text-sm leading-relaxed text-[#000]">
             Digital resources for African content creators who are serious about building a business — not
-            just a following. Created by Ndivhuwo Muhanelwa | 3M+ Followers |{" "}
-            <span className="font-bold" style={{ color: "#6b4600" }}>50+ Brand Deals</span> | Author |{" "}
+            just a following. Created by Ndivhuwo Muhanelwa | 270,283 Instagram followers |{" "}
+            <span className="font-bold" style={{ color: "#6b4600" }}>19 named brands, 23 agencies</span> | Author |{" "}
             <span className="font-bold" style={{ color: "#6b4600" }}>Humanz Top 20 African Creators 2026</span> |
-            10x Industry Award Winner. Everything here is built from real experience — these are the exact
+            Award-winning. Everything here is built from real experience — these are the exact
             tools used to turn content into multiple income streams.
           </p>
         </div>
