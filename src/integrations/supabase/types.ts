@@ -1532,6 +1532,13 @@ export type Database = {
           cta_keyword: string | null
           format: string
           hooks: Json
+          cta_artifact: string | null
+          cta_purpose: string | null
+          generated_from: Json | null
+          mechanism: string | null
+          outside_voice: string | null
+          receipt: string | null
+          story: string | null
           id: string
           money_cost: string | null
           piece_id: string | null
@@ -1554,6 +1561,13 @@ export type Database = {
           cta_keyword?: string | null
           format?: string
           hooks?: Json
+          cta_artifact?: string | null
+          cta_purpose?: string | null
+          generated_from?: Json | null
+          mechanism?: string | null
+          outside_voice?: string | null
+          receipt?: string | null
+          story?: string | null
           id?: string
           money_cost?: string | null
           piece_id?: string | null
@@ -1576,6 +1590,13 @@ export type Database = {
           cta_keyword?: string | null
           format?: string
           hooks?: Json
+          cta_artifact?: string | null
+          cta_purpose?: string | null
+          generated_from?: Json | null
+          mechanism?: string | null
+          outside_voice?: string | null
+          receipt?: string | null
+          story?: string | null
           id?: string
           money_cost?: string | null
           piece_id?: string | null

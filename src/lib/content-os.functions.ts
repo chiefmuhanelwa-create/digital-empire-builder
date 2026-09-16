@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { SEED_LIBRARY } from "@/lib/content-library";
 
 // Content OS persistence. RLS is per-user on both tables, so the same code
 // serves the founder and every subscriber without a branch — which is what
@@ -228,7 +229,6 @@ export const seedLibrary = createServerFn({ method: "POST" })
       .from("content_resources").select("id", { count: "exact", head: true }).eq("user_id", context.userId);
     if ((count ?? 0) > 0) return { seeded: 0 };
 
-    const { SEED_LIBRARY } = await import("@/lib/content-library");
     const rows = SEED_LIBRARY.map((r) => ({
       user_id: context.userId, kind: r.kind, title: r.title,
       body: r.body ?? null, evidence: r.evidence ?? null, pillar: r.pillar ?? null, is_seed: true,

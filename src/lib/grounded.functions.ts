@@ -187,3 +187,99 @@ export const corpusStats = createServerFn({ method: "GET" })
     for (const s of sources) byCollection[s.collection] = (byCollection[s.collection] ?? 0) + 1;
     return { sources: sources.length, chunks: chunkRes.count ?? 0, byCollection, list: sources.slice(0, 200) };
   });
+
+/** GENERATE A SCRIPT, SLOT BY SLOT.
+ *
+ *  The studio was a form — every slot typed by hand, which is a worksheet, not
+ *  a tool. This fills them from the corpus: the hook candidates, the beat-3
+ *  story, the receipt, the outside voice, the mechanism. Everything it returns
+ *  is drawn from retrieved rows and the ledger, and anything it could not find
+ *  comes back in `missing` rather than invented.
+ *
+ *  Returns structured fields, not prose, so the studio can drop them straight
+ *  into the form and the user edits from a filled page instead of a blank one.
+ */
+export const generateSlots = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({
+      topic: z.string().min(3).max(400),
+      pillar: z.string().max(40).nullish(),
+      style: z.enum(["nochill", "jatho"]).default("nochill"),
+      format: z.string().max(40).default("epiphany"),
+    }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const [craft, evidence, ledgerRes] = await Promise.all([
+      retrieve(context.userId, `${data.topic} hook beat voice rehook screen text`, ["skills", "icp"], 8),
+      retrieve(context.userId, `${data.topic} ${data.pillar ?? ""} story confession receipt quote`, ["estate", "global"], 10),
+      supabaseAdmin.from("ledger_entries").select("*").eq("user_id", context.userId),
+    ]);
+    const rows = [...evidence, ...craft];
+    const ledger = (ledgerRes.data ?? []) as LedgerEntry[];
+
+    if (!rows.length) {
+      return {
+        slots: null, sources: [], report: null,
+        note: "Corpus is empty. Run the ingest first — without it this would only produce generic creator advice, which is the thing the tool exists to prevent.",
+      };
+    }
+
+    const msg = await getAnthropic().messages.create({
+      model: MODEL,
+      max_tokens: 2600,
+      system: systemPrompt(ledger),
+      messages: [{
+        role: "user",
+        content:
+`RETRIEVED CONTEXT — everything you may draw on:
+
+${renderContext(rows)}
+
+---
+
+TOPIC: ${data.topic}
+PILLAR: ${data.pillar ?? "unassigned"}
+HOUSE: ${data.style === "jatho" ? "Jatho — 23-45s, prohibition hook, tap path, seamless loop, no CTA" : "NoChill — 90-105s, FW-147 eleven beats, confession-led"}
+FORMAT: ${data.format}
+
+Return ONLY a JSON object, no prose around it, matching exactly:
+
+{
+  "hooks": [
+    { "text": "spoken line", "screen": "MAX FIVE WORDS CAPS", "shape": "one of: sole_agent|conditional|borrowed_authority|event_callout|volume_credential|false_binary|substitution|time_credential|prohibition|confession_open|named_outcome|red_flags|superlative|handover", "why": "one line" }
+  ],
+  "symptom": "what they say, in their words",
+  "money_cost": "the cost in rands or unpaid hours",
+  "story": "beat 3 — first person, PAST TENSE, 25-35 words, the belief as it felt at the time",
+  "receipt": "one figure from the verified ledger above, with its context",
+  "outside_voice": "beat 6 — reported speech in quotes, from the context. Empty string if the context carries no real quote",
+  "mechanism": "beat 8 — what changed, then the law generalised to YOU",
+  "closing_question": "answerable in four words",
+  "missing": ["anything a slot needed that the context did not supply"]
+}
+
+RULES
+- Exactly three hooks. Each second person, each presupposing money they ALREADY earn.
+- Screen text is the VERDICT, never a compression of the spoken line. No punctuation. No category words (creators, audience, entrepreneurs, the 9 to 5).
+- "receipt" must be a figure from the VERIFIED list in your system prompt. If there is none, return "" and add it to missing.
+- "outside_voice" must be a real quote from the retrieved context. Never invent one. Empty string if none exists.
+- Put anything you could not source into "missing". Naming the gap is the correct output — inventing to fill it is the failure this tool exists to prevent.`,
+      }],
+    });
+
+    const raw = msg.content.filter((b) => b.type === "text").map((b: any) => b.text).join("\n");
+    let slots: any = null;
+    try {
+      const m = raw.match(/\{[\s\S]*\}/);
+      slots = m ? JSON.parse(m[0]) : null;
+    } catch {
+      return { slots: null, sources: rows, report: null, note: "The model returned something that was not valid JSON. Try again — nothing was saved." };
+    }
+
+    const joined = [slots?.story, slots?.receipt, slots?.outside_voice, slots?.mechanism,
+                    ...(slots?.hooks ?? []).map((h: any) => h?.text)].filter(Boolean).join("\n");
+    const report = checkScript(joined, ledger);
+
+    return { slots, sources: rows, report, note: null };
+  });

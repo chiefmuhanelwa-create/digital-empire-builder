@@ -7,6 +7,7 @@ import { useKitAccess } from "@/lib/use-kit-access";
 import { listScripts, upsertScript, deleteScript, scriptToPiece } from "@/lib/scripts.functions";
 import { listContent } from "@/lib/content-os.functions";
 import { listLedger, recordChecks } from "@/lib/ledger.functions";
+import { generateSlots } from "@/lib/grounded.functions";
 import { checkScript, type LedgerEntry } from "@/lib/ledger";
 import {
   STYLES, HOOK_SHAPES, SCREEN_BANK, REHOOKS, REHOOK_RULE, HORSEMEN,
@@ -19,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import {
   Lock, Plus, X, Copy, Trash2, AlertTriangle, Check, ArrowRight, FileText,
-  ShieldCheck, ShieldAlert, ShieldX, HelpCircle,
+  ShieldCheck, ShieldAlert, ShieldX, HelpCircle, Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/apps/script-studio")({
@@ -66,6 +67,7 @@ function Tool() {
   const contentFn = useServerFn(listContent);
   const ledgerFn = useServerFn(listLedger);
   const recordFn = useServerFn(recordChecks);
+  const genFn = useServerFn(generateSlots);
 
   const { data } = useQuery({ queryKey: ["scripts"], queryFn: () => listFn() });
   const { data: content } = useQuery({ queryKey: ["content-os"], queryFn: () => contentFn() });
@@ -74,6 +76,7 @@ function Tool() {
 
   const [d, setD] = useState<Draft>({ ...BLANK });
   const [open, setOpen] = useState(false);
+  const [missing, setMissing] = useState<string[]>([]);
   const scripts = (data?.scripts ?? []) as any[];
 
   const set = <K extends keyof Draft>(k: K, v: Draft[K]) => setD((p) => ({ ...p, [k]: v }));
@@ -113,6 +116,8 @@ function Tool() {
       symptom: d.symptom, money_cost: d.money_cost, raw_material: d.raw_material,
       hooks: d.hooks.filter((h) => h.text.trim()), chosen_hook: d.chosen_hook,
       screen_text: d.screen_text, beats, cta_keyword: d.cta_keyword,
+      story: d.story, receipt: d.receipt, outside_voice: d.outside_voice,
+      mechanism: d.mechanism, cta_artifact: d.cta_artifact, cta_purpose: d.cta_purpose,
       closing_question: d.closing_question, runtime_target: d.runtime_target, status: "draft",
     } as any }),
     onSuccess: (r) => {
@@ -132,15 +137,49 @@ function Tool() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  // GENERATE. The studio was a form: every slot typed by hand, which is a
+  // worksheet, not a tool. This fills them from the corpus and the ledger, and
+  // whatever it could not source comes back named rather than invented.
+  const generate = useMutation({
+    mutationFn: () => genFn({ data: { topic: d.title, pillar: d.pillar, style: d.style, format: d.format } }),
+    onSuccess: (r: any) => {
+      if (r.note) { toast.error(r.note); return; }
+      const sl = r.slots;
+      if (!sl) { toast.error("Nothing came back."); return; }
+      setD((p) => ({
+        ...p,
+        hooks: [0, 1, 2].map((i) => ({
+          ...EMPTY_HOOK,
+          text: sl.hooks?.[i]?.text ?? "",
+          screen: (sl.hooks?.[i]?.screen ?? "").toUpperCase(),
+          shape: sl.hooks?.[i]?.shape ?? "",
+          note: sl.hooks?.[i]?.why ?? "",
+        })),
+        symptom: sl.symptom ?? p.symptom,
+        money_cost: sl.money_cost ?? p.money_cost,
+        story: sl.story ?? p.story,
+        receipt: sl.receipt ?? p.receipt,
+        outside_voice: sl.outside_voice ?? p.outside_voice,
+        mechanism: sl.mechanism ?? p.mechanism,
+        closing_question: sl.closing_question ?? p.closing_question,
+        screen_text: (sl.hooks?.[0]?.screen ?? p.screen_text).toUpperCase(),
+      }));
+      setMissing(sl.missing ?? []);
+      toast.success("Filled from your corpus — now score the hooks and edit.");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   function loadScript(s: any) {
     setD({
       id: s.id, title: s.title, style: s.style, format: s.format, pillar: s.pillar,
       symptom: s.symptom ?? "", money_cost: s.money_cost ?? "", raw_material: s.raw_material ?? "",
       hooks: [...(s.hooks ?? []), ...Array(3).fill(EMPTY_HOOK)].slice(0, 3).map((h: any) => ({ ...EMPTY_HOOK, ...h })),
       chosen_hook: s.chosen_hook, screen_text: s.screen_text ?? "",
-      story: (s.beats ?? []).find((b: Beat) => b.name.includes("NAIVE") || b.name.includes("RECEIPT"))?.slot ?? "",
-      receipt: "", outside_voice: "", mechanism: "",
-      cta_artifact: "", cta_purpose: "", cta_keyword: s.cta_keyword ?? "",
+      story: s.story ?? "", receipt: s.receipt ?? "",
+      outside_voice: s.outside_voice ?? "", mechanism: s.mechanism ?? "",
+      cta_artifact: s.cta_artifact ?? "", cta_purpose: s.cta_purpose ?? "",
+      cta_keyword: s.cta_keyword ?? "",
       closing_question: s.closing_question ?? "", runtime_target: s.runtime_target ?? 95,
     });
     setOpen(true);
@@ -193,7 +232,25 @@ function Tool() {
           <>
             {/* Intake */}
             <Section title="1 · Intake" sub="Run before the hook. If none of the six starting points applies, this isn't a script yet.">
-              <F label="Title"><Input value={d.title} onChange={(e) => set("title", e.target.value)} /></F>
+              <F label="Title — or just the topic, then generate"><Input value={d.title} onChange={(e) => set("title", e.target.value)} /></F>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button onClick={() => generate.mutate()} disabled={!d.title.trim() || generate.isPending}
+                  className="bg-[#D4A82F] text-[#1C1C1C] hover:bg-[#D9BC45] font-semibold">
+                  <Sparkles className="mr-1.5 h-4 w-4" />
+                  {generate.isPending ? "Retrieving, then writing…" : "Generate from my corpus"}
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  Fills the hooks and every beat from your own stories, receipts and voice rules. You edit from a filled page, not a blank one.
+                </span>
+              </div>
+              {missing.length > 0 && (
+                <div className="rounded-lg border border-amber-500/40 bg-amber-500/5 p-3">
+                  <p className="text-xs font-semibold">It could not source these — they are left empty on purpose:</p>
+                  <ul className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                    {missing.map((m, i) => <li key={i}>· {m}</li>)}
+                  </ul>
+                </div>
+              )}
               <div className="grid gap-3 sm:grid-cols-3">
                 <F label="Pillar"><Sel value={d.pillar ?? ""} onChange={(v) => set("pillar", v || null)}
                   options={[["", "—"], ...PILLARS.map((p) => [p.key, `${p.key} · ${p.share}%`] as [string, string])]} /></F>
