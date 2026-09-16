@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { myPurchases, getMyDownloadUrl } from "@/lib/products.functions";
 import { CLARITY_STEPS, CLARITY_TOTAL, readClarityProgress, nextClarityStep } from "@/lib/clarity-system";
 import { Download, BookOpen, ArrowRight, ShieldCheck, Sparkles, Compass, Users } from "lucide-react";
+import { TOOLS, TOOL_CATEGORY_ORDER } from "@/lib/tools";
 import { toast } from "sonner";
 import { memberProductUrl } from "@/lib/domains";
 
@@ -90,6 +91,57 @@ function Dashboard() {
       </section>
 
       <div className="mx-auto max-w-6xl px-5 sm:px-6 py-10 space-y-12">
+
+        {/* The tools. Added 2026-09-16 because logging in landed members on a
+            page with no route to any of them — eleven apps, zero links. Driven
+            off the same TOOLS list the hub uses, so the two cannot drift. */}
+        <section className="space-y-4">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <div className="nx-label">Your tools</div>
+              <h2 className="font-display text-2xl sm:text-3xl mt-1">Everything you have access to</h2>
+            </div>
+            <Button asChild variant="ghost" size="sm" className="shrink-0">
+              <a href="https://chkplt.com/tools">See all <ArrowRight className="ml-1 size-3.5" /></a>
+            </Button>
+          </div>
+
+          {TOOL_CATEGORY_ORDER.map((cat) => {
+            const items = TOOLS.filter((t) => t.category === cat);
+            if (!items.length) return null;
+            return (
+              <div key={cat} className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{cat}</p>
+                <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                  {items.map((t) => {
+                    const Icon = t.icon;
+                    const locked = t.tier === "premium" && !hasKit;
+                    const card = (
+                      <div className={`h-full rounded-xl border p-4 transition-colors ${locked ? "opacity-60" : "hover:border-[var(--nx-gold-bright)]/50 hover:bg-muted/30"}`}>
+                        <div className="flex items-start gap-3">
+                          <Icon className="size-4 shrink-0 mt-0.5 text-[var(--nx-gold-deep)]" />
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-semibold text-sm">{t.name}</span>
+                              {t.tier === "premium" && (
+                                <span className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-[var(--nx-gold-bright)]/20 text-[var(--nx-gold-deep)]">Kit</span>
+                              )}
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{t.blurb}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                    if (locked) return <div key={t.path}>{card}</div>;
+                    return t.external
+                      ? <a key={t.path} href={t.path} target="_blank" rel="noreferrer">{card}</a>
+                      : <Link key={t.path} to={t.path}>{card}</Link>;
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </section>
 
         {/* Admin entry — only for admins, kept out of the member flow */}
         {isAdmin && (

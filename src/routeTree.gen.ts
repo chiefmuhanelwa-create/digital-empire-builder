@@ -78,6 +78,7 @@ import { Route as AuthenticatedAppsReturnRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAppsProofLedgerRouteImport } from './routes/_authenticated/apps.proof-ledger'
 import { Route as AuthenticatedAppsPriceDecisionRouteImport } from './routes/_authenticated/apps.price-decision'
 import { Route as AuthenticatedAppsPaidsAuditorRouteImport } from './routes/_authenticated/apps.paids-auditor'
+import { Route as AuthenticatedAppsOsRouteImport } from './routes/_authenticated/apps.os'
 import { Route as AuthenticatedAppsOfferBlueprintRouteImport } from './routes/_authenticated/apps.offer-blueprint'
 import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './routes/_authenticated/apps.niche-clarity-builder'
 import { Route as AuthenticatedAppsMsTsSsRouteImport } from './routes/_authenticated/apps.ms-ts-ss'
@@ -480,6 +481,11 @@ const AuthenticatedAppsPaidsAuditorRoute =
     path: '/apps/paids-auditor',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsOsRoute = AuthenticatedAppsOsRouteImport.update({
+  id: '/apps/os',
+  path: '/apps/os',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAppsOfferBlueprintRoute =
   AuthenticatedAppsOfferBlueprintRouteImport.update({
     id: '/apps/offer-blueprint',
@@ -771,6 +777,7 @@ export interface FileRoutesByFullPath {
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
+  '/apps/os': typeof AuthenticatedAppsOsRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
@@ -876,6 +883,7 @@ export interface FileRoutesByTo {
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
+  '/apps/os': typeof AuthenticatedAppsOsRoute
   '/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
@@ -985,6 +993,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
   '/_authenticated/apps/niche-clarity-builder': typeof AuthenticatedAppsNicheClarityBuilderRoute
   '/_authenticated/apps/offer-blueprint': typeof AuthenticatedAppsOfferBlueprintRoute
+  '/_authenticated/apps/os': typeof AuthenticatedAppsOsRoute
   '/_authenticated/apps/paids-auditor': typeof AuthenticatedAppsPaidsAuditorRoute
   '/_authenticated/apps/price-decision': typeof AuthenticatedAppsPriceDecisionRoute
   '/_authenticated/apps/proof-ledger': typeof AuthenticatedAppsProofLedgerRoute
@@ -1095,6 +1104,7 @@ export interface FileRouteTypes {
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
     | '/apps/offer-blueprint'
+    | '/apps/os'
     | '/apps/paids-auditor'
     | '/apps/price-decision'
     | '/apps/proof-ledger'
@@ -1200,6 +1210,7 @@ export interface FileRouteTypes {
     | '/apps/ms-ts-ss'
     | '/apps/niche-clarity-builder'
     | '/apps/offer-blueprint'
+    | '/apps/os'
     | '/apps/paids-auditor'
     | '/apps/price-decision'
     | '/apps/proof-ledger'
@@ -1308,6 +1319,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/ms-ts-ss'
     | '/_authenticated/apps/niche-clarity-builder'
     | '/_authenticated/apps/offer-blueprint'
+    | '/_authenticated/apps/os'
     | '/_authenticated/apps/paids-auditor'
     | '/_authenticated/apps/price-decision'
     | '/_authenticated/apps/proof-ledger'
@@ -1882,6 +1894,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsPaidsAuditorRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/os': {
+      id: '/_authenticated/apps/os'
+      path: '/apps/os'
+      fullPath: '/apps/os'
+      preLoaderRoute: typeof AuthenticatedAppsOsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/offer-blueprint': {
       id: '/_authenticated/apps/offer-blueprint'
       path: '/apps/offer-blueprint'
@@ -2268,6 +2287,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsMsTsSsRoute: typeof AuthenticatedAppsMsTsSsRoute
   AuthenticatedAppsNicheClarityBuilderRoute: typeof AuthenticatedAppsNicheClarityBuilderRoute
   AuthenticatedAppsOfferBlueprintRoute: typeof AuthenticatedAppsOfferBlueprintRoute
+  AuthenticatedAppsOsRoute: typeof AuthenticatedAppsOsRoute
   AuthenticatedAppsPaidsAuditorRoute: typeof AuthenticatedAppsPaidsAuditorRoute
   AuthenticatedAppsPriceDecisionRoute: typeof AuthenticatedAppsPriceDecisionRoute
   AuthenticatedAppsProofLedgerRoute: typeof AuthenticatedAppsProofLedgerRoute
@@ -2316,6 +2336,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsNicheClarityBuilderRoute:
     AuthenticatedAppsNicheClarityBuilderRoute,
   AuthenticatedAppsOfferBlueprintRoute: AuthenticatedAppsOfferBlueprintRoute,
+  AuthenticatedAppsOsRoute: AuthenticatedAppsOsRoute,
   AuthenticatedAppsPaidsAuditorRoute: AuthenticatedAppsPaidsAuditorRoute,
   AuthenticatedAppsPriceDecisionRoute: AuthenticatedAppsPriceDecisionRoute,
   AuthenticatedAppsProofLedgerRoute: AuthenticatedAppsProofLedgerRoute,

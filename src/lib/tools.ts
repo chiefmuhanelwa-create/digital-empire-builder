@@ -20,6 +20,7 @@ import {
   LayoutGrid,
   Wand2,
   BookLock,
+  Database,
   Waves,
   Scissors,
   type LucideIcon,
@@ -163,6 +164,18 @@ export const TOOLS: Tool[] = [
   },
 
   // ── Content Creation ─────────────────────────────────────────────────────
+  {
+    // The unifier. Three routes was three tools, which is the one-shot problem
+    // this product exists to correct, shipped by us. The estate is the database,
+    // retrieval runs before generation, and the ledger checks what comes back.
+    name: "The OS",
+    path: "/apps/os",
+    tier: "premium",
+    category: "Content Creation",
+    blurb:
+      "Your estate as the database — draft from your own stories and receipts, and see the file every line came from.",
+    icon: Database,
+  },
   {
     // The spine the content tools never had. Hook Bank held its state in
     // useState and lost it on tab close; the 4E calendar wrote to localStorage,

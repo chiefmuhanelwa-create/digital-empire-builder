@@ -3,6 +3,7 @@ import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { BackNav } from "@/components/BackNav";
 import { supabase } from "@/integrations/supabase/client";
+import { GOOGLE_AUTH_ENABLED } from "@/lib/auth-providers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,15 +63,17 @@ function SignupPage() {
               Contentpreneur Accelerator PRO · Kingdom Business Programme
             </p>
 
-            <Button
-              onClick={onGoogle}
-              variant="outline"
-              className="mt-8 w-full h-12 border-border/60 hover:border-banana/40 hover:text-banana font-semibold"
-            >
-              Continue with Google
-            </Button>
+            {GOOGLE_AUTH_ENABLED && (
+              <Button
+                onClick={onGoogle}
+                variant="outline"
+                className="mt-8 w-full h-12 border-border/60 hover:border-banana/40 hover:text-banana font-semibold"
+              >
+                Continue with Google
+              </Button>
+            )}
 
-            <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground font-mono">
+            <div className={`${GOOGLE_AUTH_ENABLED ? "my-6" : "mt-8 mb-6"} flex items-center gap-3 text-xs text-muted-foreground font-mono`}>
               <div className="h-px flex-1 bg-border" /> or create with email <div className="h-px flex-1 bg-border" />
             </div>
 

@@ -1011,6 +1011,72 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_chunks: {
+        Row: {
+          body: string
+          heading: string | null
+          id: string
+          ordinal: number
+          source_id: string
+          tags: string[]
+          user_id: string
+        }
+        Insert: {
+          body: string
+          heading?: string | null
+          id?: string
+          ordinal?: number
+          source_id: string
+          tags?: string[]
+          user_id: string
+        }
+        Update: {
+          body?: string
+          heading?: string | null
+          id?: string
+          ordinal?: number
+          source_id?: string
+          tags?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      knowledge_sources: {
+        Row: {
+          bytes: number | null
+          collection: string
+          evidence_tier: string | null
+          id: string
+          ingested_at: string
+          kind: string
+          path: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          bytes?: number | null
+          collection: string
+          evidence_tier?: string | null
+          id?: string
+          ingested_at?: string
+          kind?: string
+          path: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          bytes?: number | null
+          collection?: string
+          evidence_tier?: string | null
+          id?: string
+          ingested_at?: string
+          kind?: string
+          path?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       leak_audits: {
         Row: {
           annual_value_cents: number
@@ -1742,6 +1808,24 @@ export type Database = {
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
+      }
+      search_knowledge: {
+        Args: {
+          _user_id: string
+          _query: string
+          _collections?: string[] | null
+          _limit?: number | null
+        }
+        Returns: {
+          chunk_id: string
+          source_path: string
+          source_title: string
+          collection: string
+          evidence_tier: string | null
+          heading: string | null
+          body: string
+          rank: number
+        }[]
       }
       has_active_subscription: { Args: { _email: string }; Returns: boolean }
       has_role: {
