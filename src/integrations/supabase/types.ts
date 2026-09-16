@@ -192,6 +192,204 @@ export type Database = {
         }
         Relationships: []
       }
+      content_ideas: {
+        Row: {
+          angle: string | null
+          created_at: string
+          favourite: boolean
+          id: string
+          idea: string
+          inspiration_url: string | null
+          pillar: string | null
+          source_handle: string | null
+          topic: string | null
+          used_piece_id: string | null
+          user_id: string
+        }
+        Insert: {
+          angle?: string | null
+          created_at?: string
+          favourite?: boolean
+          id?: string
+          idea: string
+          inspiration_url?: string | null
+          pillar?: string | null
+          source_handle?: string | null
+          topic?: string | null
+          used_piece_id?: string | null
+          user_id: string
+        }
+        Update: {
+          angle?: string | null
+          created_at?: string
+          favourite?: boolean
+          id?: string
+          idea?: string
+          inspiration_url?: string | null
+          pillar?: string | null
+          source_handle?: string | null
+          topic?: string | null
+          used_piece_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      content_pieces: {
+        Row: {
+          comments: number | null
+          completion_pct: number | null
+          created_at: string
+          cta_keyword: string | null
+          format: string
+          hook: string | null
+          hook_shape: string | null
+          id: string
+          notes: string | null
+          permalink: string | null
+          pillar: string | null
+          platform: string | null
+          posted_at: string | null
+          reach: number | null
+          receipt_ref: string | null
+          runtime_seconds: number | null
+          saves: number | null
+          scheduled_for: string | null
+          screen_text: string | null
+          shares: number | null
+          status: string
+          story_ref: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comments?: number | null
+          completion_pct?: number | null
+          created_at?: string
+          cta_keyword?: string | null
+          format?: string
+          hook?: string | null
+          hook_shape?: string | null
+          id?: string
+          notes?: string | null
+          permalink?: string | null
+          pillar?: string | null
+          platform?: string | null
+          posted_at?: string | null
+          reach?: number | null
+          receipt_ref?: string | null
+          runtime_seconds?: number | null
+          saves?: number | null
+          scheduled_for?: string | null
+          screen_text?: string | null
+          shares?: number | null
+          status?: string
+          story_ref?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comments?: number | null
+          completion_pct?: number | null
+          created_at?: string
+          cta_keyword?: string | null
+          format?: string
+          hook?: string | null
+          hook_shape?: string | null
+          id?: string
+          notes?: string | null
+          permalink?: string | null
+          pillar?: string | null
+          platform?: string | null
+          posted_at?: string | null
+          reach?: number | null
+          receipt_ref?: string | null
+          runtime_seconds?: number | null
+          saves?: number | null
+          scheduled_for?: string | null
+          screen_text?: string | null
+          shares?: number | null
+          status?: string
+          story_ref?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      content_resources: {
+        Row: {
+          archived: boolean
+          body: string | null
+          created_at: string
+          evidence: string | null
+          id: string
+          is_seed: boolean
+          kind: string
+          pillar: string | null
+          times_used: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          archived?: boolean
+          body?: string | null
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          is_seed?: boolean
+          kind: string
+          pillar?: string | null
+          times_used?: number
+          title: string
+          user_id: string
+        }
+        Update: {
+          archived?: boolean
+          body?: string | null
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          is_seed?: boolean
+          kind?: string
+          pillar?: string | null
+          times_used?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      content_settings: {
+        Row: {
+          pillars: Json
+          wired_keywords: Json
+          weekly_target: number
+          runtime_low: number
+          runtime_high: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          pillars?: Json
+          wired_keywords?: Json
+          weekly_target?: number
+          runtime_low?: number
+          runtime_high?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          pillars?: Json
+          wired_keywords?: Json
+          weekly_target?: number
+          runtime_low?: number
+          runtime_high?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string | null
@@ -453,6 +651,90 @@ export type Database = {
           type?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      ledger_checks: {
+        Row: {
+          checked_at: string
+          claim: string
+          entry_id: string | null
+          id: string
+          script_id: string | null
+          user_id: string
+          verdict: string
+        }
+        Insert: {
+          checked_at?: string
+          claim: string
+          entry_id?: string | null
+          id?: string
+          script_id?: string | null
+          user_id: string
+          verdict: string
+        }
+        Update: {
+          checked_at?: string
+          claim?: string
+          entry_id?: string | null
+          id?: string
+          script_id?: string | null
+          user_id?: string
+          verdict?: string
+        }
+        Relationships: []
+      }
+      ledger_entries: {
+        Row: {
+          counterparty: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          kind: string
+          label: string
+          notes: string | null
+          occurred_on: string | null
+          replacement: string | null
+          source: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          value_number: number | null
+          value_text: string | null
+        }
+        Insert: {
+          counterparty?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          kind?: string
+          label: string
+          notes?: string | null
+          occurred_on?: string | null
+          replacement?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          value_number?: number | null
+          value_text?: string | null
+        }
+        Update: {
+          counterparty?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          kind?: string
+          label?: string
+          notes?: string | null
+          occurred_on?: string | null
+          replacement?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          value_number?: number | null
+          value_text?: string | null
         }
         Relationships: []
       }
@@ -1172,6 +1454,75 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      scripts: {
+        Row: {
+          beats: Json
+          chosen_hook: number | null
+          closing_question: string | null
+          created_at: string
+          cta_keyword: string | null
+          format: string
+          hooks: Json
+          id: string
+          money_cost: string | null
+          piece_id: string | null
+          pillar: string | null
+          raw_material: string | null
+          runtime_target: number | null
+          screen_text: string | null
+          status: string
+          style: string
+          symptom: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          beats?: Json
+          chosen_hook?: number | null
+          closing_question?: string | null
+          created_at?: string
+          cta_keyword?: string | null
+          format?: string
+          hooks?: Json
+          id?: string
+          money_cost?: string | null
+          piece_id?: string | null
+          pillar?: string | null
+          raw_material?: string | null
+          runtime_target?: number | null
+          screen_text?: string | null
+          status?: string
+          style?: string
+          symptom?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          beats?: Json
+          chosen_hook?: number | null
+          closing_question?: string | null
+          created_at?: string
+          cta_keyword?: string | null
+          format?: string
+          hooks?: Json
+          id?: string
+          money_cost?: string | null
+          piece_id?: string | null
+          pillar?: string | null
+          raw_material?: string | null
+          runtime_target?: number | null
+          screen_text?: string | null
+          status?: string
+          style?: string
+          symptom?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

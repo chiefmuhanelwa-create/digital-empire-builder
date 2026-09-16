@@ -71,6 +71,7 @@ import { Route as AuthenticatedAppsTheLeakRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppsTheLadderRouteImport } from './routes/_authenticated/apps.the-ladder'
 import { Route as AuthenticatedAppsTeleprompterRouteImport } from './routes/_authenticated/apps.teleprompter'
 import { Route as AuthenticatedAppsSeedsPipelineRouteImport } from './routes/_authenticated/apps.seeds-pipeline'
+import { Route as AuthenticatedAppsScriptStudioRouteImport } from './routes/_authenticated/apps.script-studio'
 import { Route as AuthenticatedAppsSaleScriptsRouteImport } from './routes/_authenticated/apps.sale-scripts'
 import { Route as AuthenticatedAppsRightSideDiagnosticRouteImport } from './routes/_authenticated/apps.right-side-diagnostic'
 import { Route as AuthenticatedAppsReturnRouteImport } from './routes/_authenticated/apps.return'
@@ -82,6 +83,7 @@ import { Route as AuthenticatedAppsNicheClarityBuilderRouteImport } from './rout
 import { Route as AuthenticatedAppsMsTsSsRouteImport } from './routes/_authenticated/apps.ms-ts-ss'
 import { Route as AuthenticatedAppsMoneySplitRouteImport } from './routes/_authenticated/apps.money-split'
 import { Route as AuthenticatedAppsMethodNamerRouteImport } from './routes/_authenticated/apps.method-namer'
+import { Route as AuthenticatedAppsLedgerRouteImport } from './routes/_authenticated/apps.ledger'
 import { Route as AuthenticatedAppsLeadMagnetRouteImport } from './routes/_authenticated/apps.lead-magnet'
 import { Route as AuthenticatedAppsKnowledgeAuditRouteImport } from './routes/_authenticated/apps.knowledge-audit'
 import { Route as AuthenticatedAppsInvoiceRouteImport } from './routes/_authenticated/apps.invoice'
@@ -93,6 +95,7 @@ import { Route as AuthenticatedAppsFigureCheckRouteImport } from './routes/_auth
 import { Route as AuthenticatedAppsEditBriefRouteImport } from './routes/_authenticated/apps.edit-brief'
 import { Route as AuthenticatedAppsDealsRouteImport } from './routes/_authenticated/apps.deals'
 import { Route as AuthenticatedAppsDaresAssetModelRouteImport } from './routes/_authenticated/apps.dares-asset-model'
+import { Route as AuthenticatedAppsContentOsRouteImport } from './routes/_authenticated/apps.content-os'
 import { Route as AuthenticatedAppsConsistencyBlueprintRouteImport } from './routes/_authenticated/apps.consistency-blueprint'
 import { Route as AuthenticatedAppsConcentrationRouteImport } from './routes/_authenticated/apps.concentration'
 import { Route as AuthenticatedAppsBriefCheckRouteImport } from './routes/_authenticated/apps.brief-check'
@@ -436,6 +439,12 @@ const AuthenticatedAppsSeedsPipelineRoute =
     path: '/apps/seeds-pipeline',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsScriptStudioRoute =
+  AuthenticatedAppsScriptStudioRouteImport.update({
+    id: '/apps/script-studio',
+    path: '/apps/script-studio',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAppsSaleScriptsRoute =
   AuthenticatedAppsSaleScriptsRouteImport.update({
     id: '/apps/sale-scripts',
@@ -500,6 +509,11 @@ const AuthenticatedAppsMethodNamerRoute =
     path: '/apps/method-namer',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAppsLedgerRoute = AuthenticatedAppsLedgerRouteImport.update({
+  id: '/apps/ledger',
+  path: '/apps/ledger',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAppsLeadMagnetRoute =
   AuthenticatedAppsLeadMagnetRouteImport.update({
     id: '/apps/lead-magnet',
@@ -563,6 +577,12 @@ const AuthenticatedAppsDaresAssetModelRoute =
   AuthenticatedAppsDaresAssetModelRouteImport.update({
     id: '/apps/dares-asset-model',
     path: '/apps/dares-asset-model',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAppsContentOsRoute =
+  AuthenticatedAppsContentOsRouteImport.update({
+    id: '/apps/content-os',
+    path: '/apps/content-os',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAppsConsistencyBlueprintRoute =
@@ -733,6 +753,7 @@ export interface FileRoutesByFullPath {
   '/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
   '/apps/concentration': typeof AuthenticatedAppsConcentrationRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
+  '/apps/content-os': typeof AuthenticatedAppsContentOsRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/deals': typeof AuthenticatedAppsDealsRoute
   '/apps/edit-brief': typeof AuthenticatedAppsEditBriefRoute
@@ -744,6 +765,7 @@ export interface FileRoutesByFullPath {
   '/apps/invoice': typeof AuthenticatedAppsInvoiceRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/apps/ledger': typeof AuthenticatedAppsLedgerRoute
   '/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
   '/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
@@ -755,6 +777,7 @@ export interface FileRoutesByFullPath {
   '/apps/return': typeof AuthenticatedAppsReturnRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
+  '/apps/script-studio': typeof AuthenticatedAppsScriptStudioRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/apps/teleprompter': typeof AuthenticatedAppsTeleprompterRoute
   '/apps/the-ladder': typeof AuthenticatedAppsTheLadderRoute
@@ -835,6 +858,7 @@ export interface FileRoutesByTo {
   '/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
   '/apps/concentration': typeof AuthenticatedAppsConcentrationRoute
   '/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
+  '/apps/content-os': typeof AuthenticatedAppsContentOsRoute
   '/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/apps/deals': typeof AuthenticatedAppsDealsRoute
   '/apps/edit-brief': typeof AuthenticatedAppsEditBriefRoute
@@ -846,6 +870,7 @@ export interface FileRoutesByTo {
   '/apps/invoice': typeof AuthenticatedAppsInvoiceRoute
   '/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/apps/ledger': typeof AuthenticatedAppsLedgerRoute
   '/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
   '/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
@@ -857,6 +882,7 @@ export interface FileRoutesByTo {
   '/apps/return': typeof AuthenticatedAppsReturnRoute
   '/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
+  '/apps/script-studio': typeof AuthenticatedAppsScriptStudioRoute
   '/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/apps/teleprompter': typeof AuthenticatedAppsTeleprompterRoute
   '/apps/the-ladder': typeof AuthenticatedAppsTheLadderRoute
@@ -941,6 +967,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/brief-check': typeof AuthenticatedAppsBriefCheckRoute
   '/_authenticated/apps/concentration': typeof AuthenticatedAppsConcentrationRoute
   '/_authenticated/apps/consistency-blueprint': typeof AuthenticatedAppsConsistencyBlueprintRoute
+  '/_authenticated/apps/content-os': typeof AuthenticatedAppsContentOsRoute
   '/_authenticated/apps/dares-asset-model': typeof AuthenticatedAppsDaresAssetModelRoute
   '/_authenticated/apps/deals': typeof AuthenticatedAppsDealsRoute
   '/_authenticated/apps/edit-brief': typeof AuthenticatedAppsEditBriefRoute
@@ -952,6 +979,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/invoice': typeof AuthenticatedAppsInvoiceRoute
   '/_authenticated/apps/knowledge-audit': typeof AuthenticatedAppsKnowledgeAuditRoute
   '/_authenticated/apps/lead-magnet': typeof AuthenticatedAppsLeadMagnetRoute
+  '/_authenticated/apps/ledger': typeof AuthenticatedAppsLedgerRoute
   '/_authenticated/apps/method-namer': typeof AuthenticatedAppsMethodNamerRoute
   '/_authenticated/apps/money-split': typeof AuthenticatedAppsMoneySplitRoute
   '/_authenticated/apps/ms-ts-ss': typeof AuthenticatedAppsMsTsSsRoute
@@ -963,6 +991,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/return': typeof AuthenticatedAppsReturnRoute
   '/_authenticated/apps/right-side-diagnostic': typeof AuthenticatedAppsRightSideDiagnosticRoute
   '/_authenticated/apps/sale-scripts': typeof AuthenticatedAppsSaleScriptsRoute
+  '/_authenticated/apps/script-studio': typeof AuthenticatedAppsScriptStudioRoute
   '/_authenticated/apps/seeds-pipeline': typeof AuthenticatedAppsSeedsPipelineRoute
   '/_authenticated/apps/teleprompter': typeof AuthenticatedAppsTeleprompterRoute
   '/_authenticated/apps/the-ladder': typeof AuthenticatedAppsTheLadderRoute
@@ -1048,6 +1077,7 @@ export interface FileRouteTypes {
     | '/apps/brief-check'
     | '/apps/concentration'
     | '/apps/consistency-blueprint'
+    | '/apps/content-os'
     | '/apps/dares-asset-model'
     | '/apps/deals'
     | '/apps/edit-brief'
@@ -1059,6 +1089,7 @@ export interface FileRouteTypes {
     | '/apps/invoice'
     | '/apps/knowledge-audit'
     | '/apps/lead-magnet'
+    | '/apps/ledger'
     | '/apps/method-namer'
     | '/apps/money-split'
     | '/apps/ms-ts-ss'
@@ -1070,6 +1101,7 @@ export interface FileRouteTypes {
     | '/apps/return'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
+    | '/apps/script-studio'
     | '/apps/seeds-pipeline'
     | '/apps/teleprompter'
     | '/apps/the-ladder'
@@ -1150,6 +1182,7 @@ export interface FileRouteTypes {
     | '/apps/brief-check'
     | '/apps/concentration'
     | '/apps/consistency-blueprint'
+    | '/apps/content-os'
     | '/apps/dares-asset-model'
     | '/apps/deals'
     | '/apps/edit-brief'
@@ -1161,6 +1194,7 @@ export interface FileRouteTypes {
     | '/apps/invoice'
     | '/apps/knowledge-audit'
     | '/apps/lead-magnet'
+    | '/apps/ledger'
     | '/apps/method-namer'
     | '/apps/money-split'
     | '/apps/ms-ts-ss'
@@ -1172,6 +1206,7 @@ export interface FileRouteTypes {
     | '/apps/return'
     | '/apps/right-side-diagnostic'
     | '/apps/sale-scripts'
+    | '/apps/script-studio'
     | '/apps/seeds-pipeline'
     | '/apps/teleprompter'
     | '/apps/the-ladder'
@@ -1255,6 +1290,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/brief-check'
     | '/_authenticated/apps/concentration'
     | '/_authenticated/apps/consistency-blueprint'
+    | '/_authenticated/apps/content-os'
     | '/_authenticated/apps/dares-asset-model'
     | '/_authenticated/apps/deals'
     | '/_authenticated/apps/edit-brief'
@@ -1266,6 +1302,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/invoice'
     | '/_authenticated/apps/knowledge-audit'
     | '/_authenticated/apps/lead-magnet'
+    | '/_authenticated/apps/ledger'
     | '/_authenticated/apps/method-namer'
     | '/_authenticated/apps/money-split'
     | '/_authenticated/apps/ms-ts-ss'
@@ -1277,6 +1314,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/return'
     | '/_authenticated/apps/right-side-diagnostic'
     | '/_authenticated/apps/sale-scripts'
+    | '/_authenticated/apps/script-studio'
     | '/_authenticated/apps/seeds-pipeline'
     | '/_authenticated/apps/teleprompter'
     | '/_authenticated/apps/the-ladder'
@@ -1795,6 +1833,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsSeedsPipelineRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/script-studio': {
+      id: '/_authenticated/apps/script-studio'
+      path: '/apps/script-studio'
+      fullPath: '/apps/script-studio'
+      preLoaderRoute: typeof AuthenticatedAppsScriptStudioRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/sale-scripts': {
       id: '/_authenticated/apps/sale-scripts'
       path: '/apps/sale-scripts'
@@ -1872,6 +1917,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppsMethodNamerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/apps/ledger': {
+      id: '/_authenticated/apps/ledger'
+      path: '/apps/ledger'
+      fullPath: '/apps/ledger'
+      preLoaderRoute: typeof AuthenticatedAppsLedgerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/apps/lead-magnet': {
       id: '/_authenticated/apps/lead-magnet'
       path: '/apps/lead-magnet'
@@ -1947,6 +1999,13 @@ declare module '@tanstack/react-router' {
       path: '/apps/dares-asset-model'
       fullPath: '/apps/dares-asset-model'
       preLoaderRoute: typeof AuthenticatedAppsDaresAssetModelRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/apps/content-os': {
+      id: '/_authenticated/apps/content-os'
+      path: '/apps/content-os'
+      fullPath: '/apps/content-os'
+      preLoaderRoute: typeof AuthenticatedAppsContentOsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/apps/consistency-blueprint': {
@@ -2191,6 +2250,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsBriefCheckRoute: typeof AuthenticatedAppsBriefCheckRoute
   AuthenticatedAppsConcentrationRoute: typeof AuthenticatedAppsConcentrationRoute
   AuthenticatedAppsConsistencyBlueprintRoute: typeof AuthenticatedAppsConsistencyBlueprintRoute
+  AuthenticatedAppsContentOsRoute: typeof AuthenticatedAppsContentOsRoute
   AuthenticatedAppsDaresAssetModelRoute: typeof AuthenticatedAppsDaresAssetModelRoute
   AuthenticatedAppsDealsRoute: typeof AuthenticatedAppsDealsRoute
   AuthenticatedAppsEditBriefRoute: typeof AuthenticatedAppsEditBriefRoute
@@ -2202,6 +2262,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsInvoiceRoute: typeof AuthenticatedAppsInvoiceRoute
   AuthenticatedAppsKnowledgeAuditRoute: typeof AuthenticatedAppsKnowledgeAuditRoute
   AuthenticatedAppsLeadMagnetRoute: typeof AuthenticatedAppsLeadMagnetRoute
+  AuthenticatedAppsLedgerRoute: typeof AuthenticatedAppsLedgerRoute
   AuthenticatedAppsMethodNamerRoute: typeof AuthenticatedAppsMethodNamerRoute
   AuthenticatedAppsMoneySplitRoute: typeof AuthenticatedAppsMoneySplitRoute
   AuthenticatedAppsMsTsSsRoute: typeof AuthenticatedAppsMsTsSsRoute
@@ -2213,6 +2274,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppsReturnRoute: typeof AuthenticatedAppsReturnRoute
   AuthenticatedAppsRightSideDiagnosticRoute: typeof AuthenticatedAppsRightSideDiagnosticRoute
   AuthenticatedAppsSaleScriptsRoute: typeof AuthenticatedAppsSaleScriptsRoute
+  AuthenticatedAppsScriptStudioRoute: typeof AuthenticatedAppsScriptStudioRoute
   AuthenticatedAppsSeedsPipelineRoute: typeof AuthenticatedAppsSeedsPipelineRoute
   AuthenticatedAppsTeleprompterRoute: typeof AuthenticatedAppsTeleprompterRoute
   AuthenticatedAppsTheLadderRoute: typeof AuthenticatedAppsTheLadderRoute
@@ -2234,6 +2296,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsConcentrationRoute: AuthenticatedAppsConcentrationRoute,
   AuthenticatedAppsConsistencyBlueprintRoute:
     AuthenticatedAppsConsistencyBlueprintRoute,
+  AuthenticatedAppsContentOsRoute: AuthenticatedAppsContentOsRoute,
   AuthenticatedAppsDaresAssetModelRoute: AuthenticatedAppsDaresAssetModelRoute,
   AuthenticatedAppsDealsRoute: AuthenticatedAppsDealsRoute,
   AuthenticatedAppsEditBriefRoute: AuthenticatedAppsEditBriefRoute,
@@ -2246,6 +2309,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsInvoiceRoute: AuthenticatedAppsInvoiceRoute,
   AuthenticatedAppsKnowledgeAuditRoute: AuthenticatedAppsKnowledgeAuditRoute,
   AuthenticatedAppsLeadMagnetRoute: AuthenticatedAppsLeadMagnetRoute,
+  AuthenticatedAppsLedgerRoute: AuthenticatedAppsLedgerRoute,
   AuthenticatedAppsMethodNamerRoute: AuthenticatedAppsMethodNamerRoute,
   AuthenticatedAppsMoneySplitRoute: AuthenticatedAppsMoneySplitRoute,
   AuthenticatedAppsMsTsSsRoute: AuthenticatedAppsMsTsSsRoute,
@@ -2259,6 +2323,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppsRightSideDiagnosticRoute:
     AuthenticatedAppsRightSideDiagnosticRoute,
   AuthenticatedAppsSaleScriptsRoute: AuthenticatedAppsSaleScriptsRoute,
+  AuthenticatedAppsScriptStudioRoute: AuthenticatedAppsScriptStudioRoute,
   AuthenticatedAppsSeedsPipelineRoute: AuthenticatedAppsSeedsPipelineRoute,
   AuthenticatedAppsTeleprompterRoute: AuthenticatedAppsTeleprompterRoute,
   AuthenticatedAppsTheLadderRoute: AuthenticatedAppsTheLadderRoute,

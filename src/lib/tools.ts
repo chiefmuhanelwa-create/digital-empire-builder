@@ -17,6 +17,9 @@ import {
   BellRing,
   ShieldCheck,
   ClipboardCheck,
+  LayoutGrid,
+  Wand2,
+  BookLock,
   Waves,
   Scissors,
   type LucideIcon,
@@ -160,6 +163,46 @@ export const TOOLS: Tool[] = [
   },
 
   // ── Content Creation ─────────────────────────────────────────────────────
+  {
+    // The spine the content tools never had. Hook Bank held its state in
+    // useState and lost it on tab close; the 4E calendar wrote to localStorage,
+    // which never reached the server. Nothing recorded what a piece actually
+    // did — which is the one-shot-tool failure this product exists to correct,
+    // running inside the product itself.
+    name: "Content OS",
+    path: "/apps/content-os",
+    tier: "premium",
+    category: "Content Creation",
+    blurb:
+      "Every piece from idea to what it actually did — tracker, calendar, idea bank and a library that shows the number behind every line.",
+    icon: LayoutGrid,
+  },
+  {
+    // PART 1 of the spec, and the only thing here a competitor cannot copy.
+    // Every other AI writing tool sells "generate faster"; this refuses to
+    // print a number the user cannot defend. The value compounds with use and
+    // the data is theirs — switching means rebuilding it somewhere else.
+    name: "The Ledger",
+    path: "/apps/ledger",
+    tier: "premium",
+    category: "Content Creation",
+    blurb:
+      "Your own verified numbers — and an engine that refuses to write a figure that isn't in them.",
+    icon: BookLock,
+  },
+  {
+    // Two houses side by side — NOCHILL (FW-147, 90-105s, confession-led) and
+    // JATHO (prohibition hook, tap path, seamless loop, 23-45s). The evidence
+    // does not settle which is better for this account, so the tool builds both
+    // and refuses to choose. It writes STRUCTURE and slots, never figures.
+    name: "Script Studio",
+    path: "/apps/script-studio",
+    tier: "premium",
+    category: "Content Creation",
+    blurb:
+      "Two scripting houses, three hooks scored against the gate, and a beat map that cannot invent a number.",
+    icon: Wand2,
+  },
   {
     name: "The Positioning Test",
     path: "/positioning",
