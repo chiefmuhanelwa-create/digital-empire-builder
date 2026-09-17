@@ -1,3 +1,11 @@
+// ⛔ FACT-LOCK 2026-09-17 — LIVE PUBLIC SALES COPY (contentpreneur.africa).
+// Never put a number on this page without checking
+// ~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv.
+// Never name the employer, workplace or industry. Never name a real person
+// (Article IV). Governing ICP:
+// ~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md
+// Award claims: say "award-winning". State no total.
+
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -56,6 +64,9 @@ function FoundationCheckout() {
     },
   });
 
+  // ⛔ FACT-LOCK 2026-09-17: "$97" is the SSR fallback only. $97 is NOT a tier on the ruled
+  // ladder (FREE R0 · ENTRY R350–R499 · CORE R1,500–R1,800 · PREMIUM $499/R9,000) — off-ladder,
+  // needs a founder ruling. Display and charge both read USD_DISPLAY; never edit one alone.
   const priceLabel = product
     ? formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country)
     : "$97";

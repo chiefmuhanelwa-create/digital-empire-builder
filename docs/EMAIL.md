@@ -1,11 +1,17 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 > # ⛔ SUPERSEDED — DO NOT COPY FROM THIS FILE
 >
 > Quarantined 2026-09-07. This document carries figures the evidence has since
 > **disproven**, and it must not be used as a source for any script, email, page
 > or product until it has been rebuilt against the audited banks.
 >
-> Known bad figures still present below, left in place deliberately so the record
-> of what was believed is not erased:
+> Known bad figures, **swept out of the body of this file on 2026-09-17** and kept
+> only here, so the record of what was believed is not erased:
 > **R132,500** undercharging · **R180,000/year** AdSense · **R800,000+** ads and
 > affiliates · **R450,000+** partnership value · **R100,000** Netflix (the contract
 > shows a different figure and is under NDA — do not publish either) ·
@@ -19,7 +25,7 @@
 
 # CHKPLT — Email Infrastructure Reference
 
-> The email list is the only platform we own 100%. Instagram can suspend (780K gone). AdSense can disable (R180K/year gone). The email list cannot be suspended.
+> The email list is the only platform we own 100%. Instagram can suspend (780K gone — ⛔ never date it). An ad account can be terminated — his was, at the end of 2024, and two appeals were refused, the second final in May 2025. The email list cannot be suspended. ⛔ The list is **173**.
 
 ---
 
@@ -118,7 +124,7 @@ Any reply or engagement that includes these words → tag `contentpreneur-potent
 ### Email 1 — Day 1 (Trust Building)
 **Subject:** "I owe you more than I've been giving"
 **Purpose:** Introduce Ndivhuwo, the 780K story, what's coming in the sequence
-**Lead:** The loss (780K suspended, AdSense disabled) → why it changed everything
+**Lead:** The loss (780K suspended — ⛔ never dated; the ad account terminated end-2024, two appeals refused) → why it changed everything
 **CTA:** None — just establish trust and set up the next email
 **Tone:** Vulnerable before strong
 
@@ -133,7 +139,7 @@ Any reply or engagement that includes these words → tag `contentpreneur-potent
 **Subject:** "5 ways your content can make money"
 **Purpose:** PAIDS breakdown — most creators only use one stream (A)
 **Teach:** P = Products, A = Ads+Affiliates, I = Information, D = Deals, S = Services
-**Proof:** R23,000 in ONE day from the 'A' stream (AdMarula affiliate link)
+**Proof:** **R23,524** in affiliate commission across **March 2019** — a month, not a day — from the 'A' stream. 41.6% of all affiliate commission ever earned.
 **CTA:** Download PAIDS PDF (if not already)
 
 ### Email 4 — Day 7 (Framework)
@@ -145,8 +151,8 @@ Any reply or engagement that includes these words → tag `contentpreneur-potent
 ### Email 5 — Day 9 (Ownership)
 **Subject:** "I lost 780,000 followers in one morning."
 **Purpose:** River vs Fish Tank — why the email list is the only thing they own
-**Lead:** The Instagram suspension story (August 2025, 780K gone)
-**Teach:** LEFT side = rented platforms (Instagram, AdSense, TikTok). RIGHT side = email list, products, CHKPLT.
+**Lead:** The Instagram suspension story (780K gone). ⛔ **NEVER DATE THE LOSS.**
+**Teach:** LEFT side = rented platforms (Instagram, ad revenue, TikTok). RIGHT side = email list, products, CHKPLT.
 **CTA:** "Start your email list free on MailerLite (free to 1,000 subscribers)"
 
 ### Email 6 — Day 11 (Monetisation)
@@ -158,7 +164,7 @@ Any reply or engagement that includes these words → tag `contentpreneur-potent
 - Micro (10K–50K): R3,000–R8,000
 - Mid (50K–500K): R8,000–R20,000
 - Macro (500K+): R20,000–R100,000+
-**Proof:** R132,500 lost undercharging the first 50 brand deals → R10,500 per Reel (Capitec 2026)
+**Proof:** ⛔ **R132,500 is DISPROVEN** (681 records searched) and "the first 50 brand deals" is wrong — **19 named brands, 23 agencies.** Use instead: a standing **R15,000** quoted for years without ever working the number out, then **R45,000** once one job was properly costed, April 2020, same account same week.
 
 ### Email 7 — Day 13 (Offer)
 **Subject:** "I built something for you"
@@ -180,7 +186,7 @@ For subscribers tagged `contentpreneur-potential`. Subject angles adapt per lane
 |-------|-----|--------------|--------------|---------|
 | A | 15 | "Your salary is SARS's number, not yours" | "Your brand deals aren't an asset — they're a payday" | Contentpreneur Blueprint (free) |
 | B | 18 | Matthew 20 — "You're not too late" | Matthew 20 — "You're not too late" | 11th Hour Playbook (free) |
-| C | 21 | "The shift worker who built R600K between night shifts" | "R600K built while the algorithm kept changing the rules" | 4-Hour Window System (free) |
+| C | 21 | "Built on night shifts, before there was anything to show for it" | "Built while the algorithm kept changing the rules" | 4-Hour Window System (free) | ⛔ no annual total, and never name the employer, workplace or industry
 | D | 25 | "20 years of expertise + zero packaging" | "A full audience + zero owned income" | Foundation Kit |
 | E | 30 | "6 spots. 12 weeks. $499." *(was "20 weeks. R18,000" — repriced 2026-07-27)* | "6 spots. 12 weeks. $499." | Contentpreneur Accelerator PRO |
 
@@ -189,7 +195,7 @@ For subscribers tagged `contentpreneur-potential`. Subject angles adapt per lane
 ## Email Copy Rules (NOCHILL Voice)
 
 1. **Subject line:** Specific amount OR story hook OR direct question. Never vague.
-   - ✅ "I lost R180,000/year in one email from Google"
+   - ✅ "One email from Google ended my ad revenue. Two appeals. Both refused." ⛔ **R180,000/year is BANNED** — 13 payments, peak month $260.01.
    - ❌ "Important update about your account"
 
 2. **Opening:** Lead with the truth they need to hear, not a greeting.

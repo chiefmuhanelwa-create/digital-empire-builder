@@ -1,3 +1,22 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
+> ⛔ **"CALLED EXPERT" IS RETIRED — 2026-09-01.** The ICP1 "Called Expert" (32–50,
+> R9,000–R45,000) was never measured; when it was — **median age 21, two people over 32
+> out of 70, zero purchasers.** The term and the ICP1/ICP2 split must never appear in
+> copy, a product title, a hook, an email or a page. Every `Called Expert` and `ICP1`
+> string below is **historical record or a functional slug/enum key only.**
+>
+> **Ruled customer (2026-09-17):** the creator whose income is decided by somebody else,
+> and who finds out afterwards. Gate: **money has moved, or money is visibly blocked**
+> AND **another human being appears in their fear.** Tiers: FREE R0 the Beginner Aspirant
+> (⛔ never sold to) · ENTRY R350–R499 the Blocked · CORE R1,500–R1,800 the Underpriced &
+> Unreserved · PREMIUM $499/R9,000 the Asset-Backed Contentpreneur.
+> Pillars: KEEP IT 30 · PRICE IT 25 · OWN IT 20 · BUILD IT ANYWAY 15 · PROVE IT 10.
+
 # THE CALLED EXPERT MACHINE — Master Blueprint
 **NOCHILL PTY LTD — the system that runs 80–90% without you.** Built from real receipts (this session's automations + the live store + the FB engine + CHKPLT). Founder's only manual job: **learn the data → create video courses → create apps.** Everything else = machines.
 
@@ -125,7 +144,7 @@ These = PAIDS **S** (Services) + **P** (Products), all DARES-compliant, all recu
 - **Email engine (MailerLite)** → affiliate sequences to the list.
 - **Card generator** → "tool of the week" affiliate cards.
 - **Link tracking (Pixel + Vercel Analytics)** → see which affiliate links click.
-- Precedent: AdMarula/Mr Price R23k-in-a-day — the muscle exists; point it at recurring SaaS/tool affiliates this time.
+- Precedent: AdMarula/Mr Price, **R23,524 across March 2019** (⛔ not "R23k in a day") — the muscle exists; point it at recurring SaaS/tool affiliates this time.
 
 ---
 

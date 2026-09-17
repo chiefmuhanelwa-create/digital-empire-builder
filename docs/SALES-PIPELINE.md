@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # CHKPLT — Contentpreneur Sales Pipeline SOP
 ## 12-Step Acquisition: Stranger → Enrolled Student
 
@@ -7,7 +13,7 @@
 
 > ⚠️ **PRICE UPDATE, 2026-07-27:** the Accelerator is now a flat **$499** — the R18,000/R6,500×3 and "3× installment" language throughout this doc (including the live sales script in Step 12) is stale and must not be read verbatim on a real call until rewritten. Flagged here rather than silently rewritten — a live sales script needs a deliberate pass, not a mechanical find-replace.
 
-⚠️ **SCRIPT WARNING:** Any script referencing "R285,000 to SARS" is WRONG. Verified figure is **R207,879.20**. Always use R207,879 in all scripts and discovery calls.
+⚠️ **SCRIPT WARNING:** Any script referencing "R285,000 to SARS" is WRONG. The only publishable figure is **R207,879.20**, and it is **UNPAID** — he is still carrying it. Write it in full, every time: ⛔ never "R207K", never "R207,879" truncated, never R162,174, never R45,705, never a repayment or "it's done" ending. ⛔ *"SARS came for me"* is banned. Permitted, both halves or neither: *"I went to SARS before they came to me. Nobody prompted me and nobody audited me. And it still went wrong."*
 
 ---
 
@@ -40,12 +46,18 @@
 ### 60-Second ICP Profile
 The buyer is a **Contentpreneur** — someone who turns what they know into income they own. Two lanes qualify; money + expertise is the filter for both.
 
-**Lane A — Contentpreneur (still employed):**
-- Age: 32–50
-- Background: Corporate professional, specialist, academic, healthcare, ministry leader, teacher
-- Credentials: Degree / MBA / certification / 10+ years domain expertise
-- Job income: R30,000–R200,000+/month from employment or practice
-- Core pain: Has expertise and calling — lacks the content business SYSTEM to monetise it
+> ⛔ **RETIRED 2026-09-01.** The "Lane A, 32–50, R30,000–R200,000+/month" profile was never
+> measured; when it was — **median age 21, two people over 32 out of 70, zero purchasers.**
+> **Ruled customer (2026-09-17):** *the creator whose income is decided by somebody else, and
+> who finds out afterwards.* Gate: **money has moved, or money is visibly blocked** AND
+> **another human being appears in their fear.** Tiers: FREE R0 the Beginner Aspirant (⛔ never
+> sold to) · ENTRY R350–R499 the Blocked · CORE R1,500–R1,800 the Underpriced & Unreserved ·
+> PREMIUM $499/R9,000 the Asset-Backed Contentpreneur. Governing document:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
+**Lane A — still employed:**
+- Already earns from what they know, but somebody else sets the number
+- Core pain: prices by guessing, has never reserved for tax, income sits on a platform that can end it
 
 **Lane B — Knowledge Creator (self-employed / already earning):**
 - Coach, consultant, podcaster, creator, or founder with real expertise and often an audience
@@ -55,7 +67,7 @@ The buyer is a **Contentpreneur** — someone who turns what they know into inco
 **Both lanes:**
 - Faith: Actively practising Christian
 - Desire: Legacy business, generational impact, nations served
-- WTP: R9,000–R45,000 (investment mindset, not expense mindset)
+- ⛔ **WTP "R9,000–R45,000" is RETIRED 2026-09-01.** Never quote it. The ladder is FREE R0 · ENTRY R350–R499 · CORE R1,500–R1,800 · PREMIUM $499/R9,000 🔒.
 - Green lights: Shows up prepared, has researched you, asks specific questions, has existing assets
 
 ### Where to Find Them
@@ -66,7 +78,7 @@ The buyer is a **Contentpreneur** — someone who turns what they know into inco
 - Referrals: alumni of Contentpreneur Accelerator PRO who refer peers
 
 ### The 6 Sub-Segments
-1. **Shift Worker** (primary proof — ATNS/NOCHILL story is this)
+1. **Shift Worker** (primary proof — the night-shift story. ⛔ **never name the employer**)
 2. **Corporate Trapped** (largest sub-segment)
 3. **Teacher / Lecturer**
 4. **Healthcare Worker**
@@ -213,8 +225,8 @@ Qualify for the programme. Brief description: "I run a 90-day intensive for [the
 ### Opening Script Key Points
 - Be transparent: "I have no agenda to pitch you anything today — I want to understand where you are"
 - Brief personal bio (90 seconds max): Tshikwarani → bathroom floors → night shifts → built and rebuilt
-- ⚠️ SARS figure: **R207,879** (never R285,000)
-- Revenue figure: only use **R600,000** (Meta 12-month payout, 2023 — verified)
+- ⚠️ SARS figure: **R207,879.20**, and it is **UNPAID** (never R285,000, never R207K, never R162,174, never R45,705, never a repayment or "it's done" ending)
+- ⛔ **"R600,000 Meta 12-month payout" is BANNED** — actual is **$22,180.93 remitted, 2021–2025**. Bank-confirmed lifetime is **R453,710.37 across 2017–2025.** ⛔ **State no annual total.**
 
 ### Discovery Layers
 - **Layer 1:** Current reality — platforms, content output, monthly income
@@ -223,7 +235,10 @@ Qualify for the programme. Brief description: "I run a 90-day intensive for [the
 
 ### Pain Amplification
 Reflect their gap back in their own words. Calculate opportunity cost out loud:
-"You said you've been doing this for 3 years without income from it. At R5,000/month — the starting point for monetised experts — that's R180,000 you didn't earn. What would that have changed?"
+"You said you've been doing this for 3 years without income from it. Put your own number on a month of it, and multiply it by 36. What would that have changed?"
+
+> ⛔ **Do not state an opportunity-cost figure on a call.** Make them say the number. Any
+> figure you supply is invented, and R180,000 in particular reads as a banned AdSense claim.
 
 **Sector-specific version (use their actual numbers, not a template):** "You have 15 years of senior banking and wealth expertise. If we organise that knowledge into just one R1,500 masterclass delivered monthly to a small community of 20 professionals, that's R30,000 a month. Over a year, that's R360,000 in unleveraged asset value you're actively leaving on the table. How much longer are you going to leave that vault closed?" — swap in their real sector, their real credential count, and a believable monthly price for their audience.
 
@@ -245,7 +260,7 @@ Before revealing the programme, get an unprompted "yes" to the underlying premis
 ### Programme Tiers
 | Tier | Price | Format | Duration |
 |------|-------|--------|----------|
-| Contentpreneur Accelerator PRO | **R18,000 PIF / R6,500×3** | Cohort (max 10 people) | **12 weeks** (see `docs/CURRICULUM.md`) |
+| Contentpreneur Accelerator PRO | ⛔ **R18,000 PIF / R6,500×3 RETIRED** — premium is **$499 / R9,000** 🔒; live store price is **$997** (unresolved conflict) | Cohort (max 10 people) | **12 weeks** (see `docs/CURRICULUM.md`) |
 | Contentpreneur Accelerator VIP | ⚠️ price conflict — see note | 1:1 coaching | 12 weeks |
 
 > ⚠️ **VIP price discrepancy, not yet resolved:** this row says R25,000; `docs/PRODUCTS.md` and `contentpreneur-vip-tier` in the DB say R45,000. Confirm the real number before quoting VIP on a call.
@@ -257,6 +272,14 @@ Before revealing the programme, get an unprompted "yes" to the underlying premis
 "If you walk away with one paid speaking engagement at R15,000 — that's near break-even. One workshop at R1,500 with 20 people: R30,000. One brand deal using your credentials: R10,000–R50,000. The investment pays for itself with one activation."
 
 ### Price Delivery Script
+> ⛔ **DO NOT READ THE SCRIPT BELOW ON A CALL. Flagged 2026-09-17.** Every figure in it is
+> dead: **R18,000 / 3×R6,500** is RETIRED (premium is **$499 / R9,000** 🔒; the live store
+> charges **$997** — an unresolved conflict). The "break even with one R15,000 speaking
+> engagement or one workshop of 20 people" line is an **invented outcome projection** with
+> no payment record behind it: there is currently **no record of any individual buying
+> knowledge** in `PROOF_BANK.csv`. Left in place, not rewritten — a script read aloud to a
+> real human needs a deliberate pass and a settled price, not a find-replace.
+
 "The investment for our complete 12-week Accelerator PRO implementation room is R18,000. You can also choose our flexible instalment option of R6,500 across 3 months. To put this in perspective, your newly engineered media kit alone will let you break even with a single paid speaking engagement at R15,000 — or one workshop launch with 20 people."
 
 ### The Golden Rule

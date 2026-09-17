@@ -156,7 +156,7 @@ function HookGeneratorPage() {
                     <Input
                       value={ang}
                       onChange={(e) => setAng(e.target.value)}
-                      placeholder="e.g. I built R600K in 4-hour night-shift windows"
+                      placeholder="e.g. I quoted R15,000 for years without ever costing it"
                     />
                   </Field>
                 </div>

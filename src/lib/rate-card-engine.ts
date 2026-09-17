@@ -36,6 +36,9 @@ export const NICHE_CPM: Record<string, NicheData> = {
     cpm: 453.25,
     global_cpm: "$25",
     notes:
+      // ⛔ FACT-LOCK 2026-09-17: brand names here describe WHO BUYS IN THIS NICHE. They are
+      // market context for the user's rate card — never NoChill's deal proof. Never attach
+      // one of his figures to a brand named in this file.
       "Purchase-decision content. Samsung, Takealot and telcos (MTN, Vodacom) actively buy tech review placements.",
   },
   Lifestyle: {

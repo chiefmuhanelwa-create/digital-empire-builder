@@ -1,11 +1,17 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 > # ⛔ SUPERSEDED — DO NOT COPY FROM THIS FILE
 >
 > Quarantined 2026-09-07. This document carries figures the evidence has since
 > **disproven**, and it must not be used as a source for any script, email, page
 > or product until it has been rebuilt against the audited banks.
 >
-> Known bad figures still present below, left in place deliberately so the record
-> of what was believed is not erased:
+> Known bad figures, **swept out of the stories below on 2026-09-17** and kept only
+> here, so the record of what was believed is not erased:
 > **R132,500** undercharging · **R180,000/year** AdSense · **R800,000+** ads and
 > affiliates · **R450,000+** partnership value · **R100,000** Netflix (the contract
 > shows a different figure and is under NDA — do not publish either) ·
@@ -38,18 +44,24 @@
 **ICP:** Both | **4E:** Encourage | **Shadow Fear:** SF1 (Wasted Life), SF4 (Generational Poverty)
 
 ### Snippet (5–8s)
-> "I used to sleep on bathroom floors. Now I negotiate R100K+ brand deals in boardrooms."
+> "I used to sleep on bathroom floors. Now I walk into boardrooms and name my number before they name theirs."
 
 ### Verified Timeline (DO NOT DEVIATE)
 - NMMU Gqeberha: Pharmacy, DOH Limpopo bursary never came through
-- Helen (Red Lion Hotel, Gqeberha): gave him free room + food for 6 months (had a dream about him)
+- A hotel owner in Gqeberha gave him free room + food for 6 months (had a dream about him). ⛔ Article IV — never name the person or the business.
 - June 2011: Deregistered from NMMU — owed R25K, returned home to Tshikwarani
-- Mid-2011: **Mother Florah passed away** — NOT at UP, BEFORE UP. Farm worker, R13/day (R400/month).
+- Mid-2011: **His mother passed away** — NOT at UP, BEFORE UP. Farm worker, R13/day (R400/month). ⛔ Article IV — never publish her name.
 - Late 2011: Applied to UP with REAP bursary
 - 2012: UP — REAP covered everything, good first year
 - 2013: Failed one module — REAP dropped him immediately, no grace
 - April 2013: Started sleeping in UP bathrooms (2–4 months)
 - Applied for call centre, security company jobs during that period
+> ⛔ **ARTICLE IV GUARD — the employer is named below as internal biography only.**
+> **It may never be written into a script, caption, hook, product description or any public
+> output.** Write "a full time job", "night shifts", "on shift". Not the name, not the airport,
+> not the industry. It breaches his company's rules — and it is already in print, uneditable,
+> in the 2026 book.
+
 - Found ATNS bursary — accepted August 2013
 - Left UP. Started at ATNS.
 - 2014: Deployed to OR Tambo. Bought R6,000 Huawei phone from first salary.
@@ -57,8 +69,8 @@
 
 ### Numbers
 - Before: R0 income, sleeping in UP bathrooms, mother gone, owed NMMU R25K
-- After: R600,000+ annual income, 19 named brands, Netflix/Samsung/Huawei campaigns
-- Timeline: 8 years from bathroom floor to six-figure content empire
+- After: **R453,710.37** in bank-confirmed lifetime receipts across 2017–2025. **19 named brands, 23 agencies.** ⛔ State no annual total.
+- Timeline: 8 years from bathroom floor to a registered company that employs people
 
 ### Lesson
 > Your starting point doesn't determine your destination. The bathroom floor taught me more about building than any university could.
@@ -68,18 +80,19 @@
 
 ---
 
-## STORY 02 — R750 to R100K Brand Deals
+## STORY 02 — R750 to R45,000
 
 **Title:** The Price That Changed Everything
 **ICP:** Both | **4E:** Educate + Encourage | **Shadow Fear:** SF2 (Financial Ceiling), SF3 (Imposter)
 
 ### Snippet (10–12s)
-> "I started accepting R750 for Instagram posts. Then Netflix paid me R100K for the same work. The difference? I learned to price my value, not my desperation."
+> "My second brand deal was R750. For years after that I quoted R15,000 without ever working the number out. In April 2020 I actually costed one job — same account, same week — and quoted R45,000. The difference was not my audience. It was that I had done the arithmetic."
 
 ### Numbers
-- Before: R750 per sponsored post
-- After: R100,000 per deal (Netflix), R25,000/month retainer (Savanna Cider × 4 months)
-- Turning point: Learned that 18% engagement rate was worth more than 1M ghost followers
+- First brand deal: **R350** (2017). Second: **R750**, same month.
+- Standing rate quoted for years: **R15,000** — never a number he had worked out
+- Costed one job properly, **April 2020**: quoted **R45,000**, same account, same week
+- ⛔ Banned: R100,000 per deal · any Netflix figure (under NDA) · R25,000/month Savanna · 18% engagement (current IG median is **2.78%**)
 
 ### Lesson
 > Undercharging is not humility. It is ignorance. Learn what your audience is worth to a brand — then charge for that.
@@ -89,19 +102,19 @@
 
 ---
 
-## STORY 03 — Huawei R6,000 Investment
+## STORY 03 — The R6,000 Phone
 
 **Title:** The R6K Bet That Built Everything
 **ICP:** Both | **4E:** Educate | **Shadow Fear:** SF2 (Financial Ceiling)
 
 ### Snippet (10–15s)
-> "I bought a R6,000 Huawei with my first salary in 2014. That phone built R600,000+ in brand deals. 10,000% ROI. The equipment is not the barrier. The decision is."
+> "In 2014 I stood in a shop talking myself out of a R6,000 phone for longer than I want to admit. I bought it anyway. Everything I own started on that phone. The equipment is not the barrier. The decision is."
 
 ### Numbers
-- Investment: R6,000 (from ATNS salary, 2014)
-- Phone: Huawei (first smartphone — built entire content career from it)
-- ROI: R600,000+ in brand deals within years
-- Return multiple: 100x+
+- Investment: **R6,000** (2014, from a R6,000 monthly salary — his own money, first phone)
+- First smartphone — the whole content career was built from it
+- ⛔ State no ROI figure and no lifetime total here. Bank-confirmed lifetime is **R453,710.37**; "R600,000" is not in the ledger.
+- ⛔ Never name the phone brand as deal proof, and never name the employer the salary came from
 
 ### Lesson
 > Strategic investment beats waiting for perfect conditions. The barrier is rarely the tool — it's the decision to use what you have.
@@ -117,10 +130,10 @@
 **ICP:** Both | **4E:** Educate | **Shadow Fear:** SF9 (Platform Dependency)
 
 ### Snippet (12–15s)
-> "Lost my 780K Instagram account overnight. False copyright claim. Appeal denied. Revenue increased. Because I owned my email list. Build what they can't take."
+> "Lost my 780K Instagram account overnight. Appeal refused. Revenue held, because I owned my email list. Build what they can't take." ⛔ Never date the loss.
 
 ### Numbers
-- Followers lost: ~780,000 (August 2025)
+- Followers lost: **~780,000**. ⛔ **NEVER DATE THIS.** No month, no year.
 - Recovery: Revenue did not drop — the Tank (email list + CHKPLT) was full
 - Platform history: Had also lost account earlier (noted in multiple sources — peak was 800K)
 
@@ -132,9 +145,9 @@
 
 ---
 
-## STORY 05 — SARS R207K Tax Debt
+## STORY 05 — The SARS Assessment
 
-**Title:** The R207K Lesson I'm Still Carrying
+**Title:** The R207,879.20 Lesson I'm Still Carrying
 **ICP:** Both | **4E:** Educate | **Shadow Fear:** SF2 (Financial Ceiling)
 
 ### VERIFIED FIGURE — DO NOT ALTER
@@ -144,13 +157,13 @@
 - ⛔ Never state a final-debt figure, a waived-penalty figure, a monthly amount, a number of months, or the mechanism used — internal records contradict each other and none of it is settled.
 - ⛔ Never publish a SARS/VDP/case reference number. Never name a tax practitioner or firm.
 
-**NEVER USE:** R285,000 (unverified) | R207,869 (slightly wrong) | any repayment or "it's done" ending
+**NEVER USE:** R285,000 (unverified) | R207,869 or "R207K" (rounding/transcription errors) | R162,174 (final-debt figure) | R45,705 (waived penalties) | any repayment or "it's done" ending | the framing *"SARS came for me"* — it inverts the evidenced sequence
 
 ### Snippet (15–18s)
 > "I owe SARS R207,879. Not because I was hiding. Because nobody told me Meta payouts were taxable. I came forward myself. And I'm still carrying it. Here's what you need to know before it's your turn."
 
 ### Lesson
-> Come forward before SARS comes for you — but understand that coming forward doesn't erase it. You carry it. Every brand deal, Meta payout, and AdSense cent — SARS can see it. So reserve the money before it is owed: 25% SARS, 10% business, 65% yours. That's the 35% Rule, applied the day the money lands, not at year end.
+> I went to SARS before they came to me. Nobody prompted me and nobody audited me. And it still went wrong. Coming forward doesn't erase it. You carry it. Every brand deal, Meta payout, and AdSense cent — SARS can see it. So reserve the money before it is owed: 25% SARS, 10% business, 65% yours. That's the 35% Rule, applied the day the money lands, not at year end.
 
 ### Products This Story Sells
 - Tax Guide for Content Creators (R299) | PAIDS Starter Course
@@ -163,7 +176,7 @@
 **ICP:** Both | **4E:** Encourage | **Shadow Fear:** SF1 (Wasted Life), SF6 (Wrong Path)
 
 ### Snippet (12–15s)
-> "My family kept asking 'when are you getting a real job?' I had no answer. I just kept building. Now I employ 3 people and earn more than most degree holders. Your path doesn't need their approval — it needs to be walked."
+> "My family kept asking 'when are you getting a real job?' I had no answer. I just kept building. Now I employ three people. Your path doesn't need their approval — it needs to be walked."
 
 ### Numbers
 - Decision: Dropped out (NMMU 2011, UP never completed)
@@ -178,27 +191,19 @@
 
 ---
 
-## STORY 07 — First Netflix Deal
+## STORY 07 — ⛔ WITHDRAWN 2026-09-17
 
-**Title:** When Netflix Said Yes
-**ICP:** Both (esp. ICP 1) | **4E:** Educate | **Shadow Fear:** SF3 (Imposter), SF5 (Insignificance)
+**Title:** *(withdrawn — do not write this story)*
 
-### Snippet (15–18s)
-> "Netflix approached me when I had 100K followers. I quoted R100,000 for 3 posts. They said yes in 24 hours. Not because of my follower count — because of my 18% engagement rate and what I knew to say."
-
-### Numbers
-- Followers at time: 100,000
-- Engagement rate: 18% (brands care about this more than follower count)
-- Deal value: R100,000
-- Posts delivered: 3
-- Response time: 24 hours
-- Agency: Eclipse Comms (Kylie Reid, kylie@eclipsecomms.com)
-
-### Lesson
-> Brands buy engagement and relevance, not vanity metrics. Know your value before they call — you only get one chance to price it right.
-
-### Products This Story Sells
-- Brand Deal Bible | Pitch Masterclass | Rate Card Generator | Contentpreneur Accelerator PRO
+> ⛔ **The whole story is withdrawn.** The contract is **under NDA** and neither the
+> published figure nor the real one may be stated. The **18% engagement** claim is
+> undated and unsupported — current IG median is **2.78%**. The agency contact that
+> stood here has been deleted: **never publish a named individual's name or email**
+> (Article IV).
+>
+> **Use instead:** the pricing story in **STORY 02** — standing **R15,000** → costed
+> and quoted **R45,000** in April 2020, same account, same week. The highest evidenced
+> fee on file is **Flying Fish R50,000, contracted.**
 
 ---
 
@@ -208,14 +213,13 @@
 **ICP:** Both | **4E:** Educate | **Shadow Fear:** SF1 (Wasted Life)
 
 ### Snippet (18–20s)
-> "Posted 3x daily for 6 months. Got 2M views. Made R0 from content. Burned out completely. Switched to 1 strategic post per week with a monetisation system behind it. Made R50K that month."
+> "Posted three times a day for six months. Made nothing from any of it. Burned out completely. Switched to one strategic post a week with a monetisation system behind it — and for the first time the content had somewhere to send people." ⛔ No revenue figure: there is no payment record behind one.
 
 ### Numbers
 - Hustle period: 6 months, 3 posts per day
-- Views generated: 2 million
-- Revenue from 6 months of hustle: R0
+- Revenue from 6 months of hustle: **R0**
 - Post-system: 1 post per week with SEEDS + PAIDS structure
-- Revenue first month after switch: R50,000
+- ⛔ **R50,000 first month after the switch is WITHDRAWN** — no payment record. ⛔ The 2M view count is unverified.
 
 ### Lesson
 > Consistency without strategy is just exhausting. You don't need more content — you need a smarter system.
@@ -225,39 +229,32 @@
 
 ---
 
-## STORY 09 — Samsung Partnership
+## STORY 09 — ⛔ WITHDRAWN 2026-09-17
 
-**Title:** One Post, 18-Month Partnership
-**ICP:** Both (esp. ICP 1) | **4E:** Educate | **Shadow Fear:** SF2 (Financial Ceiling), SF5 (Insignificance)
+**Title:** *(withdrawn — do not write this story)*
 
-### Snippet (12–15s)
-> "One Samsung post led to an 18-month partnership worth R450K+. The difference: I asked what success looked like for them — not what they'd pay me. Strategy beats begging."
-
-### Numbers
-- Initial deal: R15,000 (one post)
-- Partnership duration: 18 months
-- Total partnership value: R450,000+
-- Return multiple from first deal: 30x
-- Key question asked: "What does success look like for you?" (not follower count)
-
-### Lesson
-> Solve brand problems — don't just promote products. The creator who understands the brief gets the retainer.
-
-### Products This Story Sells
-- Brand Deal Bible | Pitch Masterclass | PAIDS Pro Course
+> ⛔ **Disproven.** The evidence shows **one week, March 2020, no fee** — not an
+> 18-month partnership and not R450,000. Never name the brand as deal proof and
+> never state the escalation.
+>
+> **The real, evidenced version of "solve their problem and the deal grows":**
+> a **three-month deal that became six**, and the unprompted weekly performance
+> reports sent to three independent agencies in 2019–2020 — one of whom replied
+> that he was **the only influencer who had ever done it**. That is behavioural
+> proof, third-party, and it does not decay.
 
 ---
 
 ## STORY 10 — Ubuntu Principle
 
-**Title:** 200 Creators to Their First R10K Month
+**Title:** Rising Together
 **ICP:** ICP 1 (primary) | **4E:** Encourage | **Shadow Fear:** SF10 (Legacy Void)
 
 ### Snippet (15–18s)
-> "I share everything I know because Ubuntu teaches: your success doesn't diminish mine. Lifted creators to their first R10K month. Their wins are my legacy — for children's children."
+> "I share everything I know because Ubuntu teaches: your success doesn't diminish mine. Their wins are my legacy — for children's children." ⛔ No student-results count: there is no record behind one.
 
 ### Numbers
-- Creators lifted to first R10K/month: 200+
+- ⛔ **"200+ creators lifted to their first R10K month" is WITHDRAWN** — unsupported. State no student-results number.
 - Principle: Ubuntu — "Umuntu ngumuntu ngabantu" (a person is a person through other people)
 - CHKPLT mission: 153 products — "153 fish. No net broken." (John 21:11)
 
@@ -269,24 +266,24 @@
 
 ---
 
-## STORY 11 — AdMarula, OfferForge & The R23K Day
+## STORY 11 — AdMarula, OfferForge & The March 2019 Month
 
-**Title:** R23,000 From a Link. While Posting About Something Else.
+**Title:** R23,524 From Links. While Posting About Something Else.
 **ICP:** Both | **4E:** Educate | **Shadow Fear:** SF2 (Financial Ceiling), SF9 (Platform Dependency)
 
 ### Snippet (5–8s)
-> "I made R23,000 in one day from an affiliate link. Not a brand deal. Not a product launch. One link. One post. R23,000. Most SA creators don't even know this stream exists."
+> "R23,524 in affiliate commission in one month — March 2019. Not a brand deal. Not a product launch. Links, in content I was making anyway. That one month is 41.6% of every rand of affiliate commission I have ever earned. Most SA creators don't even know this stream exists."
 
 ### Full Story
-In 2019 I joined two SA affiliate networks — AdMarula and OfferForge. OfferForge gave me R3,000 a month from products I was recommending anyway. Consistent. Quiet. No filming. Then in March 2019, AdMarula ran a Mr Price campaign. I posted once. Woke up to R23,000. One day. One link. And when Google killed my AdSense in December 2024 — took R180,000 a year off my table overnight — my income didn't collapse. Because I had the other PAIDS streams running. That's not luck. That's PAIDS as a survival system.
+In 2019 I joined two SA affiliate networks — AdMarula and OfferForge. OfferForge paid me **R36,050.50 across 10 payments between 2017 and 2019**, from products I was recommending anyway. Consistent. Quiet. No filming. Then March 2019 happened: **R23,524 in commission in that one month** — 41.6% of all the affiliate commission I have ever earned. And when my ad account was terminated at the end of 2024 — **two appeals, both refused, the second final in May 2025** — my income didn't collapse. Because I had the other PAIDS streams running. That's not luck. That's PAIDS as a survival system.
 
 ### Verified Numbers
-- OfferForge: R3,000/month consistent
-- AdMarula (Mr Price, March 2019): **R23,000 in ONE DAY**
-- AdMarula total: R38,070+
-- Meta/Facebook monetisation (all years): ~R600,000
-- Google AdSense (website, annual at peak): R180,000/year — **disabled by Google December 2024**
-- **Total Ads & Affiliates (all streams, all years): R800,000+**
+- OfferForge: **R36,050.50** across 10 payments, 2017–2019
+- Affiliate commission, **March 2019**: **R23,524** — a **month**, not a day. 41.6% of all affiliate commission ever earned.
+- AdMarula: **R41,562.15 received** (R56,564 invoiced — always state *received*)
+- Meta: **$22,180.93 remitted**, 2021–2025, inward telegraphic transfers
+- Ad account **terminated end-2024**; **two appeals refused**, the second final **May 2025**
+- ⛔ **WITHDRAWN:** "R23,000 in ONE DAY" · "R38,070+" · "~R600,000 Meta" · "AdSense R180,000/year" (13 payments, peak month **$260.01**) · "Total Ads & Affiliates R800,000+" (not reconstructable)
 
 ### Lesson
 > The "A" in PAIDS is the most passive and most underused stream in SA. You're already recommending products — you're just not getting paid for it. And when any platform kills your income — and they will — the other streams keep you alive.
@@ -300,20 +297,20 @@ In 2019 I joined two SA affiliate networks — AdMarula and OfferForge. OfferFor
 
 | Topic | Stories to Use |
 |-------|---------------|
-| Brand deals / negotiation | 02 (R750→R100K) · 07 (Netflix) · 09 (Samsung) |
-| Pricing confidence | 02 (R750→R100K) · 07 (Netflix) |
-| Starting from nothing | 01 (Bathroom Floors) · 03 (Huawei R6K) |
-| Platform independence | 04 (780K lost) · 11 (AdSense killed) |
-| Tax / SARS | 05 (R207K debt) |
+| Brand deals / negotiation | 02 (R750 → R45,000) |
+| Pricing confidence | 02 (R750 → R45,000) |
+| Starting from nothing | 01 (Bathroom Floors) · 03 (The R6,000 Phone) |
+| Platform independence | 04 (780K lost — never dated) · 11 (ad account terminated) |
+| Tax / SARS | 05 (the R207,879.20 assessment, unpaid) |
 | Resilience / rebuilding | 01 (Bathroom Floors) · 06 (Family Shame) |
 | Systems over hustle | 08 (Burnout) |
-| Long-term brand partnerships | 09 (Samsung) |
+| Long-term brand partnerships | ⛔ 09 withdrawn — use the three-month deal that became six |
 | Legacy / community | 10 (Ubuntu) |
-| Investment mindset | 03 (Huawei R6K) |
-| Passive income / affiliates | 11 (AdMarula R23K) |
-| Platform betrayal / diversification | 04 (780K) · 11 (AdSense) |
-| DARES in action | 11 (income survived AdSense kill) · 08 (system → R50K) |
-| Contentpreneur positioning | 07 (Netflix) · 09 (Samsung) · 10 (Ubuntu) |
+| Investment mindset | 03 (The R6,000 Phone) |
+| Passive income / affiliates | 11 (AdMarula, March 2019) |
+| Platform betrayal / diversification | 04 (780K, never dated) · 11 (ad account terminated) |
+| DARES in action | 11 (income survived the termination) · 08 (system over hustle) |
+| Contentpreneur positioning | 10 (Ubuntu) · the behavioural proof (weekly reports to three agencies) |
 
 ---
 

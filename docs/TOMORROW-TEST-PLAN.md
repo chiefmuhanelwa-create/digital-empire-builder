@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # CHKPLT Funnel — 100% Functionality Test Plan
 
 > Goal: a fully functioning funnel with NOTHING untouched. Tested as a **user** and an **admin**, front-end and back-end.
@@ -7,6 +13,11 @@
 ---
 
 ## A. DATA INTEGRITY (do first — these silently break purchases)
+
+> ⛔ **FACT-LOCK 2026-09-17.** The `called-expert-*` slugs below are **functional database
+> identifiers only** — "Called Expert" is RETIRED 2026-09-01 and must never appear as
+> audience language, a product title, or in any copy. Do not rename the slugs: URLs and LMS
+> grants key off them.
 
 - [ ] **Every purchasable slug is `published`** — query `products` where status='published'; confirm these exist: called-expert-foundation-kit, called-expert-starter-bundle, called-expert-inner-circle, called-expert-foundations, called-expert-facilitator, contentpreneur-90day-cohort, creator-swipe-vault, asset-accelerator, + the 8 ICP2 products. (Unpublished slug → `initializeCheckout` fails.)
 - [ ] **Every paid product has a real `download_path`** — null/empty → buyer sees "No download available" after paying. List products where download_path IS NULL and status='published' AND is_free=false → fix each.

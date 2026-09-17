@@ -20,8 +20,13 @@ export const Route = createFileRoute("/_authenticated/apps/hook-bank")({
 // 120 hooks across six categories, every one annotated against R x A x C x U^B.
 // Ported from the founder's own content system, with one change that matters:
 // the hooks built on his receipts are marked STRUCTURE ONLY. A buyer copying
-// "I went from sleeping in university bathrooms to R600K" is borrowing proof,
+// "I went from sleeping in university bathrooms to [his own figure]" is borrowing
+// proof,
 // and this audience sells on being trustworthy. They get the shape instead.
+//
+// FACT-LOCK 2026-09-17: the bank was swept for banned and unsourced figures.
+// Check ~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv before adding any
+// number, and never name the employer, workplace or industry.
 
 function HookBank() {
   const { access } = useKitAccess();

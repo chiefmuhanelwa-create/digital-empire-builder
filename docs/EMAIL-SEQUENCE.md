@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # CHKPLT — The 5-Day Email Nurture Sequence (Ready to Paste into MailerLite)
 
 > Reconciles `docs/COVENANT-ENGINE.md` §5.3 (the detailed blueprint draft) with
@@ -57,7 +63,7 @@ Most people try to fix this by buying more tools. Wrong lever. Fix Mindset first
 
 ---
 
-## Email 3 (Day 4) — "200,000 followers and 47 email subscribers"
+## Email 3 (Day 4) — "The follower count that meant nothing"
 
 **Subject:** The follower count that meant nothing
 **Preview text:** No links today. Just the truth.
@@ -66,13 +72,13 @@ Most people try to fix this by buying more tools. Wrong lever. Fix Mindset first
 
 I'm not going to sell you anything in this email.
 
-There was a point where the numbers looked good from the outside — 200,000 Facebook followers, brand deals coming in — and I started an email list that got **47 subscribers**. Forty-seven people. That is humbling when you are celebrating 200,000 anywhere else. It turned out to be the only number that mattered. It grew to 100,000.
+There was a point where the numbers looked good from the outside — a big following, brand deals coming in — and then I started an email list. The list was tiny. Humbling, next to a follower count. It turned out to be the only number that mattered, and it is **173 people today**. That number is real, and I can reach every one of them without asking anybody's permission.
 
-Later, a different kind of number hit: **Instagram suspended the account in August 2025. 780,000 followers, gone, in 24 hours. No warning, no appeal window, no timeline.**
+Later, a different kind of number hit: **Instagram suspended the account. 780,000 followers, gone. No warning, no appeal window, no timeline.**
 
 That's rented land. The algorithm is the landlord. It can evict you with no notice, and there's no court you can appeal to.
 
-What survived that suspension: those 47 people, grown up. When Instagram suspended my 780K account, I still had 100K people I could email that same day. Same list you're reading this on right now. Owned land — nobody can suspend it, shadowban it, or change the rules on it overnight.
+What survived that suspension was the list. When Instagram suspended my 780K account, I still had people I could email that same day. The same list you're reading this on right now. Owned land — nobody can suspend it, shadowban it, or change the rules on it overnight.
 
 There's also a tax story I don't tell often — a SARS assessment that hit R207,879.20 because income was coming in with nobody telling me to set 25% aside. I came forward and corrected it rather than hide from it. I'm still carrying it. And that's the lesson I'll never unlearn: **untracked income becomes a debt with your name on it.**
 

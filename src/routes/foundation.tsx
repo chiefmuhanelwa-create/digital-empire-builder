@@ -1,3 +1,11 @@
+// ⛔ FACT-LOCK 2026-09-17 — LIVE PUBLIC SALES COPY (contentpreneur.africa).
+// Never put a number on this page without checking
+// ~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv.
+// Never name the employer, workplace or industry. Never name a real person
+// (Article IV). Governing ICP:
+// ~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md
+// Award claims: say "award-winning". State no total.
+
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,20 +40,22 @@ import { TOOL_COUNT, WORKBOOK_COUNT, VIDEO_LESSON_COUNT } from "@/lib/kit-conten
 //      Every "Step 2 of 3" and the whole "since the free kit" section is gone.
 //      Most people who land here have never seen the Starter Kit, and a page
 //      that assumes they did tells them they are in the wrong place.
-//   3. "Use Unathi, Kea and Lerato's language — understandable words — that
+//   3. "Use the subscribers' own language — understandable words — that
 //      will make them say, THIS IS ME."
+//
+// ⛔ FACT-LOCK 2026-09-17: real respondents anonymised below (Article IV — never
+// name a real person, and never carry identifying detail in a repo).
 //
 // So the vocabulary here is theirs, not a copywriter's. Their actual words,
 // from actual messages:
 //
-//   Lerato   "I'm not sure how to put that in one sentence."
-//            Academic support advisor. Two of her students won scholarships.
-//            Has never charged. Strangers pass her personal number around.
-//   Kea      "I am just not too certain in terms of pricing and at what point
-//            do I start charging."
-//   Unathi   "I am not starting from zero, but I do feel like I need direction."
-//            "I published my first book a few years ago, although I did not
-//            actively promote it."
+//   Respondent A  "I'm not sure how to put that in one sentence."
+//                 Coaches people to real results. Has never charged for it.
+//   Respondent B  "I am just not too certain in terms of pricing and at what
+//                 point do I start charging."
+//   Respondent C  "I am not starting from zero, but I do feel like I need
+//                 direction." / "I published a book a few years ago, although I
+//                 did not actively promote it."
 //
 // Note how plain that is. Nobody says "monetise your expertise" or "unlock your
 // potential". They say not too certain, direction, not sure how to put it. The
@@ -109,6 +119,10 @@ function FoundationFunnel() {
 
   // formatPrice NEEDS the slug and the country. Without them it falls through to
   // a generic ZAR→USD conversion and shows "$94" to everybody.
+  // ⛔ FACT-LOCK 2026-09-17: "$97" is the SSR fallback only — the real price comes from
+  // USD_DISPLAY via formatPrice, and checkout.functions.ts charges from the same map.
+  // $97 is NOT a tier on the ruled ladder (FREE R0 · ENTRY R350–R499 · CORE R1,500–R1,800 ·
+  // PREMIUM $499/R9,000). Off-ladder. Needs a founder ruling — do not reprice by guesswork.
   const priceLabel = product
     ? formatPrice(product.price_cents, product.currency, product.is_free, product.slug, country)
     : "$97";
@@ -234,6 +248,25 @@ function FoundationFunnel() {
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {[
+
+            /* ⛔ FACT-LOCK 2026-09-17 — RETIRED PERSONA, LIVE ON A PUBLIC PAGE.
+               The three profiles below are the credentialed-professional ICP
+               (MBA, fifteen years, qualification, medical/finance/academic),
+               RETIRED 2026-09-01: never measured, median measured age 21, two
+               people over 32 out of 70, zero purchasers.
+
+               Ruled customer (2026-09-17): the creator whose income is decided
+               by somebody else, and who finds out afterwards. Gate: money has
+               moved, or money is visibly blocked, AND another human being
+               appears in their fear.
+
+               NOT rewritten here — repositioning a live sales page is a founder
+               decision, not a sweep. Two things to decide together:
+                 1. whether this page keeps addressing the retired persona;
+                 2. Article IV — these are real subscribers. "Fifteen years, an
+                    MBA, a published book, twelve keynotes" and "two of the
+                    students she helped won scholarships" are identifying, and
+                    they are published. No consent is recorded for either. */
               {
                 who: "An academic support advisor",
                 quote: "I'm not sure how to put that in one sentence.",
@@ -428,8 +461,8 @@ function FoundationFunnel() {
                 "followers gone in one morning, on a platform that owed me no explanation",
               ],
               [
-                "R207,879",
-                "assessed by SARS, because I built the income before I built the structure",
+                "R207,879.20",
+                "assessed by SARS, because I built the income before I built the structure. Unpaid — I am still carrying it.",
               ],
             ].map(([n, l], i) => (
               <Reveal key={n} delay={i * 90}>

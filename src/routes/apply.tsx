@@ -1,3 +1,11 @@
+// ⛔ FACT-LOCK 2026-09-17 — LIVE PUBLIC SALES COPY (contentpreneur.africa).
+// Never put a number on this page without checking
+// ~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv.
+// Never name the employer, workplace or industry. Never name a real person
+// (Article IV). Governing ICP:
+// ~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md
+// Award claims: say "award-winning". State no total.
+
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, useRef} from "react";
@@ -332,7 +340,7 @@ function ApplyPage() {
                   The Foundation Kit First.
                 </h2>
                 <p className="text-[#555] text-base leading-relaxed mb-6 max-w-sm mx-auto">
-                  You're not ready for the Accelerator PRO yet — and that's not a failure. It means we caught your gap before you paid $997 for something you'd struggle to execute. Start with the Foundation Kit. Build the base. Apply again in 90 days.
+                  You're not ready for the Accelerator PRO yet — and that's not a failure. It means we caught your gap before you paid for something you'd struggle to execute. Start with the Foundation Kit. Build the base. Apply again in 90 days.
                 </p>
                 {result.focusPillars && (
                   <p className="text-[#777] text-sm mb-6 max-w-xs mx-auto">

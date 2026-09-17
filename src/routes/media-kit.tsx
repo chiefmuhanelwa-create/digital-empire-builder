@@ -443,7 +443,7 @@ function MediaKitPage() {
                     <Field label="Payment terms"><Input value={k.paymentTerms} onChange={(e) => set("paymentTerms", e.target.value)} placeholder="50% deposit · Net 15 · #ad disclosed" /></Field>
                   </div>
                   <Field label="Availability" hint="A little scarcity reads as premium."><Input value={k.availability} onChange={(e) => set("availability", e.target.value)} placeholder="Accepting Q4 2026 partnerships" /></Field>
-                  <Field label="Press & authority"><Input value={k.press} onChange={(e) => set("press", e.target.value)} placeholder="10 awards · SAMA judge · Meta speaker" /></Field>
+                  <Field label="Press & authority"><Input value={k.press} onChange={(e) => set("press", e.target.value)} placeholder="Award-winning · industry judge · conference speaker" /></Field>
                   <div className="grid gap-5 sm:grid-cols-2">
                     <Field label="Contact email"><Input type="email" value={k.email} onChange={(e) => set("email", e.target.value)} placeholder="you@email.com" /></Field>
                     <Field label="Booking link"><Input value={k.booking} onChange={(e) => set("booking", e.target.value)} placeholder="calendly.com/you" /></Field>

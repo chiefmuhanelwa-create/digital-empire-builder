@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # CHKPLT — Launch Blockers
 
 > Fix these in order before any public launch. 🔴 = launch-critical. 🟡 = should fix before launch. 🟢 = polish.
@@ -83,9 +89,15 @@ _Original (now-obsolete) framing kept for history below:_
 ### BLOCKER-003: Qualification Gate Rejects Everyone
 **What's broken:** `client_stewardship_applications` table has only 1 row, 0 with `determined_routing_status = 'QUALIFIED_FOR_CORE_PROGRAM'`.
 
-**Impact:** The checkout gate for premium programmes (R18,000 / R45,000) checks qualification before allowing payment. If no one is qualified, the premium programmes cannot be purchased by anyone — including the owner.
+**Impact:** The checkout gate for premium programmes checks qualification before allowing payment. ⛔ The **R18,000 / R45,000** band is RETIRED 2026-09-01; premium is **$499 / R9,000** 🔒 (live store price is **$997** — unresolved conflict). If no one is qualified, the premium programmes cannot be purchased by anyone — including the owner.
 
-**Fix:** SEEDED via migration `20260615100000_seed_owner_qualification.sql`. Inserts Ndivhuwo's application with `QUALIFIED_FOR_CORE_PROGRAM` status using verified proof numbers (4,895 subscribers, 5 PAIDS income streams, R300K+/month). The `checkQualification` function reads the most recent application per email — this seed immediately unlocks premium checkout for `chiefmuhanelwa@gmail.com`.
+**Fix:** SEEDED via migration `20260615100000_seed_owner_qualification.sql`. Inserts Ndivhuwo's application with `QUALIFIED_FOR_CORE_PROGRAM` status.
+
+> ⛔ **FACT-LOCK 2026-09-17.** The seeded figures were **not** verified. The email list is
+> **173**, not 4,895. **R300K+/month is unsupported** and `20260711120000` already tried to
+> correct it to a figure derived from the banned "R600,000 Meta over 12 months" claim — the
+> real figure is **$22,180.93 remitted across 2021–2025**. Neither number may be published.
+> Treat this row as a **functional gate-unlock only**, never as a proof source. The `checkQualification` function reads the most recent application per email — this seed immediately unlocks premium checkout for `chiefmuhanelwa@gmail.com`.
 
 **Remaining step:** Run the migration against the live Supabase project (`supabase db push` or apply via Supabase dashboard SQL editor).
 
@@ -303,7 +315,7 @@ BLOCKER-004 (published flag)   ← FLIP (visibility)
     ↓
 POLISH-001 through POLISH-006  ← POLISH (launch quality)
     ↓
-🚀 SOFT LAUNCH (email list of 4,895 subscribers)
+🚀 SOFT LAUNCH (⛔ the email list is **173**, not 4,895)
     ↓
 📣 PUBLIC LAUNCH
 ```

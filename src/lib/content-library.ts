@@ -18,7 +18,7 @@ export type SeedResource = {
 
 export const LIBRARY_KINDS = [
   { key: "hook", label: "Hooks", blurb: "The spoken first line. Second person, presupposes income." },
-  { key: "visual_hook", label: "Visual Hooks", blurb: "The card on screen at 0:00. Different words from the voice. Must land on mute." },
+  { key: "visual_hook", label: "Visual Hooks", blurb: "The card at 0:00. A COMPRESSION of the spoken line — different words, same meaning. Must land on mute." },
   { key: "rehook", label: "Rehooks", blurb: "Beat 5 and beat 9. The exit point and the battery." },
   { key: "cta", label: "CTAs", blurb: "Comment WORD → the thing. Only keywords that resolve." },
   { key: "prompt", label: "Prompts", blurb: "Angles by pillar, each one a leak the viewer already has." },
@@ -96,7 +96,7 @@ export const SEED_LIBRARY: SeedResource[] = [
     evidence: "Free-tool CTAs: 25,300 and 23,100. Purchase CTAs: 11,900 and 11,400." },
   { kind: "cta", title: "⛔ Never \"DM me\"",
     body: "Comment a keyword. A DM ask cannot be automated and cannot be counted.",
-    evidence: "320 orphaned comments already sit on keywords with no destination." },
+    evidence: "A keyword with no destination converts nothing. (The orphan count is SUSPENDED pending re-derivation — R14.)" },
 
   // ── PROMPTS ────────────────────────────────────────────────────────────────
   { kind: "prompt", pillar: "KEEP IT", title: "The bill nobody warns you about",

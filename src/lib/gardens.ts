@@ -66,7 +66,20 @@ export const USD_DISPLAY: Record<string, number> = {
   // USD is the source of truth; the ZAR in price_cents is derived at 16.13 —
   // the rate the live Foundation Kit already implies (R1,565.03 ÷ $97) — so
   // repricing these two moves nothing else.
-  "contentpreneur-90day-cohort": 99700,   // $997 (charged R16,081.61) — was $499, reprice 2026-08-19
+  // ⛔ FACT-LOCK 2026-09-17 — PRICING CONFLICT, NEEDS A FOUNDER RULING.
+  // The Constitution (global CLAUDE.md v1.1, 2026-09-01) rules the Accelerator at
+  // $499 / R9,000 🔒 and states "$499 supersedes $997". That ruling is NEWER than the
+  // 2026-08-19 ruling above and it is 🔒, so $997 is dead on the ledger — but it is what
+  // the site charges today. NOT changed here: this map is read by checkout.functions.ts
+  // as well as formatPrice, so editing it changes what a real buyer is charged. One line,
+  // founder's call: 99700 → 49900. Same question for the VIP tier below, and for the
+  // Foundation Kit's $97, which is not a tier on the ruled ladder at all.
+  // 🔒 RULED 2026-09-17 by the founder: "use $499". Restores the Constitution v1.0
+  // (2026-09-01) ruling, which states "$499 supersedes $997". The 2026-08-19 reprice to
+  // $997 is withdrawn. ⚠️ THIS LINE ONLY CONTROLS THE DISPLAYED PRICE AND THE USD/STRIPE
+  // CHARGE. The ZAR/Paystack amount is read from products.price_cents in Supabase and must
+  // be set to R9,000 separately — see D-81.
+  "contentpreneur-90day-cohort": 49900,   // $499 / R9,000 🔒
   "contentpreneur-vip-tier": 299700,      // $2,997 (charged R48,341.61) — new tier 2026-08-19
   "creator-swipe-vault": 1700,            // $17 order bump (charged R274.28 — verified live 2026-08-25)
   "asset-accelerator": 19700,             // $197 1-click upsell (charged R3,178.46 — verified live 2026-08-25)

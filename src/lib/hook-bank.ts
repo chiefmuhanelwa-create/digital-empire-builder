@@ -7,11 +7,16 @@ import type { Offer } from "./offer-spine";
 // THE PORT PROBLEM, AND WHY THIS FILE EXISTS
 // ==========================================
 // Roughly a fifth of these hooks are not patterns — they are HIS life.
-// "I went from sleeping in university bathrooms to R600K" is not a template a
-// buyer can fill in; used as-is it makes them claim a story that isn't theirs,
-// and this audience is credentialed people whose whole asset is being
-// trustworthy. Handing them borrowed proof is the fastest way to cost them the
-// thing they came here to monetise.
+// FACT-LOCK 2026-09-17: banned and unsourced figures were swept out of
+// data/hooks-120.json in this pass. Never reinstate a rand figure here without
+// checking ~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv, and never name
+// the employer, workplace or industry in a hook.
+//
+// "I went from sleeping in university bathrooms to [his own figure]" is not a
+// template a buyer can fill in; used as-is it makes them claim a story that
+// isn't theirs, and this audience sells on being trustworthy. Handing them
+// borrowed proof is the fastest way to cost them the thing they came here to
+// monetise.
 //
 // So the bank ships with every hook classified. Founder-story hooks are shown
 // as STRUCTURE ONLY, with the shape named and the buyer told to bring their own

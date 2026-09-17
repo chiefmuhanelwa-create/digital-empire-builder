@@ -1,6 +1,25 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+>
+> **This file is a HISTORICAL BUILD LOG, not a proof source.** Its sessions are dated and
+> preserved on purpose — including the numbers that were believed at the time and have
+> since been disproven. **No figure in here is authoritative.** Never lift a rand figure,
+> a follower count, a brand count, an award total or an audience profile out of this file
+> into copy. Go to `PROOF_BANK.csv`.
+>
+> **Retired below, kept as record:** "Called Expert" / ICP1 / ICP2 / 32–50 /
+> R9,000–R45,000 / R9,997–R18,000 (all RETIRED 2026-09-01) · R132,500 · R600K and any
+> annual total · AdSense R180,000 · Samsung R450,000 · Savanna R25,000/mo · Netflix any
+> figure (NDA) · R800,000+ ads and affiliates · "R23,000 in ONE DAY" · "50+ deals" ·
+> any award total. Real people named in past sessions must never be named again
+> (Article IV).
+
 # Learnings.md — CHKPLT Digital Empire Builder
 
-The living record of what was discovered, what broke, what was corrected, and what was decided. Read this alongside `CLAUDE.md` before every session. Treat it as authoritative.
+The living record of what was discovered, what broke, what was corrected, and what was decided. Read this alongside `CLAUDE.md` before every session. **It is authoritative about what happened — never about what is true now.** Every proof figure in it is superseded by `PROOF_BANK.csv`.
 
 ---
 
@@ -833,7 +852,7 @@ Founder asked for proof the maths is still the researched original after the nat
 
 Currency conversion is display-only (engine computes in ZAR, `formatCurrency` converts at render), so it cannot move the underlying maths.
 
-**Calibration note, recorded not acted on:** against the founder's own verified deals the tool's outputs run 3–39× high (Capitec R10,500/Reel vs tool R43,860 at ~100K views; SA Tourism R1,000/deliverable vs R38,834; Savanna R25,000/mo vs R78,948). Founder's decision: **leave the researched constants exactly as built.** Flagged the sharpest risk for the record — the "Floor rate · never go below this" label sits ~4× above a real Capitec offer, so a creator following it literally could decline a genuine deal. No change made.
+**Calibration note, recorded not acted on:** against the founder's own verified deals the tool's outputs run 3–39× high (Capitec R10,500/Reel vs tool R43,860 at ~100K views; SA Tourism R1,000/deliverable vs R38,834; ⛔ **the Savanna R25,000/mo comparator is BANNED** — the evidence shows **R45,000 quoted, 2020**, and no Savanna retainer figure survives). Founder's decision: **leave the researched constants exactly as built.** Flagged the sharpest risk for the record — the "Floor rate · never go below this" label sits ~4× above a real Capitec offer, so a creator following it literally could decline a genuine deal. No change made.
 
 ### Tools Hub: first-party analytics, and the Rate Card rebuilt native
 
@@ -1009,7 +1028,12 @@ A full read-only audit of the live front-end (routes, `clarity-system.ts`, `gard
 - `src/routes/index.tsx` — 6 instances of "30-day, no-questions-asked money-back guarantee" language directly contradicted the real, live `refund-policy.tsx` (7 days, conditional on a technical access issue, repair-or-refund not blanket refund). Rewrote all 6 to accurately reflect the real 7-day policy rather than unilaterally extending the actual legal policy to match the marketing copy — a real guarantee extension is a business decision for the owner, not something to assume.
 - `src/components/PremiumProgramBreakdown.tsx` — the Accelerator PRO's actual sales page described a completely different, generic-influencer-agency curriculum ("The Launchpad Foundation," "Viral Content Engine," "Authority Studio Setup") that does not match the real, seeded, live curriculum (`docs/CURRICULUM.md` — the 7-stage Genesis→Deuteronomy structure, 32 lessons). A paying customer would see one program on the sales page and a different one after logging in. Rewritten to describe the actual seeded lesson content, correct stage names, and Called Expert language throughout (also fixed 2 instances of third-person "Creators"/"elite creators" copy on this page).
 - `docs/EMAIL.md`, `docs/PRODUCTS.md` — both still instructed anyone doing design work to use the old Heritage Gold `#C9A84C`/Charcoal `#1C1C1C`/Cream `#FAF7F0`/Lato spec. The site shipped a different "Modern Professional" slate+amber theme (confirmed deliberate — the old theme is backed up whole in `src/styles.heritage.bak.css`, not deleted). Updated both docs to describe the theme that's actually live, with a note pointing to the backup file if anyone ever wants to revert.
-- New migration `20260711120000_fix_owner_qualification_income_figure.sql` — corrects the owner's own seeded qualification record from R300,000/month (unverified, sourced only from the published book, and inconsistent with the original migration's own "R600K+ annual" comment) to R50,000/month (the verified monthly-equivalent of the real R600,000/12-month Meta payout figure). **Not yet applied — needs `supabase db push` against the live project.**
+- New migration `20260711120000_fix_owner_qualification_income_figure.sql` — corrects the owner's own seeded qualification record from R300,000/month (unverified, sourced only from the published book, and inconsistent with the original migration's own "R600K+ annual" comment) to R50,000/month. **Not yet applied — needs `supabase db push` against the live project.**
+
+  > ⛔ **FACT-LOCK 2026-09-17: this correction was itself wrong.** "R600,000 from Meta over
+  > 12 months" is **BANNED** — the record is **$22,180.93 remitted across 2021–2025**. So
+  > R50,000/month, derived from it, is also banned. **Do not apply this migration as written,
+  > and never publish either figure.**
 
 **Flagged, NOT auto-fixed — these need your decision, not mine:**
 - **`src/utils/evaluator.ts`'s qualification thresholds actively reject the stated ideal customer.** Hard gates require 1,000+ followers, a 100+-subscriber email list, R5,000+/month existing income, and 3+ income streams before someone can even apply for the Accelerator PRO — but the Called Expert is, by this business's own definition, someone with *unexploited* expertise who likely has none of that yet. The homepage FAQ directly promises "works from a standing start of zero followers." I did not change the thresholds — how strict qualification should be is a real business call, not a copy bug.
@@ -1218,7 +1242,15 @@ These files imported from the NOCHILL Knowledge Base (uploaded documents) and ad
 
 ### Proof Numbers Updated in CLAUDE.md
 
-Added from verified credibility report (email archive, 840+ campaigns):
+> ⛔ **THE BLOCK BELOW IS DISPROVEN — DO NOT USE. Kept as the record of what was believed.**
+> **R25,000/month Savanna × 4 = R100,000** → evidence shows **R45,000 quoted, 2020**.
+> **Total Ads & Affiliates R800,000+** → **not reconstructable**; lifetime bank-confirmed is
+> **R453,710.37**. **AdMarula "R23,000 in ONE DAY"** → **R23,524 across March 2019**, a month.
+> **"R38,070+ AdMarula total"** → **R41,562.15 received**. **"18+ brands · 50+ deals"** →
+> **19 named brands, 23 agencies**; never state a deal count. The word *verified* in the line
+> below was never earned — the source was an email archive, not a bank statement.
+
+Added from a credibility report (email archive, 840+ campaigns) — **⛔ never bank-confirmed**:
 - Superbalist / Takealot deal (Nov 2021): R12,000
 - Savanna Cider retainer: R25,000/month × 4 = R100,000
 - Playa Bets retainer (active): R12,500/month
@@ -1227,7 +1259,7 @@ Added from verified credibility report (email archive, 840+ campaigns):
 - SARS: **R207,879.20 assessed** — the only publishable figure. Unpaid, still carried. No final-debt/waived-penalty/monthly/months/mechanism claims.
 - 18+ brands · 23 agencies · 50+ deals confirmed
 
-Story 11 (AdMarula R23K day) added to story bank and referenced in CLAUDE.md.
+Story 11 (AdMarula) added to story bank and referenced in CLAUDE.md. ⛔ The "R23K day" framing was corrected 2026-09-17 to **R23,524 across March 2019**.
 
 ---
 
@@ -1423,7 +1455,10 @@ Spine already matched blueprint. Built the 4 gaps the user picked:
 - **Currency: one currency everywhere = USD.** Old `formatPrice` geo-gated (ZA→R, intl→$), which is why the owner saw a R/$ mix. Rewrote it to ALWAYS render USD: explicit `USD_DISPLAY[slug]` override → native USD → else convert ZAR via `ZAR_PER_USD = 18.5` (rounded to whole $). Charge stays ZAR (Paystack can't bill USD). `country` param kept for signature compat but ignored (`_country`).
 - Added "billed in ZAR at checkout · local equivalent" microcopy at every price point (CheckoutModal, products.$slug, cohort/facilitator cards, apply footer) — honest because Paystack shows ZAR at pay step.
 - Converted ALL hardcoded ZAR price strings → USD: cohort R18,000→$970 (+R6,500×3→$350×3), VIP R45,000→$2,430, niche-clarity R299→$16 (meta+fallback), apply income brackets (labels only; INCOME_MAP scoring values stay ZAR), rejection email, editor-cost lines. Added `contentpreneur-90day-cohort: 97000` to USD_DISPLAY.
-- **KEEP IN RAND:** proof-story figures (R600K Meta, R180K AdSense, R6K phone, R350 deals) — they're verified income receipts (brand bible), not prices. Don't convert.
+- **KEEP IN RAND:** proof-story figures. ⛔ **Two of the four named here are now BANNED:**
+  **R600K Meta** → **$22,180.93 remitted, 2021–2025**; **R180K AdSense** → 13 payments, peak
+  month **$260.01**. Only **R6,000 phone (2014)** and **R350 first deal (2017)** survive.
+  They were never "verified income receipts" — that was the assumption that broke.
 - Admin product list now shows USD (passes slug) + a small "charged R…" hint so the owner still sees the actual ZAR charge.
 - **Colour: cream canvas → WHITE.** Page bg was hardcoded `bg-[#FAF7F0]` inline per-section (NOT the `--background` token), so changing the token alone wasn't enough — had to sed `bg-[#FAF7F0]`→`bg-white` across index/apply/about/site-header (32 spots). Also set `--background:#FFFFFF` for token-driven routes (products/admin/learn).
 - **Gold-text legibility trap:** gold `#C9A84C` as TEXT on white = ~1.9:1 (fails). But gold as FILL (buttons) must stay bright. Can't repoint one token for both. Solution: added `--nx-gold-text:#8A6D1F` (4.8:1 on white = AA), then an UNLAYERED CSS override `.text-banana{color:var(--nx-gold-text)}` (unlayered beats Tailwind's layered utility) + descendant scope `.bg-[#1C1C1C] .text-banana, .bg-[#111111] .text-banana {color:var(--nx-gold)}` so gold text auto-goes deep on white / bright on dark sections. Consolidated all `text-[#C9A84C/D4B65C/...]` → `text-banana` (sed) so they inherit the override. `bg-banana` untouched (buttons stay bright).
@@ -1469,8 +1504,8 @@ Spine already matched blueprint. Built the 4 gaps the user picked:
 - **Portrait video bug:** the Meta talk is a YouTube *Short* but the embed wrapper used `aspect-video` (16:9) → vertical video letterboxed with grey bars. Fix = `aspect-[9/16] max-w-[300px]`. (Constant comment already said "YouTube Short — vertical" — heed it.)
 - **White gap under footer (mobile):** root `<div class="… bg-white … pb-20 sm:pb-0">` put 80px of WHITE padding below the dark `<SiteFooter>` (the pb was to clear the fixed mobile buy-bar). Fix = remove pb from the white root; wrap the footer in `<div class="bg-[#0F172A] pb-20 sm:pb-0">` so the trailing space is dark.
 - **Proof images pipeline (no base64):** owner's images live in iCloud Drive (`~/Library/Mobile Documents/com~apple~CloudDocs/…`, e.g. `SAMA31 - 2025/`, `META/`) and Google Drive (MCP). Local iCloud = plain `cp` (free). Google Drive `download_file_content` returns base64 into context (~1.3× filesize) — AVOID for binaries; prefer the local iCloud copies. Picked the best shot by Read-ing 1–2 candidates (UUID filenames are opaque). Optimized with macOS `sips -Z 1200 -s formatOptions 72` → 1.3M/925K → 122K/188K. Output to `public/proof/`; Vite copies `public/` → `dist/client/` on build. Verified live via image HTTP 200 + grepping the built route chunk (`dist/client/assets/index-*.js`) for the new strings (body is client-rendered, so curl of `/` won't show section text).
-- **Proof-claim accuracy catch:** owner said "10 awards · SAMA 30/31/32 consecutive" but CLAUDE.md verified table said "9 awards · SAMA31", and SAMA32 = 2027 (future as of 2026-06-25). Asked → confirmed **10 awards · SAMA 30 & 31** (dropped 32). Updated both project + global CLAUDE.md. Lesson: when an owner-stated proof number conflicts with the documented verified table OR implies a future date, confirm before publishing (rules forbid fabrication; public + hard to reverse).
-- **Brands on the strip:** owner named Disney + DStv, but chose **verified-only** (Capitec, Standard Bank, Netflix, Suzuki, SA Tourism, Showmax, ABSA) — dropped the undocumented ones.
+- **Proof-claim accuracy catch:** owner said "10 awards · SAMA 30/31/32 consecutive" but CLAUDE.md verified table said "9 awards · SAMA31", and SAMA32 = 2027 (future as of 2026-06-25). Asked → confirmed **10 awards · SAMA 30 & 31** (dropped 32). ⛔ **2026-09-17: state no award total.** An open conflict sits over the count — say *"award-winning"* or name one award. Updated both project + global CLAUDE.md. Lesson: when an owner-stated proof number conflicts with the documented verified table OR implies a future date, confirm before publishing (rules forbid fabrication; public + hard to reverse).
+- **Brands on the strip:** owner named Disney + DStv, but chose **verified-only** (Capitec, Standard Bank, Netflix, Suzuki, SA Tourism, Showmax, ABSA) — dropped the undocumented ones. ⛔ **2026-09-17: the Netflix relationship is under NDA — never publish the name as deal proof, and never publish either figure.**
 - **Housekeeping:** merged `redesign/icp1-modern-professional` → `main` (--no-ff), pushed (`c90ad28..aefb095`). Untracked `.env` (`git rm --cached` + `.gitignore` `.env`/`​.env.*`). ⚠️ `.env` is in prior git HISTORY — owner must rotate the Supabase service-role key + other secrets. Deploy version `20178973`.
 
 ---

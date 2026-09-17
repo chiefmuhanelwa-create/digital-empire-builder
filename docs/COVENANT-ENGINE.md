@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # THE COVENANT ENGINE: NOCHILL PTY LTD OPERATIONAL EMPIRE & BLUEPRINT
 
 **A Comprehensive Architecture Linking Torah Principles, the Contentpreneur Methodology, and CHKPLT SaaS Infrastructure**
@@ -36,7 +42,20 @@ Your audience splits into three tiers under the **Contentpreneur** umbrella. To 
 
 1. **Reach Tier: The DNA Starter (Digital Native Aspiring | Age 18–35):** Your **Top-of-Funnel REACH market**, NOT a core buyer. Passion and phones but no capital and nothing yet to package. They consume short-form content, fill your email list, and buy low-ticket books and templates — then grow INTO a buyer lane over 12 months. The volume layer. Never insulted in copy.
 
-2. **Buyer Lane A: The Contentpreneur (The Unathi-Type | Age 32–50):** Credentialed professionals (teachers, senior corporate managers, financial advisors, medical specialists) earning R30,000–R200,000+/month, still employed. Time-poor, faith-rooted, sitting on unpublished intellectual property. They buy architecture, strategy, and systems that protect their energy and dignity — not hype.
+> ⛔ **RETIRED 2026-09-01.** "ICP 1 / Called Expert / Lane A, 32–50, R9,000–R45,000,
+> R30,000–R200,000+/month" was never measured; when it was — median age 21, two people
+> over 32 out of 70, zero purchasers. **Ruled customer (2026-09-17):** the creator whose
+> income is decided by somebody else, and who finds out afterwards. Gate: money has moved,
+> or money is visibly blocked, AND another human being appears in their fear. Tiers:
+> FREE R0 the Beginner Aspirant (⛔ never sold to) · ENTRY R350–R499 the Blocked ·
+> CORE R1,500–R1,800 the Underpriced & Unreserved · PREMIUM $499/R9,000 the Asset-Backed
+> Contentpreneur. Governing document:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+> The `ICP 1` / `ICP 2` / `called-expert-*` strings that remain below are **functional
+> slugs and enum keys only** — structural, kept so the app and DB keep working. They are
+> never audience language and never appear in copy.
+
+2. **Buyer Lane A — still employed:** already earns from what they know, but somebody else sets the number and they find out afterwards. Time-poor, faith-rooted, sitting on unpublished intellectual property. They buy architecture, strategy, and systems that protect their energy and dignity — not hype. ⛔ Article IV — never name the real subscriber this profile was drawn from.
 
 3. **Buyer Lane B: The Knowledge Creator (coach / consultant / podcaster / creator):** Self-employed or already-earning, already has the knowledge and often the audience, but no system to OWN the income. Tired of brand-deal dependency; wants an asset they own. Also a core buyer — money still qualifies (they already invest in their growth). Distinct from the Reach Tier: Lane B has expertise AND earns.
 
@@ -157,7 +176,7 @@ You publish 3 to 5 high-energy short-form video pieces per week across LinkedIn 
 - **Copywriting Framework:** Hooks are engineered from your *New Voice Bank*, focusing completely on identity and the reframing of career intellect as an asset.
 - **The Direct Script Blueprint:**
   - *Hook (0–3 sec):* "You have an MBA, 12 years of corporate leadership, and your LinkedIn bio barely captures the true depth of what you know. Stop leaving your best years inside an organization's vault."
-  - *Story (3–40 sec):* "I spent years working inside corporate ATNS, dreaming of more, creating in the dark. I discovered that having an audience means nothing if you are building your sandcastle entirely on someone else's rented algorithm beach."
+  - *Story (3–40 sec):* "I spent years working a full time job, dreaming of more, creating in the dark. I discovered that having an audience means nothing if you are building your sandcastle entirely on someone else's rented algorithm beach."
   - *Insight (40–55 sec):* "When you shift your model from vanity views to owned digital infrastructure via the **DARES architecture**, your skills convert into an independent asset that outlasts your employment."
   - *CTA (55–60 sec):* "Do not chase followers. Comment the word **SYSTEM** below, and I will instantly DM you my complete interactive Content Architecture Blueprint."
 
@@ -199,7 +218,7 @@ The email address captured by ManyChat is pushed into MailerLite/ConvertKit, tri
 
 #### Email 4 (Day 6) — "What 90 Days of Structured Building Looks Like"
 
-- **Copywriting Structure:** The proof offering. You showcase screenshots and case study data of an African corporate manager (an elite Unathi-type profile) who successfully mapped her industry curriculum, deployed an automated lead funnel, and secured her first R25,000 paid advisory engagement using her digital asset base.
+- **Copywriting Structure:** ⛔ **BLOCKED 2026-09-17.** This calls for a case study that does not exist: there is **no payment record from an individual buying knowledge** in `PROOF_BANK.csv`, so there is no student result to screenshot, and the R25,000 engagement is invented. Also ⛔ Article IV — never build a case study around a named real person. **An empty slot beats a plausible filler.** Leave this section empty until a real, consented, dated result exists.
 - **CTA:** *"Review what is possible when you stop guessing and install a system."*
 
 #### Email 5 (Day 8) — "The Contentpreneur Cohort — Is This Your Season?"
@@ -227,7 +246,7 @@ Your sales calendar is a high-value asset. The application form acts as a strict
 ### 6.2 Pre-Call Verification Workflow
 
 - **Automated Redirection:** If a user selects "I do not have resources at this stage," the logic bypasses the Calendly link entirely and redirects them to a value-stacked checkout page to purchase the **$97 self-paced Foundation Kit**.
-- **The Authority Filter Video:** If they select "Yes, I am ready" and complete the booking on Calendly, they land on a mandatory confirmation screen. It features an embedded 5-minute video covering your corporate background (from ATNS to enterprise brand partnerships) and explicitly states: *"We run a high-integrity, peer-to-peer boardroom conversation. If you show up to our call without having reviewed our core frameworks, your slot will be automatically canceled to protect the stewardship of our schedules."*
+- **The Authority Filter Video:** If they select "Yes, I am ready" and complete the booking on Calendly, they land on a mandatory confirmation screen. It features an embedded 5-minute video covering his background (⛔ **never name the employer, workplace or industry** — say "a full time job") through to enterprise brand partnerships and explicitly states: *"We run a high-integrity, peer-to-peer boardroom conversation. If you show up to our call without having reviewed our core frameworks, your slot will be automatically canceled to protect the stewardship of our schedules."*
 
 ## SECTION 7: The Zoom Boardroom Sales Framework
 

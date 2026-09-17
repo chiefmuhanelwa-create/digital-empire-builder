@@ -21,10 +21,10 @@ const STREAMS: { id: Sid; letter: string; name: string; examples: string; why: s
     why: "Digital products are your scalable backbone — make once, sell forever. They turn what you know into an asset that earns while you sleep.",
     product: "Package one thing you already teach into a R199–R997 product. The Knowledge Audit names it for you." },
   { id: "a", letter: "A", name: "Ads & Affiliates", examples: "Platform payouts, affiliate links",
-    why: "The most passive, most overlooked stream in SA. You're already recommending products — you're just not paid for it. R23,000 in one day from one AdMarula link proved it to me.",
+    why: "The most passive, most overlooked stream in SA. You're already recommending products — you're just not paid for it. R23,524 in affiliate commission across March 2019, from links I was already sharing, proved it to me.",
     product: "Join one affiliate network this week (AdMarula, OfferForge, Takealot). Add links to content you already make." },
   { id: "i", letter: "I", name: "Information", examples: "Newsletter, membership, the Vault",
-    why: "This is where 'R100K/month without active selling' actually lives. Recurring income that pays whether you show up or not. The single biggest gap in most creators' income.",
+    why: "This is where income without active selling actually lives. Money that pays whether you show up or not. The single biggest gap in most creators' income.",
     product: "Start a paid letter (R99/mo) or a membership. One recurring product changes everything." },
   { id: "d", letter: "D", name: "Deals", examples: "Brand campaigns, retainers",
     why: "One brand deal is a payday. One retainer is a salary. The skill is turning a campaign into recurring — one three-month deal of mine became six that way.",
@@ -263,7 +263,7 @@ function PaidsAuditor() {
       <section className="border-t border-border bg-[var(--bg-surface)]">
         <div className="mx-auto max-w-3xl px-4 py-10 text-center">
           <p className="nx-label">The stream that changes the game · I — Information</p>
-          <p className="nx-body mt-2 max-w-xl mx-auto">“R100K a month without active selling” comes from recurring income: a paid letter, a membership, a vault people pay for monthly. If your I is at zero, that's the whole ceiling on your freedom.</p>
+          <p className="nx-body mt-2 max-w-xl mx-auto">Income that arrives without active selling comes from one place: recurring. A paid letter, a membership, a vault people pay for monthly. If your I is at zero, that's the whole ceiling on your freedom.</p>
           <Link to="/dashboard/foundation-kit" className="cta-glow inline-flex items-center gap-2 mt-6">Back to your kit <ArrowRight className="size-4" /></Link>
         </div>
       </section>

@@ -140,12 +140,29 @@ export function judgeHook(h: HookCandidate): HookVerdict {
   if (hitCategory)
     fail.push(`"${hitCategory}" is a category word. STOP CHARGING PEANUTS did 25,000; the same command with a category noun did 2,388.`);
 
-  // Screen must not be a compression of the voice.
+  // MAX ALIGNMENT — R3, ruled 2026-09-17.
+  //
+  // The card IS a compression of the spoken line: different WORDS, the SAME
+  // MEANING, never a second idea. An earlier version of this check said
+  // "screen states the VERDICT, voice gives the EVIDENCE" and warned on
+  // compression — that is overturned. Reading the rule as "make them say
+  // different things" cost a 350x view gap on alignment alone.
+  //
+  // Two failures at opposite ends; only the middle is right:
+  //   too much word overlap → verbatim reuse, the card adds nothing
+  //   none at all           → a second idea, the 350x failure
   const norm = (x: string) => x.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(/\s+/).filter(Boolean);
   const sw = new Set(norm(screen));
-  const overlap = norm(t).filter((w) => sw.has(w) && w.length > 3).length;
-  if (screen && overlap >= Math.max(2, sw.size - 1))
-    warn.push("Screen is a compression of the voice. Screen states the VERDICT, voice gives the EVIDENCE — compression gives the verdict twice and the evidence never.");
+  const contentWords = norm(t).filter((w) => w.length > 3);
+  const overlap = contentWords.filter((w) => sw.has(w)).length;
+  const screenContent = [...sw].filter((w) => w.length > 3).length;
+
+  if (screen && screenContent > 0 && contentWords.length > 0) {
+    if (overlap >= Math.max(2, screenContent))
+      warn.push("The card reuses the spoken words verbatim. Same MEANING is required; the same WORDS are not — compress it differently.");
+    else if (overlap === 0)
+      warn.push("The card shares no content word with the spoken line. Different words, SAME meaning — a card carrying a second idea is the 350x alignment failure (R3).");
+  }
 
   return { passes: fail.length === 0, failures: fail, warnings: warn, score: hookScore(h), screenWords };
 }
@@ -202,7 +219,7 @@ export function buildBeats(style: Style, format: string, v: {
     { t: "0:26–0:30", name: "5 · LOOP or LAW", job: "🔑 THE EXIT POINT. Loop → comments · Law → shares", slot: v.moneyCost, guard: "You cannot have both. Pick the product before you write the line." },
     { t: "0:30–0:44", name: "6 · OUTSIDE VOICE", job: "Someone tells him. He does not work it out", slot: v.outsideVoice, guard: "Reported speech, in quotes. ⛔ Never named — no employer, agency, practitioner or third party." },
     { t: "0:44–0:49", name: "7 · IMPACT", job: "What that sentence DID to him. Not what he learned", slot: "That sentence rewired how I quote.", guard: "Physical, immediate, personal." },
-    { t: "0:49–1:07", name: "8 · MECHANISM", job: "The teaching. What he changed · the receipt · the law generalised to YOU", slot: v.mechanism, guard: "Must contain the absolution: 'They're not trying to rob you. They're just never going to correct you.' Without it, everything before reads as grievance." },
+    { t: "0:49–1:07", name: "8 · MECHANISM", job: "The teaching. What he changed · the receipt · the law generalised to YOU", slot: v.mechanism, guard: "PLAIN SPEECH: every part is NAME IT → SAY WHAT IT MEANS → SAY WHAT TO DO. Never three labels in a row. Replace the metric name with what the number does. Name the framework HERE, never at beat 1, and say what it means in the same breath. Must contain the absolution: 'They're not trying to rob you. They're just never going to correct you.' Without it, everything before reads as grievance." },
     { t: "1:07–1:16", name: "9 · BATTERY", job: "🔑 Three to five questions they will FAIL, escalating", slot: "So let me ask you. …? Not roughly. Not 'I think I'm fine.' The exact number.", guard: "Include the pre-emption. It closes the escape hatch of a vague answer." },
     { t: "1:16–1:22", name: "10 · VERDICT + SERVICE", job: "Absolve, then serve", slot: "If that's a no, you're not careless. You were never taught this. I went through it so you don't have to.", guard: "" },
     { t: "1:22–1:35", name: "11 · CTA + QUESTION", job: "Convert, then reopen", slot: v.cta, guard: "Comment [WORD] → what they put in → the closing question, answerable in four words. ⛔ Never 'DM me'." },
@@ -239,6 +256,44 @@ export const REHOOK_RULE = "One at the 30% seam, one before the last step. Credi
 
 export type ScriptWarning = { severity: "stop" | "warn"; message: string };
 
+/** PLAIN SPEECH — ruled 2026-09-17. No term stands alone.
+ *  A word the listener has to already know is a word that loses them, and they
+ *  do not rewind. Each of these must be followed by its meaning, replaced with
+ *  the plain phrase, or deleted. */
+const JARGON: { term: RegExp; plain: string }[] = [
+  { term: /\bengagement rate\b/i, plain: "the bigger that number, the higher your price" },
+  { term: /\breach\b/i, plain: "how many people saw them" },
+  { term: /\busage rights?\b/i, plain: "when the brand puts your video in their own adverts" },
+  { term: /\bwhitelisting\b/i, plain: "when they run ads through your account, using your face" },
+  { term: /\bexclusivity\b/i, plain: "when you agree not to work with anyone like them for a while" },
+  { term: /\bretainer\b/i, plain: "the same work every month, paid every month" },
+  { term: /\bprovisional tax\b/i, plain: "you pay SARS twice a year, before they ask" },
+  { term: /\bpaid media\b/i, plain: "their own adverts" },
+  { term: /\bdeliverables?\b/i, plain: "what you're actually making for them" },
+  { term: /\bconversion\b/i, plain: "whether anybody buys" },
+  { term: /\bassets?\b/i, plain: "the things you own" },
+  { term: /\bscope\b/i, plain: "what's included, and what isn't" },
+];
+
+/** A term counts as explained if a plain gloss follows it in the same or the
+ *  next sentence — "that's…", "it just means…", "which is…". */
+export function plainSpeechWarnings(text: string): ScriptWarning[] {
+  if (!text?.trim()) return [];
+  const out: ScriptWarning[] = [];
+  for (const { term, plain } of JARGON) {
+    const m = term.exec(text);
+    if (!m) continue;
+    const after = text.slice(m.index, m.index + 260).toLowerCase();
+    const glossed = /(that'?s|it just means|which is|meaning|in other words|i mean|that is)\b/.test(after);
+    if (!glossed)
+      out.push({
+        severity: "warn",
+        message: `"${m[0]}" stands alone. Say what it means in the next sentence, or use the plain phrase: "${plain}".`,
+      });
+  }
+  return out;
+}
+
 export function scriptWarnings(args: {
   style: Style; runtime: number | null; ctaKeyword: string; wired: string[];
   receipt: string; story: string; closing: string; hook: string;
@@ -254,6 +309,8 @@ export function scriptWarnings(args: {
     if (!wired.includes(args.ctaKeyword.trim().toUpperCase()))
       out.push({ severity: "stop", message: `"${args.ctaKeyword.trim().toUpperCase()}" has no destination. No new keyword ships before its asset exists — a keyword with nothing behind it is a broken promise.` });
   }
+
+  out.push(...plainSpeechWarnings([args.hook, args.receipt, args.story, args.closing].join(" ")));
 
   if (args.style === "nochill" && !args.story.trim())
     out.push({ severity: "stop", message: "No beat-3 story. Every reel with one outperformed every reel without: 17.3 saves per 1,000 against 5.7." });

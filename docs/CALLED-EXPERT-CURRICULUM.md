@@ -1,3 +1,22 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
+> ⛔ **"CALLED EXPERT" IS RETIRED — 2026-09-01.** The ICP1 "Called Expert" (32–50,
+> R9,000–R45,000) was never measured; when it was — **median age 21, two people over 32
+> out of 70, zero purchasers.** The term and the ICP1/ICP2 split must never appear in
+> copy, a product title, a hook, an email or a page. Every `Called Expert` and `ICP1`
+> string below is **historical record or a functional slug/enum key only.**
+>
+> **Ruled customer (2026-09-17):** the creator whose income is decided by somebody else,
+> and who finds out afterwards. Gate: **money has moved, or money is visibly blocked**
+> AND **another human being appears in their fear.** Tiers: FREE R0 the Beginner Aspirant
+> (⛔ never sold to) · ENTRY R350–R499 the Blocked · CORE R1,500–R1,800 the Underpriced &
+> Unreserved · PREMIUM $499/R9,000 the Asset-Backed Contentpreneur.
+> Pillars: KEEP IT 30 · PRICE IT 25 · OWN IT 20 · BUILD IT ANYWAY 15 · PROVE IT 10.
+
 # Called Expert Curriculum — Build-As-You-Teach Knowledge Base
 **Owner:** Ndivhuwo Muhanelwa / NOCHILL PTY LTD · **Audience:** ICP 1 (Called Experts) · **Status:** living document
 
@@ -105,7 +124,7 @@
 - **Lesson:** Lead with the pain, in their words. Facts tell, stories sell. End with one command, not a question.
 - **Toolset:** R×A×C×U^B hooks, 7-Act, HSLFCTA, Section 13 checklist, the proof-story bank (S001–S020), verified figures table.
 - **Steps (SOP):** lock ONE ICP → pain hook → agitate → verified proof → offer → single CTA. SA English, ZAR, no fabricated figures.
-- **Proof / lessons:** ICP-segmented ad copy in the ads playbook; never use banned figures (R285,000 SARS, standalone Netflix R100K).
+- **Proof / lessons:** segmented ad copy in the ads playbook; never use banned figures. ⛔ The full banned list now includes **R285,000 / R207K SARS** (only **R207,879.20, unpaid**), **any Netflix figure** (under NDA), **R132,500**, **R600K / any annual total**, **AdSense R180,000**, **Samsung R450,000**, **Savanna R25,000/mo**, **R800,000+ ads and affiliates**, **"50 brand deals"** (19 brands, 23 agencies), **"R23,000 in one day"** (R23,524 across March 2019) and **any award total** (say *award-winning*).
 
 ### M10 — Mine Your Audience for the Product (DM Intelligence) (Stage 2 · MS+SS · SEEDS Signal · 4E)
 - **Lesson:** Your next product is already written — in your DMs. Don't guess what to sell; **COUNT** what people beg for, in their own words. The product is the answer you'd otherwise type 100 times — productised once.

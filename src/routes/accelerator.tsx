@@ -1,3 +1,11 @@
+// ⛔ FACT-LOCK 2026-09-17 — LIVE PUBLIC SALES COPY (contentpreneur.africa).
+// Never put a number on this page without checking
+// ~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv.
+// Never name the employer, workplace or industry. Never name a real person
+// (Article IV). Governing ICP:
+// ~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md
+// Award claims: say "award-winning". State no total.
+
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Reveal,
@@ -33,6 +41,26 @@ const CTA_TO = "/apply";
 const APPLY = "Apply for the Accelerator";
 
 const STAGE_TINTS = ["#fbbf24", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#06b6d4", "#ef4444"];
+
+
+// ⛔ PRICING CONFLICT — UNRESOLVED, NEEDS A FOUNDER RULING. Flagged 2026-09-17.
+//
+// The Constitution (global CLAUDE.md v1.1, 2026-09-01) rules the Accelerator at
+// $499 / R9,000 🔒 and says "$499 supersedes $997". This page charges $997,
+// from the 2026-08-19 founder ruling recorded in src/lib/gardens.ts. Two dated
+// rulings disagree and the newer one is 🔒, so $997 is dead on the ledger.
+//
+// The $997 strings below were NOT silently changed, on purpose. checkout.functions.ts
+// reads the SAME USD_DISPLAY map that formatPrice reads, precisely so the amount
+// charged equals the price shown. Editing the copy alone would show $499 and charge
+// $997 — a worse defect than the one being fixed, and a real one for a real buyer.
+//
+// THE FIX IS ONE LINE, AND IT IS THE FOUNDER'S TO MAKE:
+//   src/lib/gardens.ts → "contentpreneur-90day-cohort": 99700 → 49900
+// plus the same decision on "contentpreneur-vip-tier" (299700) and on the
+// Foundation Kit's $97, which is NOT a tier on the ruled ladder at all
+// (FREE R0 · ENTRY R350–R499 · CORE R1,500–R1,800 · PREMIUM $499/R9,000).
+// Until that ruling lands, DO NOT edit either side alone.
 
 export const Route = createFileRoute("/accelerator")({
   head: () => ({

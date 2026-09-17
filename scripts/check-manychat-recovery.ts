@@ -28,6 +28,10 @@ if (error) {
 type ManychatData = { segment?: string | null; pain_point?: string | null; blocker_detail?: string | null };
 
 // Filter out obvious personal test accounts so the rate reflects real leads.
+//
+// ⛔ FACT-LOCK 2026-09-17: one marker below is the founder's employer domain. It is
+// a functional filter string ONLY. It must never be printed, logged into a report,
+// or reach any user-facing surface — never name the employer, workplace or industry.
 const TEST_MARKERS = ["nochill.co.za", "@test.com", "test@", "chiefmuha", "nochillvodcast", "atns.co.za"];
 const isTest = (email: string, name: string | null) =>
   TEST_MARKERS.some((m) => email.toLowerCase().includes(m)) || (name ?? "").toLowerCase().includes("nochillvodcast");

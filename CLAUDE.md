@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # CLAUDE.md — CHKPLT Digital Empire Builder
 
 Read this file AND `Learnings.md` before every task. These two files are your operating instructions for this project.
@@ -31,14 +37,18 @@ After every work session — without being asked — extract ALL teachable conte
   - **Contentpreneur** — personal brand identity and Contentpreneur coaching brand (CHKPLT)
   - **Content Creators Hub** — digital product store at contentcreatorhub.online (Shopify, ZAR)
   - **CHKPLT** — this platform. High-ticket coaching + LMS + digital products. Paystack + Stripe.
-- **#1 goal:** R100K/month from digital products alone — ecosystem fully live, running without active selling
+- **#1 goal:** an ecosystem fully live, running without active selling
+  > ⛔ **The "R100K/month" target is an ambition, never a claim.** It has never been
+  > earned and must never appear in copy, a hook, a sales page or an email. There is
+  > currently **no payment record from an individual buying knowledge** in `PROOF_BANK.csv`.
 - **Business stage:** Active — Contentpreneur Programme at R18K/client. Platform built, not yet fully live.
 
 ### This Project — What CHKPLT Is
 
 CHKPLT = Christ's Kingdom Platform. It is the **John 21 "right side"** owned platform.
 
-Left side = rented platforms (Instagram suspended 780K followers, AdSense disabled R180K/year, TikTok/Facebook algorithm dependency).
+Left side = rented platforms (Instagram suspended 780K followers — ⛔ never dated; ad account terminated end-2024, **two appeals refused**, the second final May 2025; TikTok/Facebook algorithm dependency).
+> ⛔ **"AdSense R180,000/year" is BANNED** — 13 payments, peak month **$260.01**.
 Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 
 **This is NOT the content generator.** The content system (`~/Desktop/VS code/full-content-system`) generates content FOR this platform. CHKPLT is where the products are delivered.
@@ -52,9 +62,50 @@ Right side = CHKPLT, email list, Contentpreneur cohort, digital products.
 **The brand identity NOCHILL owns is "Contentpreneur":** someone who turns what they know into income they own. It is the umbrella. Under it sit two BUYER lanes — both have money + expertise, both are the revenue engine. Lead copy with money + expertise so it filters for buyers; never with "salary"-only language (it excludes the self-employed earner).
 
 **Lane A — The Employed Professional (still in a job/practice)**
-- Profile: 32–50, SA professional/specialist/academic/healthcare/teacher — has unexploited expertise, wants to monetise knowledge WITHOUT quitting their job
-- Revenue math: 6–10 cohort sales × R9,997–R18,000 = R100K/month
-- Primary proof hook: "I still work at ATNS. I built R600K+ in 4-hour shift windows. You don't have to quit first — build first."
+- ⛔ **RETIRED 2026-09-17.** The 32–50 professional profile was never measured; when it was,
+  median age **21**, two people over 32 out of 70, **zero purchasers**.
+
+### 🔴 THE CUSTOMER — ruled 2026-09-17. This replaces every earlier ICP.
+
+**The creator whose income is decided by somebody else, and who finds out afterwards.**
+
+**Two tests, both run on one sentence:**
+1. **Money has moved, or money is visibly blocked.** Not follower count, not niche.
+   1.2M views and R0 **qualifies**. 400 followers asking how to go viral **does not**.
+2. **Does another human being appear in their fear?**
+   *"Provide for my kids"* → **customer.** *"To get 0 likes"* → **traffic.**
+
+**Four tiers:**
+
+| Tier | Who | Their line | Pillar |
+|---|---|---|---|
+| **FREE R0** ⛔ | **The Beginner Aspirant** — 18–24, R0 revenue. **Content only, never sold to** | *"To get 0 likes"* | — |
+| **ENTRY R350–R499** | **The Blocked** — money exists, a system holds it | *"Millions of views but I am not earning"* | OWN IT · KEEP IT |
+| **CORE R1,500–R1,800** | **The Underpriced & Unreserved** — money arrives and leaks | *"I'm not sure about rates"* | PRICE IT · KEEP IT · BUILD IT ANYWAY |
+| **PREMIUM $499/R9,000** 🔒 | **The Asset-Backed Contentpreneur** — had it, lost it | *"There was nobody to phone"* | OWN IT · PROVE IT |
+
+**Pillars:** KEEP IT 30 · PRICE IT 25 · OWN IT 20 · BUILD IT ANYWAY 15 · PROVE IT 10.
+One per week, five-week rotation. **PAIDS is an income model, not a pillar set.**
+
+**The mechanism, true of all four:** *somebody else decides what they earn, and they find out
+afterwards.* Meta decides eligibility, country and "originality". The agency sets the budget
+before it makes contact. **That is what "Famous is not paid" means.**
+
+> ⛔ **RETIRED:** ICP1 "Called Expert" 32–50 at R9,000–R45,000 · the ICP1/ICP2 split · the
+> Sipho/Lerato personas. The Called Expert was never measured; when it was — **median age 21,
+> two people over 32 out of 70, zero purchasers.**
+
+**Governing document:** `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+**Skill reference:** `~/.claude/skills/nochill-brain/references/ICP-TIERS.md`
+
+- ⛔ **RETIRED 2026-09-01:** the old revenue math — "6–10 cohort sales × R9,997–R18,000 =
+  R100K/month". The R9,997–R18,000 band is retired; premium is **$499 / R9,000** 🔒.
+  ⛔ **State no monthly revenue target as a claim.**
+- Primary proof hook: "I still work a full time job. I built this in 4-hour night-shift windows. You don't have to quit first — build first."
+  > ⛔ **NEVER NAME THE EMPLOYER, THE WORKPLACE OR THE INDUSTRY.** Write "a full time job",
+  > "night shifts", "on shift". It breaches his company's rules. Article IV.
+  > ⛔ **"R600K" is not in the ledger.** Bank-confirmed lifetime receipts are **R453,710.37**
+  > across 2017–2025. **Never state a total in this hook** — the story works without one.
 - Buying trigger: paid-less-than-you're-worth trap + the quit-first lie + the wrong mountain (Deut 1:6)
 - Language: "your knowledge is worth more than you're being paid for it" | "you don't need another qualification" | "you don't have to quit first"
 - Sub-segments: Shift Worker · Corporate Trapped (largest) · Teacher/Lecturer · Healthcare Worker · Faith Professional · Freelancer at Capacity
@@ -183,11 +234,14 @@ it does not decay.
 ### Personal Data (Always Accurate)
 - **Full name:** Ndivhuwo Muhanelwa | alias "NoChill" / "NO CHILL" / "Mr NoChill"
 - **Origin:** Tshikwarani, Venda, Limpopo — youngest of 4 brothers
-- **Mother:** Florah (late) — passed mid-2011 while Ndivhuwo was at UP
+- **Mother:** (late) — passed mid-2011. ⛔ **Article IV — never publish her name.**
+  > ⚠️ **OPEN CONTRADICTION, flagged 2026-09-17.** This line says she passed *while he was
+  > at UP*; `docs/STORY-BANK.md` STORY 01 says **"NOT at UP, BEFORE UP"** (he applied to UP
+  > late 2011). Two internal records disagree — **state no placement relative to UP until ruled.**
 - **Partner:** Kegomoditswe — "the love of my life and the mother of my children"
 - **Sons:** Gomotsegang and Gaopalelwe — always TWO sons, never "son"
 - **Education:** NMMU (Pharmacy, dropped out) → UP (Geoinformatics, REAP bursary, no degree)
-- **First job:** ATNS (Air Traffic Services) — worked night shifts while building content
+- **First job:** [REDACTED — Article IV] — worked night shifts while building content. **Never name the employer, workplace or industry in any output.**
 - **Faith:** Christian. Kingdom purpose drives every decision. Proverbs 13:22 anchor.
 
 ---

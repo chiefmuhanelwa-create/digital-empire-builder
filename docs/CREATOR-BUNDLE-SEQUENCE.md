@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # Creator Bundle — The 7-Stage Journey (Emails 2–8, Ready to Paste into MailerLite)
 
 > Continues the live "Creator Bundle Delivery" automation. Email 1 (welcome) already
@@ -20,7 +26,8 @@
 > soft, optional invitation to reply, not stacked homework ("did you open the
 > workbook AND reply with X AND tell me Y"). Give first.
 >
-> Checked against real signal: Unathi Mabunda ("I am not starting from zero, but I
+> Checked against real signal: a subscriber, anonymised — ⛔ Article IV, never name a
+> real person ("I am not starting from zero, but I
 > need direction") is the right-fit reader this whole sequence is written for. Each
 > email still points toward the HOW (a small guide, Foundation Kit, or Accelerator)
 > where it's earned, per the Constitution's own stated split: *"Content sells WHAT and
@@ -106,7 +113,7 @@ was won first).
 </td></tr>
 <tr><td class="content-pad" style="padding: 16px 40px 0 40px;">
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, I want to guess something about you. You've spent years, maybe decades, getting genuinely good at something. And somewhere along the way you started believing that on its own isn't enough — that you need more letters after your name, more permission, more proof, before it counts as something worth building on. I know that belief from the inside. I lived in it long before I had any letters after my name at all.</p>
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">2013. University of Pretoria. I fail one module — one — in my first semester, and the bursary that was paying for everything drops me the same week. My mother, Florah, had passed not long before that. She earned R400 a month picking potatoes on a farm in Venda. I remember thinking, clearly, for the first time: I'm by myself now.</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">2013. University of Pretoria. I fail one module — one — in my first semester, and the bursary that was paying for everything drops me the same week. My mother had passed not long before that. She earned R400 a month picking potatoes on a farm in Venda. I remember thinking, clearly, for the first time: I'm by myself now.</p>
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">I sleep in the university bathrooms for two to four months. I don't tell people that easily, even now.</p>
 </td></tr>
 <tr><td style="padding: 4px 40px 0 40px;">
@@ -117,7 +124,7 @@ was won first).
 </td></tr>
 <tr><td class="content-pad" style="padding: 12px 40px 0 40px;">
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, I want you to actually sit with that for a second before you keep reading. Not skim past it. A bathroom stall, night after night, for months. That's not a story I tell for sympathy. It's the floor I found out I could stand on.</p>
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">A year later, 2014, posted to OR Tambo with a real salary for the first time, I stand in a shop talking myself out of a R6,000 smartphone for longer than I'd like to admit. It feels reckless. I buy it anyway. Same week, no plan, no strategy document, no idea what I was doing — I start a Facebook page and call it "No Chill in Mzansi."</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">A year later, 2014, working a full time job with a real salary for the first time, I stand in a shop talking myself out of a R6,000 smartphone for longer than I'd like to admit. It feels reckless. I buy it anyway. Same week, no plan, no strategy document, no idea what I was doing — I start a Facebook page and call it "No Chill in Mzansi."</p>
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, here's what I need you to actually understand, not just agree with politely: I didn't have a system. I didn't have clarity. I didn't even have confidence. What I had was a phone, and a story nobody had asked me to tell yet — my own. That was the entire starting material. Everything else got built on top of it, slowly, badly, one attempt at a time.</p>
   <p class="body-text" style="margin:0 0 24px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">That's the part almost nobody believes about themselves. Not that they lack a system — that they already have the raw material, and they're waiting for permission to call it enough.</p>
 </td></tr>
@@ -388,9 +395,9 @@ was won first).
 
 ---
 
-## Email 6 — Stage 5: Assets — Subject: "Made R23K in my sleep?"
+## Email 6 — Stage 5: Assets — Subject: "R23,524 from a link I posted once"
 
-**Preheader:** One link. One night's sleep. Then the number.
+**Preheader:** One link. One month. Then the number.
 
 ```html
 <!DOCTYPE html>
@@ -400,7 +407,7 @@ was won first).
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
-<title>Made R23K in my sleep?</title>
+<title>R23,524 from a link I posted once</title>
 <style>
 @media only screen and (max-width:620px) {
   .email-wrapper { padding: 16px 8px !important; }
@@ -414,7 +421,7 @@ was won first).
 </style>
 </head>
 <body style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; padding: 0; background-color: #f5f5f5;">
-<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#f5f5f5;">One link. One night's sleep. Then the number. &zwnj; &zwnj; &zwnj; &zwnj;</div>
+<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#f5f5f5;">One link. One month. Then the number. &zwnj; &zwnj; &zwnj; &zwnj;</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="email-wrapper" style="background-color: #f5f5f5; padding: 32px 16px; border-collapse: collapse;" bgcolor="#f5f5f5">
 <tbody><tr><td align="center">
 <table role="presentation" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-collapse: collapse;" width="100%" bgcolor="#ffffff"><tbody>
@@ -424,12 +431,12 @@ was won first).
 </td></tr>
 <tr><td class="hero-pad" style="padding: 20px 40px 0 40px;">
   <p style="margin:0 0 8px 0;font-size:15px;color:#888888;font-family:Arial,sans-serif;">{$name},</p>
-  <h1 style="margin:0 0 12px 0;font-size:26px;font-weight:700;color:#111111;line-height:1.3;font-family:Arial,sans-serif;">One link. While I slept.</h1>
+  <h1 style="margin:0 0 12px 0;font-size:26px;font-weight:700;color:#111111;line-height:1.3;font-family:Arial,sans-serif;">One link. One month. R23,524.</h1>
 </td></tr>
 <tr><td class="content-pad" style="padding: 16px 40px 0 40px;">
   <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, how many times this month has someone said "can I just pick your brain for five minutes" and it turned into forty-five, for free, again? I used to think that was just the cost of being good at something. It isn't. It's a sign you've already built something valuable enough to package — and just haven't yet.</p>
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, I want to tell you about the night I stopped thinking of myself as someone who posts, and started thinking of myself as someone who owns things.</p>
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">March 2019. I post a Mr Price link — nothing dramatic, no countdown, no launch. Just an affiliate link through a network called AdMarula. I close the app. I go to sleep.</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">{$name}, I want to tell you about the month I stopped thinking of myself as someone who posts, and started thinking of myself as someone who owns things.</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">March 2019. I post a Mr Price link — nothing dramatic, no countdown, no launch. Just an affiliate link through a network called AdMarula. I close the app. I go back to making other things.</p>
 </td></tr>
 <tr><td style="padding: 4px 40px 0 40px;">
   <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:4px 0 4px 0;"><tr><td>
@@ -438,7 +445,7 @@ was won first).
   </td></tr></table>
 </td></tr>
 <tr><td class="content-pad" style="padding: 4px 40px 0 40px;">
-  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">I open my phone the next morning to an email asking where to send an invoice. R23,524. For a link. That I posted once. That I never touched again.</p>
+  <p class="body-text" style="margin:0 0 16px 0;font-size:16px;color:#444444;line-height:1.8;font-family:Arial,sans-serif;">By the end of that month there was an email asking where to send an invoice. R23,524. For a link. That I posted once. That I never touched again. That single month is 41.6% of every rand of affiliate commission I have ever earned.</p>
 </td></tr>
 <tr><td style="padding: 4px 40px 0 40px;">
   <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:4px 0 4px 0;"><tr><td>
@@ -554,7 +561,7 @@ was won first).
 
 ## Email 8 — Stage 7: Legacy — Subject: "{$name}, one map"
 
-**Preheader:** Bathroom floors to R600K+ — the whole map, in one email.
+**Preheader:** Bathroom floors to a business I own — the whole map, in one email.
 
 ```html
 <!DOCTYPE html>
@@ -581,7 +588,7 @@ was won first).
 </style>
 </head>
 <body style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin: 0; padding: 0; background-color: #f5f5f5;">
-<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#f5f5f5;">Bathroom floors to R600K+ — the whole map, in one email. &zwnj; &zwnj;</div>
+<div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#f5f5f5;">Bathroom floors to a business I own — the whole map, in one email. &zwnj; &zwnj;</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="email-wrapper" style="background-color: #f5f5f5; padding: 32px 16px; border-collapse: collapse;" bgcolor="#f5f5f5">
 <tbody><tr><td align="center">
 <table role="presentation" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #ffffff; border-collapse: collapse;" width="100%" bgcolor="#ffffff"><tbody>
@@ -660,4 +667,4 @@ was won first).
   step instead of a mismatched resource link.)
 - [ ] Tag replies: "later" (Email 3) → not yet qualified, keep on free frameworks only. Replies with a real "I help ___ to ___" sentence → tag `positioning_clear`. Replies to Email 2/4/6/7's reflection questions are pure relationship-building — read them, but they're not qualification signals the way the Email 3 reply is.
 - [ ] Test the full 8-email arc (welcome + 7 stages) on a personal address before it's live for real subscribers.
-- [ ] Re-check against real subscriber replies after this version has been live a couple of weeks, same way Unathi's own quote and the Khanya/Patricia replies shaped this rebuild.
+- [ ] Re-check against real subscriber replies after this version has been live a couple of weeks, same way the anonymised subscriber quotes shaped this rebuild (⛔ Article IV — never record real names here).

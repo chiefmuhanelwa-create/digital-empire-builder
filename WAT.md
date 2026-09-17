@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # CHKPLT — WAT Framework
 **What · Why · How for every workflow on the platform**
 
@@ -36,7 +42,13 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 
 **What:** Move a Contentpreneur from application → qualification → onboarding → 20-week transformation → graduation.
 
-**Why:** The Contentpreneur Accelerator PRO (R18,000 PIF / R6,500×3) is the primary revenue engine. 6 students × R18,000 = R108,000 per cohort. This workflow is the covenant between CHKPLT and the student.
+**Why:** The Contentpreneur Accelerator PRO is the primary revenue engine. This workflow is the covenant between CHKPLT and the student.
+
+> ⛔ **FACT-LOCK 2026-09-17.** The **R18,000 PIF / R6,500×3** band is RETIRED (2026-09-01);
+> premium is **$499 / R9,000** 🔒. The "6 students × R18,000 = R108,000 per cohort" projection
+> is removed: it is arithmetic, not revenue, and there is **no payment record from an
+> individual buying knowledge** in `PROOF_BANK.csv`. ⚠️ Note the live price in
+> `src/lib/gardens.ts` is **$997** — an unresolved conflict; see the sweep report.
 
 **How:**
 1. **Application** — Student submits 23-point diagnostic at `/apply`
@@ -85,7 +97,9 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 
 **What:** Move a subscriber from first opt-in → warm lead → ICP 1 upgrade path.
 
-**Why:** The email list is the only platform Ndivhuwo owns 100%. Instagram can be suspended (780K gone overnight). AdSense disabled (R180K/year gone). The email list cannot be suspended.
+**Why:** The email list is the only platform Ndivhuwo owns 100%. Instagram can be suspended (780K gone overnight — ⛔ never date the loss). An ad account can be terminated: his was, at the end of 2024, and **two appeals were refused**, the second final in May 2025. The email list cannot be suspended — it is **173 people**.
+
+> ⛔ **"AdSense R180,000/year" is BANNED** — 13 payments, peak month **$260.01**.
 
 **How — 7-email welcome sequence (Days 1–13):**
 | Email | Day | Subject angle | CTA |
@@ -112,7 +126,7 @@ Read this alongside `CLAUDE.md` and `Learnings.md` before starting any session.
 
 **What:** Generate, film, and publish weekly content batches using the full-content-system as the AI brain and CHKPLT as the destination.
 
-**Why:** Content drives traffic. Traffic drives leads. Leads enter the SEEDS pipeline. SEEDS converts to cohort sales. The 4-hour window (from ATNS shift work days) is the non-negotiable production window.
+**Why:** Content drives traffic. Traffic drives leads. Leads enter the SEEDS pipeline. SEEDS converts to cohort sales. The 4-hour window (from his night-shift years — ⛔ **never name the employer**) is the non-negotiable production window.
 
 **How:**
 1. **Generate** — Use `full-content-system` (`/dashboard/batch-planner`) to generate weekly content series

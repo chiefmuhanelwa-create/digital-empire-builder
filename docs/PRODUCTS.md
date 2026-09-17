@@ -1,3 +1,9 @@
+> ⛔ **FACT-LOCK 2026-09-17.** This file contained figures that are disproven or banned.
+> Never copy a number out of here without checking
+> `~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv`.
+> **Never name the employer, workplace or industry.** Governing ICP:
+> `~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md`
+
 # CHKPLT — Product Reference
 
 > 153 fish. Every product is one fish in the net. The net did not break. — John 21:11
@@ -84,7 +90,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 - **DB slug:** `right-side-assessment`
 
 ### FREE-004: The 4-Hour Window Starter System
-- **Description:** Framework for building a second income in 4-hour blocks while employed. Based on ATNS shift worker proof — "I built R600K in these windows." 10 pages. Includes time audit template, 4-hour content window schedule, platform pick guide.
+- **Description:** Framework for building a second income in 4-hour blocks while employed. Based on his own night-shift years — ⛔ **never name the employer, and never state a lifetime total.** Bank-confirmed is R453,710.37; "R600K" is not in the ledger. 10 pages. Includes time audit template, 4-hour content window schedule, platform pick guide.
 - **ICP:** ICP 1 (Shift Worker sub-segment primary)
 - **Garden:** `deshe`
 - **is_free:** true
@@ -210,7 +216,7 @@ These need to be created in the DB and designed in Canva. Use `/admin/products` 
 
 1. Every product title implies a transformation. Not "A Guide to X" — "The X System That Gets You to Y in Z Days."
 2. Lead with the pain or the mistake. The product is the resolution.
-3. Use specific proof numbers. R23,000 in ONE day. Not "significant income."
+3. Use specific proof numbers **that exist in `PROOF_BANK.csv`**. ⛔ "R23,000 in ONE day" is BANNED — it was **R23,524 across March 2019**, a month. Safe: R350 first deal · R15,000 → R45,000 (April 2020) · R23,524 March 2019 · R207,879.20 unpaid · $22,180.93 remitted 2021–2025 · R453,710.37 lifetime.
 4. One ICP per product. Never write for both ICPs in the same description.
 5. NOCHILL voice — big brother, not guru. Direct, not motivational speaker.
 6. Spiritual layer after practical lesson — never as the opening line.

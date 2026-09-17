@@ -1,10 +1,13 @@
 // THE CHARGE GATE — when to start charging, and what to charge.
 //
-// This is the one question the whole estate could not answer. It is Kea's, in
-// her own words: "I am just not too certain in terms of pricing and at what
-// point do I start charging." It is Lerato's, unasked — two people she coached
-// won scholarships and she has never charged for any of it. And it is the
-// second half of Unathi's "how to grow this into something that can eventually
+// ⛔ FACT-LOCK 2026-09-17: real respondents anonymised (Article IV — never name
+// a real person, and never carry identifying detail in a repo).
+//
+// This is the one question the whole estate could not answer. Respondent A said
+// it in her own words: "I am just not too certain in terms of pricing and at
+// what point do I start charging." Respondent B has it unasked — she has coached
+// people to results and has never charged for any of it. And it is the second
+// half of Respondent C's "how to grow this into something that can eventually
 // generate income".
 //
 // TWO SEPARATE QUESTIONS, ANSWERED IN ORDER

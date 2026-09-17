@@ -116,7 +116,7 @@ function RightSideDiagnostic() {
               <p className="text-xs text-[#9A9488] mt-3">8 questions · 90 seconds</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
-              {[["780K", "followers lost overnight"], ["R180K", "AdSense gone in a day"], ["R0", "what I'd have left without owned assets"]].map(([n, l]) => (
+              {[["780K", "followers lost overnight"], ["2", "appeals lodged \u2014 both refused"], ["R0", "what I'd have left without owned assets"]].map(([n, l]) => (
                 <div key={n} className="nx-card !p-4"><div className="font-display text-2xl text-[var(--nx-gold-deep)]">{n}</div><div className="text-xs text-[var(--text-dim)] mt-1">{l}</div></div>
               ))}
             </div>

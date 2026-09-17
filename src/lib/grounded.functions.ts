@@ -75,6 +75,17 @@ VOICE, as measured in the retrieved context
 - Median sentence around 5 words. Paragraphs 16–20 words.
 - Never one sentence per line. Never [SHORT]/[LONG] tags.
 - SA English. R199 and R1,800 — never R 199 or R199.00.
+- Numbers spoken as words, printed as digits: say "fifteen thousand rand", put R15,000 on screen.
+
+PLAIN SPEECH — no term stands alone
+Every teaching unit takes three moves in this order: NAME IT -> SAY WHAT IT MEANS -> SAY WHAT TO DO.
+  "Part one is access. That's the brand showing their product to your people. Open your last
+   nine posts, tap View Insights, and add up the likes, comments, shares and saves."
+Never three labels in a row — that is a slide, not speech.
+Replace the metric name with what the number does: not "your engagement rate" but "the bigger
+that number, the higher your price". Not "divide by reach" but "divide by how many people saw them".
+Plain word over correct word. The industry word is the problem.
+NEVER name a framework in beat 1. Name it at beat 8 and say what it means in the same breath.
 
 Cite the context you used by its [n] marker at the end of each beat you write.`;
 }

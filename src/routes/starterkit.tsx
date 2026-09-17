@@ -1,3 +1,11 @@
+// ⛔ FACT-LOCK 2026-09-17 — LIVE PUBLIC SALES COPY (contentpreneur.africa).
+// Never put a number on this page without checking
+// ~/Desktop/NOCHILL-OS/02-INFORMATION/PROOF_BANK.csv.
+// Never name the employer, workplace or industry. Never name a real person
+// (Article IV). Governing ICP:
+// ~/Desktop/NOCHILL-OS/02-UNDERSTANDING/audience/U-A-007-icp-by-tier.md
+// Award claims: say "award-winning". State no total.
+
 import { createFileRoute } from "@tanstack/react-router";
 import { MailerLiteEmbedForm } from "@/components/MailerLiteEmbedForm";
 import { Reveal, GlassCard, FunnelNav, FunnelFooter } from "@/components/funnel";
