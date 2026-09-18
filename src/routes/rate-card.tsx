@@ -114,7 +114,10 @@ function RateCardPage() {
   const [includeProduction, setIncludeProduction] = useState(false);
 
   const [currency, setCurrency] = useState("ZAR");
-  const [rates, setRates] = useState<Record<string, number>>({ ZAR: 18.5, USD: 1 });
+  // Seed value only — replaced by the live fetch below within a moment, and shown without
+  // the "live" marker until it is. Keep it CURRENT: it is what a visitor sees first, and
+  // what they keep if open.er-api.com is unreachable. Last set 2026-09-18.
+  const [rates, setRates] = useState<Record<string, number>>({ ZAR: 16.31, USD: 1 });
   const [ratesLive, setRatesLive] = useState(false);
 
   // Every section is always open — accordions hid the form behind chevrons and

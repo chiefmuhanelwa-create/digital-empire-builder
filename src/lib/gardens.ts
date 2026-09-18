@@ -52,8 +52,13 @@ export const GARDEN_ORDER: Garden[] = ["deshe", "esev", "etz_pri", "devarim"];
 // history but no longer applies.
 //
 // ZAR_PER_USD below is ONLY the display fallback for ad-hoc ZAR products that aren't
-// in USD_DISPLAY (and for SSR before the first cron run). Keep it roughly current.
-export const ZAR_PER_USD = 16.58;
+// in USD_DISPLAY (and for SSR before the first cron run). Keep it CURRENT — with the FX
+// cron gone, nothing refreshes this but a person.
+//
+// Headline products are unaffected: they carry explicit USD_DISPLAY overrides. This only
+// decides what an international buyer pays for a product with no override, so a stale value
+// quietly mis-charges them. Last set 2026-09-18.
+export const ZAR_PER_USD = 16.31;
 
 export const USD_DISPLAY: Record<string, number> = {
   "called-expert-foundation-kit": 9700,   // $97  (charged R1,565.03 @ 16.13 — verified live 2026-08-25)
@@ -88,7 +93,7 @@ export const USD_DISPLAY: Record<string, number> = {
   "contentpreneur-community": 1900,       // $19/mo (charged ~R315) — draft until a real Paystack plan exists, see docs/RUNBOOK-COMMUNITY-LAUNCH.md
 
   // Added 2026-07-28 — found via a real /products/$slug page render showing a
-  // raw ZAR/16.58-converted price ("$6" for a R99 product) instead of a clean
+  // raw ZAR/ZAR_PER_USD-converted price ("$6" for a R99 product) instead of a clean
   // marketing price. 23 published products had this gap (most pre-dating this
   // session's imports, not just the new ones) — every one below gets a clean,
   // deliberate USD price for international buyers instead of an accidental one.
