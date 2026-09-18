@@ -22,6 +22,16 @@ export interface NicheData {
    * Both numbers look reasonable in rands, which is why nobody could see it. If you are
    * ever tempted to "correct" these downward against an advertising benchmark, you are
    * about to reintroduce that bug.
+   *
+   * 🔴 SEPARATELY, AND STILL OPEN — D-69. These values are NOT calibrated against the
+   * founder's receipted deals. At 100K views a Lifestyle reel prices here at R43,860;
+   * the money actually received for comparable work was Capitec R10,500, SA Tourism
+   * R10,000, Superbalist R12,000 (C-0143, tier E1). That is roughly 4x high, and up to
+   * 12x on Finance.
+   *
+   * These are researched market benchmarks, not his ledger. Retiring the duplicate table
+   * fixed the CONTRADICTION; it did not fix the CALIBRATION. Anyone using this to set a
+   * floor should know the floor currently sits above real offers he has accepted.
    */
   cpm: number;
   global_cpm: string;
