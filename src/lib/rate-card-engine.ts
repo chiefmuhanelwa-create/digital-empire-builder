@@ -8,6 +8,21 @@
 // so don't, unless the CPM research changed.
 
 export interface NicheData {
+  /**
+   * SPONSORSHIP CPM in ZAR — what a brand pays a CREATOR for 1,000 views of endorsed
+   * content. Roughly $13-$39. NOT a paid-media CPM.
+   *
+   * ⚠️ A paid-media CPM — what a brand pays a PLATFORM for 1,000 ad impressions — is
+   * $2-$6, and putting one of those here underprices a creator by about 7x. That is not
+   * hypothetical: a second rate-card tool held exactly that table under this same name
+   * and would have quoted R2,193 for a reel the live engine prices at R13,158, against a
+   * founder whose evidenced standing rate is R15,000. It is archived at
+   * `_ARCHIVED-ratecard-pro-full/`.
+   *
+   * Both numbers look reasonable in rands, which is why nobody could see it. If you are
+   * ever tempted to "correct" these downward against an advertising benchmark, you are
+   * about to reintroduce that bug.
+   */
   cpm: number;
   global_cpm: string;
   notes: string;
