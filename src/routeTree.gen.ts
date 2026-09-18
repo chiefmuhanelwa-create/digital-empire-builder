@@ -58,6 +58,7 @@ import { Route as ApiPublicProvisionalTaxRouteImport } from './routes/api/public
 import { Route as ApiPublicPositioningRouteImport } from './routes/api/public/positioning'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 import { Route as ApiPublicManychatLeadRouteImport } from './routes/api/public/manychat-lead'
+import { Route as ApiPublicInstagramLookupRouteImport } from './routes/api/public/instagram-lookup'
 import { Route as ApiCronSyncFxRouteImport } from './routes/api/cron/sync-fx'
 import { Route as AuthenticatedLearnSlugRouteImport } from './routes/_authenticated/learn.$slug'
 import { Route as AuthenticatedDashboardInnerCircleRouteImport } from './routes/_authenticated/dashboard.inner-circle'
@@ -364,6 +365,12 @@ const ApiPublicManychatLeadRoute = ApiPublicManychatLeadRouteImport.update({
   path: '/api/public/manychat-lead',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicInstagramLookupRoute =
+  ApiPublicInstagramLookupRouteImport.update({
+    id: '/api/public/instagram-lookup',
+    path: '/api/public/instagram-lookup',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiCronSyncFxRoute = ApiCronSyncFxRouteImport.update({
   id: '/api/cron/sync-fx',
   path: '/api/cron/sync-fx',
@@ -798,6 +805,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
+  '/api/public/instagram-lookup': typeof ApiPublicInstagramLookupRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/positioning': typeof ApiPublicPositioningRoute
@@ -903,6 +911,7 @@ export interface FileRoutesByTo {
   '/dashboard/foundation-kit': typeof AuthenticatedDashboardFoundationKitRoute
   '/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
+  '/api/public/instagram-lookup': typeof ApiPublicInstagramLookupRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/positioning': typeof ApiPublicPositioningRoute
@@ -1014,6 +1023,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/inner-circle': typeof AuthenticatedDashboardInnerCircleRoute
   '/_authenticated/learn/$slug': typeof AuthenticatedLearnSlugRouteWithChildren
   '/api/cron/sync-fx': typeof ApiCronSyncFxRoute
+  '/api/public/instagram-lookup': typeof ApiPublicInstagramLookupRoute
   '/api/public/manychat-lead': typeof ApiPublicManychatLeadRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
   '/api/public/positioning': typeof ApiPublicPositioningRoute
@@ -1125,6 +1135,7 @@ export interface FileRouteTypes {
     | '/dashboard/inner-circle'
     | '/learn/$slug'
     | '/api/cron/sync-fx'
+    | '/api/public/instagram-lookup'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
     | '/api/public/positioning'
@@ -1230,6 +1241,7 @@ export interface FileRouteTypes {
     | '/dashboard/foundation-kit'
     | '/dashboard/inner-circle'
     | '/api/cron/sync-fx'
+    | '/api/public/instagram-lookup'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
     | '/api/public/positioning'
@@ -1340,6 +1352,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/inner-circle'
     | '/_authenticated/learn/$slug'
     | '/api/cron/sync-fx'
+    | '/api/public/instagram-lookup'
     | '/api/public/manychat-lead'
     | '/api/public/paystack-webhook'
     | '/api/public/positioning'
@@ -1397,6 +1410,7 @@ export interface RootRouteChildren {
   VerifySlugRoute: typeof VerifySlugRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
   ApiCronSyncFxRoute: typeof ApiCronSyncFxRoute
+  ApiPublicInstagramLookupRoute: typeof ApiPublicInstagramLookupRoute
   ApiPublicManychatLeadRoute: typeof ApiPublicManychatLeadRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
   ApiPublicPositioningRoute: typeof ApiPublicPositioningRoute
@@ -1752,6 +1766,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/manychat-lead'
       fullPath: '/api/public/manychat-lead'
       preLoaderRoute: typeof ApiPublicManychatLeadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/instagram-lookup': {
+      id: '/api/public/instagram-lookup'
+      path: '/api/public/instagram-lookup'
+      fullPath: '/api/public/instagram-lookup'
+      preLoaderRoute: typeof ApiPublicInstagramLookupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/cron/sync-fx': {
@@ -2395,6 +2416,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifySlugRoute: VerifySlugRoute,
   ProductsIndexRoute: ProductsIndexRoute,
   ApiCronSyncFxRoute: ApiCronSyncFxRoute,
+  ApiPublicInstagramLookupRoute: ApiPublicInstagramLookupRoute,
   ApiPublicManychatLeadRoute: ApiPublicManychatLeadRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
   ApiPublicPositioningRoute: ApiPublicPositioningRoute,

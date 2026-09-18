@@ -226,6 +226,28 @@ export const ADDONS = {
 } as const;
 export type AddonKey = keyof typeof ADDONS;
 
+/**
+ * Which method the objective actually BUYS.
+ *
+ * CPM is the floor for every deliverable, because a brand buying engagement still receives
+ * the impressions — the reach is delivered either way. CPE is added ON TOP only when
+ * engagement is the thing being bought.
+ *
+ * The old rule was max(CPM, CPE) for everything, which charged an AWARENESS campaign the
+ * engagement price whenever engagement happened to be higher — billing a brand for a
+ * deliverable it did not order. That is not defensible in a negotiation, and defensible is
+ * the whole promise of this tool.
+ *
+ * "" (no objective chosen yet) keeps max(), because with nothing specified the honest
+ * answer is what the post is worth at its best.
+ */
+export const OBJECTIVE_METHOD: Record<string, 'cpm' | 'cpe' | 'both'> = {
+  awareness: 'cpm',
+  event: 'cpm',
+  conversion: 'cpm',
+  engagement: 'cpe',
+}
+
 export const OBJECTIVES = {
   awareness: { mult: 1.0, label: "Brand Awareness" },
   conversion: { mult: 1.1, label: "Conversions / Sales" },
@@ -384,7 +406,19 @@ export function computeRateCard(input: RateCardInput) {
 
   const price_cpm_final = price_cpm * premiumMult * multiDiscount;
   const price_cpe_final = price_cpe * premiumMult * multiDiscount;
-  const sponsorship = Math.max(price_cpm_final, price_cpe_final) * campaignMult;
+
+  // The objective selects the method; CPM stays the floor because the impressions are
+  // delivered whatever the campaign is called. See OBJECTIVE_METHOD.
+  const method = OBJECTIVE_METHOD[input.objective as string] ?? 'both';
+  const priced =
+    method === 'cpm'
+      ? price_cpm_final
+      : Math.max(price_cpm_final, price_cpe_final);
+
+  const pricedOn: 'cpm' | 'cpe' =
+    method === 'cpm' || price_cpm_final >= price_cpe_final ? 'cpm' : 'cpe';
+
+  const sponsorship = priced * campaignMult;
 
   const productionCost = input.includeProduction ? (ct.prod ?? 500) : 0;
   const total = sponsorship + productionCost;
@@ -415,6 +449,9 @@ export function computeRateCard(input: RateCardInput) {
     price_cpe,
     price_cpm_final,
     price_cpe_final,
+    /** Which method the objective buys, and which one actually set the number. */
+    pricingMethod: method,
+    pricedOn,
     premiumMult,
     selAddons: input.addons,
     objMult,
