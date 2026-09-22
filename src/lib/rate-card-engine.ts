@@ -38,6 +38,37 @@ export interface NicheData {
   notes: string;
 }
 
+/**
+ * ── SANITY BOUNDS ─────────────────────────────────────────────────────────────
+ * Added 2026-09-22, after a creator reported the tool quoting them over R1 million.
+ * Reproduced worse: 300k followers / 2M views / Finance returned R2,560,006 with no
+ * add-ons ticked, and the UI labelled R2,176,005 as the number to walk away below.
+ *
+ * These four values STOP A RUNAWAY. They are not calibrated to anything, and they are
+ * not a fix for D-69 above — the CPM table is untouched and still sits 4–12x over the
+ * receipts. Do not describe them as market research, because they are not.
+ */
+
+/** A fully-loaded brief is a premium job, not a different business. Clamps the PRODUCT. */
+export const MAX_COMBINED_MULTIPLIER = 4;
+
+/** Views up to here bill at the full CPM. */
+export const FULL_RATE_VIEWS = 500_000;
+
+/** Every view above FULL_RATE_VIEWS bills at this share of the rate. */
+export const TAPER_RATE = 0.25;
+
+/** One deliverable, one creator, SA market. Above this the result is flagged, not blocked. */
+export const SANITY_CEILING_ZAR = 150_000;
+
+/** Views a brand is actually buying, after the taper. */
+export function billable(views: number): number {
+  if (!Number.isFinite(views) || views <= 0) return 0;
+  return views <= FULL_RATE_VIEWS
+    ? views
+    : FULL_RATE_VIEWS + (views - FULL_RATE_VIEWS) * TAPER_RATE;
+}
+
 export const NICHE_CPM: Record<string, NicheData> = {
   "Fashion & Beauty": {
     cpm: 271.95,
@@ -417,20 +448,37 @@ export function computeRateCard(input: RateCardInput) {
   const cpeTierData = getCpeTier(er);
 
   const adjustedCPM = nicheCPM.cpm * tier.mult * cpm_mult * ct.mult;
-  const price_cpm = (adjustedCPM / 1000) * views;
+
+  // Reach past a point is audience the brand did not buy, and a budget does not double
+  // because a reel went twice as viral. Without this the price rose linearly forever:
+  // 300k followers / 2M views / Finance quoted R2,560,006 with nothing ticked.
+  const billableViews = billable(views);
+
+  const price_cpm = (adjustedCPM / 1000) * billableViews;
   const adjustedCPE = cpeTierData.cpe_zar * cpe_mult;
   const price_cpe = adjustedCPE * interactions;
 
+  // ADDS, never multiplies. Each add-on is a separate line item on the same job, so its
+  // increment is additive. Multiplying them compounded 1.35 × 1.5 × 1.2 × 1.15 into 3.49x
+  // for four ticks, which was the sharpest leg of a 31x stack.
   let premiumMult = 1;
-  for (const k of input.addons) if (ADDONS[k]) premiumMult *= ADDONS[k].mult;
+  for (const k of input.addons) if (ADDONS[k]) premiumMult += ADDONS[k].mult - 1;
 
   const objMult = OBJECTIVES[input.objective as keyof typeof OBJECTIVES]?.mult ?? 1.0;
   const scopeMult = SCOPES[input.scope as keyof typeof SCOPES]?.mult ?? 1.0;
   const budgetMult = BUDGET_TIERS[input.budgetTier as keyof typeof BUDGET_TIERS]?.mult ?? 1.0;
   const campaignMult = objMult * scopeMult * budgetMult;
 
-  const price_cpm_final = price_cpm * premiumMult * multiDiscount;
-  const price_cpe_final = price_cpe * premiumMult * multiDiscount;
+  // Clamp the PRODUCT, not each leg. Every multiplier here is individually defensible —
+  // the defect was that they compounded: tier 1.5 × platform 1.8 × contentType 2.5 ×
+  // addons 3.49 × objective 1.1 × budget 1.2 reached 31.1x, or R19,750 per 1,000 views.
+  // Capping legs one at a time is what let that happen.
+  const rawCombined = tier.mult * cpm_mult * ct.mult * premiumMult * campaignMult;
+  const combinedCap =
+    rawCombined > MAX_COMBINED_MULTIPLIER ? MAX_COMBINED_MULTIPLIER / rawCombined : 1;
+
+  const price_cpm_final = price_cpm * premiumMult * multiDiscount * combinedCap;
+  const price_cpe_final = price_cpe * premiumMult * multiDiscount * combinedCap;
 
   // The objective selects the method; CPM stays the floor because the impressions are
   // delivered whatever the campaign is called. See OBJECTIVE_METHOD.
@@ -449,8 +497,17 @@ export function computeRateCard(input: RateCardInput) {
   const total = sponsorship + productionCost;
   const range_low = total * 0.85;
   const range_high = total * 1.15;
-  const saAvgRate = (nicheCPM.cpm / 1000) * views;
+  // Same billable views as the quote. On raw views the benchmark would keep climbing while
+  // the quote tapered, and rate-card.tsx plots the two against each other — the user's own
+  // number would render BELOW the "African average" and read as the tool under-pricing them.
+  const saAvgRate = (nicheCPM.cpm / 1000) * billableViews;
   const globalAvgRate = saAvgRate / 1.8;
+
+  // D-69 is still open: the CPM table sits 4–12x above his receipted deals, so this engine
+  // can still overshoot even with the stack capped. Flag it rather than block it — the
+  // quote is usually usable and one figure is wrong, and a blocked tool teaches people to
+  // ignore the banner.
+  const implausible = total > SANITY_CEILING_ZAR;
 
   return {
     followers,
@@ -491,6 +548,9 @@ export function computeRateCard(input: RateCardInput) {
     range_high,
     saAvgRate,
     globalAvgRate,
+    billableViews,
+    combinedCap,
+    implausible,
   };
 }
 

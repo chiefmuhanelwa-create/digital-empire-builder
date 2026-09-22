@@ -843,7 +843,7 @@ function SummaryCard({
 
             {/* Floor / Standard / Premium */}
             <div className="mt-5 grid grid-cols-3 gap-2">
-              <MiniRate label="Floor" value={money(r.range_low)} />
+              <MiniRate label="Low" value={money(r.range_low)} />
               <MiniRate label="Standard" value={money(r.total)} hero />
               <MiniRate label="Premium" value={money(r.range_high)} />
             </div>
@@ -1027,6 +1027,23 @@ function DeepDive({
 
   return (
     <div className="space-y-4">
+      {/* A number this size is almost certainly above what a SA brand will pay for one
+          deliverable. Say so above the figure rather than blocking — the rest of the
+          breakdown is still useful, and a blocked tool teaches people to skip the banner. */}
+      {r.implausible && (
+        <div className="rounded-lg border-l-4 border-l-amber-500 bg-amber-50 p-4">
+          <p className="text-[14px] font-semibold text-[#1A1523]">
+            Sense-check this one before you send it.
+          </p>
+          <p className="mt-1 text-[13px] leading-relaxed text-neutral-600">
+            This works out well above what most single deliverables pay in South Africa.
+            Real fees on comparable reels have landed around R10,000–R12,000. Treat the
+            number below as an opening ask you can justify, not a rate you should hold out
+            for — and price the job off the brief and your own costs before you quote.
+          </p>
+        </div>
+      )}
+
       {/* Negotiation */}
       <div className="grid gap-4 sm:grid-cols-2">
         <Panel className="p-5">
@@ -1039,12 +1056,13 @@ function DeepDive({
           </p>
         </Panel>
         <Panel className="p-5">
-          <Eyebrow tone="muted">Walk away below</Eyebrow>
+          <Eyebrow tone="muted">Low end of your range</Eyebrow>
           <p className="mt-2 font-display text-[28px] font-extrabold leading-none text-[#1A1523]">
             {money(r.range_low)}
           </p>
           <p className="mt-2 text-[13px] text-neutral-500">
-            Your floor. Below this you are paying to work.
+            A starting number, not a minimum. Brands in SA routinely pay less than a
+            calculator suggests — an offer below this is worth costing, not refusing.
           </p>
         </Panel>
       </div>
