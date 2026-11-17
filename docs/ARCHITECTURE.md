@@ -349,6 +349,14 @@ counterparts (RPCs: `enqueue_email`, `read_email_batch`, `delete_email`, `move_t
   Vercel domain) + `SiteFooter` — being same-origin lets the wrapper read
   `iframe.contentDocument.body.scrollHeight` via a `ResizeObserver` and auto-size the
   iframe, with zero lines of the tool's own file touched for sizing.
+- **`/price-it`** (added 2026-11-18): `public/price-it.html`, a standalone static page,
+  no route file, no backend, no lead capture. A freelancer price calculator for
+  photographers, videographers, editors, filmmakers and screening hosts, built from the
+  "Building Influence with Purpose" masterclass formula
+  `((Time × Rate) + Costs) × Skill × Client use`. All maths lives in one pure
+  `compute()` between `/*CALC-START*/` and `/*CALC-END*/` so it can be eval'd in node
+  and tested against the slide examples. Served extensionless (Workers assets
+  `html_handling=drop`). Saved settings + price list are per-browser `localStorage` only.
 
 ---
 
